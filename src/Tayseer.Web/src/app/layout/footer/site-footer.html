@@ -1,0 +1,108 @@
+<footer class="border-t border-brand-blue/10 bg-surface-dark text-ink-inverse dark:border-white/10">
+  <div class="site-container grid gap-fluid-lg py-fluid-2xl md:grid-cols-2 lg:grid-cols-4">
+    <div class="lg:col-span-1">
+      <img src="/brand/logo-light.svg" alt="Tayseer Innovations" class="h-10 w-auto brightness-110" />
+      <p class="mt-4 text-sm leading-relaxed text-white/70">{{ copy().footer.tagline }}</p>
+      <div class="mt-4 flex flex-wrap items-center gap-3">
+        <p class="inline-flex rounded-lg border border-brand-green/40 px-3 py-1.5 text-xs text-brand-green">
+          {{ copy().trust.iso }}
+        </p>
+        <a
+          class="inline-flex items-center gap-2 rounded-lg border border-white/15 px-3 py-1.5 text-xs text-white/80 transition hover:border-brand-green hover:text-brand-green"
+          href="https://www.linkedin.com/company/tayseer-innovations/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg width="14" height="14" viewBox="0 0 448 512" aria-hidden="true" fill="currentColor">
+            <path
+              d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"
+            />
+          </svg>
+          {{ copy().footer.linkedIn }}
+        </a>
+      </div>
+    </div>
+
+    <div>
+      <h3 class="font-display text-sm font-semibold uppercase tracking-wide text-white">
+        {{ copy().footer.ourServices }}
+      </h3>
+      <ul class="mt-4 space-y-2 text-sm text-white/70">
+        @for (item of services(); track item.path) {
+          <li>
+            <a [routerLink]="item.path" class="hover:text-brand-green">{{ item.title }}</a>
+          </li>
+        }
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="font-display text-sm font-semibold uppercase tracking-wide text-white">
+        {{ copy().footer.quickLinks }}
+      </h3>
+      <ul class="mt-4 space-y-2 text-sm text-white/70">
+        <li>
+          <a [routerLink]="'/' + lang()" class="hover:text-brand-green">{{ copy().nav.home }}</a>
+        </li>
+        <li>
+          <a [routerLink]="'/' + lang() + '/solutions'" class="hover:text-brand-green">{{
+            copy().nav.solutions
+          }}</a>
+        </li>
+        <li>
+          <a [routerLink]="'/' + lang() + '/about'" class="hover:text-brand-green">{{ copy().nav.about }}</a>
+        </li>
+        <li>
+          <a [routerLink]="'/' + lang() + '/blog'" class="hover:text-brand-green">{{ copy().nav.blog }}</a>
+        </li>
+        <li>
+          <a [routerLink]="'/' + lang() + '/careers'" class="hover:text-brand-green">{{
+            copy().nav.careers
+          }}</a>
+        </li>
+        <li>
+          <a [routerLink]="'/' + lang() + '/connect'" class="hover:text-brand-green">{{
+            copy().nav.connect
+          }}</a>
+        </li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="font-display text-sm font-semibold uppercase tracking-wide text-white">
+        {{ copy().footer.contactUs }}
+      </h3>
+      <div class="mt-4 space-y-4 text-sm text-white/70">
+        <div>
+          <p class="font-semibold text-white">Saudi Arabia</p>
+          <p>Office 7, 2nd Floor, Selam Building, Prince Saad bin Abdulrahman Alawal Branch Road, Al Rawabi, Riyadh</p>
+          <a class="hover:text-brand-green" href="tel:+966555203079">+966 555203079</a>
+        </div>
+        <div>
+          <p class="font-semibold text-white">UAE</p>
+          <p>601, One Lake Plaza, Cluster T, JLT, Dubai</p>
+          <a class="hover:text-brand-green" href="tel:+97143997558">+971 43997558</a>
+        </div>
+        <a class="hover:text-brand-green" [href]="'mailto:' + copy().common.email">{{
+          copy().common.email
+        }}</a>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="border-t border-white/10 px-4 py-4 text-center text-xs text-white/50 sm:pb-4 pb-20"
+  >
+    <div class="site-container flex flex-col items-center justify-between gap-3 sm:flex-row sm:text-start">
+      <p>{{ copy().footer.rights }}</p>
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        <a [routerLink]="'/' + lang() + '/legal/privacy'" class="hover:text-brand-green">{{
+          copy().footer.privacy
+        }}</a>
+        <a [routerLink]="'/' + lang() + '/legal/terms'" class="hover:text-brand-green">{{
+          copy().footer.terms
+        }}</a>
+      </div>
+    </div>
+  </div>
+</footer>

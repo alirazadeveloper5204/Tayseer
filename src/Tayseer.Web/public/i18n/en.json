@@ -1,0 +1,18 @@
+{
+  "common": {
+    "loading": "Loading",
+    "readMore": "Read More",
+    "requestDemo": "Request Demo",
+    "talkToUs": "Talk To Us",
+    "viewAllServices": "View All Services"
+  },
+  "nav": {
+    "home": "Home",
+    "solutions": "Solutions",
+    "about": "About Us",
+    "blog": "Blogs and Resources",
+    "careers": "Careers",
+    "connect": "Connect",
+    "submitQuery": "Submit A Query"
+  }
+}

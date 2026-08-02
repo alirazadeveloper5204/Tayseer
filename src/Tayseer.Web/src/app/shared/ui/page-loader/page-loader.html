@@ -1,0 +1,65 @@
+@if (loader.active()) {
+  <div
+    class="page-loader"
+    [class.page-loader--light]="loader.surface() === 'light'"
+    [class.page-loader--visible]="loader.visible()"
+    [class.page-loader--leaving]="loader.leaving()"
+    role="status"
+    aria-live="polite"
+    [attr.aria-busy]="!loader.leaving()"
+    aria-label="Loading"
+  >
+    @for (gen of [loader.generation()]; track gen) {
+      <div class="page-loader__panel">
+        <div class="page-loader__mark-wrap">
+          <div class="page-loader__aura" aria-hidden="true"></div>
+          <svg
+            class="page-loader__mark"
+            viewBox="0 0 120 120"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <defs>
+              <filter id="chevron-glow" x="-60%" y="-60%" width="220%" height="220%">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="2.2" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+
+            <g class="page-loader__ghost">
+              <path d="M20 20H100V100" />
+              <path d="M20 32H88V100" />
+              <path d="M20 44H76V100" />
+              <path d="M20 56H64V100" />
+              <path d="M20 68H52V100" />
+            </g>
+
+            <g class="page-loader__draw" filter="url(#chevron-glow)">
+              <path class="page-loader__stroke page-loader__stroke--1a" pathLength="100" d="M20 20H100" />
+              <path class="page-loader__stroke page-loader__stroke--1b" pathLength="100" d="M100 20V100" />
+              <path class="page-loader__stroke page-loader__stroke--2a" pathLength="100" d="M20 32H88" />
+              <path class="page-loader__stroke page-loader__stroke--2b" pathLength="100" d="M88 32V100" />
+              <path class="page-loader__stroke page-loader__stroke--3a" pathLength="100" d="M20 44H76" />
+              <path class="page-loader__stroke page-loader__stroke--3b" pathLength="100" d="M76 44V100" />
+              <path class="page-loader__stroke page-loader__stroke--4a" pathLength="100" d="M20 56H64" />
+              <path class="page-loader__stroke page-loader__stroke--4b" pathLength="100" d="M64 56V100" />
+              <path class="page-loader__stroke page-loader__stroke--5a" pathLength="100" d="M20 68H52" />
+              <path class="page-loader__stroke page-loader__stroke--5b" pathLength="100" d="M52 68V100" />
+            </g>
+          </svg>
+        </div>
+        <img
+          class="page-loader__logo"
+          src="/brand/logo-light.svg"
+          alt="Tayseer"
+          width="220"
+          height="48"
+        />
+      </div>
+    }
+  </div>
+}

@@ -1,0 +1,58 @@
+<section class="home-hero" aria-label="Hero">
+  <div class="home-hero__atmosphere" aria-hidden="true">
+    <div class="home-hero__grid"></div>
+    <div class="home-hero__glow home-hero__glow--blue"></div>
+    <div class="home-hero__glow home-hero__glow--green"></div>
+    <div class="home-hero__ring home-hero__ring--outer"></div>
+    <div class="home-hero__ring home-hero__ring--inner"></div>
+
+    <svg
+      class="home-hero__mark"
+      viewBox="0 0 120 120"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path class="home-hero__chevron home-hero__chevron--1" d="M20 20H100V100" />
+      <path class="home-hero__chevron home-hero__chevron--2" d="M20 32H88V100" />
+      <path class="home-hero__chevron home-hero__chevron--3" d="M20 44H76V100" />
+      <path class="home-hero__chevron home-hero__chevron--4" d="M20 56H64V100" />
+      <path class="home-hero__chevron home-hero__chevron--5" d="M20 68H52V100" />
+    </svg>
+  </div>
+
+  <div class="site-container relative z-10 flex min-h-[inherit] flex-col justify-center pb-24 pt-fluid-2xl sm:pb-28">
+    <p class="type-eyebrow mb-fluid-sm">
+      {{ copy().home.eyebrow }}
+    </p>
+    <h1 class="home-hero__title">
+      {{ copy().home.headline }}
+    </h1>
+    <p class="type-lead mt-fluid-md max-w-xl text-ink-soft dark:text-ink-inverse/75">
+      {{ copy().home.subhead }}
+    </p>
+    <div class="mt-fluid-lg flex flex-wrap gap-fluid-sm">
+      <a [routerLink]="'/' + lang() + '/connect'" class="btn-brand">
+        {{ copy().common.requestDemo }}
+      </a>
+      <a
+        [routerLink]="'/' + lang() + '/solutions'"
+        class="inline-flex items-center justify-center rounded-xl border border-brand-blue/25 bg-white/50 px-fluid-md py-fluid-sm text-fluid-sm font-semibold text-brand-blue backdrop-blur-sm transition hover:border-brand-green hover:text-brand-green dark:border-white/20 dark:bg-white/5 dark:text-ink-inverse dark:hover:border-brand-green dark:hover:text-brand-green"
+      >
+        {{ copy().common.viewAllServices }}
+      </a>
+    </div>
+  </div>
+
+  <div class="home-hero__fade" aria-hidden="true"></div>
+
+  <div class="home-hero__scroll" aria-hidden="true">
+    <span class="home-hero__scroll-mouse">
+      <span class="home-hero__scroll-dot"></span>
+    </span>
+    <span class="home-hero__scroll-chevron"></span>
+  </div>
+</section>
+
+<app-trust-strip />
+<app-services-bento />
+<app-home-story />

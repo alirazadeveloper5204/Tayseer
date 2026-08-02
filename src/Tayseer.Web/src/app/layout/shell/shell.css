@@ -1,0 +1,14 @@
+.chrome-top {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 280ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.chrome-top--hidden {
+  grid-template-rows: 0fr;
+}
+
+.chrome-top__inner {
+  overflow: hidden;
+  min-height: 0;
+}

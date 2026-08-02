@@ -1,0 +1,22 @@
+<div
+  class="flex min-h-screen flex-col bg-surface-light text-ink dark:bg-surface-dark dark:text-ink-inverse"
+>
+  <div
+    class="site-content flex min-h-screen flex-col"
+    [class.site-content--veiled]="navigationLoader.covered()"
+    [inert]="navigationLoader.active()"
+  >
+    <div class="sticky top-0 z-50 bg-surface-light dark:bg-surface-dark">
+      <div class="chrome-top" [class.chrome-top--hidden]="topBarHidden()">
+        <div class="chrome-top__inner">
+          <app-top-bar />
+        </div>
+      </div>
+      <app-site-header />
+    </div>
+    <main class="flex-1">
+      <router-outlet />
+    </main>
+    <app-site-footer />
+  </div>
+</div>

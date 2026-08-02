@@ -1,0 +1,40 @@
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# IDE
+.vs/
+.idea/
+*.user
+*.suo
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# .NET
+**/bin/
+**/obj/
+**/out/
+*.db
+*.db-shm
+*.db-wal
+
+# Node / Angular
+**/node_modules/
+**/dist/
+**/.angular/
+**/coverage/
+npm-debug.log*
+.npm
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+**/appsettings.*.local.json
+
+# Misc
+*.log
+_scrape/

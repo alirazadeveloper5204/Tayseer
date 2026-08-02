@@ -1,0 +1,18 @@
+{
+  "common": {
+    "loading": "جاري التحميل",
+    "readMore": "اقرأ المزيد",
+    "requestDemo": "اطلب عرضاً توضيحياً",
+    "talkToUs": "تحدث معنا",
+    "viewAllServices": "عرض جميع الخدمات"
+  },
+  "nav": {
+    "home": "الرئيسية",
+    "solutions": "الحلول",
+    "about": "من نحن",
+    "blog": "المدونة والموارد",
+    "careers": "الوظائف",
+    "connect": "تواصل معنا",
+    "submitQuery": "أرسل استفساراً"
+  }
+}

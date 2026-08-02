@@ -1,0 +1,235 @@
+<header
+  class="border-b border-brand-blue/10 bg-white/85 backdrop-blur-md dark:border-white/10 dark:bg-surface-dark-elevated/90"
+>
+  <div class="site-container flex items-center justify-between gap-fluid-sm py-fluid-sm">
+    <a [routerLink]="'/' + lang()" class="shrink-0" (click)="closeMenu()" aria-label="Tayseer Innovations">
+      <img
+        src="/brand/logo-light.svg"
+        alt="Tayseer Innovations"
+        class="h-8 w-auto sm:h-10"
+        width="180"
+        height="40"
+      />
+    </a>
+
+    <nav
+      class="fixed inset-x-0 bottom-0 z-40 overflow-y-auto bg-white transition-[top] duration-280 dark:bg-surface-dark-elevated lg:static lg:inset-auto lg:top-auto lg:flex lg:overflow-visible lg:bg-transparent"
+      [style.top]="chromeScroll.topBarHidden() ? '4rem' : '7.25rem'"
+      [class.max-lg:hidden]="!menuOpen()"
+      [class.max-lg:flex]="menuOpen()"
+      aria-label="Primary"
+    >
+      <ul
+        class="flex w-full flex-col text-sm font-semibold text-[#585858] dark:text-ink-inverse/80 lg:w-auto lg:flex-row lg:items-center lg:gap-4 xl:gap-6 xl:text-[0.9375rem]"
+      >
+        <li>
+          <a
+            [routerLink]="'/' + lang()"
+            routerLinkActive="text-brand-blue dark:text-brand-green"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="block border-b border-[#f1f1f1] px-6 py-4 whitespace-nowrap hover:text-brand-blue dark:border-white/10 dark:hover:text-brand-green lg:border-0 lg:px-0 lg:py-2"
+            (click)="closeMenu()"
+          >
+            {{ copy().nav.home }}
+          </a>
+        </li>
+
+        <li class="relative border-b border-[#f1f1f1] dark:border-white/10 lg:border-0 lg:group">
+          <div class="flex items-center justify-between">
+            <a
+              [routerLink]="'/' + lang() + '/solutions'"
+              routerLinkActive="text-brand-blue dark:text-brand-green"
+              class="block flex-1 px-6 py-4 whitespace-nowrap hover:text-brand-blue dark:hover:text-brand-green lg:px-0 lg:py-2"
+              (click)="closeMenu()"
+            >
+              {{ copy().nav.solutions }}
+            </a>
+            <button
+              type="button"
+              class="px-6 py-4 lg:hidden"
+              [attr.aria-expanded]="solutionsOpen()"
+              aria-label="Toggle solutions"
+              (click)="toggleSolutions()"
+            >
+              <svg width="14" height="14" viewBox="0 0 320 512" fill="currentColor" aria-hidden="true">
+                <path
+                  d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <ul
+            class="bg-surface-light-muted dark:bg-surface-dark-muted lg:invisible lg:absolute lg:start-0 lg:top-full lg:z-50 lg:mt-1 lg:w-72 lg:rounded-xl lg:border lg:border-brand-blue/10 lg:bg-white lg:py-2 lg:opacity-0 lg:shadow-lg lg:transition lg:group-hover:visible lg:group-hover:opacity-100 dark:lg:border-white/10 dark:lg:bg-surface-dark-elevated"
+            [class.max-lg:hidden]="!solutionsOpen()"
+          >
+            @for (item of solutionLinks(); track item.slug) {
+              <li>
+                <a
+                  [routerLink]="item.path"
+                  class="block px-6 py-3 text-sm hover:bg-brand-blue hover:text-white lg:rounded-md lg:mx-1"
+                  (click)="closeMenu()"
+                >
+                  {{ item.title }}
+                </a>
+              </li>
+            }
+          </ul>
+        </li>
+
+        <li>
+          <a
+            [routerLink]="'/' + lang() + '/about'"
+            routerLinkActive="text-brand-blue dark:text-brand-green"
+            class="block border-b border-[#f1f1f1] px-6 py-4 whitespace-nowrap hover:text-brand-blue dark:border-white/10 dark:hover:text-brand-green lg:border-0 lg:px-0 lg:py-2"
+            (click)="closeMenu()"
+          >
+            {{ copy().nav.about }}
+          </a>
+        </li>
+        <li>
+          <a
+            [routerLink]="'/' + lang() + '/blog'"
+            routerLinkActive="text-brand-blue dark:text-brand-green"
+            class="block border-b border-[#f1f1f1] px-6 py-4 whitespace-nowrap hover:text-brand-blue dark:border-white/10 dark:hover:text-brand-green lg:border-0 lg:px-0 lg:py-2"
+            (click)="closeMenu()"
+          >
+            {{ copy().nav.blog }}
+          </a>
+        </li>
+        <li>
+          <a
+            [routerLink]="'/' + lang() + '/careers'"
+            routerLinkActive="text-brand-blue dark:text-brand-green"
+            class="block border-b border-[#f1f1f1] px-6 py-4 whitespace-nowrap hover:text-brand-blue dark:border-white/10 dark:hover:text-brand-green lg:border-0 lg:px-0 lg:py-2"
+            (click)="closeMenu()"
+          >
+            {{ copy().nav.careers }}
+          </a>
+        </li>
+        <li>
+          <a
+            [routerLink]="'/' + lang() + '/connect'"
+            routerLinkActive="text-brand-blue dark:text-brand-green"
+            class="block border-b border-[#f1f1f1] px-6 py-4 whitespace-nowrap hover:text-brand-blue dark:border-white/10 dark:hover:text-brand-green lg:border-0 lg:px-0 lg:py-2"
+            (click)="closeMenu()"
+          >
+            {{ copy().nav.connect }}
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-2 shrink-0">
+      <!-- Language: En | ع -->
+      <button
+        type="button"
+        class="inline-flex h-9 items-center rounded-full border border-brand-blue/20 bg-white p-1 text-xs font-bold dark:border-white/20 dark:bg-white/10"
+        (click)="switchLocale()"
+        [attr.aria-label]="lang() === 'en' ? 'Switch to Arabic' : 'Switch to English'"
+      >
+        <span
+          class="inline-flex h-7 min-w-7 items-center justify-center rounded-full px-2 transition"
+          [class.bg-brand-blue]="lang() === 'en'"
+          [class.text-white]="lang() === 'en'"
+          [class.text-brand-blue]="lang() !== 'en'"
+          [class.dark:text-white/50]="lang() !== 'en'"
+          aria-hidden="true"
+        >
+          En
+        </span>
+        <span
+          class="inline-flex h-7 min-w-7 items-center justify-center rounded-full px-2 font-arabic transition"
+          [class.bg-brand-blue]="lang() === 'ar'"
+          [class.text-white]="lang() === 'ar'"
+          [class.text-brand-blue]="lang() !== 'ar'"
+          [class.dark:text-white/50]="lang() !== 'ar'"
+          aria-hidden="true"
+        >
+          ع
+        </span>
+      </button>
+
+      <!-- Theme: sun / moon switch -->
+      <button
+        type="button"
+        class="relative inline-flex h-9 w-16 shrink-0 items-center rounded-full border-2 border-brand-blue/35 bg-brand-blue/10 p-0.5 shadow-inner dark:border-white/25 dark:bg-slate-900"
+        (click)="theme.toggle()"
+        [attr.aria-pressed]="theme.isDark()"
+        [attr.aria-label]="theme.isDark() ? 'Switch to light mode' : 'Switch to dark mode'"
+      >
+        <!-- Track icons (always readable; sit above the thumb) -->
+        <span
+          class="pointer-events-none absolute inset-y-0 start-0 z-20 inline-flex w-1/2 items-center justify-center"
+          aria-hidden="true"
+        >
+          <svg
+            class="size-3.5 transition-colors"
+            [class.text-amber-500]="!theme.isDark()"
+            [class.text-brand-blue/45]="theme.isDark()"
+            [class.dark:text-white/35]="theme.isDark()"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.4"
+            stroke-linecap="round"
+          >
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+          </svg>
+        </span>
+        <span
+          class="pointer-events-none absolute inset-y-0 end-0 z-20 inline-flex w-1/2 items-center justify-center"
+          aria-hidden="true"
+        >
+          <svg
+            class="size-3.5 transition-colors"
+            [class.text-brand-blue]="!theme.isDark()"
+            [class.text-sky-200]="theme.isDark()"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path d="M21 14.3A8.5 8.5 0 0 1 9.7 3a7 7 0 1 0 11.3 11.3Z" />
+          </svg>
+        </span>
+
+        <!-- Sliding thumb behind icons -->
+        <span
+          class="pointer-events-none relative z-10 size-7 rounded-full border border-brand-blue/15 bg-white shadow-md transition-[margin] duration-300 ease-out dark:border-white/10 dark:bg-slate-700"
+          [class.ms-auto]="theme.isDark()"
+          aria-hidden="true"
+        ></span>
+      </button>
+
+      <a [routerLink]="'/' + lang() + '/connect'" class="btn-brand hidden text-sm sm:inline-flex">
+        {{ copy().nav.submitQuery }}
+      </a>
+      <button
+        type="button"
+        class="text-brand-blue dark:text-ink-inverse lg:hidden"
+        [attr.aria-expanded]="menuOpen()"
+        aria-label="Toggle menu"
+        (click)="toggleMenu()"
+      >
+        @if (menuOpen()) {
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M6 6l12 12M18 6L6 18" />
+          </svg>
+        } @else {
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M4 7h16M4 12h16M4 17h16" />
+          </svg>
+        }
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Sticky mobile CTA -->
+<div
+  class="fixed inset-x-0 bottom-0 z-40 border-t border-brand-blue/10 bg-white/95 p-3 backdrop-blur dark:border-white/10 dark:bg-surface-dark-elevated/95 sm:hidden"
+>
+  <a [routerLink]="'/' + lang() + '/connect'" class="btn-brand w-full text-sm">
+    {{ copy().common.talkToUs }}
+  </a>
+</div>

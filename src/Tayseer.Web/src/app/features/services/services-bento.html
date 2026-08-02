@@ -1,0 +1,52 @@
+<section id="solutions" class="site-section">
+  <div class="site-container">
+    <div class="mb-fluid-lg flex flex-col gap-fluid-md lg:flex-row lg:items-end lg:justify-between">
+      <div class="max-w-3xl">
+        <h2 class="type-title">
+          {{ copy().home.servicesTitle }}
+        </h2>
+        <p class="type-subtitle mt-fluid-xs">
+          {{ copy().home.servicesSubtitle }}
+        </p>
+      </div>
+      <a [routerLink]="'/' + lang() + '/solutions'" class="btn-brand shrink-0 self-start">
+        {{ copy().common.viewAllServices }}
+      </a>
+    </div>
+
+    @if (loading()) {
+      <div class="flex items-center gap-fluid-sm text-ink-soft dark:text-white/60">
+        <span class="geometric-loader h-8 w-8"></span>
+        <span class="text-fluid-base">{{ copy().common.loading }}…</span>
+      </div>
+    } @else if (error()) {
+      <div class="glass-card p-fluid-md text-fluid-sm text-ink-soft dark:text-white/70">
+        Services API is offline. Start
+        <code class="rounded bg-black/5 px-1 dark:bg-white/10">Tayseer.Api</code>
+        on port 5095, then refresh.
+      </div>
+    } @else {
+      <div class="grid grid-cols-1 gap-fluid-md md:grid-cols-2 lg:grid-cols-6">
+        @for (item of featured(); track item.slug) {
+          <div class="lg:col-span-3">
+            <app-service-card
+              [service]="item"
+              [lang]="lang()"
+              [ctaLabel]="copy().common.readMore"
+              [featured]="true"
+            />
+          </div>
+        }
+        @for (item of rest(); track item.slug) {
+          <div class="lg:col-span-2">
+            <app-service-card
+              [service]="item"
+              [lang]="lang()"
+              [ctaLabel]="copy().common.readMore"
+            />
+          </div>
+        }
+      </div>
+    }
+  </div>
+</section>

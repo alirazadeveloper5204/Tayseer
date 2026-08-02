@@ -1,0 +1,87 @@
+import {
+  Component,
+  inject,
+  OnInit,
+  signal,
+  afterNextRender,
+  DestroyRef,
+  PLATFORM_ID,
+} from '@angular/core';
+import { isPlatformBrowser, DOCUMENT } from '@angular/common';
+import { RouterOutlet } from '@angular/router';
+import { TopBar } from '../top-bar/top-bar';
+import { SiteHeader } from '../header/site-header';
+import { SiteFooter } from '../footer/site-footer';
+import { NavigationLoaderService } from '../../core/navigation/navigation-loader.service';
+import { ChromeScrollService } from '../../core/navigation/chrome-scroll.service';
+
+@Component({
+  selector: 'app-shell',
+  imports: [RouterOutlet, TopBar, SiteHeader, SiteFooter],
+  templateUrl: './shell.html',
+  styleUrl: './shell.css',
+})
+export class Shell implements OnInit {
+  private readonly document = inject(DOCUMENT);
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly destroyRef = inject(DestroyRef);
+  readonly navigationLoader = inject(NavigationLoaderService);
+  readonly chromeScroll = inject(ChromeScrollService);
+
+  readonly topBarHidden = signal(false);
+
+  private lastY = 0;
+  private ticking = false;
+
+  constructor() {
+    afterNextRender(() => {
+      if (!isPlatformBrowser(this.platformId)) {
+        return;
+      }
+
+      const win = this.document.defaultView;
+      if (!win) {
+        return;
+      }
+
+      this.lastY = win.scrollY;
+
+      const onScroll = () => {
+        if (this.ticking) {
+          return;
+        }
+        this.ticking = true;
+        win.requestAnimationFrame(() => {
+          this.ticking = false;
+          this.applyScroll(win.scrollY);
+        });
+      };
+
+      win.addEventListener('scroll', onScroll, { passive: true });
+      this.destroyRef.onDestroy(() => win.removeEventListener('scroll', onScroll));
+    });
+  }
+
+  ngOnInit(): void {
+    this.navigationLoader.markAppReady();
+  }
+
+  private applyScroll(y: number): void {
+    const delta = y - this.lastY;
+    this.lastY = y;
+
+    let next = this.topBarHidden();
+    if (y < 40) {
+      next = false;
+    } else if (delta > 4) {
+      next = true;
+    } else if (delta < -4) {
+      next = false;
+    }
+
+    if (next !== this.topBarHidden()) {
+      this.topBarHidden.set(next);
+      this.chromeScroll.topBarHidden.set(next);
+    }
+  }
+}

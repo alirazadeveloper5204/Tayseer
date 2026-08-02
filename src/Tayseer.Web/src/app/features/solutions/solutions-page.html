@@ -1,0 +1,40 @@
+<section class="site-band bg-surface-light dark:bg-surface-dark">
+  <div class="site-container py-fluid-2xl">
+    <p class="type-eyebrow">{{ copy().nav.solutions }}</p>
+    <h1 class="type-title mt-fluid-sm">{{ title() }}</h1>
+    <p class="type-lead mt-fluid-md max-w-3xl">{{ intro() }}</p>
+
+    @if (loading()) {
+      <div class="mt-fluid-xl flex justify-center py-fluid-xl">
+        <span class="geometric-loader h-10 w-10"></span>
+      </div>
+    } @else if (error()) {
+      <p class="mt-fluid-xl text-fluid-sm text-ink-soft dark:text-white/60">
+        {{ isAr() ? 'تعذر تحميل الحلول حالياً.' : 'Solutions are temporarily unavailable.' }}
+      </p>
+    } @else {
+      <div class="mt-fluid-xl grid gap-fluid-md sm:grid-cols-2 lg:grid-cols-3">
+        @for (service of services(); track service.slug) {
+          <app-service-card [service]="service" [lang]="lang()" [ctaLabel]="copy().common.readMore" />
+        }
+      </div>
+    }
+
+    <div class="mt-fluid-2xl rounded-2xl border border-brand-blue/10 bg-surface-light-muted p-fluid-lg dark:border-white/10 dark:bg-surface-dark-elevated">
+      <h2 class="font-display text-fluid-xl font-semibold text-brand-blue dark:text-white">
+        {{ benefitsTitle() }}
+      </h2>
+      <ul class="mt-fluid-md grid gap-3 sm:grid-cols-2">
+        @for (item of benefits(); track item) {
+          <li class="flex items-start gap-2 text-fluid-sm text-ink-soft dark:text-white/75">
+            <span class="mt-1.5 size-1.5 shrink-0 rounded-full bg-brand-green" aria-hidden="true"></span>
+            {{ item }}
+          </li>
+        }
+      </ul>
+      <a [routerLink]="'/' + lang() + '/connect'" class="btn-brand mt-fluid-lg inline-flex">
+        {{ copy().common.talkToUs }}
+      </a>
+    </div>
+  </div>
+</section>

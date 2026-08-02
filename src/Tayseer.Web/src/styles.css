@@ -1,0 +1,126 @@
+@import "tailwindcss";
+@config "../tailwind.config.js";
+@import "./app/features/home/home-hero.css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    color-scheme: light;
+    --site-gutter: clamp(1rem, 0.6rem + 2vw, 2rem);
+    --site-content: 72rem;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  html {
+    @apply scroll-smooth antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-surface-light text-ink font-sans text-fluid-base;
+  }
+
+  html.dark body {
+    @apply bg-surface-dark text-ink-inverse;
+  }
+
+  /* Kill paint transitions while theme flips under the loading cover. */
+  html.theme-switching,
+  html.theme-switching * {
+    transition: none !important;
+  }
+
+  html[dir='rtl'] body {
+    @apply font-arabic;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display font-semibold tracking-tight text-balance;
+  }
+
+  p {
+    @apply text-pretty;
+  }
+}
+
+@layer components {
+  /**
+   * Edge-to-edge band + constrained content column.
+   * Use .site-band for full-bleed backgrounds; .site-container for readable width.
+   */
+  .site-band {
+    @apply relative w-full;
+  }
+
+  .site-container {
+    width: min(100% - (var(--site-gutter) * 2), var(--site-content));
+    margin-inline: auto;
+  }
+
+  .site-section {
+    @apply relative w-full py-fluid-xl sm:py-fluid-2xl;
+  }
+
+  .type-display {
+    @apply font-display font-extrabold uppercase text-fluid-5xl text-brand-blue dark:text-white;
+  }
+
+  .type-title {
+    @apply font-display font-bold text-fluid-3xl text-brand-blue dark:text-white;
+  }
+
+  .type-section {
+    @apply font-display font-semibold text-fluid-3xl tracking-tight;
+  }
+
+  .type-subtitle {
+    @apply font-display font-semibold text-fluid-xl text-brand-blue/80 dark:text-white/80;
+  }
+
+  .type-lead {
+    @apply text-fluid-lg text-ink-soft dark:text-white/70;
+  }
+
+  .type-eyebrow {
+    @apply font-mono text-fluid-xs uppercase tracking-[0.22em] text-brand-green;
+  }
+
+  .glass-card {
+    @apply rounded-2xl border border-brand-blue/15 bg-white/70 shadow-glass backdrop-blur-md;
+  }
+
+  .dark .glass-card {
+    @apply border-white/10 bg-surface-dark-elevated/70 shadow-glass-dark;
+  }
+
+  .btn-brand {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-brand-gradient-cta px-fluid-md py-fluid-sm text-fluid-sm font-semibold text-white transition hover:brightness-110;
+  }
+
+  .site-content {
+    opacity: 1;
+    transition: opacity 380ms cubic-bezier(0.33, 1, 0.68, 1);
+  }
+
+  .site-content--veiled {
+    opacity: 0;
+    pointer-events: none;
+    /* Instant — only applied once the overlay is already fully opaque. */
+    transition: none;
+  }
+
+  .geometric-accent {
+    @apply pointer-events-none bg-geometric-corner bg-contain bg-no-repeat opacity-20;
+  }
+
+  .geometric-loader {
+    @apply inline-block h-10 w-10 bg-geometric-corner bg-contain bg-no-repeat animate-geometric-pulse;
+  }
+}
