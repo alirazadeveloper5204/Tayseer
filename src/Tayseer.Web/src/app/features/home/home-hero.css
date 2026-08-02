@@ -18,10 +18,43 @@ html.dark .home-hero {
   overflow: hidden;
 }
 
+.home-hero__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transform: scale(1.04);
+  animation: home-hero-photo-ken 28s ease-in-out infinite alternate;
+}
+
+.home-hero__photo-veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to inline-end,
+    rgba(247, 249, 252, 0.97) 0%,
+    rgba(247, 249, 252, 0.9) 34%,
+    rgba(247, 249, 252, 0.55) 58%,
+    rgba(9, 90, 141, 0.22) 100%
+  );
+}
+
+html.dark .home-hero__photo-veil {
+  background: linear-gradient(
+    to inline-end,
+    rgba(10, 10, 10, 0.94) 0%,
+    rgba(10, 10, 10, 0.82) 36%,
+    rgba(10, 10, 10, 0.45) 62%,
+    rgba(9, 90, 141, 0.35) 100%
+  );
+}
+
 .home-hero__grid {
   position: absolute;
   inset: 0;
-  opacity: 0.45;
+  opacity: 0.28;
   background-image:
     linear-gradient(to right, rgba(9, 90, 141, 0.07) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(9, 90, 141, 0.07) 1px, transparent 1px);
@@ -108,7 +141,7 @@ html.dark .home-hero__ring--inner {
   height: clamp(11rem, 32vw, 22rem);
   translate: 0 -48%;
   overflow: visible;
-  opacity: 0.9;
+  opacity: 0.55;
 }
 
 [dir='rtl'] .home-hero__mark {
@@ -328,14 +361,28 @@ html.dark .home-hero__scroll-chevron {
   }
 }
 
+@keyframes home-hero-photo-ken {
+  0% {
+    transform: scale(1.04) translate(0, 0);
+  }
+  100% {
+    transform: scale(1.1) translate(-1.5%, 1%);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .home-hero__glow,
   .home-hero__ring,
   .home-hero__chevron,
   .home-hero__scroll,
   .home-hero__scroll-dot,
-  .home-hero__scroll-chevron {
+  .home-hero__scroll-chevron,
+  .home-hero__photo {
     animation: none;
+  }
+
+  .home-hero__photo {
+    transform: none;
   }
 
   .home-hero__chevron {

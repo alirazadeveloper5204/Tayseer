@@ -15,36 +15,21 @@
     </div>
     <div
       #aboutVisual
-      class="home-story__about-visual relative mx-auto flex aspect-square w-full max-w-md items-center justify-center"
+      class="home-story__about-visual relative mx-auto w-full max-w-md"
       [class.is-inview]="aboutInView()"
     >
-      <div class="home-story__about-orb" aria-hidden="true"></div>
-      <!-- Alliance / digital network — innovation + partnership -->
-      <svg class="home-story__about-art" viewBox="0 0 200 200" fill="none" aria-hidden="true">
-        <circle class="hs-ring" cx="100" cy="100" r="78" />
-        <circle class="hs-ring hs-ring--soft" cx="100" cy="100" r="58" />
-
-        <!-- Connection paths -->
-        <path class="hs-line hs-line--1" d="M62 78 L100 100 L138 72" pathLength="100" />
-        <path class="hs-line hs-line--2" d="M100 100 L128 138" pathLength="100" />
-        <path class="hs-line hs-line--soft hs-line--3" d="M62 78 L70 140" pathLength="100" />
-        <path class="hs-line hs-line--soft hs-line--4" d="M138 72 L148 128" pathLength="100" />
-
-        <!-- Hub (Tayseer) -->
-        <circle class="hs-node hs-node--hub" cx="100" cy="100" r="14" />
-        <circle class="hs-node-core" cx="100" cy="100" r="5" />
-
-        <!-- Partner / region nodes -->
-        <circle class="hs-node hs-node--n1" cx="62" cy="78" r="9" />
-        <circle class="hs-node hs-node--n2" cx="138" cy="72" r="9" />
-        <circle class="hs-node hs-node--n3" cx="128" cy="138" r="8" />
-        <circle class="hs-node hs-node--accent hs-node--n4" cx="70" cy="140" r="7" />
-        <circle class="hs-node hs-node--accent hs-node--n5" cx="148" cy="128" r="7" />
-
-        <!-- Nested L-chevron identity accent -->
-        <path class="hs-brand" d="M28 28 H52 V52" pathLength="100" />
-        <path class="hs-brand hs-brand--inner" d="M28 36 H44 V52" pathLength="100" />
-      </svg>
+      <div class="home-story__photo-frame">
+        <img
+          class="home-story__photo"
+          src="/images/about-partnership.jpg"
+          [alt]="copy().home.aboutTitle"
+          width="800"
+          height="800"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="home-story__photo-accent" aria-hidden="true"></div>
+      </div>
     </div>
   </div>
 </section>
@@ -75,44 +60,21 @@
   <div class="site-container grid items-center gap-fluid-xl py-fluid-2xl lg:grid-cols-2">
     <div
       #quoteVisual
-      class="home-story__quote-visual relative mx-auto flex aspect-square w-full max-w-md items-center justify-center lg:max-w-lg"
+      class="home-story__quote-visual relative mx-auto w-full max-w-md lg:max-w-lg"
       [class.is-inview]="quoteInView()"
-      aria-hidden="true"
     >
-      <div class="home-story__quote-orb"></div>
-      <!-- Dialogue / client voice — geometric speech + trust -->
-      <svg class="home-story__quote-art" viewBox="0 0 200 200" fill="none">
-        <circle class="hs-ring" cx="100" cy="100" r="78" />
-
-        <!-- Primary speech panel -->
-        <path
-          class="hs-panel hs-panel--main"
-          d="M42 48 H118 Q128 48 128 58 V98 Q128 108 118 108 H78 L62 124 V108 H52 Q42 108 42 98 V58 Q42 48 52 48 Z"
+      <div class="home-story__photo-frame">
+        <img
+          class="home-story__photo"
+          src="/images/clients-office.jpg"
+          alt=""
+          width="800"
+          height="800"
+          loading="lazy"
+          decoding="async"
         />
-        <path class="hs-panel-line hs-panel-line--1" d="M58 68 H108" pathLength="100" />
-        <path class="hs-panel-line hs-panel-line--2" d="M58 80 H98" pathLength="100" />
-        <path class="hs-panel-line hs-panel-line--short hs-panel-line--3" d="M58 92 H88" pathLength="100" />
-
-        <!-- Secondary reply panel -->
-        <path
-          class="hs-panel hs-panel--reply"
-          d="M82 92 H148 Q158 92 158 102 V136 Q158 146 148 146 H118 L132 160 V146 H92 Q82 146 82 136 V102 Q82 92 92 92 Z"
-        />
-        <path class="hs-panel-line hs-panel-line--reply hs-panel-line--4" d="M96 112 H140" pathLength="100" />
-        <path class="hs-panel-line hs-panel-line--reply hs-panel-line--5" d="M96 124 H128" pathLength="100" />
-
-        <!-- Angular quote marks -->
-        <path class="hs-quote-mark hs-quote-mark--1" d="M150 42 V68 L166 55 V42 H150 Z" />
-        <path class="hs-quote-mark hs-quote-mark--2" d="M170 42 V68 L186 55 V42 H170 Z" />
-
-        <!-- Trust check -->
-        <circle class="hs-trust" cx="158" cy="158" r="16" />
-        <path class="hs-trust-check" d="M150 158 L156 164 L168 150" pathLength="100" />
-
-        <!-- Brand L accent -->
-        <path class="hs-brand" d="M28 154 H48 V174" pathLength="100" />
-        <path class="hs-brand hs-brand--inner" d="M28 162 H40 V174" pathLength="100" />
-      </svg>
+        <div class="home-story__photo-accent home-story__photo-accent--green" aria-hidden="true"></div>
+      </div>
     </div>
 
     <div class="relative min-w-0">

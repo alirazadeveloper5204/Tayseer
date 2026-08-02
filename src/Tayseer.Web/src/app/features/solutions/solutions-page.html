@@ -1,5 +1,19 @@
-<section class="site-band bg-surface-light dark:bg-surface-dark">
-  <div class="site-container py-fluid-2xl">
+<section class="relative overflow-hidden">
+  <div class="absolute inset-0" aria-hidden="true">
+    <img
+      class="h-full w-full object-cover"
+      src="/images/solutions-banner.jpg"
+      alt=""
+      width="1600"
+      height="600"
+      decoding="async"
+    />
+    <div
+      class="absolute inset-0 bg-gradient-to-b from-surface-light/95 via-surface-light/88 to-surface-light dark:from-surface-dark/95 dark:via-surface-dark/90 dark:to-surface-dark"
+    ></div>
+  </div>
+
+  <div class="site-container relative z-10 py-fluid-2xl">
     <p class="type-eyebrow">{{ copy().nav.solutions }}</p>
     <h1 class="type-title mt-fluid-sm">{{ title() }}</h1>
     <p class="type-lead mt-fluid-md max-w-3xl">{{ intro() }}</p>
@@ -20,7 +34,7 @@
       </div>
     }
 
-    <div class="mt-fluid-2xl rounded-2xl border border-brand-blue/10 bg-surface-light-muted p-fluid-lg dark:border-white/10 dark:bg-surface-dark-elevated">
+    <div class="mt-fluid-2xl rounded-2xl border border-brand-blue/10 bg-surface-light-muted/90 p-fluid-lg backdrop-blur-sm dark:border-white/10 dark:bg-surface-dark-elevated/90">
       <h2 class="font-display text-fluid-xl font-semibold text-brand-blue dark:text-white">
         {{ benefitsTitle() }}
       </h2>

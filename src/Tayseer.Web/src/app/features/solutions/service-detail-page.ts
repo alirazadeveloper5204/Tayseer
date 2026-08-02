@@ -5,6 +5,7 @@ import { catchError, combineLatest, map, of, startWith, switchMap } from 'rxjs';
 import { ContentApiService } from '../../core/api/content-api.service';
 import { LocaleService } from '../../core/i18n/locale.service';
 import { UiCopyService } from '../../core/i18n/ui-copy.service';
+import { serviceImage } from '../../core/media/site-images';
 import { ServiceDto } from '../../models/service.model';
 
 @Component({
@@ -45,4 +46,9 @@ export class ServiceDetailPage {
   readonly service = computed(() => this.load().service);
 
   readonly isGreen = computed(() => this.service()?.accent === 'green');
+
+  readonly coverImage = computed(() => {
+    const slug = this.service()?.slug;
+    return slug ? serviceImage(slug) : null;
+  });
 }

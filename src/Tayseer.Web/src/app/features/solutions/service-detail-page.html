@@ -27,6 +27,20 @@
       <p class="type-eyebrow mt-fluid-md">{{ copy().nav.solutions }}</p>
       <h1 class="type-title mt-fluid-sm">{{ s.title }}</h1>
       <p class="type-lead mt-fluid-md max-w-3xl">{{ s.shortDescription }}</p>
+
+      @if (coverImage(); as image) {
+        <div class="mt-fluid-lg overflow-hidden rounded-2xl border border-brand-blue/10 dark:border-white/10">
+          <img
+            class="aspect-[21/9] w-full object-cover"
+            [src]="image"
+            [alt]="s.title"
+            width="1400"
+            height="600"
+            decoding="async"
+          />
+        </div>
+      }
+
       @if (s.body) {
         <p class="mt-fluid-md max-w-3xl text-fluid-base leading-relaxed text-ink-soft dark:text-white/75">
           {{ s.body }}
