@@ -7,6 +7,7 @@ import {
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideClientHydration, withEventReplay, withHttpTransferCacheOptions } from '@angular/platform-browser';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 import { routes } from './app.routes';
 import { ThemeService } from './core/theme/theme.service';
@@ -18,6 +19,8 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     provideHttpClient(withFetch()),
+    // Lazy-loads the animations module (SSR + smaller initial bundle).
+    provideAnimationsAsync(),
     provideClientHydration(
       withEventReplay(),
       // Reuse SSR HTTP responses on the client (no double-fetch flash).

@@ -1,11 +1,11 @@
 <article
-  class="group glass-card relative flex h-full flex-col overflow-hidden p-0 transition duration-300 hover:-translate-y-1 hover:border-brand-green/40"
+  class="group glass-card relative flex h-full flex-col overflow-hidden p-0 transition duration-300 hover:-translate-y-1 hover:border-brand-green/40 hover:shadow-lg"
   [class.min-h-56]="featured()"
   [class.md:min-h-64]="featured()"
 >
-  <div class="relative h-36 overflow-hidden sm:h-40" [class.md:h-44]="featured()">
+  <div class="relative h-40 overflow-hidden sm:h-44" [class.md:h-52]="featured()">
     <img
-      class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+      class="h-full w-full object-cover transition duration-700 group-hover:scale-110"
       [src]="coverImage()"
       [alt]="service().title"
       width="640"
@@ -14,11 +14,15 @@
       decoding="async"
     />
     <div
-      class="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent"
+      class="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent"
       aria-hidden="true"
     ></div>
     <div
-      class="absolute bottom-3 start-3 inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/30 bg-white/90 text-brand-blue shadow-sm backdrop-blur-sm dark:bg-surface-dark-elevated/90 dark:text-brand-green"
+      class="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-brand-blue/25 to-transparent opacity-80"
+      aria-hidden="true"
+    ></div>
+    <div
+      class="absolute bottom-3 start-3 inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/35 bg-white/95 text-brand-blue shadow-md backdrop-blur-sm dark:bg-surface-dark-elevated/95 dark:text-brand-green"
       [class.text-brand-green]="isGreen()"
     >
       @switch (iconKey()) {

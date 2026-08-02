@@ -7,14 +7,25 @@
   >
     @for (item of items(); track item.label) {
       <div
-        class="flex min-h-14 flex-col items-center justify-center gap-1.5 px-2 text-center sm:min-h-16"
+        class="flex min-h-16 flex-col items-center justify-center gap-2 px-2 text-center sm:min-h-[4.75rem]"
       >
-        <span
-          class="h-1.5 w-1.5 shrink-0 rounded-full"
-          [class.bg-brand-green]="item.accent === 'green'"
-          [class.bg-brand-blue]="item.accent !== 'green'"
-          aria-hidden="true"
-        ></span>
+        <div
+          class="relative h-10 w-16 overflow-hidden rounded-lg border border-brand-blue/10 shadow-sm dark:border-white/10"
+        >
+          <img
+            class="h-full w-full object-cover"
+            [src]="item.thumb"
+            alt=""
+            width="96"
+            height="64"
+            loading="lazy"
+            decoding="async"
+          />
+          <span
+            class="absolute inset-0 bg-gradient-to-t from-brand-blue/25 to-transparent"
+            aria-hidden="true"
+          ></span>
+        </div>
         <p
           class="text-fluid-sm font-semibold leading-snug"
           [class.text-brand-green]="item.accent === 'green'"

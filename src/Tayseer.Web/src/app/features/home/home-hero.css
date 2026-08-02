@@ -32,23 +32,27 @@ html.dark .home-hero {
 .home-hero__photo-veil {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to inline-end,
-    rgba(247, 249, 252, 0.97) 0%,
-    rgba(247, 249, 252, 0.9) 34%,
-    rgba(247, 249, 252, 0.55) 58%,
-    rgba(9, 90, 141, 0.22) 100%
-  );
+  background:
+    radial-gradient(ellipse 55% 70% at 78% 42%, rgba(98, 168, 69, 0.14), transparent 60%),
+    linear-gradient(
+      to inline-end,
+      rgba(247, 249, 252, 0.97) 0%,
+      rgba(247, 249, 252, 0.9) 34%,
+      rgba(247, 249, 252, 0.5) 58%,
+      rgba(9, 90, 141, 0.28) 100%
+    );
 }
 
 html.dark .home-hero__photo-veil {
-  background: linear-gradient(
-    to inline-end,
-    rgba(10, 10, 10, 0.94) 0%,
-    rgba(10, 10, 10, 0.82) 36%,
-    rgba(10, 10, 10, 0.45) 62%,
-    rgba(9, 90, 141, 0.35) 100%
-  );
+  background:
+    radial-gradient(ellipse 55% 70% at 78% 42%, rgba(98, 168, 69, 0.16), transparent 60%),
+    linear-gradient(
+      to inline-end,
+      rgba(10, 10, 10, 0.95) 0%,
+      rgba(10, 10, 10, 0.84) 36%,
+      rgba(10, 10, 10, 0.42) 62%,
+      rgba(9, 90, 141, 0.4) 100%
+    );
 }
 
 .home-hero__grid {

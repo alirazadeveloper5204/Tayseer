@@ -1,7 +1,7 @@
 <!-- About teaser -->
-<section class="site-band bg-surface-light-muted dark:bg-surface-dark-elevated/60">
-  <div class="site-container grid items-center gap-fluid-xl py-fluid-2xl lg:grid-cols-2">
-    <div>
+<section class="about-band site-band bg-surface-light-muted dark:bg-surface-dark-elevated/60">
+  <div class="site-container grid items-center gap-fluid-xl py-fluid-2xl lg:grid-cols-2 lg:gap-x-fluid-2xl">
+    <div class="about-band__copy max-w-xl">
       <h2 class="type-section text-brand-blue dark:text-white">{{ copy().home.aboutTitle }}</h2>
       <p class="mt-fluid-sm text-fluid-lg font-semibold text-ink dark:text-ink-inverse">
         {{ copy().home.aboutLead }}
@@ -13,22 +13,42 @@
         {{ copy().common.readMore }}
       </a>
     </div>
+
     <div
       #aboutVisual
-      class="home-story__about-visual relative mx-auto w-full max-w-md"
+      class="about-media home-story__about-visual relative mx-auto w-full max-w-xl lg:max-w-none"
       [class.is-inview]="aboutInView()"
     >
-      <div class="home-story__photo-frame">
+      <div class="about-media__glow" aria-hidden="true"></div>
+
+      <figure class="about-media__hero media-zoom">
         <img
-          class="home-story__photo"
-          src="/images/about-partnership.jpg"
+          class="media-zoom__img"
+          [src]="aboutCollage.main"
           [alt]="copy().home.aboutTitle"
-          width="800"
-          height="800"
+          width="1800"
+          height="1350"
+          sizes="(max-width: 1024px) 92vw, 34rem"
           loading="lazy"
           decoding="async"
         />
-        <div class="home-story__photo-accent" aria-hidden="true"></div>
+        <span class="about-media__accent" aria-hidden="true"></span>
+      </figure>
+
+      <div class="about-media__thumbs">
+        @for (thumb of aboutCollage.thumbs; track thumb; let i = $index) {
+          <figure class="about-media__thumb media-zoom" [style.--i]="i">
+            <img
+              class="media-zoom__img"
+              [src]="thumb"
+              alt=""
+              width="900"
+              height="675"
+              loading="lazy"
+              decoding="async"
+            />
+          </figure>
+        }
       </div>
     </div>
   </div>
@@ -56,55 +76,113 @@
 </section>
 
 <!-- Testimonials -->
-<section class="home-story__testimonials site-band">
-  <div class="site-container grid items-center gap-fluid-xl py-fluid-2xl lg:grid-cols-2">
+<section class="clients-band home-story__testimonials site-band">
+  <div class="site-container grid items-center gap-fluid-xl py-fluid-2xl lg:grid-cols-2 lg:gap-x-fluid-2xl">
     <div
       #quoteVisual
-      class="home-story__quote-visual relative mx-auto w-full max-w-md lg:max-w-lg"
+      class="clients-media home-story__quote-visual relative mx-auto w-full max-w-xl lg:max-w-none"
       [class.is-inview]="quoteInView()"
+      [class.is-switching]="slideBusy()"
+      [attr.data-dir]="slideDir()"
     >
-      <div class="home-story__photo-frame">
-        <img
-          class="home-story__photo"
-          src="/images/clients-office.jpg"
-          alt=""
-          width="800"
-          height="800"
-          loading="lazy"
-          decoding="async"
-        />
-        <div class="home-story__photo-accent home-story__photo-accent--green" aria-hidden="true"></div>
-      </div>
+      <div class="clients-media__glow" aria-hidden="true"></div>
+      <div class="clients-media__veil" aria-hidden="true"></div>
+
+      @for (slide of [activeTestimonial()]; track slide.id) {
+        <div class="clients-media__thumbs">
+          @for (thumb of slide.gallery.thumbs; track thumb; let i = $index) {
+            <figure
+              class="clients-media__thumb clients-media__anim clients-media__anim--thumb media-zoom"
+              [style.--i]="i"
+            >
+              <img
+                class="media-zoom__img"
+                [src]="thumb"
+                alt=""
+                width="900"
+                height="675"
+                loading="lazy"
+                decoding="async"
+              />
+            </figure>
+          }
+        </div>
+
+        <figure class="clients-media__hero clients-media__anim clients-media__anim--hero media-zoom">
+          <img
+            class="clients-media__hero-img media-zoom__img"
+            [src]="slide.gallery.main"
+            [alt]="slide.name"
+            width="1800"
+            height="1350"
+            sizes="(max-width: 1024px) 92vw, 34rem"
+            loading="lazy"
+            decoding="async"
+          />
+          <span class="clients-media__accent" aria-hidden="true"></span>
+        </figure>
+      }
     </div>
 
-    <div class="relative min-w-0">
-      <h2 class="type-section text-brand-blue dark:text-white">{{ copy().home.testimonialsTitle }}</h2>
-      <div class="relative mt-fluid-lg max-w-xl">
+    <div class="clients-band__copy relative min-w-0">
+      <h2 class="type-section text-brand-blue dark:text-white">
+        {{ copy().home.testimonialsTitle }}
+      </h2>
+
+      <div
+        class="clients-quote relative mt-fluid-lg max-w-xl"
+        [class.is-switching]="slideBusy()"
+        [attr.data-dir]="slideDir()"
+      >
         <svg
-          class="absolute -top-1 end-0 text-brand-blue dark:text-brand-green"
-          width="44"
-          height="32"
+          class="clients-quote__mark absolute -top-2 end-0 text-brand-blue dark:text-brand-green"
+          width="48"
+          height="36"
           viewBox="0 0 50 37"
           fill="currentColor"
           aria-hidden="true"
         >
           <path d="M0 0V37L18.75 18.5V0H0ZM31.25 0V37L50 18.5V0H31.25Z" />
         </svg>
-        @if (activeTestimonial(); as t) {
-          <div class="pe-12">
-            <p class="font-display text-fluid-xl font-semibold text-ink dark:text-white">{{ t.name }}</p>
-            <p class="mt-1 text-fluid-sm font-medium text-brand-blue dark:text-brand-green">{{ t.role }}</p>
-            <p class="mt-fluid-md text-fluid-base leading-relaxed text-ink-soft dark:text-white/75">
+
+        @for (t of [activeTestimonial()]; track t.id) {
+          <div
+            class="clients-quote__body clients-quote__anim pe-12"
+            [@slideFade]="slideDir()"
+          >
+            <p class="clients-quote__name font-display text-fluid-xl font-semibold text-ink dark:text-white">
+              {{ t.name }}
+            </p>
+            <p class="clients-quote__role mt-1 text-fluid-sm font-medium text-brand-blue dark:text-brand-green">
+              {{ t.role }}
+            </p>
+            <p class="clients-quote__text mt-fluid-md text-fluid-base leading-relaxed text-ink-soft dark:text-white/75">
               {{ t.quote }}
             </p>
           </div>
         }
-        <div class="mt-fluid-lg flex items-center gap-3">
+
+        <div class="mt-fluid-md flex items-center justify-center gap-2" role="tablist" [attr.aria-label]="copy().home.testimonialsTitle">
+          @for (t of testimonials(); track t.id) {
+            <button
+              type="button"
+              class="clients-dot"
+              role="tab"
+              [class.is-active]="testimonialIndex() === t.id"
+              [attr.aria-selected]="testimonialIndex() === t.id"
+              [attr.aria-label]="t.name"
+              (click)="goToTestimonial(t.id)"
+            ></button>
+          }
+        </div>
+
+        <div class="mt-fluid-md flex items-center gap-3">
           <div class="h-px flex-1 bg-brand-blue/15 dark:bg-white/15"></div>
           <button
             type="button"
-            class="inline-flex size-11 items-center justify-center rounded-full border border-brand-blue bg-white text-brand-blue transition hover:bg-brand-blue hover:text-white dark:border-white/30 dark:bg-transparent dark:text-white dark:hover:bg-brand-green dark:hover:border-brand-green"
+            class="inline-flex size-11 items-center justify-center rounded-full border border-brand-blue bg-white text-brand-blue transition hover:bg-brand-blue hover:text-white disabled:opacity-50 dark:border-white/30 dark:bg-transparent dark:text-white dark:hover:border-brand-green dark:hover:bg-brand-green"
             (click)="prevTestimonial()"
+            [disabled]="slideBusy()"
             [attr.aria-label]="copy().common.previous"
           >
             <svg class="size-4 rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -113,8 +191,9 @@
           </button>
           <button
             type="button"
-            class="inline-flex size-11 items-center justify-center rounded-full bg-brand-blue text-white transition hover:brightness-110 dark:bg-brand-green"
+            class="inline-flex size-11 items-center justify-center rounded-full bg-brand-blue text-white transition hover:brightness-110 disabled:opacity-50 dark:bg-brand-green"
             (click)="nextTestimonial()"
+            [disabled]="slideBusy()"
             [attr.aria-label]="copy().common.next"
           >
             <svg class="size-4 rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -202,12 +281,12 @@
       @for (mode of deploy(); track mode.id; let i = $index) {
         <article class="glass-card overflow-hidden p-0">
           <div
-            class="home-story__deploy-banner flex h-36 items-end p-fluid-md"
+            class="home-story__deploy-banner flex h-44 items-end p-fluid-md sm:h-52"
             [class.home-story__deploy-banner--site]="i === 0"
             [class.home-story__deploy-banner--cloud]="i === 1"
             aria-hidden="true"
           >
-            <span class="rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-brand-blue dark:bg-surface-dark/80 dark:text-brand-green">
+            <span class="rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-brand-blue shadow-sm dark:bg-surface-dark/80 dark:text-brand-green">
               {{ i === 0 ? 'On-Prem' : 'Cloud' }}
             </span>
           </div>
