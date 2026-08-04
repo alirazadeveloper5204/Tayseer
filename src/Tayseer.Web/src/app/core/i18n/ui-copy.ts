@@ -24,6 +24,7 @@ export interface UiCopy {
     eyebrow: string;
     headline: string;
     subhead: string;
+    servicesEyebrow: string;
     servicesTitle: string;
     servicesSubtitle: string;
     aboutTitle: string;
@@ -110,8 +111,10 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
       headline: 'Innovative approach',
       subhead:
         'Future-ready AI & Digital Solutions for banks and enterprises across Saudi Arabia and the UAE.',
-      servicesTitle: 'Future-ready AI & Digital Solutions',
-      servicesSubtitle: 'We Have All Your Business Needs Covered',
+      servicesEyebrow: 'What We Build',
+      servicesTitle: 'All Your Business Needs, Covered',
+      servicesSubtitle:
+        'Six purpose-built solutions for Gulf banks and enterprises — from core banking and AI to mobile and managed operations.',
       aboutTitle: 'About Us',
       aboutLead: 'Born from Innovation, Backed by Strength',
       aboutBody:
@@ -197,8 +200,10 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
       eyebrow: 'تقنية مالية للمستقبل',
       headline: 'نهج مبتكر',
       subhead: 'حلول ذكاء اصطناعي ورقمية للبنوك والمؤسسات في المملكة العربية السعودية والإمارات.',
-      servicesTitle: 'حلول ذكاء اصطناعي ورقمية للمستقبل',
-      servicesSubtitle: 'نغطي جميع احتياجات أعمالك',
+      servicesEyebrow: 'ما نقدمه',
+      servicesTitle: 'نغطي جميع احتياجات أعمالك',
+      servicesSubtitle:
+        'ستة حلول مصممة للبنوك والمؤسسات في الخليج — من الخدمات المصرفية الأساسية والذكاء الاصطناعي إلى الجوال والعمليات المُدارة.',
       aboutTitle: 'من نحن',
       aboutLead: 'من رحم الابتكار، وبدعم من القوة',
       aboutBody:
@@ -267,6 +272,42 @@ export const HOME_STATS = [
   { value: 15, suffix: '+', labelEn: 'Countries', labelAr: 'دول' },
   { value: 600, suffix: '+', labelEn: 'Finished Products', labelAr: 'منتجات مكتملة' },
   { value: 100, suffix: '+', labelEn: 'Skilled Experts', labelAr: 'خبراء مهرة' },
+] as const;
+
+/** Under-hero KPI strip (Figma Make reference layout — brand-mapped). */
+export const HOME_KPI_STATS = [
+  {
+    value: 14,
+    decimals: 0,
+    prefix: '',
+    suffix: '+',
+    labelEn: 'Banking Clients',
+    labelAr: 'عملاء مصرفيون',
+  },
+  {
+    value: 99.98,
+    decimals: 2,
+    prefix: '',
+    suffix: '%',
+    labelEn: 'Uptime SLA',
+    labelAr: 'جاهزية الخدمة',
+  },
+  {
+    value: 2.4,
+    decimals: 1,
+    prefix: '$',
+    suffix: 'B',
+    labelEn: 'Transactions Processed',
+    labelAr: 'معاملات مُعالجة',
+  },
+  {
+    value: 18,
+    decimals: 0,
+    prefix: '',
+    suffix: '+',
+    labelEn: 'Years in Gulf Banking',
+    labelAr: 'سنوات في الخدمات المصرفية الخليجية',
+  },
 ] as const;
 
 export const HOME_TESTIMONIALS = [

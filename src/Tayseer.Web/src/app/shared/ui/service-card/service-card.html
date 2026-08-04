@@ -1,11 +1,13 @@
-<article
-  class="group glass-card relative flex h-full flex-col overflow-hidden p-0 transition duration-300 hover:-translate-y-1 hover:border-brand-green/40 hover:shadow-lg"
-  [class.min-h-56]="featured()"
-  [class.md:min-h-64]="featured()"
+<a
+  [routerLink]="link()"
+  class="service-card group glass-card relative flex h-full flex-col overflow-hidden p-0 no-underline outline-none focus-visible:ring-2 focus-visible:ring-brand-green/60"
+  (pointerenter)="onCoverEnter()"
+  (pointerleave)="onCoverLeave()"
 >
-  <div class="relative h-40 overflow-hidden sm:h-44" [class.md:h-52]="featured()">
+  <div class="service-card__media relative h-44 overflow-hidden sm:h-48">
     <img
-      class="h-full w-full object-cover transition duration-700 group-hover:scale-110"
+      #coverImg
+      class="h-full w-full object-cover will-change-transform"
       [src]="coverImage()"
       [alt]="service().title"
       width="640"
@@ -14,16 +16,21 @@
       decoding="async"
     />
     <div
-      class="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent"
+      class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent"
       aria-hidden="true"
     ></div>
     <div
-      class="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-brand-blue/25 to-transparent opacity-80"
+      class="absolute inset-x-0 top-0 h-14 bg-gradient-to-b from-brand-blue/30 to-transparent"
       aria-hidden="true"
     ></div>
+
     <div
-      class="absolute bottom-3 start-3 inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/35 bg-white/95 text-brand-blue shadow-md backdrop-blur-sm dark:bg-surface-dark-elevated/95 dark:text-brand-green"
+      class="service-card__icon absolute bottom-3 start-3 inline-flex h-10 w-10 items-center justify-center rounded-lg border bg-white text-brand-blue shadow-md dark:bg-surface-dark-elevated"
+      [class.border-brand-green]="isGreen()"
       [class.text-brand-green]="isGreen()"
+      [class.border-brand-blue]="!isGreen()"
+      [class.dark:border-brand-green]="true"
+      [class.dark:text-brand-green]="true"
     >
       @switch (iconKey()) {
         @case ('ai') {
@@ -71,32 +78,27 @@
     </div>
   </div>
 
-  <div class="relative flex flex-1 flex-col p-6">
+  <div class="relative z-10 flex flex-1 flex-col p-5 sm:p-6">
     <div
-      class="geometric-accent absolute bottom-2 end-2 h-28 w-28 opacity-0 transition duration-300 group-hover:opacity-30"
+      class="geometric-accent pointer-events-none absolute bottom-2 end-2 h-24 w-24 opacity-0 transition duration-300 group-hover:opacity-25"
+      aria-hidden="true"
     ></div>
 
-    <h3
-      class="relative z-10 font-display text-fluid-lg font-semibold text-brand-blue dark:text-white"
-      [class.text-fluid-xl]="featured()"
-    >
+    <h3 class="relative font-display text-fluid-lg font-semibold text-brand-blue dark:text-white">
       {{ service().title }}
     </h3>
 
-    <p class="relative z-10 mt-fluid-xs flex-1 text-fluid-sm leading-relaxed text-ink-soft dark:text-white/70">
+    <p class="relative mt-2 flex-1 text-fluid-sm leading-relaxed text-ink-soft dark:text-white/65">
       {{ service().shortDescription }}
     </p>
 
-    <a
-      [routerLink]="link()"
-      class="relative z-10 mt-fluid-md inline-flex items-center gap-2 text-fluid-sm font-semibold transition"
+    <span
+      class="service-card__cta relative mt-5 inline-flex items-center gap-2 text-fluid-sm font-semibold text-brand-blue transition group-hover:gap-2.5 dark:text-brand-green"
       [class.text-brand-green]="isGreen()"
-      [class.text-brand-blue]="!isGreen()"
-      [class.dark:text-brand-green]="true"
     >
       {{ ctaLabel() }}
       <svg
-        class="h-3.5 w-3.5 transition group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5"
+        class="h-3.5 w-3.5 rtl:rotate-180"
         viewBox="0 0 14 14"
         fill="none"
         aria-hidden="true"
@@ -109,6 +111,6 @@
           stroke-linejoin="round"
         />
       </svg>
-    </a>
+    </span>
   </div>
-</article>
+</a>

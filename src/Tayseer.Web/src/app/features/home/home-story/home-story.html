@@ -1,5 +1,5 @@
 <!-- About teaser -->
-<section class="about-band site-band bg-surface-light-muted dark:bg-surface-dark-elevated/60">
+<section id="about" class="about-band site-band">
   <div class="site-container grid items-center gap-fluid-xl py-fluid-2xl lg:grid-cols-2 lg:gap-x-fluid-2xl">
     <div class="about-band__copy max-w-xl">
       <h2 class="type-section text-brand-blue dark:text-white">{{ copy().home.aboutTitle }}</h2>
@@ -55,15 +55,15 @@
 </section>
 
 <!-- Stats -->
-<section class="site-band bg-surface-light dark:bg-surface-dark">
+<section class="site-band">
   <div class="site-container py-fluid-2xl">
     <h2 class="type-section text-center text-brand-blue dark:text-white">{{ copy().home.statsTitle }}</h2>
     <div
-      class="mt-fluid-lg grid grid-cols-2 gap-fluid-md rounded-2xl border border-brand-blue/10 bg-white p-fluid-lg dark:border-white/10 dark:bg-surface-dark-elevated sm:grid-cols-4"
+      class="mt-fluid-lg grid grid-cols-2 gap-fluid-md rounded-2xl border border-brand-blue/10 bg-white/80 p-fluid-lg backdrop-blur-md dark:border-white/10 dark:bg-surface-dark-elevated/70 sm:grid-cols-4"
     >
       @for (stat of stats(); track stat.id) {
         <div class="text-center">
-          <p class="font-display text-fluid-3xl font-bold text-ink dark:text-white">
+          <p class="font-display financial-number text-fluid-3xl font-bold text-ink dark:text-white">
             {{ stat.value }}{{ stat.suffix }}
           </p>
           <p class="mt-1 text-fluid-sm font-medium text-brand-blue dark:text-brand-green">
@@ -76,7 +76,7 @@
 </section>
 
 <!-- Testimonials -->
-<section class="clients-band home-story__testimonials site-band">
+<section id="clients" class="clients-band home-story__testimonials site-band">
   <div class="site-container grid items-center gap-fluid-xl py-fluid-2xl lg:grid-cols-2 lg:gap-x-fluid-2xl">
     <div
       #quoteVisual
@@ -208,7 +208,7 @@
 </section>
 
 <!-- Value props -->
-<section class="site-band bg-brand-blue text-white dark:bg-[#063a5a]">
+<section class="site-band bg-brand-blue text-white">
   <div class="site-container py-fluid-2xl">
     <h2 class="type-section mx-auto max-w-3xl text-center text-white">
       {{ copy().home.valuesTitle }}
@@ -232,7 +232,7 @@
 </section>
 
 <!-- Success mantra -->
-<section class="site-band bg-surface-light dark:bg-surface-dark">
+<section class="site-band">
   <div class="site-container py-fluid-2xl">
     <h2 class="type-section text-center text-brand-blue dark:text-white">{{ copy().home.mantraTitle }}</h2>
     <div class="mt-fluid-xl grid gap-fluid-lg md:grid-cols-3">
@@ -274,7 +274,7 @@
 </section>
 
 <!-- Deployment -->
-<section class="site-band bg-surface-light-muted dark:bg-surface-dark-elevated/50">
+<section class="site-band">
   <div class="site-container py-fluid-2xl">
     <h2 class="type-section text-center text-brand-blue dark:text-white">{{ copy().home.deployTitle }}</h2>
     <div class="mt-fluid-xl grid gap-fluid-lg md:grid-cols-2">

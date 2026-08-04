@@ -9,7 +9,7 @@
   display: grid;
   place-items: center;
   pointer-events: all;
-  background: #0a0a0a;
+  background: #141b24;
   opacity: 0;
   transition: opacity 320ms cubic-bezier(0.33, 1, 0.68, 1);
 }
