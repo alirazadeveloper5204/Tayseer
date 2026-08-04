@@ -1,5 +1,6 @@
 import { Component, computed, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { serviceImage } from '../../../core/media/site-images';
 import { ServiceListItemDto } from '../../../models/service.model';
 
 @Component({
@@ -21,4 +22,6 @@ export class ServiceCard {
   readonly isGreen = computed(() => this.service().accent === 'green');
 
   readonly iconKey = computed(() => this.service().iconKey ?? 'default');
+
+  readonly coverImage = computed(() => serviceImage(this.service().slug));
 }

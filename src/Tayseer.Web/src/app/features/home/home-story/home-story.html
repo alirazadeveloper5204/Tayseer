@@ -1,7 +1,7 @@
 <!-- About teaser -->
-<section class="site-band bg-surface-light-muted dark:bg-surface-dark-elevated/60">
-  <div class="site-container grid items-center gap-fluid-xl py-fluid-2xl lg:grid-cols-2">
-    <div>
+<section class="about-band site-band bg-surface-light-muted dark:bg-surface-dark-elevated/60">
+  <div class="site-container grid items-center gap-fluid-xl py-fluid-2xl lg:grid-cols-2 lg:gap-x-fluid-2xl">
+    <div class="about-band__copy max-w-xl">
       <h2 class="type-section text-brand-blue dark:text-white">{{ copy().home.aboutTitle }}</h2>
       <p class="mt-fluid-sm text-fluid-lg font-semibold text-ink dark:text-ink-inverse">
         {{ copy().home.aboutLead }}
@@ -13,38 +13,43 @@
         {{ copy().common.readMore }}
       </a>
     </div>
+
     <div
       #aboutVisual
-      class="home-story__about-visual relative mx-auto flex aspect-square w-full max-w-md items-center justify-center"
+      class="about-media home-story__about-visual relative mx-auto w-full max-w-xl lg:max-w-none"
       [class.is-inview]="aboutInView()"
     >
-      <div class="home-story__about-orb" aria-hidden="true"></div>
-      <!-- Alliance / digital network — innovation + partnership -->
-      <svg class="home-story__about-art" viewBox="0 0 200 200" fill="none" aria-hidden="true">
-        <circle class="hs-ring" cx="100" cy="100" r="78" />
-        <circle class="hs-ring hs-ring--soft" cx="100" cy="100" r="58" />
+      <div class="about-media__glow" aria-hidden="true"></div>
 
-        <!-- Connection paths -->
-        <path class="hs-line hs-line--1" d="M62 78 L100 100 L138 72" pathLength="100" />
-        <path class="hs-line hs-line--2" d="M100 100 L128 138" pathLength="100" />
-        <path class="hs-line hs-line--soft hs-line--3" d="M62 78 L70 140" pathLength="100" />
-        <path class="hs-line hs-line--soft hs-line--4" d="M138 72 L148 128" pathLength="100" />
+      <figure class="about-media__hero media-zoom">
+        <img
+          class="media-zoom__img"
+          [src]="aboutCollage.main"
+          [alt]="copy().home.aboutTitle"
+          width="1800"
+          height="1350"
+          sizes="(max-width: 1024px) 92vw, 34rem"
+          loading="lazy"
+          decoding="async"
+        />
+        <span class="about-media__accent" aria-hidden="true"></span>
+      </figure>
 
-        <!-- Hub (Tayseer) -->
-        <circle class="hs-node hs-node--hub" cx="100" cy="100" r="14" />
-        <circle class="hs-node-core" cx="100" cy="100" r="5" />
-
-        <!-- Partner / region nodes -->
-        <circle class="hs-node hs-node--n1" cx="62" cy="78" r="9" />
-        <circle class="hs-node hs-node--n2" cx="138" cy="72" r="9" />
-        <circle class="hs-node hs-node--n3" cx="128" cy="138" r="8" />
-        <circle class="hs-node hs-node--accent hs-node--n4" cx="70" cy="140" r="7" />
-        <circle class="hs-node hs-node--accent hs-node--n5" cx="148" cy="128" r="7" />
-
-        <!-- Nested L-chevron identity accent -->
-        <path class="hs-brand" d="M28 28 H52 V52" pathLength="100" />
-        <path class="hs-brand hs-brand--inner" d="M28 36 H44 V52" pathLength="100" />
-      </svg>
+      <div class="about-media__thumbs">
+        @for (thumb of aboutCollage.thumbs; track thumb; let i = $index) {
+          <figure class="about-media__thumb media-zoom" [style.--i]="i">
+            <img
+              class="media-zoom__img"
+              [src]="thumb"
+              alt=""
+              width="900"
+              height="675"
+              loading="lazy"
+              decoding="async"
+            />
+          </figure>
+        }
+      </div>
     </div>
   </div>
 </section>
@@ -71,78 +76,113 @@
 </section>
 
 <!-- Testimonials -->
-<section class="home-story__testimonials site-band">
-  <div class="site-container grid items-center gap-fluid-xl py-fluid-2xl lg:grid-cols-2">
+<section class="clients-band home-story__testimonials site-band">
+  <div class="site-container grid items-center gap-fluid-xl py-fluid-2xl lg:grid-cols-2 lg:gap-x-fluid-2xl">
     <div
       #quoteVisual
-      class="home-story__quote-visual relative mx-auto flex aspect-square w-full max-w-md items-center justify-center lg:max-w-lg"
+      class="clients-media home-story__quote-visual relative mx-auto w-full max-w-xl lg:max-w-none"
       [class.is-inview]="quoteInView()"
-      aria-hidden="true"
+      [class.is-switching]="slideBusy()"
+      [attr.data-dir]="slideDir()"
     >
-      <div class="home-story__quote-orb"></div>
-      <!-- Dialogue / client voice — geometric speech + trust -->
-      <svg class="home-story__quote-art" viewBox="0 0 200 200" fill="none">
-        <circle class="hs-ring" cx="100" cy="100" r="78" />
+      <div class="clients-media__glow" aria-hidden="true"></div>
+      <div class="clients-media__veil" aria-hidden="true"></div>
 
-        <!-- Primary speech panel -->
-        <path
-          class="hs-panel hs-panel--main"
-          d="M42 48 H118 Q128 48 128 58 V98 Q128 108 118 108 H78 L62 124 V108 H52 Q42 108 42 98 V58 Q42 48 52 48 Z"
-        />
-        <path class="hs-panel-line hs-panel-line--1" d="M58 68 H108" pathLength="100" />
-        <path class="hs-panel-line hs-panel-line--2" d="M58 80 H98" pathLength="100" />
-        <path class="hs-panel-line hs-panel-line--short hs-panel-line--3" d="M58 92 H88" pathLength="100" />
+      @for (slide of [activeTestimonial()]; track slide.id) {
+        <div class="clients-media__thumbs">
+          @for (thumb of slide.gallery.thumbs; track thumb; let i = $index) {
+            <figure
+              class="clients-media__thumb clients-media__anim clients-media__anim--thumb media-zoom"
+              [style.--i]="i"
+            >
+              <img
+                class="media-zoom__img"
+                [src]="thumb"
+                alt=""
+                width="900"
+                height="675"
+                loading="lazy"
+                decoding="async"
+              />
+            </figure>
+          }
+        </div>
 
-        <!-- Secondary reply panel -->
-        <path
-          class="hs-panel hs-panel--reply"
-          d="M82 92 H148 Q158 92 158 102 V136 Q158 146 148 146 H118 L132 160 V146 H92 Q82 146 82 136 V102 Q82 92 92 92 Z"
-        />
-        <path class="hs-panel-line hs-panel-line--reply hs-panel-line--4" d="M96 112 H140" pathLength="100" />
-        <path class="hs-panel-line hs-panel-line--reply hs-panel-line--5" d="M96 124 H128" pathLength="100" />
-
-        <!-- Angular quote marks -->
-        <path class="hs-quote-mark hs-quote-mark--1" d="M150 42 V68 L166 55 V42 H150 Z" />
-        <path class="hs-quote-mark hs-quote-mark--2" d="M170 42 V68 L186 55 V42 H170 Z" />
-
-        <!-- Trust check -->
-        <circle class="hs-trust" cx="158" cy="158" r="16" />
-        <path class="hs-trust-check" d="M150 158 L156 164 L168 150" pathLength="100" />
-
-        <!-- Brand L accent -->
-        <path class="hs-brand" d="M28 154 H48 V174" pathLength="100" />
-        <path class="hs-brand hs-brand--inner" d="M28 162 H40 V174" pathLength="100" />
-      </svg>
+        <figure class="clients-media__hero clients-media__anim clients-media__anim--hero media-zoom">
+          <img
+            class="clients-media__hero-img media-zoom__img"
+            [src]="slide.gallery.main"
+            [alt]="slide.name"
+            width="1800"
+            height="1350"
+            sizes="(max-width: 1024px) 92vw, 34rem"
+            loading="lazy"
+            decoding="async"
+          />
+          <span class="clients-media__accent" aria-hidden="true"></span>
+        </figure>
+      }
     </div>
 
-    <div class="relative min-w-0">
-      <h2 class="type-section text-brand-blue dark:text-white">{{ copy().home.testimonialsTitle }}</h2>
-      <div class="relative mt-fluid-lg max-w-xl">
+    <div class="clients-band__copy relative min-w-0">
+      <h2 class="type-section text-brand-blue dark:text-white">
+        {{ copy().home.testimonialsTitle }}
+      </h2>
+
+      <div
+        class="clients-quote relative mt-fluid-lg max-w-xl"
+        [class.is-switching]="slideBusy()"
+        [attr.data-dir]="slideDir()"
+      >
         <svg
-          class="absolute -top-1 end-0 text-brand-blue dark:text-brand-green"
-          width="44"
-          height="32"
+          class="clients-quote__mark absolute -top-2 end-0 text-brand-blue dark:text-brand-green"
+          width="48"
+          height="36"
           viewBox="0 0 50 37"
           fill="currentColor"
           aria-hidden="true"
         >
           <path d="M0 0V37L18.75 18.5V0H0ZM31.25 0V37L50 18.5V0H31.25Z" />
         </svg>
-        @if (activeTestimonial(); as t) {
-          <div class="pe-12">
-            <p class="font-display text-fluid-xl font-semibold text-ink dark:text-white">{{ t.name }}</p>
-            <p class="mt-1 text-fluid-sm font-medium text-brand-blue dark:text-brand-green">{{ t.role }}</p>
-            <p class="mt-fluid-md text-fluid-base leading-relaxed text-ink-soft dark:text-white/75">
+
+        @for (t of [activeTestimonial()]; track t.id) {
+          <div
+            class="clients-quote__body clients-quote__anim pe-12"
+            [@slideFade]="slideDir()"
+          >
+            <p class="clients-quote__name font-display text-fluid-xl font-semibold text-ink dark:text-white">
+              {{ t.name }}
+            </p>
+            <p class="clients-quote__role mt-1 text-fluid-sm font-medium text-brand-blue dark:text-brand-green">
+              {{ t.role }}
+            </p>
+            <p class="clients-quote__text mt-fluid-md text-fluid-base leading-relaxed text-ink-soft dark:text-white/75">
               {{ t.quote }}
             </p>
           </div>
         }
-        <div class="mt-fluid-lg flex items-center gap-3">
+
+        <div class="mt-fluid-md flex items-center justify-center gap-2" role="tablist" [attr.aria-label]="copy().home.testimonialsTitle">
+          @for (t of testimonials(); track t.id) {
+            <button
+              type="button"
+              class="clients-dot"
+              role="tab"
+              [class.is-active]="testimonialIndex() === t.id"
+              [attr.aria-selected]="testimonialIndex() === t.id"
+              [attr.aria-label]="t.name"
+              (click)="goToTestimonial(t.id)"
+            ></button>
+          }
+        </div>
+
+        <div class="mt-fluid-md flex items-center gap-3">
           <div class="h-px flex-1 bg-brand-blue/15 dark:bg-white/15"></div>
           <button
             type="button"
-            class="inline-flex size-11 items-center justify-center rounded-full border border-brand-blue bg-white text-brand-blue transition hover:bg-brand-blue hover:text-white dark:border-white/30 dark:bg-transparent dark:text-white dark:hover:bg-brand-green dark:hover:border-brand-green"
+            class="inline-flex size-11 items-center justify-center rounded-full border border-brand-blue bg-white text-brand-blue transition hover:bg-brand-blue hover:text-white disabled:opacity-50 dark:border-white/30 dark:bg-transparent dark:text-white dark:hover:border-brand-green dark:hover:bg-brand-green"
             (click)="prevTestimonial()"
+            [disabled]="slideBusy()"
             [attr.aria-label]="copy().common.previous"
           >
             <svg class="size-4 rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -151,8 +191,9 @@
           </button>
           <button
             type="button"
-            class="inline-flex size-11 items-center justify-center rounded-full bg-brand-blue text-white transition hover:brightness-110 dark:bg-brand-green"
+            class="inline-flex size-11 items-center justify-center rounded-full bg-brand-blue text-white transition hover:brightness-110 disabled:opacity-50 dark:bg-brand-green"
             (click)="nextTestimonial()"
+            [disabled]="slideBusy()"
             [attr.aria-label]="copy().common.next"
           >
             <svg class="size-4 rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -240,12 +281,12 @@
       @for (mode of deploy(); track mode.id; let i = $index) {
         <article class="glass-card overflow-hidden p-0">
           <div
-            class="home-story__deploy-banner flex h-36 items-end p-fluid-md"
+            class="home-story__deploy-banner flex h-44 items-end p-fluid-md sm:h-52"
             [class.home-story__deploy-banner--site]="i === 0"
             [class.home-story__deploy-banner--cloud]="i === 1"
             aria-hidden="true"
           >
-            <span class="rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-brand-blue dark:bg-surface-dark/80 dark:text-brand-green">
+            <span class="rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-brand-blue shadow-sm dark:bg-surface-dark/80 dark:text-brand-green">
               {{ i === 0 ? 'On-Prem' : 'Cloud' }}
             </span>
           </div>

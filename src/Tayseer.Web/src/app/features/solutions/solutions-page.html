@@ -1,8 +1,51 @@
-<section class="site-band bg-surface-light dark:bg-surface-dark">
-  <div class="site-container py-fluid-2xl">
+<section class="relative overflow-hidden">
+  <div class="absolute inset-0" aria-hidden="true">
+    <img
+      class="h-full w-full scale-105 object-cover"
+      src="/images/solutions-banner.jpg"
+      alt=""
+      width="1600"
+      height="600"
+      decoding="async"
+    />
+    <div
+      class="absolute inset-0 bg-gradient-to-b from-surface-light/96 via-surface-light/90 to-surface-light dark:from-surface-dark/96 dark:via-surface-dark/90 dark:to-surface-dark"
+    ></div>
+    <div
+      class="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_20%,rgba(98,168,69,0.12),transparent_50%)]"
+    ></div>
+  </div>
+
+  <div class="site-container relative z-10 py-fluid-2xl">
     <p class="type-eyebrow">{{ copy().nav.solutions }}</p>
     <h1 class="type-title mt-fluid-sm">{{ title() }}</h1>
     <p class="type-lead mt-fluid-md max-w-3xl">{{ intro() }}</p>
+
+    @if (!loading() && !error() && services().length) {
+      <div class="mt-fluid-lg flex gap-3 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        @for (service of services(); track service.slug) {
+          <a
+            [routerLink]="'/' + lang() + '/solutions/' + service.slug"
+            class="group relative h-20 w-28 shrink-0 overflow-hidden rounded-xl border border-brand-blue/15 shadow-sm transition hover:-translate-y-0.5 hover:border-brand-green/40 dark:border-white/15"
+          >
+            <img
+              class="h-full w-full object-cover transition duration-500 group-hover:scale-110"
+              [src]="thumbFor(service.slug)"
+              [alt]="service.title"
+              width="160"
+              height="112"
+              loading="lazy"
+              decoding="async"
+            />
+            <span
+              class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-2 pb-1.5 pt-5 text-[0.65rem] font-semibold leading-tight text-white"
+            >
+              {{ service.title }}
+            </span>
+          </a>
+        }
+      </div>
+    }
 
     @if (loading()) {
       <div class="mt-fluid-xl flex justify-center py-fluid-xl">
@@ -20,7 +63,7 @@
       </div>
     }
 
-    <div class="mt-fluid-2xl rounded-2xl border border-brand-blue/10 bg-surface-light-muted p-fluid-lg dark:border-white/10 dark:bg-surface-dark-elevated">
+    <div class="mt-fluid-2xl rounded-2xl border border-brand-blue/10 bg-surface-light-muted/90 p-fluid-lg backdrop-blur-sm dark:border-white/10 dark:bg-surface-dark-elevated/90">
       <h2 class="font-display text-fluid-xl font-semibold text-brand-blue dark:text-white">
         {{ benefitsTitle() }}
       </h2>
