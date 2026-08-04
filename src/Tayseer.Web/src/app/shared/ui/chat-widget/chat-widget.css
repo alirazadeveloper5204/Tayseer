@@ -12,6 +12,14 @@
   color: inherit;
 }
 
+/* Sit above the sticky mobile CTA (hidden from sm and up) */
+@media (max-width: 639px) {
+  .chat-widget {
+    bottom: calc(var(--site-mobile-cta-height) + 0.75rem);
+    inset-inline-end: 0.85rem;
+  }
+}
+
 .chat-widget > * {
   pointer-events: auto;
 }
@@ -542,11 +550,6 @@ html[dir='rtl'] .chat-panel__send {
 }
 
 @media (max-width: 480px) {
-  .chat-widget {
-    inset-inline-end: 0.85rem;
-    bottom: 0.85rem;
-  }
-
   .chat-panel {
     width: min(100vw - 1.7rem, 22.5rem);
     height: min(72vh, 32rem);
@@ -556,6 +559,7 @@ html[dir='rtl'] .chat-panel__send {
   .chat-panel--expanded {
     position: fixed;
     inset: 0.65rem;
+    inset-block-end: calc(var(--site-mobile-cta-height) + 0.65rem);
     width: auto;
     height: auto;
     max-height: none;

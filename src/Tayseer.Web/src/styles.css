@@ -3,6 +3,9 @@
 @import "./app/features/home/home-hero.css";
 @import "./app/shared/ui/page-kit.css";
 
+/* Bootstrap utilities only — avoids reboot/grid clash with Tailwind */
+@import "bootstrap/dist/css/bootstrap-utilities.min.css" layer(bootstrap);
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
@@ -10,11 +13,16 @@
     color-scheme: light;
     --site-gutter: clamp(1rem, 0.6rem + 2vw, 2rem);
     --site-content: 72rem;
+    /* Shared chrome: mobile sticky CTA + header drawer offsets */
+    --site-mobile-cta-height: calc(4.75rem + env(safe-area-inset-bottom, 0px));
+    --site-chrome-offset-collapsed: 4rem;
+    --site-chrome-offset-expanded: 7.25rem;
   }
 
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 80px;
+    overflow-x: clip;
     @apply antialiased;
     text-rendering: optimizeLegibility;
     background: #030712;
@@ -28,6 +36,7 @@
     @apply text-ink font-sans text-fluid-base;
     position: relative;
     min-height: 100%;
+    overflow-x: clip;
     background: transparent;
   }
 
@@ -156,6 +165,19 @@
   .site-container {
     width: min(100% - (var(--site-gutter) * 2), var(--site-content));
     margin-inline: auto;
+  }
+
+  /* Fluid auto-fit grid for cards/sections at any viewport */
+  .fluid-grid {
+    display: grid;
+    gap: clamp(0.75rem, 0.5rem + 1vw, 1.5rem);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  }
+
+  .fluid-grid-sm {
+    display: grid;
+    gap: clamp(0.65rem, 0.45rem + 0.8vw, 1.15rem);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
   }
 
   .site-section {

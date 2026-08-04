@@ -20,7 +20,7 @@
         {{ isAr() ? 'تعذر تحميل الحلول حالياً.' : 'Solutions are temporarily unavailable.' }}
       </p>
     } @else {
-      <div class="grid gap-fluid-md sm:grid-cols-2 lg:grid-cols-3">
+      <div class="fluid-grid">
         @for (service of services(); track service.slug) {
           <app-service-card [service]="service" [lang]="lang()" [ctaLabel]="copy().common.readMore" />
         }

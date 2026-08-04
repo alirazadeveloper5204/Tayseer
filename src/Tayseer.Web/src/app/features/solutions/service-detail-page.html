@@ -14,14 +14,17 @@
       </a>
     } @else {
       @let s = service()!;
-      <nav class="text-fluid-xs text-ink-soft dark:text-white/50" aria-label="Breadcrumb">
-        <a [routerLink]="'/' + lang()" class="hover:text-brand-green">{{ copy().nav.home }}</a>
-        <span class="mx-2">/</span>
-        <a [routerLink]="'/' + lang() + '/solutions'" class="hover:text-brand-green">{{
+      <nav
+        class="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-fluid-xs text-ink-soft dark:text-white/50"
+        aria-label="Breadcrumb"
+      >
+        <a [routerLink]="'/' + lang()" class="shrink-0 hover:text-brand-green">{{ copy().nav.home }}</a>
+        <span class="shrink-0" aria-hidden="true">/</span>
+        <a [routerLink]="'/' + lang() + '/solutions'" class="shrink-0 hover:text-brand-green">{{
           copy().nav.solutions
         }}</a>
-        <span class="mx-2">/</span>
-        <span class="text-brand-blue dark:text-white">{{ s.title }}</span>
+        <span class="shrink-0" aria-hidden="true">/</span>
+        <span class="min-w-0 truncate text-brand-blue dark:text-white">{{ s.title }}</span>
       </nav>
 
       <p class="type-eyebrow mt-fluid-md">{{ copy().nav.solutions }}</p>
@@ -33,7 +36,7 @@
           class="relative mt-fluid-lg overflow-hidden rounded-2xl border border-brand-blue/10 shadow-lg dark:border-white/10"
         >
           <img
-            class="aspect-[21/9] w-full object-cover"
+            class="aspect-[16/10] w-full object-cover sm:aspect-[21/9]"
             [src]="image"
             [alt]="s.title"
             width="1400"
@@ -47,29 +50,39 @@
         </div>
       }
 
-      <div class="mt-fluid-md flex gap-3 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        @for (thumb of relatedThumbs(); track thumb.slug) {
-          <a
-            [routerLink]="'/' + lang() + '/solutions/' + thumb.slug"
-            class="group relative h-[4.5rem] w-24 shrink-0 overflow-hidden rounded-xl border transition"
-            [class.border-brand-green]="thumb.slug === s.slug"
-            [class.ring-2]="thumb.slug === s.slug"
-            [class.ring-brand-green/40]="thumb.slug === s.slug"
-            [class.border-brand-blue/15]="thumb.slug !== s.slug"
-            [class.dark:border-white/15]="thumb.slug !== s.slug"
-            [attr.aria-current]="thumb.slug === s.slug ? 'page' : null"
-          >
-            <img
-              class="h-full w-full object-cover transition duration-500 group-hover:scale-110"
-              [src]="thumb.src"
-              [alt]="thumb.slug"
-              width="140"
-              height="100"
-              loading="lazy"
-              decoding="async"
-            />
-          </a>
-        }
+      <div
+        class="relative mt-fluid-md"
+      >
+        <div
+          class="flex flex-wrap gap-3 sm:flex-nowrap sm:overflow-x-auto sm:pb-1 sm:[-ms-overflow-style:none] sm:[scrollbar-width:none] sm:[&::-webkit-scrollbar]:hidden"
+        >
+          @for (thumb of relatedThumbs(); track thumb.slug) {
+            <a
+              [routerLink]="'/' + lang() + '/solutions/' + thumb.slug"
+              class="group relative h-[4.5rem] w-[calc(33.333%-0.5rem)] min-w-0 overflow-hidden rounded-xl border transition sm:h-[4.5rem] sm:w-24 sm:shrink-0"
+              [class.border-brand-green]="thumb.slug === s.slug"
+              [class.ring-2]="thumb.slug === s.slug"
+              [class.ring-brand-green/40]="thumb.slug === s.slug"
+              [class.border-brand-blue/15]="thumb.slug !== s.slug"
+              [class.dark:border-white/15]="thumb.slug !== s.slug"
+              [attr.aria-current]="thumb.slug === s.slug ? 'page' : null"
+            >
+              <img
+                class="h-full w-full object-cover transition duration-500 group-hover:scale-110"
+                [src]="thumb.src"
+                [alt]="thumb.slug"
+                width="140"
+                height="100"
+                loading="lazy"
+                decoding="async"
+              />
+            </a>
+          }
+        </div>
+        <div
+          class="pointer-events-none absolute inset-y-0 end-0 hidden w-8 bg-gradient-to-l from-surface-light to-transparent dark:from-surface-dark sm:block"
+          aria-hidden="true"
+        ></div>
       </div>
 
       @if (s.body) {

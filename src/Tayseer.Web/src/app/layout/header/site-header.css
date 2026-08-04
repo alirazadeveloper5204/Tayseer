@@ -2,21 +2,228 @@
   display: block;
 }
 
-/* Desktop nav sits on frosted chrome — no solid box */
-@media (min-width: 1024px) {
+.site-header__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: clamp(0.5rem, 0.35rem + 1vw, 1.25rem);
+  row-gap: 0.5rem;
+  padding-block: clamp(0.55rem, 0.4rem + 0.6vw, 0.9rem);
+}
+
+.site-header__logo {
+  flex-shrink: 0;
+}
+
+.site-header__logo img {
+  height: clamp(1.75rem, 1.4rem + 1.2vw, 2.5rem);
+  width: auto;
+}
+
+.site-nav {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  justify-content: center;
+  background: transparent;
+}
+
+.site-nav__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.35rem, 0.2rem + 0.8vw, 1.35rem);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: clamp(0.7rem, 0.62rem + 0.45vw, 0.9375rem);
+  font-weight: 600;
+  color: #0d5a8c;
+}
+
+:host-context(html.dark) .site-nav__list {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.site-nav__link {
+  display: inline-flex;
+  align-items: center;
+  padding-block: 0.35rem;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.site-nav__link:hover,
+.site-nav__link.router-link-active,
+.site-nav__link.nav-scroll-active {
+  color: #62a945;
+}
+
+:host-context(html.dark) .site-nav__link:hover,
+:host-context(html.dark) .site-nav__link.router-link-active,
+:host-context(html.dark) .site-nav__link.nav-scroll-active {
+  color: #00f2fe;
+}
+
+.nav-dd {
+  position: relative;
+}
+
+.nav-dd__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.site-nav__chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.15rem;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  transition: transform 0.25s ease;
+}
+
+.nav-dd.is-open .site-nav__chevron,
+.nav-dd:hover .site-nav__chevron {
+  transform: rotate(180deg);
+}
+
+/*
+ * Dropdown shell: transparent top padding bridges the trigger → panel gap
+ * so the pointer never "falls out" of the hover area (Bootstrap-style fade).
+ */
+.site-nav__submenu.dropdown-menu {
+  --bs-dropdown-min-width: min(18rem, 85vw);
+  position: absolute;
+  inset-inline-start: 0;
+  top: 100%;
+  z-index: 70;
+  display: block;
+  min-width: var(--bs-dropdown-min-width);
+  margin: 0;
+  padding: 0.55rem 0 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(0.4rem);
+  transition:
+    opacity 0.22s ease,
+    transform 0.22s ease,
+    visibility 0.22s ease;
+}
+
+.site-nav__submenu.show,
+.nav-dd.is-open > .site-nav__submenu {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.site-nav__submenu-panel {
+  padding: 0.4rem;
+  list-style: none;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(13, 90, 140, 0.12);
+  background: #ffffff;
+  box-shadow: 0 12px 32px rgba(9, 90, 141, 0.14);
+}
+
+:host-context(html.dark) .site-nav__submenu-panel {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: #0f172a;
+}
+
+.site-nav__submenu-link.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  margin: 0;
+  border: 0;
+  border-radius: 0.5rem;
+  background: transparent;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: inherit;
+  text-decoration: none;
+  white-space: normal;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    padding-inline-start 0.2s ease,
+    transform 0.2s ease;
+}
+
+.site-nav__submenu-link.dropdown-item:hover,
+.site-nav__submenu-link.dropdown-item:focus {
+  background: #0d5a8c;
+  color: #ffffff;
+  padding-inline-start: 1.1rem;
+  outline: none;
+}
+
+:host-context(html.dark) .site-nav__submenu-link.dropdown-item:hover,
+:host-context(html.dark) .site-nav__submenu-link.dropdown-item:focus {
+  background: rgba(0, 242, 254, 0.18);
+  color: #00f2fe;
+}
+
+.site-header__actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: clamp(0.35rem, 0.25rem + 0.5vw, 0.65rem);
+  margin-inline-start: auto;
+}
+
+.site-header__cta {
+  font-size: clamp(0.65rem, 0.58rem + 0.35vw, 0.875rem) !important;
+  padding-inline: clamp(0.65rem, 0.5rem + 0.6vw, 1.1rem) !important;
+  padding-block: clamp(0.4rem, 0.35rem + 0.25vw, 0.65rem) !important;
+}
+
+@media (max-width: 639px) {
   .site-nav {
-    background: transparent !important;
-    box-shadow: none;
+    order: 3;
+    flex: 1 0 100%;
+    width: 100%;
+    justify-content: flex-start;
+    overflow: visible;
   }
 
-  .site-nav a {
-    transition: color 0.2s ease;
+  .site-nav__list {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    width: 100%;
+    gap: 0.35rem 0.85rem;
+  }
+
+  .site-header__cta {
+    max-width: 9.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .site-nav__submenu.dropdown-menu {
+    inset-inline-start: 0;
+    min-width: min(18rem, calc(100vw - 2rem));
   }
 }
 
-/* Mobile drawer sits under sticky chrome and above the bottom CTA */
-@media (max-width: 1023px) {
-  .site-nav {
-    bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px));
+@media (prefers-reduced-motion: reduce) {
+  .site-nav__submenu.dropdown-menu,
+  .site-nav__submenu-link.dropdown-item,
+  .site-nav__chevron {
+    transition: none;
   }
 }
