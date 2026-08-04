@@ -203,15 +203,11 @@ html.dark .home-story__quote-art .hs-trust-check {
 }
 
 .home-story__testimonials {
-  background:
-    linear-gradient(105deg, rgba(247, 249, 252, 0.55), rgba(247, 249, 252, 0.92) 48%),
-    radial-gradient(ellipse at 18% 50%, rgba(9, 90, 141, 0.14), transparent 52%);
+  background: transparent;
 }
 
 html.dark .home-story__testimonials {
-  background:
-    linear-gradient(105deg, rgba(10, 10, 10, 0.55), rgba(10, 10, 10, 0.92) 48%),
-    radial-gradient(ellipse at 18% 50%, rgba(13, 90, 142, 0.32), transparent 52%);
+  background: transparent;
 }
 
 /* ??? Clients / testimonials media mosaic ??? */
@@ -249,19 +245,23 @@ html.dark .clients-media__glow {
   isolation: isolate;
   border-radius: 1.35rem;
   cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow:
     0 24px 50px rgba(9, 90, 141, 0.18),
     0 0 0 1px rgba(9, 90, 141, 0.1);
-  opacity: 0.55;
+  opacity: 0;
+  transform: translateY(20px) translateZ(0);
+  will-change: opacity, transform;
   transition:
-    opacity 0.55s ease,
-    box-shadow 0.45s ease;
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s ease,
+    border-color 0.35s ease,
+    opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 html.dark .clients-media__hero {
   box-shadow:
-    0 24px 50px rgba(0, 0, 0, 0.45),
-    0 0 0 1px rgba(255, 255, 255, 0.08);
+    0 24px 50px rgba(0, 0, 0, 0.45);
 }
 
 .clients-media__hero .media-zoom__img,
@@ -322,19 +322,23 @@ html.dark .clients-media__hero {
   isolation: isolate;
   border-radius: 0.95rem;
   cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow:
     0 12px 28px rgba(9, 90, 141, 0.14),
     0 0 0 1px rgba(9, 90, 141, 0.1);
-  opacity: 0.45;
+  opacity: 0;
+  transform: translateY(20px) translateZ(0);
+  will-change: opacity, transform;
   transition:
-    opacity 0.55s ease,
-    box-shadow 0.45s ease;
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s ease,
+    border-color 0.35s ease,
+    opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 html.dark .clients-media__thumb {
   box-shadow:
-    0 12px 28px rgba(0, 0, 0, 0.35),
-    0 0 0 1px rgba(255, 255, 255, 0.1);
+    0 12px 28px rgba(0, 0, 0, 0.35);
 }
 
 .clients-media__thumb::after {
@@ -350,19 +354,18 @@ html.dark .clients-media__thumb {
 .clients-media.is-inview .clients-media__hero,
 .clients-media.is-inview .clients-media__thumb {
   opacity: 1;
+  transform: translateY(0) translateZ(0);
 }
 
 /* Frame fixed ? CSS zoom img only (no filter = stays sharp) */
 .clients-media:not(.is-switching) .clients-media__hero:hover {
-  box-shadow:
-    0 28px 56px rgba(98, 168, 69, 0.28),
-    0 0 0 1px rgba(98, 168, 69, 0.4);
+  transform: translateY(-6px) scale(1.015);
+  border-color: rgba(0, 242, 254, 0.4);
+  box-shadow: 0 20px 40px -15px rgba(0, 242, 254, 0.15);
 }
 
 html.dark .clients-media:not(.is-switching) .clients-media__hero:hover {
-  box-shadow:
-    0 28px 56px rgba(0, 0, 0, 0.55),
-    0 0 0 1px rgba(98, 168, 69, 0.45);
+  box-shadow: 0 20px 40px -15px rgba(0, 242, 254, 0.15);
 }
 
 .clients-media:not(.is-switching) .clients-media__hero:hover::after {
@@ -374,9 +377,9 @@ html.dark .clients-media:not(.is-switching) .clients-media__hero:hover {
 }
 
 .clients-media:not(.is-switching) .clients-media__thumb:hover {
-  box-shadow:
-    0 16px 36px rgba(98, 168, 69, 0.3),
-    0 0 0 1px rgba(98, 168, 69, 0.45);
+  transform: translateY(-6px) scale(1.015);
+  border-color: rgba(0, 242, 254, 0.4);
+  box-shadow: 0 20px 40px -15px rgba(0, 242, 254, 0.15);
 }
 
 .clients-media:not(.is-switching) .clients-media__thumb:hover::after {
@@ -762,19 +765,23 @@ html.dark .about-media__glow {
   isolation: isolate;
   border-radius: 1.35rem;
   cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow:
     0 24px 50px rgba(9, 90, 141, 0.18),
     0 0 0 1px rgba(9, 90, 141, 0.1);
-  opacity: 0.55;
+  opacity: 0;
+  transform: translateY(20px) translateZ(0);
+  will-change: opacity, transform;
   transition:
-    opacity 0.55s ease,
-    box-shadow 0.45s ease;
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s ease,
+    border-color 0.35s ease,
+    opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 html.dark .about-media__hero {
   box-shadow:
-    0 24px 50px rgba(0, 0, 0, 0.45),
-    0 0 0 1px rgba(255, 255, 255, 0.08);
+    0 24px 50px rgba(0, 0, 0, 0.45);
 }
 
 .about-media__hero .media-zoom__img,
@@ -839,19 +846,23 @@ html.dark .about-media__hero {
   isolation: isolate;
   border-radius: 0.95rem;
   cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow:
     0 12px 28px rgba(9, 90, 141, 0.14),
     0 0 0 1px rgba(9, 90, 141, 0.1);
-  opacity: 0.45;
+  opacity: 0;
+  transform: translateY(20px) translateZ(0);
+  will-change: opacity, transform;
   transition:
-    opacity 0.55s ease,
-    box-shadow 0.45s ease;
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s ease,
+    border-color 0.35s ease,
+    opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 html.dark .about-media__thumb {
   box-shadow:
-    0 12px 28px rgba(0, 0, 0, 0.35),
-    0 0 0 1px rgba(255, 255, 255, 0.1);
+    0 12px 28px rgba(0, 0, 0, 0.35);
 }
 
 .about-media__thumb::after {
@@ -867,19 +878,19 @@ html.dark .about-media__thumb {
 .about-media.is-inview .about-media__hero,
 .about-media.is-inview .about-media__thumb {
   opacity: 1;
+  transform: translateY(0) translateZ(0);
 }
 
 /* Frame fixed ? CSS zoom img only (no filter = stays sharp) */
 .about-media .about-media__hero:hover {
-  box-shadow:
-    0 30px 60px rgba(9, 90, 141, 0.3),
-    0 0 0 1px rgba(98, 168, 69, 0.4);
+  transform: translateY(-6px) scale(1.015);
+  border-color: rgba(0, 242, 254, 0.4);
+  box-shadow: 0 20px 40px -15px rgba(0, 242, 254, 0.15);
 }
 
 html.dark .about-media .about-media__hero:hover {
-  box-shadow:
-    0 30px 60px rgba(0, 0, 0, 0.55),
-    0 0 0 1px rgba(98, 168, 69, 0.45);
+  border-color: rgba(0, 242, 254, 0.4);
+  box-shadow: 0 20px 40px -15px rgba(0, 242, 254, 0.15);
 }
 
 .about-media .about-media__hero:hover::after {
@@ -891,9 +902,9 @@ html.dark .about-media .about-media__hero:hover {
 }
 
 .about-media .about-media__thumb:hover {
-  box-shadow:
-    0 18px 40px rgba(98, 168, 69, 0.32),
-    0 0 0 1px rgba(98, 168, 69, 0.45);
+  transform: translateY(-6px) scale(1.015);
+  border-color: rgba(0, 242, 254, 0.4);
+  box-shadow: 0 20px 40px -15px rgba(0, 242, 254, 0.15);
 }
 
 .about-media .about-media__thumb:hover::after {
@@ -1463,12 +1474,7 @@ html.dark .home-story__quote-visual.is-inview .hs-quote-mark--2 {
   }
 }
 
-.about-media__hero:hover,
-.about-media__thumb:hover,
-.clients-media__hero:hover,
-.clients-media__thumb:hover {
-  transform: none !important;
-}
+/* Allow container hover transform (images still scale smoothly via media-zoom rules). */
 
 @media (prefers-reduced-motion: reduce) {
   .about-media .media-zoom__img,

@@ -6,18 +6,21 @@ import {
   afterNextRender,
   DestroyRef,
   PLATFORM_ID,
+  computed,
 } from '@angular/core';
 import { isPlatformBrowser, DOCUMENT } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { TopBar } from '../top-bar/top-bar';
 import { SiteHeader } from '../header/site-header';
 import { SiteFooter } from '../footer/site-footer';
 import { NavigationLoaderService } from '../../core/navigation/navigation-loader.service';
 import { ChromeScrollService } from '../../core/navigation/chrome-scroll.service';
+import { LocaleService } from '../../core/i18n/locale.service';
+import { UiCopyService } from '../../core/i18n/ui-copy.service';
 
 @Component({
   selector: 'app-shell',
-  imports: [RouterOutlet, TopBar, SiteHeader, SiteFooter],
+  imports: [RouterOutlet, RouterLink, TopBar, SiteHeader, SiteFooter],
   templateUrl: './shell.html',
   styleUrl: './shell.css',
 })
@@ -25,8 +28,11 @@ export class Shell implements OnInit {
   private readonly document = inject(DOCUMENT);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly locale = inject(LocaleService);
   readonly navigationLoader = inject(NavigationLoaderService);
   readonly chromeScroll = inject(ChromeScrollService);
+  readonly copy = inject(UiCopyService).copy;
+  readonly lang = computed(() => this.locale.lang());
 
   readonly topBarHidden = signal(false);
 

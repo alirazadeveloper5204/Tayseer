@@ -1,12 +1,10 @@
-<div
-  class="flex min-h-screen flex-col bg-surface-light text-ink dark:bg-surface-dark dark:text-ink-inverse"
->
+<div class="site-shell flex min-h-screen flex-col text-ink dark:text-ink-inverse">
   <div
     class="site-content flex min-h-screen flex-col"
     [class.site-content--veiled]="navigationLoader.covered()"
     [inert]="navigationLoader.active()"
   >
-    <div class="sticky top-0 z-50 bg-surface-light dark:bg-surface-dark">
+    <div class="site-chrome sticky top-0 z-50 border-b border-white/10">
       <div class="chrome-top" [class.chrome-top--hidden]="topBarHidden()">
         <div class="chrome-top__inner">
           <app-top-bar />
@@ -14,9 +12,18 @@
       </div>
       <app-site-header />
     </div>
-    <main class="flex-1">
+    <main class="flex-1 bg-transparent pb-[4.75rem] sm:pb-0">
       <router-outlet />
     </main>
     <app-site-footer />
+  </div>
+
+  <!-- Viewport-fixed mobile CTA (outside sticky chrome so it never clips) -->
+  <div
+    class="site-mobile-cta fixed inset-x-0 bottom-0 z-[80] border-t border-white/15 bg-[#030712]/80 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-8px_24px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:hidden"
+  >
+    <a [routerLink]="'/' + lang() + '/connect'" class="btn-brand w-full justify-center text-sm">
+      {{ copy().common.talkToUs }}
+    </a>
   </div>
 </div>

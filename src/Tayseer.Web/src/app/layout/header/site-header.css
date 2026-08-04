@@ -1,3 +1,18 @@
 :host {
   display: block;
 }
+
+/* Desktop nav sits on frosted chrome — no solid box */
+@media (min-width: 1024px) {
+  .site-nav {
+    background: transparent !important;
+    box-shadow: none;
+  }
+}
+
+/* Mobile drawer sits under sticky chrome and above the bottom CTA */
+@media (max-width: 1023px) {
+  .site-nav {
+    bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px));
+  }
+}

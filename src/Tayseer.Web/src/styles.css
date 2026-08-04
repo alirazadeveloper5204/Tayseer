@@ -11,21 +11,92 @@
     --site-content: 72rem;
   }
 
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px;
+    @apply antialiased;
+    text-rendering: optimizeLegibility;
+    background: #030712;
+  }
+
   html.dark {
     color-scheme: dark;
   }
 
-  html {
-    @apply scroll-smooth antialiased;
-    text-rendering: optimizeLegibility;
-  }
-
   body {
-    @apply bg-surface-light text-ink font-sans text-fluid-base;
+    @apply text-ink font-sans text-fluid-base;
+    position: relative;
+    min-height: 100%;
+    background: transparent;
   }
 
   html.dark body {
-    @apply bg-surface-dark text-ink-inverse;
+    @apply text-ink-inverse;
+  }
+
+  /*
+   * True page canvas — one continuous background for the entire document.
+   * Content flows naturally on top (no separate background div / z-index stack).
+   */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: -8%;
+    z-index: -2;
+    pointer-events: none;
+    background-image: url('/images/hero-fintech.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    transform: translate3d(0, 0, 0) scale(1.06);
+    transform-origin: center center;
+    will-change: transform, background-position;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 80% 55% at 15% 8%, rgba(0, 242, 254, 0.1), transparent 55%),
+      radial-gradient(ellipse 70% 50% at 88% 18%, rgba(16, 185, 129, 0.08), transparent 50%),
+      linear-gradient(180deg, rgba(3, 7, 18, 0.42) 0%, rgba(3, 7, 18, 0.58) 50%, rgba(3, 7, 18, 0.68) 100%);
+  }
+
+  html:not(.dark) body::after {
+    background:
+      radial-gradient(ellipse 80% 55% at 15% 8%, rgba(0, 242, 254, 0.06), transparent 55%),
+      radial-gradient(ellipse 70% 50% at 88% 18%, rgba(16, 185, 129, 0.05), transparent 50%),
+      linear-gradient(180deg, rgba(247, 249, 252, 0.52) 0%, rgba(247, 249, 252, 0.68) 50%, rgba(247, 249, 252, 0.78) 100%);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    body::before {
+      animation: pageBgCinematic 44s cubic-bezier(0.42, 0, 0.16, 1) infinite alternate;
+    }
+  }
+
+  @keyframes pageBgCinematic {
+    0% {
+      transform: translate3d(-2.5%, -1.5%, 0) scale(1.08);
+      background-position: 44% 46%;
+    }
+    50% {
+      transform: translate3d(2%, 1.2%, 0) scale(1.14);
+      background-position: 56% 52%;
+    }
+    100% {
+      transform: translate3d(-1.5%, 2%, 0) scale(1.1);
+      background-position: 50% 58%;
+    }
+  }
+
+  @media (max-width: 768px) {
+    body::before {
+      background-position: 62% center;
+    }
   }
 
   /* Kill paint transitions while theme flips under the loading cover. */
@@ -36,6 +107,28 @@
 
   html[dir='rtl'] body {
     @apply font-arabic;
+  }
+
+  /* Smooth scrollbar (WebKit) */
+  ::-webkit-scrollbar {
+    width: 7px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #030712;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 9999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #00f2fe;
+  }
+
+  html {
+    scrollbar-color: #1e293b #030712; /* Firefox */
   }
 
   h1,
@@ -73,35 +166,76 @@
   }
 
   .type-title {
-    @apply font-display font-bold text-fluid-3xl text-brand-blue dark:text-white;
+    @apply font-display font-bold text-fluid-3xl text-brand-blue-800 dark:text-white;
   }
 
   .type-section {
-    @apply font-display font-semibold text-fluid-3xl tracking-tight;
+    @apply font-display font-semibold text-fluid-3xl tracking-tight text-brand-blue-800 dark:text-white;
   }
 
   .type-subtitle {
-    @apply font-display font-semibold text-fluid-xl text-brand-blue/80 dark:text-white/80;
+    @apply font-display font-semibold text-fluid-xl text-brand-blue-700 dark:text-white/85;
   }
 
   .type-lead {
-    @apply text-fluid-lg text-ink-soft dark:text-white/70;
+    @apply text-fluid-lg font-medium text-ink dark:text-white/85;
   }
 
   .type-eyebrow {
-    @apply font-mono text-fluid-xs uppercase tracking-[0.22em] text-brand-green;
+    @apply font-mono text-fluid-xs font-semibold uppercase tracking-[0.22em] text-brand-green-700 dark:text-brand-green-300;
   }
 
   .glass-card {
-    @apply rounded-2xl border border-brand-blue/15 bg-white/70 shadow-glass backdrop-blur-md;
+    @apply rounded-2xl border shadow-glass backdrop-blur-md;
+    background: rgba(255, 255, 255, 0.82);
+    border-color: rgba(0, 242, 254, 0.14);
+    transition:
+      transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.35s ease,
+      border-color 0.35s ease;
+    will-change: transform, box-shadow, border-color;
+    transform: translateZ(0);
   }
 
-  .dark .glass-card {
-    @apply border-white/10 bg-surface-dark-elevated/70 shadow-glass-dark;
+  html.dark .glass-card {
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 242, 254, 0.06);
+  }
+
+  .glass-card:hover {
+    transform: translateY(-6px) scale(1.015);
+    border-color: rgba(0, 242, 254, 0.4);
+    box-shadow: 0 20px 40px -15px rgba(0, 242, 254, 0.15);
   }
 
   .btn-brand {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-brand-gradient-cta px-fluid-md py-fluid-sm text-fluid-sm font-semibold text-white transition hover:brightness-110;
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-brand-gradient-cta px-fluid-md py-fluid-sm text-fluid-sm font-semibold text-white;
+    transition:
+      transform 140ms cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 260ms cubic-bezier(0.16, 1, 0.3, 1),
+      filter 260ms ease;
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  .btn-brand:hover {
+    box-shadow:
+      0 0 0 1px rgba(0, 242, 254, 0.35),
+      0 18px 50px -20px rgba(0, 242, 254, 0.25),
+      0 0 26px rgba(0, 242, 254, 0.18);
+    filter: brightness(1.06);
+  }
+
+  .btn-brand:active {
+    transform: scale(0.98);
+  }
+
+  .financial-number {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum';
   }
 
   .site-content {
@@ -122,5 +256,118 @@
 
   .geometric-loader {
     @apply inline-block h-10 w-10 bg-geometric-corner bg-contain bg-no-repeat animate-geometric-pulse;
+  }
+
+  /* Shell / main stay clear so body canvas shows through continuously. */
+  .site-shell,
+  .site-content,
+  main,
+  .home-hero {
+    background: transparent !important;
+  }
+
+  /* Sticky chrome — light frosted strip, not a solid opaque bar. */
+  .site-chrome {
+    background: rgba(3, 7, 18, 0.28);
+    backdrop-filter: blur(18px) saturate(1.1);
+    -webkit-backdrop-filter: blur(18px) saturate(1.1);
+  }
+
+  html:not(.dark) .site-chrome {
+    background: rgba(247, 249, 252, 0.35);
+  }
+
+  /*
+   * Module panels — slightly transparent frosted backgrounds over the page canvas.
+   * Applied to every home content module so text/cards read clearly.
+   */
+  .module-glass,
+  .services-bento,
+  .about-band,
+  .clients-band,
+  .site-band,
+  .trust-strip {
+    position: relative;
+    isolation: isolate;
+    background: rgba(3, 7, 18, 0.48) !important;
+    backdrop-filter: blur(18px) saturate(1.05);
+    -webkit-backdrop-filter: blur(18px) saturate(1.05);
+    border-block: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  html:not(.dark) .module-glass,
+  html:not(.dark) .services-bento,
+  html:not(.dark) .about-band,
+  html:not(.dark) .clients-band,
+  html:not(.dark) .site-band,
+  html:not(.dark) .trust-strip {
+    background: rgba(247, 249, 252, 0.58) !important;
+    border-block-color: rgba(9, 90, 141, 0.1);
+  }
+
+  /* Brand / values band — slightly stronger tint for white text */
+  .site-band.bg-brand-blue {
+    background: rgba(0, 88, 120, 0.42) !important;
+    border-block-color: rgba(0, 242, 254, 0.12);
+  }
+
+  html.dark .site-band.bg-brand-blue {
+    background: rgba(3, 7, 18, 0.55) !important;
+  }
+
+  .site-band.bg-brand-blue [class*='rounded-xl'],
+  .site-band.bg-brand-blue [class*='rounded-2xl'] {
+    background: rgba(3, 7, 18, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  /* Desktop nav active/hover accents over the photo */
+  @media (min-width: 1024px) {
+    .site-nav a:hover,
+    .site-nav .nav-scroll-active {
+      color: #00f2fe !important;
+    }
+  }
+
+  /* Scroll-spy active nav highlighting */
+  .nav-scroll-active {
+    color: #00f2fe !important;
+    border-color: rgba(0, 242, 254, 0.5) !important;
+  }
+
+  html.dark .nav-scroll-active {
+    color: #00f2fe !important;
+    border-color: rgba(0, 242, 254, 0.5) !important;
+  }
+
+  /* Image hover polish (Services / About / Clients) */
+  @media (hover: hover) and (pointer: fine) {
+    html.dark .services-bento img,
+    html.dark .about-band img,
+    html.dark .clients-band img {
+      opacity: 0.85;
+      filter: grayscale(20%) brightness(0.95);
+      transition:
+        transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 0.6s ease,
+        filter 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform, opacity, filter;
+      transform: translateZ(0);
+    }
+
+    /* Collage cards scale image smoothly */
+    html.dark .about-media .media-zoom:hover > .media-zoom__img,
+    html.dark .clients-media:not(.is-switching) .media-zoom:hover > .media-zoom__img {
+      transform: scale(1.05) translateZ(0);
+      opacity: 1;
+      filter: grayscale(0%) brightness(1.1);
+    }
+
+    /* Service cards: GSAP handles scale; we only polish clarity */
+    html.dark .services-bento a:hover .service-card__media img {
+      opacity: 1;
+      filter: grayscale(0%) brightness(1.1);
+    }
   }
 }

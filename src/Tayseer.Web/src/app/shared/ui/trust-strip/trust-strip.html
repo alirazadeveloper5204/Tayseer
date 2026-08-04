@@ -1,39 +1,14 @@
-<section
-  class="site-band border-y border-brand-blue/10 bg-white/60 dark:border-white/10 dark:bg-surface-dark-elevated/50"
-  aria-label="Trust credentials"
->
-  <div
-    class="site-container grid grid-cols-2 items-stretch gap-fluid-sm py-fluid-md sm:grid-cols-4 sm:gap-fluid-md"
-  >
-    @for (item of items(); track item.label) {
-      <div
-        class="flex min-h-16 flex-col items-center justify-center gap-2 px-2 text-center sm:min-h-[4.75rem]"
-      >
-        <div
-          class="relative h-10 w-16 overflow-hidden rounded-lg border border-brand-blue/10 shadow-sm dark:border-white/10"
-        >
-          <img
-            class="h-full w-full object-cover"
-            [src]="item.thumb"
-            alt=""
-            width="96"
-            height="64"
-            loading="lazy"
-            decoding="async"
-          />
-          <span
-            class="absolute inset-0 bg-gradient-to-t from-brand-blue/25 to-transparent"
-            aria-hidden="true"
-          ></span>
-        </div>
+<section class="trust-strip" aria-label="Key performance indicators">
+  <div class="trust-strip__grid site-container">
+    @for (item of items(); track item.id; let last = $last) {
+      <div class="trust-strip__item" [class.trust-strip__item--last]="last">
         <p
-          class="text-fluid-sm font-semibold leading-snug"
-          [class.text-brand-green]="item.accent === 'green'"
-          [class.text-brand-blue]="item.accent !== 'green'"
-          [class.dark:text-white]="item.accent !== 'green'"
+          class="trust-strip__value"
+          [attr.aria-label]="item.final + ' ' + item.label"
         >
-          {{ item.label }}
+          {{ item.display }}
         </p>
+        <p class="trust-strip__label">{{ item.label }}</p>
       </div>
     }
   </div>

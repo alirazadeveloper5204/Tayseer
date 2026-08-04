@@ -1,6 +1,7 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, inject, input, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { serviceImage } from '../../../core/media/site-images';
+import { GsapService } from '../../../core/motion/gsap.service';
 import { ServiceListItemDto } from '../../../models/service.model';
 
 @Component({
@@ -8,14 +9,17 @@ import { ServiceListItemDto } from '../../../models/service.model';
   imports: [RouterLink],
   templateUrl: './service-card.html',
   host: {
-    class: 'block h-full',
+    class: 'service-card-host block h-full',
   },
 })
 export class ServiceCard {
+  private readonly motion = inject(GsapService);
+
   readonly service = input.required<ServiceListItemDto>();
   readonly lang = input.required<string>();
   readonly ctaLabel = input('Read More');
-  readonly featured = input(false);
+
+  private readonly coverImg = viewChild<HTMLImageElement>('coverImg');
 
   readonly link = computed(() => `/${this.lang()}/solutions/${this.service().slug}`);
 
@@ -24,4 +28,18 @@ export class ServiceCard {
   readonly iconKey = computed(() => this.service().iconKey ?? 'default');
 
   readonly coverImage = computed(() => serviceImage(this.service().slug));
+
+  onCoverEnter(): void {
+    const img = this.coverImg();
+    if (img) {
+      this.motion.zoomIn(img, 1.05);
+    }
+  }
+
+  onCoverLeave(): void {
+    const img = this.coverImg();
+    if (img) {
+      this.motion.zoomOut(img);
+    }
+  }
 }
