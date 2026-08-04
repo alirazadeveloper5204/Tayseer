@@ -88,6 +88,36 @@ Useful endpoints:
 
 > Ollama is ideal for local/dev. Public production needs a hosted model (e.g. Gemini free tier) instead of `localhost:11434`.
 
+## Control panel (Phase 4 MVP)
+
+Authenticated CMS admin lives at `/admin` in the Angular app.
+
+### Default admin (development)
+
+Configured in `src/Tayseer.Api/appsettings.json`:
+
+- Email: `admin@tayseer.me`
+- Password: `ChangeMe!Tayseer1`
+
+Change `Jwt:SigningKey` and `AdminSeed:Password` before any shared/deployed environment. Prefer User Secrets for production.
+
+### Features
+
+- JWT login (`POST /api/v1/auth/login`)
+- Manage **Services** (CRUD + features) and **Offices**
+- Rebuild Fahim RAG knowledge index (`POST /api/v1/chat/knowledge/reindex`, admin-only)
+- **Agent inbox** (`/admin/inbox`) — visitors use **Talk to an agent** in the site chat; admins get live SignalR notifications and can claim/reply/close
+
+Open `http://localhost:4200/admin/login` after API + web are running.
+
+### Agent chat (Phase 1)
+
+1. Visitor clicks **Talk to an agent** in the Fahim widget.
+2. API stores the conversation and notifies all logged-in admins over SignalR (`/hubs/agent-chat`).
+3. Admins open **Agent inbox**, claim the chat, and reply in real time.
+
+Teams channel webhooks are planned as a follow-on (not wired yet).
+
 ## Brand
 
 Assets live in `assets/brand/` and `src/Tayseer.Web/public/brand/`.

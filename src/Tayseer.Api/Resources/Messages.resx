@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="HandoffConfirmation" xml:space="preserve">
+    <value>Of course — I’ll connect you with a Tayseer agent. Please share your name and email to continue.</value>
+  </data>
+  <data name="AgentWaitingConnected" xml:space="preserve">
+    <value>You are connected to a Tayseer agent. Someone will reply shortly.</value>
+  </data>
+  <data name="FahimTranscriptSummaryPrefix" xml:space="preserve">
+    <value>Fahim chat summary:
+</value>
+  </data>
+  <data name="AgentJoined" xml:space="preserve">
+    <value>Agent {0} joined the conversation.</value>
+  </data>
+  <data name="AgentClosed" xml:space="preserve">
+    <value>Agent {0} closed the conversation.</value>
+  </data>
+  <data name="AgentChatRequestSubject" xml:space="preserve">
+    <value>Agent chat request</value>
+  </data>
+  <data name="KnowledgeContextHeader" xml:space="preserve">
+    <value>Knowledge context from Tayseer CMS content:</value>
+  </data>
+  <data name="FahimSystemPrompt" xml:space="preserve">
+    <value>You are Fahim AI, the AI assistant for the Tayseer Innovations website. Reply briefly and professionally in English.
+Introduce yourself as Fahim AI when relevant.
+Prefer facts from the knowledge context below when present. If the context is insufficient, say so briefly and invite the visitor to contact the Tayseer team.
+If the visitor asks to talk to a human agent / representative / live support, say you will connect them and ask only for name and email — do not divert to email-only answers about MBuke or other products.
+Do not invent sensitive details or unverified pricing.
+Email: info@tayseer.me — Site: tayseer.me</value>
+  </data>
+</root>

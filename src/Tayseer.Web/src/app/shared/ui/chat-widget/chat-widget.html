@@ -20,8 +20,8 @@
             </svg>
           </span>
           <div>
-            <p class="chat-panel__eyebrow">{{ copy().eyebrow }}</p>
-            <h2 class="chat-panel__title">{{ copy().title }}</h2>
+            <p class="chat-panel__eyebrow">{{ panelEyebrow() }}</p>
+            <h2 class="chat-panel__title">{{ panelTitle() }}</h2>
           </div>
         </div>
         <div class="chat-panel__actions">
@@ -73,23 +73,76 @@
         <p class="chat-panel__error" role="alert">{{ err }}</p>
       }
 
-      <form class="chat-panel__composer" (ngSubmit)="send()">
-        <label class="sr-only" for="chat-input">{{ copy().placeholder }}</label>
-        <textarea
-          #composer
-          id="chat-input"
-          rows="2"
-          [placeholder]="copy().placeholder"
-          [ngModel]="draft()"
-          (ngModelChange)="draft.set($event)"
-          (keydown)="onKeydown($event)"
-          [disabled]="busy()"
-          name="chatDraft"
-        ></textarea>
-        <button type="submit" class="chat-panel__send" [disabled]="busy() || !draft().trim()">
-          {{ copy().send }}
-        </button>
-      </form>
+      @if (mode() === 'handoff') {
+        <form class="chat-panel__handoff-form" (ngSubmit)="startAgentChat()">
+          <p class="chat-panel__handoff-intro">{{ copy().handoffIntro }}</p>
+          <label>
+            <span>{{ copy().handoffNameLabel }}</span>
+            <input
+              type="text"
+              name="visitorName"
+              autocomplete="name"
+              [placeholder]="copy().handoffNamePlaceholder"
+              [ngModel]="visitorName()"
+              (ngModelChange)="visitorName.set($event)"
+              [disabled]="busy()"
+              required
+            />
+          </label>
+          <label>
+            <span>{{ copy().handoffEmailLabel }}</span>
+            <input
+              type="email"
+              name="visitorEmail"
+              autocomplete="email"
+              [placeholder]="copy().handoffEmailPlaceholder"
+              [ngModel]="visitorEmail()"
+              (ngModelChange)="visitorEmail.set($event)"
+              [disabled]="busy()"
+              required
+            />
+          </label>
+          <div class="chat-panel__handoff-actions">
+            <button type="button" class="chat-panel__handoff-link" (click)="cancelHandoff()" [disabled]="busy()">
+              {{ copy().handoffCancel }}
+            </button>
+            <button type="submit" class="chat-panel__send" [disabled]="!canSubmitHandoff()">
+              {{ busy() ? copy().handoffConnecting : copy().handoffSubmit }}
+            </button>
+          </div>
+        </form>
+      } @else {
+        <div class="chat-panel__handoff">
+          @if (mode() === 'fahim') {
+            <button type="button" class="chat-panel__handoff-btn" (click)="talkToAgent()" [disabled]="busy()">
+              {{ copy().talkToAgent }}
+            </button>
+          } @else {
+            <p class="chat-panel__handoff-note">{{ copy().agentWaiting }}</p>
+            <button type="button" class="chat-panel__handoff-link" (click)="backToFahim()" [disabled]="busy()">
+              {{ copy().backToFahim }}
+            </button>
+          }
+        </div>
+
+        <form class="chat-panel__composer" (ngSubmit)="send()">
+          <label class="sr-only" for="chat-input">{{ copy().placeholder }}</label>
+          <textarea
+            #composer
+            id="chat-input"
+            rows="2"
+            [placeholder]="mode() === 'agent' ? copy().agentPlaceholder : copy().placeholder"
+            [ngModel]="draft()"
+            (ngModelChange)="draft.set($event)"
+            (keydown)="onKeydown($event)"
+            [disabled]="busy()"
+            name="chatDraft"
+          ></textarea>
+          <button type="submit" class="chat-panel__send" [disabled]="busy() || !draft().trim()">
+            {{ copy().send }}
+          </button>
+        </form>
+      }
     </section>
   }
 

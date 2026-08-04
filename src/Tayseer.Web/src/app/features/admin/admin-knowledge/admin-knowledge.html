@@ -1,0 +1,32 @@
+<section class="admin-page">
+  <header class="admin-page__header">
+    <div>
+      <p class="admin-page__eyebrow">Fahim AI</p>
+      <h2>Knowledge index</h2>
+    </div>
+    <button type="button" class="admin-btn" (click)="reindex()" [disabled]="busy()">
+      {{ busy() ? 'Reindexing…' : 'Rebuild index' }}
+    </button>
+  </header>
+
+  @if (error(); as err) {
+    <p class="admin-error">{{ err }}</p>
+  }
+  @if (message(); as msg) {
+    <p class="admin-ok">{{ msg }}</p>
+  }
+
+  <div class="admin-panel">
+    @if (status(); as s) {
+      <p><strong>Enabled:</strong> {{ s.enabled ? 'Yes' : 'No' }}</p>
+      <p><strong>Chunks:</strong> {{ s.chunkCount }}</p>
+      <p><strong>Embedding model:</strong> {{ s.embeddingModel }}</p>
+      <p><strong>Built at:</strong> {{ s.builtAtUtc ? (s.builtAtUtc | date: 'medium') : '—' }}</p>
+      @if (s.lastError) {
+        <p class="admin-error"><strong>Last error:</strong> {{ s.lastError }}</p>
+      }
+    } @else {
+      <p>Loading…</p>
+    }
+  </div>
+</section>

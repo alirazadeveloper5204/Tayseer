@@ -1,0 +1,27 @@
+<section class="admin-page">
+  <header class="admin-page__header">
+    <div>
+      <p class="admin-page__eyebrow">Overview</p>
+      <h2>Dashboard</h2>
+    </div>
+  </header>
+
+  <div class="admin-grid">
+    <a class="admin-stat" routerLink="/admin/inbox">
+      <span>Agent inbox</span>
+      <strong>Live</strong>
+    </a>
+    <a class="admin-stat" routerLink="/admin/services">
+      <span>Services</span>
+      <strong>{{ serviceCount() }}</strong>
+    </a>
+    <a class="admin-stat" routerLink="/admin/offices">
+      <span>Offices</span>
+      <strong>{{ officeCount() }}</strong>
+    </a>
+    <a class="admin-stat" routerLink="/admin/knowledge">
+      <span>Knowledge chunks</span>
+      <strong>{{ knowledge()?.chunkCount ?? '—' }}</strong>
+    </a>
+  </div>
+</section>

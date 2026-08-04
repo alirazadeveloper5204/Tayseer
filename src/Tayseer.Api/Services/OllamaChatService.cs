@@ -5,6 +5,7 @@ using System.Text.Json.Serialization;
 using Microsoft.Extensions.Options;
 using Tayseer.Api.Contracts;
 using Tayseer.Api.Options;
+using Tayseer.Api.Resources;
 using Tayseer.Api.Services.Rag;
 
 namespace Tayseer.Api.Services;
@@ -35,6 +36,15 @@ public sealed class OllamaChatService(
             .LastOrDefault(m => string.Equals(m.Role, "user", StringComparison.OrdinalIgnoreCase))
             ?.Content
             ?.Trim();
+
+        if (AgentHandoffIntent.IsMatch(latestUser))
+        {
+            return new ChatResponseDto(
+                AgentHandoffIntent.Confirmation(isArabic),
+                "handoff",
+                Sources: null,
+                HandoffRequested: true);
+        }
 
         IReadOnlyList<RetrievedChunk> retrieved = [];
         if (!string.IsNullOrWhiteSpace(latestUser))
@@ -123,31 +133,12 @@ public sealed class OllamaChatService(
     private static string BuildSystemPrompt(bool isArabic, IReadOnlyList<RetrievedChunk> retrieved)
     {
         var sb = new StringBuilder();
-        if (isArabic)
-        {
-            sb.AppendLine("""
-                أنت فهيم (Fahim AI)، مساعد الذكاء الاصطناعي لموقع تيسير للابتكارات (Tayseer Innovations). أجب باختصار وبأسلوب احترافي بالعربية.
-                قدّم نفسك باسم فهيم عند الحاجة.
-                اعتمد على سياق المعرفة أدناه إن وُجد. إذا لم يكفِ السياق، قل ذلك باختصار ووجّه الزائر للتواصل مع فريق تيسير.
-                لا تختلق معلومات حساسة أو أسعار غير مؤكدة.
-                البريد: info@tayseer.me — الموقع: tayseer.me
-                """);
-        }
-        else
-        {
-            sb.AppendLine("""
-                You are Fahim AI, the AI assistant for the Tayseer Innovations website. Reply briefly and professionally in English.
-                Introduce yourself as Fahim AI when relevant.
-                Prefer facts from the knowledge context below when present. If the context is insufficient, say so briefly and invite the visitor to contact the Tayseer team.
-                Do not invent sensitive details or unverified pricing.
-                Email: info@tayseer.me — Site: tayseer.me
-                """);
-        }
+        sb.AppendLine(ApiMessages.FahimSystemPrompt(isArabic));
 
         if (retrieved.Count > 0)
         {
             sb.AppendLine();
-            sb.AppendLine(isArabic ? "سياق المعرفة من محتوى تيسير:" : "Knowledge context from Tayseer CMS content:");
+            sb.AppendLine(ApiMessages.KnowledgeContextHeader(isArabic));
             var i = 1;
             foreach (var item in retrieved)
             {

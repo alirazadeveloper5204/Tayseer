@@ -108,6 +108,7 @@ public static class ChatEndpoints
                     statusCode: StatusCodes.Status500InternalServerError);
             }
         })
+        .RequireAuthorization()
         .WithName("ChatKnowledgeReindex");
 
         return group;

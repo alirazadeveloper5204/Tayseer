@@ -63,6 +63,24 @@ export interface UiCopy {
     welcome: string;
     error: string;
     offline: string;
+    talkToAgent: string;
+    agentEyebrow: string;
+    agentTitle: string;
+    agentPlaceholder: string;
+    agentWaiting: string;
+    backToFahim: string;
+    handoffTitle: string;
+    handoffIntro: string;
+    handoffNameLabel: string;
+    handoffNamePlaceholder: string;
+    handoffEmailLabel: string;
+    handoffEmailPlaceholder: string;
+    handoffSubmit: string;
+    handoffConnecting: string;
+    handoffCancel: string;
+    handoffNameRequired: string;
+    handoffEmailInvalid: string;
+    handoffConfirm: string;
   };
 }
 
@@ -134,6 +152,25 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
         'Hi — I am Fahim AI, Tayseer’s assistant. Ask me about Core Banking, Fahim AI, MBuke, or how to get in touch.',
       error: 'Something went wrong. Please try again in a moment.',
       offline: 'Cannot reach the chat service. Is the API and Ollama running?',
+      talkToAgent: 'Talk to an agent',
+      agentEyebrow: 'Tayseer Support',
+      agentTitle: 'Live agent chat',
+      agentPlaceholder: 'Message the agent…',
+      agentWaiting: 'Connected to an agent. Replies appear here in real time.',
+      backToFahim: 'Back to Fahim AI',
+      handoffTitle: 'Connect with an agent',
+      handoffIntro: 'Please share your name and email so our team can follow up.',
+      handoffNameLabel: 'Name',
+      handoffNamePlaceholder: 'Your full name',
+      handoffEmailLabel: 'Email',
+      handoffEmailPlaceholder: 'you@company.com',
+      handoffSubmit: 'Start chat',
+      handoffConnecting: 'Connecting…',
+      handoffCancel: 'Cancel',
+      handoffNameRequired: 'Please enter your name.',
+      handoffEmailInvalid: 'Please enter a valid email address.',
+      handoffConfirm:
+        'Of course — I’ll connect you with a Tayseer agent. Please share your name and email to continue.',
     },
   },
   ar: {
@@ -202,6 +239,25 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
         'مرحباً — أنا فهيم، مساعد تيسير. اسألني عن الخدمات المصرفية الأساسية أو فهيم أو إم بوكي أو كيفية التواصل معنا.',
       error: 'حدث خطأ. حاول مرة أخرى بعد قليل.',
       offline: 'تعذر الوصول إلى خدمة المحادثة. هل الـ API و Ollama يعملان؟',
+      talkToAgent: 'تحدث مع وكيل',
+      agentEyebrow: 'دعم تيسير',
+      agentTitle: 'محادثة مع وكيل',
+      agentPlaceholder: 'اكتب رسالة للوكيل…',
+      agentWaiting: 'أنت متصل بوكيل. ستظهر الردود هنا مباشرة.',
+      backToFahim: 'العودة إلى فهيم',
+      handoffTitle: 'التواصل مع وكيل',
+      handoffIntro: 'يرجى إدخال اسمك وبريدك الإلكتروني حتى يتمكن فريقنا من المتابعة معك.',
+      handoffNameLabel: 'الاسم',
+      handoffNamePlaceholder: 'اسمك الكامل',
+      handoffEmailLabel: 'البريد الإلكتروني',
+      handoffEmailPlaceholder: 'you@company.com',
+      handoffSubmit: 'بدء المحادثة',
+      handoffConnecting: 'جاري الاتصال…',
+      handoffCancel: 'إلغاء',
+      handoffNameRequired: 'يرجى إدخال اسمك.',
+      handoffEmailInvalid: 'يرجى إدخال بريد إلكتروني صالح.',
+      handoffConfirm:
+        'بالتأكيد — سأوصلك بأحد ممثلي تيسير. يرجى إدخال اسمك وبريدك الإلكتروني للمتابعة.',
     },
   },
 };

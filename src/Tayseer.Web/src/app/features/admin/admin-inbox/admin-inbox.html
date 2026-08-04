@@ -1,0 +1,104 @@
+<section class="admin-page admin-chat">
+  <header class="admin-page__header">
+    <div>
+      <p class="admin-page__eyebrow">Live support</p>
+      <h2>Agent inbox</h2>
+    </div>
+    <div class="admin-toolbar">
+      <button type="button" class="admin-btn admin-btn--ghost" (click)="setFilter('open')" [class.is-selected]="filter() === 'open'">Open</button>
+      <button type="button" class="admin-btn admin-btn--ghost" (click)="setFilter('Waiting')" [class.is-selected]="filter() === 'Waiting'">Waiting</button>
+      <button type="button" class="admin-btn admin-btn--ghost" (click)="setFilter('Active')" [class.is-selected]="filter() === 'Active'">Active</button>
+      <button type="button" class="admin-btn admin-btn--ghost" (click)="setFilter('Closed')" [class.is-selected]="filter() === 'Closed'">Closed</button>
+      <button type="button" class="admin-btn admin-btn--ghost" (click)="reload()">Refresh</button>
+    </div>
+  </header>
+
+  @if (error(); as err) {
+    <p class="admin-error">{{ err }}</p>
+  }
+
+  <div class="admin-chat__layout">
+    <aside class="admin-panel admin-chat__list">
+      @if (conversations().length === 0) {
+        <p class="admin-chat__empty">No conversations yet. Visitors use “Talk to an agent” on the site chat.</p>
+      }
+      @for (c of conversations(); track c.id) {
+        <button
+          type="button"
+          class="admin-chat__item"
+          [class.is-active]="selectedId() === c.id"
+          (click)="select(c.id)"
+        >
+          <div class="admin-chat__item-top">
+            <strong>{{ c.visitorName || 'Website visitor' }}</strong>
+            <span [class]="statusClass(c.status)">{{ c.status }}</span>
+          </div>
+          <p>{{ c.subject || 'Agent chat' }}</p>
+          <time>{{ c.updatedAt | date: 'short' }}</time>
+        </button>
+      }
+    </aside>
+
+    <section class="admin-panel admin-chat__thread">
+      @if (detail(); as d) {
+        <header class="admin-chat__thread-header">
+          <div>
+            <h3>{{ d.visitorName || 'Website visitor' }}</h3>
+            <p>
+              {{ d.visitorEmail || 'No email' }} · {{ d.lang }}
+              @if (d.assignedAdminName) {
+                · {{ d.assignedAdminName }}
+              }
+            </p>
+          </div>
+          <div class="admin-actions">
+            @if (d.status !== 'Closed' && !d.assignedAdminUserId) {
+              <button type="button" class="admin-btn" (click)="claim()" [disabled]="busy()">Claim</button>
+            }
+            @if (d.status !== 'Closed') {
+              <button type="button" class="admin-btn admin-btn--danger" (click)="closeChat()" [disabled]="busy()">Close</button>
+            }
+          </div>
+        </header>
+
+        <div #transcript class="admin-chat__messages">
+          @for (m of d.messages; track m.id) {
+            <div
+              class="admin-chat__bubble"
+              [class.admin-chat__bubble--visitor]="m.sender === 'Visitor'"
+              [class.admin-chat__bubble--agent]="m.sender === 'Agent'"
+              [class.admin-chat__bubble--system]="m.sender === 'System'"
+            >
+              <p>{{ m.body }}</p>
+              <span>
+                @if (m.sender === 'Agent' && m.adminDisplayName) {
+                  {{ m.adminDisplayName }} ·
+                }
+                {{ m.createdAt | date: 'shortTime' }}
+              </span>
+            </div>
+          }
+        </div>
+
+        @if (d.status !== 'Closed') {
+          <form class="admin-chat__composer" (ngSubmit)="send()">
+            <textarea
+              rows="3"
+              placeholder="Reply as Tayseer agent…"
+              [ngModel]="draft()"
+              (ngModelChange)="draft.set($event)"
+              (keydown)="onKeydown($event)"
+              [disabled]="busy()"
+              name="agentDraft"
+            ></textarea>
+            <button type="submit" class="admin-btn" [disabled]="busy() || !draft().trim()">Send</button>
+          </form>
+        } @else {
+          <p class="admin-chat__closed">This conversation is closed.</p>
+        }
+      } @else {
+        <p class="admin-chat__empty">Select a conversation to reply.</p>
+      }
+    </section>
+  </div>
+</section>

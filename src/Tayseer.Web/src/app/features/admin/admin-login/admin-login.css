@@ -1,0 +1,80 @@
+.admin-login {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background:
+    radial-gradient(circle at top left, rgb(98 168 69 / 18%), transparent 42%),
+    linear-gradient(160deg, #f7f9fc, #e8f3f9);
+  font-family: 'Kumbh Sans', system-ui, sans-serif;
+  color: #1a2332;
+}
+
+.admin-login__card {
+  width: min(100%, 24rem);
+  display: grid;
+  gap: 0.85rem;
+  padding: 1.5rem;
+  border: 1px solid rgb(9 90 141 / 12%);
+  border-radius: 1rem;
+  background: #fff;
+  box-shadow: 0 8px 32px rgba(9, 90, 141, 0.12);
+}
+
+.admin-login__eyebrow {
+  margin: 0;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #62a845;
+}
+
+.admin-login__card h1 {
+  margin: 0;
+  font-family: 'Space Grotesk', 'Kumbh Sans', system-ui, sans-serif;
+  color: #095a8d;
+}
+
+.admin-login__lead {
+  margin: 0 0 0.4rem;
+  color: #5b6478;
+  font-size: 0.92rem;
+}
+
+.admin-login__card label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.admin-login__card input {
+  border: 1px solid rgb(9 90 141 / 18%);
+  border-radius: 0.65rem;
+  padding: 0.7rem 0.8rem;
+  font: inherit;
+}
+
+.admin-login__card button {
+  margin-top: 0.35rem;
+  border: 0;
+  border-radius: 0.65rem;
+  padding: 0.75rem 1rem;
+  background: #095a8d;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admin-login__card button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.admin-login__error {
+  margin: 0;
+  color: #b42318;
+  font-size: 0.85rem;
+}

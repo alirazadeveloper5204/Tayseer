@@ -1,0 +1,81 @@
+<section class="admin-page">
+  <header class="admin-page__header">
+    <div>
+      <p class="admin-page__eyebrow">CMS</p>
+      <h2>{{ id() ? 'Edit service' : 'New service' }}</h2>
+    </div>
+    <a class="admin-btn admin-btn--ghost" routerLink="/admin/services">Back</a>
+  </header>
+
+  @if (error(); as err) {
+    <p class="admin-error">{{ err }}</p>
+  }
+
+  <form class="admin-panel admin-form" (ngSubmit)="save()">
+    <div class="admin-form__row">
+      <label>Slug<input name="slug" [(ngModel)]="model.slug" required /></label>
+      <label>Sort order<input name="sortOrder" type="number" [(ngModel)]="model.sortOrder" /></label>
+    </div>
+    <div class="admin-form__row">
+      <label>Title EN<input name="titleEn" [(ngModel)]="model.titleEn" required /></label>
+      <label>Title AR<input name="titleAr" [(ngModel)]="model.titleAr" required /></label>
+    </div>
+    <div class="admin-form__row">
+      <label>Short EN<textarea name="shortEn" [(ngModel)]="model.shortDescriptionEn" required></textarea></label>
+      <label>Short AR<textarea name="shortAr" [(ngModel)]="model.shortDescriptionAr" required></textarea></label>
+    </div>
+    <div class="admin-form__row">
+      <label>Body EN<textarea name="bodyEn" [(ngModel)]="model.bodyEn"></textarea></label>
+      <label>Body AR<textarea name="bodyAr" [(ngModel)]="model.bodyAr"></textarea></label>
+    </div>
+    <div class="admin-form__row">
+      <label>CTA label EN<input name="ctaEn" [(ngModel)]="model.ctaLabelEn" /></label>
+      <label>CTA label AR<input name="ctaAr" [(ngModel)]="model.ctaLabelAr" /></label>
+    </div>
+    <div class="admin-form__row">
+      <label>CTA URL<input name="ctaUrl" [(ngModel)]="model.ctaUrl" /></label>
+      <label>Icon key<input name="iconKey" [(ngModel)]="model.iconKey" /></label>
+    </div>
+    <div class="admin-form__row">
+      <label>
+        Accent
+        <select name="accent" [(ngModel)]="model.accentColor">
+          <option value="blue">blue</option>
+          <option value="green">green</option>
+        </select>
+      </label>
+      <label class="admin-check">
+        <input type="checkbox" name="published" [(ngModel)]="model.isPublished" />
+        Published
+      </label>
+    </div>
+
+    <div class="admin-toolbar">
+      <h3 style="margin: 0; flex: 1">Features</h3>
+      <button type="button" class="admin-btn admin-btn--ghost" (click)="addFeature()">Add feature</button>
+    </div>
+
+    @for (feature of model.features; track $index; let i = $index) {
+      <div class="admin-feature">
+        <div class="admin-form__row">
+          <label>Title EN<input [(ngModel)]="feature.titleEn" [name]="'ftEn' + i" /></label>
+          <label>Title AR<input [(ngModel)]="feature.titleAr" [name]="'ftAr' + i" /></label>
+        </div>
+        <div class="admin-form__row">
+          <label>Desc EN<textarea [(ngModel)]="feature.descriptionEn" [name]="'fdEn' + i"></textarea></label>
+          <label>Desc AR<textarea [(ngModel)]="feature.descriptionAr" [name]="'fdAr' + i"></textarea></label>
+        </div>
+        <div class="admin-form__row">
+          <label>Order<input type="number" [(ngModel)]="feature.sortOrder" [name]="'fo' + i" /></label>
+          <div class="admin-actions" style="align-self: end">
+            <button type="button" class="admin-btn admin-btn--danger" (click)="removeFeature(i)">Remove</button>
+          </div>
+        </div>
+      </div>
+    }
+
+    <div class="admin-actions">
+      <button class="admin-btn" type="submit" [disabled]="busy()">{{ busy() ? 'Saving…' : 'Save' }}</button>
+    </div>
+  </form>
+</section>

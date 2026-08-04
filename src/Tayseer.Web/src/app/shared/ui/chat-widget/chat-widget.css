@@ -307,6 +307,125 @@ html.dark .chat-panel__error {
   color: #f97066;
 }
 
+.chat-panel__handoff {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  padding: 0 1rem 0.65rem;
+}
+
+.chat-panel__handoff-btn {
+  border: 1px solid rgb(9 90 141 / 20%);
+  border-radius: 0.65rem;
+  background: transparent;
+  color: #095a8d;
+  padding: 0.45rem 0.75rem;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+html.dark .chat-panel__handoff-btn {
+  border-color: rgb(98 168 69 / 35%);
+  color: #62a845;
+}
+
+.chat-panel__handoff-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.chat-panel__handoff-note {
+  margin: 0;
+  color: #5b6478;
+  font-size: 0.78rem;
+}
+
+html.dark .chat-panel__handoff-note {
+  color: rgb(255 255 255 / 55%);
+}
+
+.chat-panel__handoff-link {
+  border: 0;
+  background: none;
+  color: #095a8d;
+  padding: 0;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 650;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+html.dark .chat-panel__handoff-link {
+  color: #62a845;
+}
+
+.chat-panel__handoff-form {
+  display: grid;
+  gap: 0.7rem;
+  padding: 0.15rem 1rem 1rem;
+  border-top: 1px solid rgb(9 90 141 / 10%);
+}
+
+html.dark .chat-panel__handoff-form {
+  border-top-color: rgb(255 255 255 / 10%);
+}
+
+.chat-panel__handoff-intro {
+  margin: 0;
+  color: #5b6478;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+html.dark .chat-panel__handoff-intro {
+  color: rgb(255 255 255 / 60%);
+}
+
+.chat-panel__handoff-form label {
+  display: grid;
+  gap: 0.3rem;
+  font-size: 0.78rem;
+  font-weight: 650;
+  color: #1a2332;
+}
+
+html.dark .chat-panel__handoff-form label {
+  color: #e8eef5;
+}
+
+.chat-panel__handoff-form input {
+  border: 1px solid rgb(9 90 141 / 15%);
+  border-radius: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  background: #f7f9fc;
+  color: #1a2332;
+  font: inherit;
+  font-size: 0.9rem;
+}
+
+html.dark .chat-panel__handoff-form input {
+  border-color: rgb(255 255 255 / 12%);
+  background: #0a0a0a;
+  color: #e8eef5;
+}
+
+.chat-panel__handoff-form input:focus {
+  outline: 2px solid color-mix(in srgb, #62a845 65%, white);
+  outline-offset: 1px;
+}
+
+.chat-panel__handoff-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.15rem;
+}
+
 .chat-panel__composer {
   display: grid;
   grid-template-columns: 1fr auto;

@@ -1,0 +1,37 @@
+<div class="admin-login">
+  <form class="admin-login__card" (ngSubmit)="submit()">
+    <p class="admin-login__eyebrow">Tayseer Control Panel</p>
+    <h1>Sign in</h1>
+    <p class="admin-login__lead">Manage services, offices, and Fahim knowledge.</p>
+
+    <label>
+      Email
+      <input
+        type="email"
+        required
+        autocomplete="username"
+        [ngModel]="email()"
+        (ngModelChange)="email.set($event)"
+        name="email"
+      />
+    </label>
+
+    <label>
+      Password
+      <input
+        type="password"
+        required
+        autocomplete="current-password"
+        [ngModel]="password()"
+        (ngModelChange)="password.set($event)"
+        name="password"
+      />
+    </label>
+
+    @if (error(); as err) {
+      <p class="admin-login__error" role="alert">{{ err }}</p>
+    }
+
+    <button type="submit" [disabled]="busy()">{{ busy() ? 'Signing in…' : 'Sign in' }}</button>
+  </form>
+</div>

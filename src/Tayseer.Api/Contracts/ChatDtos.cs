@@ -11,7 +11,8 @@ public record ChatSourceDto(string Title, string SourceType, string SourceKey, f
 public record ChatResponseDto(
     string Reply,
     string Model,
-    IReadOnlyList<ChatSourceDto>? Sources = null);
+    IReadOnlyList<ChatSourceDto>? Sources = null,
+    bool HandoffRequested = false);
 
 public record ChatErrorDto(string Error, string? Detail = null);
 

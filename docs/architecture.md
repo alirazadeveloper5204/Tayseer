@@ -17,7 +17,8 @@ Tayseer/
 
 ## Defaults
 
-- Auth: JWT in Phase 4 (Entra later)
+- Auth: JWT admin control panel at `/admin` (Entra later)
+- Default seed admin: `AdminSeed` in `appsettings.json` (change before deploy)
 - DB: SQL Server LocalDB in development
 - Locales: `/en` `/ar` routes in Phase 1
 - Theme: dark-first class strategy (`html.dark`)

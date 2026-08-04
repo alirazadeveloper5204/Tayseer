@@ -19,6 +19,7 @@ export interface ChatResponseDto {
   reply: string;
   model: string;
   sources?: ChatSourceDto[] | null;
+  handoffRequested?: boolean;
 }
 
 export interface ChatErrorDto {
