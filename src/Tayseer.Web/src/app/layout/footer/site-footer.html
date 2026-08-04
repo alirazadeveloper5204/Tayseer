@@ -45,8 +45,18 @@
           <a [routerLink]="'/' + lang()" class="hover:text-brand-green">{{ copy().nav.home }}</a>
         </li>
         <li>
+          <a [routerLink]="'/' + lang() + '/services'" class="hover:text-brand-green">{{
+            copy().nav.services
+          }}</a>
+        </li>
+        <li>
           <a [routerLink]="'/' + lang() + '/solutions'" class="hover:text-brand-green">{{
             copy().nav.solutions
+          }}</a>
+        </li>
+        <li>
+          <a [routerLink]="'/' + lang() + '/case-studies'" class="hover:text-brand-green">{{
+            copy().nav.caseStudies
           }}</a>
         </li>
         <li>
@@ -61,7 +71,7 @@
           }}</a>
         </li>
         <li>
-          <a [routerLink]="'/' + lang() + '/connect'" class="hover:text-brand-green">{{
+          <a [routerLink]="'/' + lang() + '/contact'" class="hover:text-brand-green">{{
             copy().nav.connect
           }}</a>
         </li>

@@ -1,0 +1,65 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.service-card__cta {
+  color: #62a945;
+  letter-spacing: 0.01em;
+  transition:
+    color 0.25s ease,
+    gap 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.25s ease;
+}
+
+.service-card__cta::after {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  bottom: -0.15rem;
+  width: 100%;
+  height: 1.5px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #0d5a8c 0%, #62a945 100%);
+  transform: scaleX(0);
+  transform-origin: inline-start;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.service-card:hover .service-card__cta,
+.service-card:focus-visible .service-card__cta {
+  color: #0d5a8c;
+  gap: 0.65rem;
+}
+
+.service-card:hover .service-card__cta::after,
+.service-card:focus-visible .service-card__cta::after {
+  transform: scaleX(1);
+}
+
+html.dark .service-card__cta {
+  color: #62a945;
+}
+
+html.dark .service-card:hover .service-card__cta,
+html.dark .service-card:focus-visible .service-card__cta {
+  color: #00f2fe;
+}
+
+html.dark .service-card__cta::after {
+  background: linear-gradient(90deg, #00f2fe 0%, #62a945 100%);
+}
+
+.service-card__cta-arrow {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.service-card:hover .service-card__cta-arrow,
+.service-card:focus-visible .service-card__cta-arrow {
+  transform: translateX(2px);
+}
+
+[dir='rtl'] .service-card:hover .service-card__cta-arrow,
+[dir='rtl'] .service-card:focus-visible .service-card__cta-arrow {
+  transform: translateX(-2px);
+}

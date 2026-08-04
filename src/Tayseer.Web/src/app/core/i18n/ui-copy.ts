@@ -13,7 +13,9 @@ export interface UiCopy {
   };
   nav: {
     home: string;
+    services: string;
     solutions: string;
+    caseStudies: string;
     about: string;
     blog: string;
     careers: string;
@@ -99,11 +101,13 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
     },
     nav: {
       home: 'Home',
+      services: 'Services',
       solutions: 'Solutions',
+      caseStudies: 'Case Studies',
       about: 'About Us',
       blog: 'Blogs and Resources',
       careers: 'Careers',
-      connect: 'Connect',
+      connect: 'Contact',
       submitQuery: 'Submit A Query',
     },
     home: {
@@ -189,7 +193,9 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
     },
     nav: {
       home: 'الرئيسية',
+      services: 'الخدمات',
       solutions: 'الحلول',
+      caseStudies: 'دراسات الحالة',
       about: 'من نحن',
       blog: 'المدونة والموارد',
       careers: 'الوظائف',

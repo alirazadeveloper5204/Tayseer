@@ -6,6 +6,13 @@ import { Shell } from './layout/shell/shell';
 import { HomePage } from './features/home/home-page';
 import { SolutionsPage } from './features/solutions/solutions-page';
 import { ServiceDetailPage } from './features/solutions/service-detail-page';
+import { ServicesPage } from './features/services/services-page';
+import { SoftwarePage } from './features/software/software-page';
+import { ManagedPage } from './features/managed/managed-page';
+import { AboutPage } from './features/about/about-page';
+import { CaseStudiesPage } from './features/case-studies/case-studies-page';
+import { CaseStudyDetailPage } from './features/case-studies/case-study-detail-page';
+import { ContactPage } from './features/contact/contact-page';
 import { PlaceholderPage } from './shared/ui/placeholder-page/placeholder-page';
 import { AdminShell } from './features/admin/admin-shell/admin-shell';
 import { AdminLogin } from './features/admin/admin-login/admin-login';
@@ -43,6 +50,9 @@ export const routes: Routes = [
     component: Shell,
     children: [
       { path: '', component: HomePage },
+      { path: 'services', component: ServicesPage },
+      { path: 'software-development', component: SoftwarePage },
+      { path: 'managed-services', component: ManagedPage },
       {
         path: 'solutions',
         children: [
@@ -50,11 +60,16 @@ export const routes: Routes = [
           { path: ':slug', component: ServiceDetailPage },
         ],
       },
+      { path: 'about', component: AboutPage },
       {
-        path: 'about',
-        component: PlaceholderPage,
-        data: { titleEn: 'About Us', titleAr: 'من نحن' },
+        path: 'case-studies',
+        children: [
+          { path: '', component: CaseStudiesPage },
+          { path: ':slug', component: CaseStudyDetailPage },
+        ],
       },
+      { path: 'contact', component: ContactPage },
+      { path: 'connect', component: ContactPage },
       {
         path: 'blog',
         component: PlaceholderPage,
@@ -64,11 +79,6 @@ export const routes: Routes = [
         path: 'careers',
         component: PlaceholderPage,
         data: { titleEn: 'Careers', titleAr: 'الوظائف' },
-      },
-      {
-        path: 'connect',
-        component: PlaceholderPage,
-        data: { titleEn: 'Connect', titleAr: 'تواصل معنا' },
       },
       {
         path: 'legal/privacy',

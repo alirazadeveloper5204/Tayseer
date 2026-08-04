@@ -1,21 +1,29 @@
-<div class="border-b border-white/10 bg-transparent text-[0.85rem] text-white/75">
+<div
+  class="border-b border-brand-blue/15 bg-transparent text-[0.85rem] text-brand-blue dark:border-white/10 dark:text-white/80"
+>
   <div class="site-container flex flex-wrap items-center justify-between gap-fluid-xs py-fluid-xs">
     <div class="flex flex-wrap items-center gap-4 sm:gap-5">
       <a
-        class="hover:text-brand-blue dark:hover:text-brand-green"
+        class="font-medium transition hover:text-brand-green dark:hover:text-brand-cyan"
         [href]="'mailto:' + copy().common.email"
       >
         {{ copy().common.email }}
       </a>
-      <a class="hover:text-brand-blue dark:hover:text-brand-green" href="tel:+966555203079">
+      <a
+        class="font-medium transition hover:text-brand-green dark:hover:text-brand-cyan"
+        href="tel:+966555203079"
+      >
         +966 555203079
       </a>
-      <a class="hover:text-brand-blue dark:hover:text-brand-green" href="tel:+97143997558">
+      <a
+        class="font-medium transition hover:text-brand-green dark:hover:text-brand-cyan"
+        href="tel:+97143997558"
+      >
         +971 43997558
       </a>
     </div>
     <a
-      class="hidden items-center hover:text-brand-blue dark:hover:text-brand-green md:inline-flex"
+      class="hidden items-center transition hover:text-brand-green dark:hover:text-brand-cyan md:inline-flex"
       href="https://www.linkedin.com/company/tayseer-innovations/"
       target="_blank"
       rel="noopener noreferrer"

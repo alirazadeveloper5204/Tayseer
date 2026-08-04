@@ -21,7 +21,7 @@ import { UiCopyService } from '../../core/i18n/ui-copy.service';
 
 @Component({
   selector: 'app-shell',
-  imports: [RouterOutlet, RouterLink, TopBar, SiteHeader, SiteFooter],
+  imports: [RouterOutlet, RouterLink, TopBar, SiteHeader, SiteFooter, ChatWidget],
   templateUrl: './shell.html',
   styleUrl: './shell.css',
 })

@@ -4,7 +4,7 @@
     [class.site-content--veiled]="navigationLoader.covered()"
     [inert]="navigationLoader.active()"
   >
-    <div class="site-chrome sticky top-0 z-50 border-b border-white/10">
+    <div class="site-chrome sticky top-0 z-50 border-b border-brand-blue/15 dark:border-white/12">
       <div class="chrome-top" [class.chrome-top--hidden]="topBarHidden()">
         <div class="chrome-top__inner">
           <app-top-bar />
@@ -20,10 +20,12 @@
 
   <!-- Viewport-fixed mobile CTA (outside sticky chrome so it never clips) -->
   <div
-    class="site-mobile-cta fixed inset-x-0 bottom-0 z-[80] border-t border-white/15 bg-[#030712]/80 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-8px_24px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:hidden"
+    class="site-mobile-cta fixed inset-x-0 bottom-0 z-[80] border-t border-brand-blue/15 bg-white/90 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-8px_24px_rgba(9,90,141,0.12)] backdrop-blur-xl dark:border-white/15 dark:bg-[#030712]/88 dark:shadow-[0_-8px_24px_rgba(0,0,0,0.35)] sm:hidden"
   >
-    <a [routerLink]="'/' + lang() + '/connect'" class="btn-brand w-full justify-center text-sm">
+    <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand w-full justify-center text-sm">
       {{ copy().common.talkToUs }}
     </a>
   </div>
+
+  <app-chat-widget />
 </div>

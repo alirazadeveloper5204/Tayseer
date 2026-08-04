@@ -1,0 +1,64 @@
+<section class="page-hero site-band">
+  <div class="page-hero__glow" aria-hidden="true"></div>
+  <div class="site-container relative z-10">
+    <div class="page-hero__panel">
+      <p class="type-eyebrow">{{ eyebrow() }}</p>
+      <h1 class="type-title mt-fluid-sm page-ink">{{ title() }}</h1>
+      <p class="mt-fluid-md text-fluid-base leading-relaxed page-muted">{{ lead() }}</p>
+      <div class="mt-fluid-lg flex flex-wrap gap-fluid-sm">
+        <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand">{{ label(common.requestDemo) }}</a>
+        <a [routerLink]="'/' + lang() + '/case-studies'" class="page-ghost-btn">
+          {{ label(common.learnMore) }}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page-module site-band">
+  <div class="site-container py-fluid-2xl">
+    <div class="grid gap-fluid-md sm:grid-cols-2">
+      @for (pillar of c.pillars; track pillar.id) {
+        <article class="fintech-card overflow-hidden">
+          <div class="img-hover-box h-40">
+            <img
+              class="h-full w-full object-cover"
+              [src]="
+                pillar.id === 'core'
+                  ? '/images/service-core-banking.jpg'
+                  : pillar.id === 'payments'
+                    ? '/images/service-banking-systems.jpg'
+                    : pillar.id === 'wallets'
+                      ? '/images/service-mbuke.jpg'
+                      : '/images/gallery-analytics.jpg'
+              "
+              [alt]="label(pillar.title)"
+              width="800"
+              height="480"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <div class="p-fluid-md">
+            <h2 class="font-display text-fluid-xl font-semibold page-ink">{{ label(pillar.title) }}</h2>
+            <p class="mt-2 text-fluid-sm leading-relaxed page-muted">{{ label(pillar.body) }}</p>
+          </div>
+        </article>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="page-module site-band">
+  <div class="site-container py-fluid-2xl">
+    <h2 class="type-section page-ink">{{ flowTitle() }}</h2>
+    <p class="mt-fluid-sm max-w-2xl text-fluid-base page-muted">{{ flowLead() }}</p>
+    <div class="arch-flow mt-fluid-xl">
+      @for (node of c.nodes; track $index) {
+        <div class="arch-node">
+          <p class="arch-node__label">{{ label(node) }}</p>
+        </div>
+      }
+    </div>
+  </div>
+</section>

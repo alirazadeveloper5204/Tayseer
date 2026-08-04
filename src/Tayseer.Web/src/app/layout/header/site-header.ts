@@ -32,11 +32,20 @@ export class SiteHeader {
 
   readonly solutionLinks = computed(() => {
     const isAr = this.locale.lang() === 'ar';
-    return SOLUTION_LINKS.map((item) => ({
-      slug: item.slug,
-      title: isAr ? item.titleAr : item.titleEn,
-      path: `/${this.locale.lang()}/solutions/${item.slug}`,
-    }));
+    const lang = this.locale.lang();
+    return SOLUTION_LINKS.map((item) => {
+      const dedicated =
+        item.slug === 'software-management-systems'
+          ? `/${lang}/software-development`
+          : item.slug === 'managed-services'
+            ? `/${lang}/managed-services`
+            : `/${lang}/solutions/${item.slug}`;
+      return {
+        slug: item.slug,
+        title: isAr ? item.titleAr : item.titleEn,
+        path: dedicated,
+      };
+    });
   });
 
   toggleMenu(): void {

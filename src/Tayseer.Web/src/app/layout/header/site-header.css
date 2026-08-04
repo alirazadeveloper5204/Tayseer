@@ -8,6 +8,10 @@
     background: transparent !important;
     box-shadow: none;
   }
+
+  .site-nav a {
+    transition: color 0.2s ease;
+  }
 }
 
 /* Mobile drawer sits under sticky chrome and above the bottom CTA */

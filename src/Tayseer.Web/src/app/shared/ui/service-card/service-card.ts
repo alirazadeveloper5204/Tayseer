@@ -8,6 +8,7 @@ import { ServiceListItemDto } from '../../../models/service.model';
   selector: 'app-service-card',
   imports: [RouterLink],
   templateUrl: './service-card.html',
+  styleUrl: './service-card.css',
   host: {
     class: 'service-card-host block h-full',
   },

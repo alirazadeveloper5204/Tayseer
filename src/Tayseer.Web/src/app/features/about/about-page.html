@@ -1,0 +1,83 @@
+<section class="page-hero site-band">
+  <div class="page-hero__glow" aria-hidden="true"></div>
+  <div class="site-container relative z-10">
+    <div class="page-hero__panel">
+      <p class="type-eyebrow">{{ eyebrow() }}</p>
+      <h1 class="type-title mt-fluid-sm page-ink">{{ title() }}</h1>
+      <p class="mt-fluid-md max-w-3xl text-fluid-base leading-relaxed page-muted">{{ mission() }}</p>
+      <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand mt-fluid-lg inline-flex">
+        {{ label(common.talkToUs) }}
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="page-module site-band">
+  <div class="site-container py-fluid-2xl">
+    <h2 class="type-section page-ink">{{ timelineTitle() }}</h2>
+    <ol class="about-timeline mt-fluid-xl">
+      @for (item of c.timeline; track item.year) {
+        <li class="about-timeline__item">
+          <span class="financial-number font-display text-fluid-lg font-bold page-accent">{{ item.year }}</span>
+          <p class="mt-1 text-fluid-sm leading-relaxed page-muted">{{ label(item.text) }}</p>
+        </li>
+      }
+    </ol>
+  </div>
+</section>
+
+<section class="page-module site-band">
+  <div class="site-container py-fluid-2xl">
+    <h2 class="type-section page-ink">{{ credentialsTitle() }}</h2>
+    <div class="mt-fluid-lg grid gap-fluid-sm sm:grid-cols-2 lg:grid-cols-4">
+      @for (cred of c.creds; track label(cred)) {
+        <article class="fintech-card p-fluid-md text-center">
+          <p class="font-display text-fluid-sm font-semibold page-ink">{{ label(cred) }}</p>
+        </article>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="page-module site-band">
+  <div class="site-container py-fluid-2xl">
+    <h2 class="type-section page-ink">{{ teamTitle() }}</h2>
+    <div class="mt-fluid-lg grid gap-fluid-md sm:grid-cols-2 lg:grid-cols-4">
+      @for (member of c.leaders; track member.id) {
+        <article class="team-card fintech-card overflow-hidden">
+          <div class="img-hover-box relative h-64">
+            <img
+              class="h-full w-full object-cover"
+              [src]="member.img"
+              [alt]="label(member.name)"
+              width="640"
+              height="800"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="team-card__overlay">
+              <p class="font-display text-fluid-lg font-semibold text-white">{{ label(member.name) }}</p>
+              <p class="mt-1 text-fluid-sm text-brand-green">{{ label(member.role) }}</p>
+              <div class="mt-3 flex gap-3">
+                @for (link of member.links; track link.href) {
+                  <a
+                    class="text-fluid-xs font-semibold uppercase tracking-wider text-white/85 transition hover:text-brand-green"
+                    [href]="link.href"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {{ label(link.label) }}
+                  </a>
+                }
+              </div>
+            </div>
+          </div>
+          <div class="p-fluid-md lg:hidden">
+            <p class="font-display text-fluid-base font-semibold page-ink">{{ label(member.name) }}</p>
+            <p class="mt-1 text-fluid-sm page-accent-green">{{ label(member.role) }}</p>
+          </div>
+        </article>
+      }
+    </div>
+  </div>
+</section>

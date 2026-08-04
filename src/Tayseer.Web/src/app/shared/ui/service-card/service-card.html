@@ -88,17 +88,14 @@
       {{ service().title }}
     </h3>
 
-    <p class="relative mt-2 flex-1 text-fluid-sm leading-relaxed text-ink-soft dark:text-white/65">
+    <p class="relative mt-2 flex-1 text-fluid-sm leading-relaxed text-ink-soft dark:text-white/70">
       {{ service().shortDescription }}
     </p>
 
-    <span
-      class="service-card__cta relative mt-5 inline-flex items-center gap-2 text-fluid-sm font-semibold text-brand-blue transition group-hover:gap-2.5 dark:text-brand-green"
-      [class.text-brand-green]="isGreen()"
-    >
+    <span class="service-card__cta relative mt-5 inline-flex items-center gap-2 text-fluid-sm font-semibold">
       {{ ctaLabel() }}
       <svg
-        class="h-3.5 w-3.5 rtl:rotate-180"
+        class="service-card__cta-arrow h-3.5 w-3.5 rtl:rotate-180"
         viewBox="0 0 14 14"
         fill="none"
         aria-hidden="true"

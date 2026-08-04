@@ -1,81 +1,49 @@
-<section class="relative overflow-hidden">
-  <div class="absolute inset-0" aria-hidden="true">
-    <img
-      class="h-full w-full scale-105 object-cover"
-      src="/images/solutions-banner.jpg"
-      alt=""
-      width="1600"
-      height="600"
-      decoding="async"
-    />
-    <div
-      class="absolute inset-0 bg-gradient-to-b from-surface-light/96 via-surface-light/90 to-surface-light dark:from-surface-dark/96 dark:via-surface-dark/90 dark:to-surface-dark"
-    ></div>
-    <div
-      class="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_20%,rgba(98,168,69,0.12),transparent_50%)]"
-    ></div>
+<section class="page-hero site-band">
+  <div class="page-hero__glow" aria-hidden="true"></div>
+  <div class="site-container relative z-10">
+    <div class="page-hero__panel">
+      <p class="type-eyebrow">{{ copy().nav.solutions }}</p>
+      <h1 class="type-title mt-fluid-sm page-ink">{{ title() }}</h1>
+      <p class="mt-fluid-md text-fluid-base leading-relaxed page-muted">{{ intro() }}</p>
+    </div>
   </div>
+</section>
 
-  <div class="site-container relative z-10 py-fluid-2xl">
-    <p class="type-eyebrow">{{ copy().nav.solutions }}</p>
-    <h1 class="type-title mt-fluid-sm">{{ title() }}</h1>
-    <p class="type-lead mt-fluid-md max-w-3xl">{{ intro() }}</p>
-
-    @if (!loading() && !error() && services().length) {
-      <div class="mt-fluid-lg flex gap-3 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        @for (service of services(); track service.slug) {
-          <a
-            [routerLink]="'/' + lang() + '/solutions/' + service.slug"
-            class="group relative h-20 w-28 shrink-0 overflow-hidden rounded-xl border border-brand-blue/15 shadow-sm transition hover:-translate-y-0.5 hover:border-brand-green/40 dark:border-white/15"
-          >
-            <img
-              class="h-full w-full object-cover transition duration-500 group-hover:scale-110"
-              [src]="thumbFor(service.slug)"
-              [alt]="service.title"
-              width="160"
-              height="112"
-              loading="lazy"
-              decoding="async"
-            />
-            <span
-              class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-2 pb-1.5 pt-5 text-[0.65rem] font-semibold leading-tight text-white"
-            >
-              {{ service.title }}
-            </span>
-          </a>
-        }
-      </div>
-    }
-
+<section class="page-module site-band">
+  <div class="site-container py-fluid-2xl">
     @if (loading()) {
-      <div class="mt-fluid-xl flex justify-center py-fluid-xl">
+      <div class="flex justify-center py-fluid-xl">
         <span class="geometric-loader h-10 w-10"></span>
       </div>
     } @else if (error()) {
-      <p class="mt-fluid-xl text-fluid-sm text-ink-soft dark:text-white/60">
+      <p class="text-fluid-sm page-muted">
         {{ isAr() ? 'تعذر تحميل الحلول حالياً.' : 'Solutions are temporarily unavailable.' }}
       </p>
     } @else {
-      <div class="mt-fluid-xl grid gap-fluid-md sm:grid-cols-2 lg:grid-cols-3">
+      <div class="grid gap-fluid-md sm:grid-cols-2 lg:grid-cols-3">
         @for (service of services(); track service.slug) {
           <app-service-card [service]="service" [lang]="lang()" [ctaLabel]="copy().common.readMore" />
         }
       </div>
     }
+  </div>
+</section>
 
-    <div class="mt-fluid-2xl rounded-2xl border border-brand-blue/10 bg-surface-light-muted/90 p-fluid-lg backdrop-blur-sm dark:border-white/10 dark:bg-surface-dark-elevated/90">
-      <h2 class="font-display text-fluid-xl font-semibold text-brand-blue dark:text-white">
+<section class="page-module site-band">
+  <div class="site-container py-fluid-2xl">
+    <div class="fintech-card p-fluid-lg">
+      <h2 class="font-display text-fluid-xl font-semibold page-ink">
         {{ benefitsTitle() }}
       </h2>
       <ul class="mt-fluid-md grid gap-3 sm:grid-cols-2">
         @for (item of benefits(); track item) {
-          <li class="flex items-start gap-2 text-fluid-sm text-ink-soft dark:text-white/75">
+          <li class="flex items-start gap-2 text-fluid-sm page-muted">
             <span class="mt-1.5 size-1.5 shrink-0 rounded-full bg-brand-green" aria-hidden="true"></span>
             {{ item }}
           </li>
         }
       </ul>
-      <a [routerLink]="'/' + lang() + '/connect'" class="btn-brand mt-fluid-lg inline-flex">
+      <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand mt-fluid-lg inline-flex">
         {{ copy().common.talkToUs }}
       </a>
     </div>

@@ -1,0 +1,54 @@
+<section class="page-hero site-band">
+  <div class="page-hero__glow" aria-hidden="true"></div>
+  <div class="site-container relative z-10">
+    <div class="page-hero__panel">
+      <p class="type-eyebrow">{{ eyebrow() }}</p>
+      <h1 class="type-title mt-fluid-sm page-ink">{{ title() }}</h1>
+      <p class="mt-fluid-md text-fluid-base leading-relaxed page-muted">{{ lead() }}</p>
+      <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand mt-fluid-lg inline-flex">
+        {{ label(common.talkToUs) }}
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="page-module site-band">
+  <div class="site-container py-fluid-2xl">
+    <h2 class="type-section page-ink">{{ slaTitle() }}</h2>
+    <div class="mt-fluid-lg grid gap-fluid-md sm:grid-cols-2 lg:grid-cols-4">
+      @for (metric of c.metrics; track label(metric.label)) {
+        <article class="fintech-card p-fluid-md">
+          <div class="mb-3 flex items-center gap-2">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span class="text-fluid-xs uppercase tracking-wider page-muted">{{ label(metric.label) }}</span>
+          </div>
+          <p class="financial-number font-display text-fluid-3xl font-bold page-accent-green">{{ metric.value }}</p>
+        </article>
+      }
+    </div>
+
+    <div class="fintech-card mt-fluid-xl p-fluid-md">
+      <ul class="space-y-3">
+        @for (feed of c.feeds; track label(feed)) {
+          <li class="flex items-start gap-3 text-fluid-sm page-muted">
+            <span class="status-dot mt-1.5 shrink-0" aria-hidden="true"></span>
+            <span>{{ label(feed) }}</span>
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="page-module site-band">
+  <div class="site-container py-fluid-2xl">
+    <h2 class="type-section page-ink">{{ badgesTitle() }}</h2>
+    <div class="mt-fluid-lg grid gap-fluid-sm sm:grid-cols-2 lg:grid-cols-4">
+      @for (badge of c.badges; track label(badge)) {
+        <article class="fintech-card px-fluid-md py-fluid-lg text-center">
+          <p class="font-display text-fluid-base font-semibold page-accent">{{ label(badge) }}</p>
+        </article>
+      }
+    </div>
+  </div>
+</section>

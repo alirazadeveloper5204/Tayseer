@@ -18,18 +18,16 @@
       aria-label="Primary"
     >
       <ul
-        class="flex w-full flex-col text-sm font-semibold text-[#585858] max-lg:dark:text-white/85 lg:w-auto lg:flex-row lg:items-center lg:gap-4 lg:text-white/85 xl:gap-6 xl:text-[0.9375rem]"
+        class="flex w-full flex-col text-sm font-semibold text-brand-blue max-lg:dark:text-white/90 lg:w-auto lg:flex-row lg:items-center lg:gap-4 lg:text-brand-blue dark:lg:text-white/92 xl:gap-6 xl:text-[0.9375rem]"
       >
         <li>
           <a
-            [routerLink]="'/' + lang()"
-            routerLinkActive="text-brand-blue dark:text-brand-green"
-            [routerLinkActiveOptions]="{ exact: true }"
-            class="block border-b border-[#f1f1f1] px-6 py-4 whitespace-nowrap hover:text-brand-blue dark:border-white/10 dark:hover:text-brand-green lg:border-0 lg:px-0 lg:py-2"
-            [class.nav-scroll-active]="scrollActive() === 'home'"
+            [routerLink]="'/' + lang() + '/services'"
+            routerLinkActive="text-brand-green dark:text-brand-cyan"
+            class="block border-b border-[#f1f1f1] px-6 py-4 whitespace-nowrap hover:text-brand-green dark:border-white/10 dark:hover:text-brand-cyan lg:border-0 lg:px-0 lg:py-2"
             (click)="closeMenu()"
           >
-            {{ copy().nav.home }}
+            {{ copy().nav.services }}
           </a>
         </li>
 
@@ -37,8 +35,8 @@
           <div class="flex items-center justify-between">
             <a
               [routerLink]="'/' + lang() + '/solutions'"
-              routerLinkActive="text-brand-blue dark:text-brand-green"
-              class="block flex-1 px-6 py-4 whitespace-nowrap hover:text-brand-blue dark:hover:text-brand-green lg:px-0 lg:py-2"
+              routerLinkActive="text-brand-green dark:text-brand-cyan"
+              class="block flex-1 px-6 py-4 whitespace-nowrap hover:text-brand-green dark:hover:text-brand-cyan lg:px-0 lg:py-2"
               [class.nav-scroll-active]="scrollActive() === 'solutions'"
               (click)="closeMenu()"
             >
@@ -80,8 +78,8 @@
         <li>
           <a
             [routerLink]="'/' + lang() + '/about'"
-            routerLinkActive="text-brand-blue dark:text-brand-green"
-            class="block border-b border-[#f1f1f1] px-6 py-4 whitespace-nowrap hover:text-brand-blue dark:border-white/10 dark:hover:text-brand-green lg:border-0 lg:px-0 lg:py-2"
+            routerLinkActive="text-brand-green dark:text-brand-cyan"
+            class="block border-b border-[#f1f1f1] px-6 py-4 whitespace-nowrap hover:text-brand-green dark:border-white/10 dark:hover:text-brand-cyan lg:border-0 lg:px-0 lg:py-2"
             [class.nav-scroll-active]="scrollActive() === 'about'"
             (click)="closeMenu()"
           >
@@ -91,8 +89,8 @@
         <li>
           <a
             [routerLink]="'/' + lang() + '/blog'"
-            routerLinkActive="text-brand-blue dark:text-brand-green"
-            class="block border-b border-[#f1f1f1] px-6 py-4 whitespace-nowrap hover:text-brand-blue dark:border-white/10 dark:hover:text-brand-green lg:border-0 lg:px-0 lg:py-2"
+            routerLinkActive="text-brand-green dark:text-brand-cyan"
+            class="block border-b border-[#f1f1f1] px-6 py-4 whitespace-nowrap hover:text-brand-green dark:border-white/10 dark:hover:text-brand-cyan lg:border-0 lg:px-0 lg:py-2"
             (click)="closeMenu()"
           >
             {{ copy().nav.blog }}
@@ -101,21 +99,11 @@
         <li>
           <a
             [routerLink]="'/' + lang() + '/careers'"
-            routerLinkActive="text-brand-blue dark:text-brand-green"
-            class="block border-b border-[#f1f1f1] px-6 py-4 whitespace-nowrap hover:text-brand-blue dark:border-white/10 dark:hover:text-brand-green lg:border-0 lg:px-0 lg:py-2"
+            routerLinkActive="text-brand-green dark:text-brand-cyan"
+            class="block border-b border-[#f1f1f1] px-6 py-4 whitespace-nowrap hover:text-brand-green dark:border-white/10 dark:hover:text-brand-cyan lg:border-0 lg:px-0 lg:py-2"
             (click)="closeMenu()"
           >
             {{ copy().nav.careers }}
-          </a>
-        </li>
-        <li>
-          <a
-            [routerLink]="'/' + lang() + '/connect'"
-            routerLinkActive="text-brand-blue dark:text-brand-green"
-            class="block border-b border-[#f1f1f1] px-6 py-4 whitespace-nowrap hover:text-brand-blue dark:border-white/10 dark:hover:text-brand-green lg:border-0 lg:px-0 lg:py-2"
-            (click)="closeMenu()"
-          >
-            {{ copy().nav.connect }}
           </a>
         </li>
       </ul>
@@ -202,7 +190,7 @@
         ></span>
       </button>
 
-      <a [routerLink]="'/' + lang() + '/connect'" class="btn-brand hidden text-sm sm:inline-flex">
+      <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand hidden text-sm sm:inline-flex">
         {{ copy().nav.submitQuery }}
       </a>
       <button

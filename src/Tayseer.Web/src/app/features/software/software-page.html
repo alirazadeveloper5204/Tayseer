@@ -1,0 +1,68 @@
+<section class="page-hero site-band">
+  <div class="page-hero__glow" aria-hidden="true"></div>
+  <div class="site-container relative z-10">
+    <div class="page-hero__panel">
+      <p class="type-eyebrow">{{ eyebrow() }}</p>
+      <h1 class="type-title mt-fluid-sm page-ink">{{ title() }}</h1>
+      <p class="mt-fluid-md text-fluid-base leading-relaxed page-muted">{{ lead() }}</p>
+      <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand mt-fluid-lg inline-flex">
+        {{ label(common.requestDemo) }}
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="page-module site-band">
+  <div class="site-container grid gap-fluid-md py-fluid-2xl lg:grid-cols-3">
+    @for (track of c.tracks; track track.id) {
+      <article class="fintech-card p-fluid-md">
+        <div class="img-hover-box mb-fluid-md h-36">
+          <img
+            class="h-full w-full object-cover"
+            [src]="
+              track.id === 'legacy'
+                ? '/images/service-software.jpg'
+                : track.id === 'cloud'
+                  ? '/images/deploy-cloud.jpg'
+                  : '/images/gallery-mobile.jpg'
+            "
+            [alt]="label(track.title)"
+            width="640"
+            height="360"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <h2 class="font-display text-fluid-lg font-semibold page-ink">{{ label(track.title) }}</h2>
+        <p class="mt-2 text-fluid-sm leading-relaxed page-muted">{{ label(track.body) }}</p>
+      </article>
+    }
+  </div>
+</section>
+
+<section class="page-module site-band">
+  <div class="site-container py-fluid-2xl">
+    <h2 class="type-section page-ink">{{ tabsTitle() }}</h2>
+    <div class="mt-fluid-md flex flex-wrap gap-2" role="tablist">
+      @for (tab of c.tabs; track tab.id) {
+        <button
+          type="button"
+          class="tab-pill"
+          role="tab"
+          [class.is-active]="activeTab() === tab.id"
+          [attr.aria-selected]="activeTab() === tab.id"
+          (click)="setTab(tab.id)"
+        >
+          {{ label(tab.label) }}
+        </button>
+      }
+    </div>
+    <div class="mt-fluid-lg grid gap-fluid-sm sm:grid-cols-2 lg:grid-cols-4">
+      @for (item of activeItems(); track label(item)) {
+        <article class="fintech-card p-fluid-md text-center">
+          <p class="font-display text-fluid-base font-semibold page-accent">{{ label(item) }}</p>
+        </article>
+      }
+    </div>
+  </div>
+</section>

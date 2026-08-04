@@ -1,0 +1,58 @@
+<section class="page-hero site-band">
+  <div class="page-hero__glow" aria-hidden="true"></div>
+  <div class="site-container relative z-10">
+    <div class="page-hero__panel">
+      <p class="type-eyebrow">{{ eyebrow() }}</p>
+      <h1 class="type-title mt-fluid-sm page-ink">{{ title() }}</h1>
+      <p class="mt-fluid-md text-fluid-base leading-relaxed page-muted">{{ lead() }}</p>
+    </div>
+  </div>
+</section>
+
+<section class="page-module site-band">
+  <div class="site-container py-fluid-2xl">
+    <div class="flex flex-wrap gap-2" role="tablist" aria-label="Sector filter">
+      @for (f of c.filters; track f.id) {
+        <button
+          type="button"
+          class="tab-pill"
+          role="tab"
+          [class.is-active]="filter() === f.id"
+          [attr.aria-selected]="filter() === f.id"
+          (click)="setFilter(f.id)"
+        >
+          {{ label(f.label) }}
+        </button>
+      }
+    </div>
+
+    <div class="mt-fluid-xl grid gap-fluid-md sm:grid-cols-2 lg:grid-cols-3">
+      @for (item of filtered(); track item.slug) {
+        <article class="fintech-card overflow-hidden">
+          <div class="img-hover-box h-44">
+            <img
+              class="h-full w-full object-cover"
+              [src]="item.img"
+              [alt]="label(item.title)"
+              width="800"
+              height="480"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <div class="p-fluid-md">
+            <p class="text-fluid-xs uppercase tracking-wider page-accent-green">{{ sectorLabel(item.sector) }}</p>
+            <h2 class="mt-2 font-display text-fluid-lg font-semibold page-ink">{{ label(item.title) }}</h2>
+            <p class="mt-2 text-fluid-sm leading-relaxed page-muted">{{ label(item.summary) }}</p>
+            <a
+              class="mt-4 inline-flex text-fluid-sm font-semibold page-accent transition hover:text-brand-green"
+              [routerLink]="'/' + lang() + '/case-studies/' + item.slug"
+            >
+              {{ label(common.viewCase) }}
+            </a>
+          </div>
+        </article>
+      }
+    </div>
+  </div>
+</section>

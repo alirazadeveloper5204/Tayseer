@@ -3,7 +3,6 @@ import { RouterLink } from '@angular/router';
 import { ContentStore } from '../../state/content.store';
 import { LocaleService } from '../../core/i18n/locale.service';
 import { UiCopyService } from '../../core/i18n/ui-copy.service';
-import { serviceImage } from '../../core/media/site-images';
 import { ServiceCard } from '../../shared/ui/service-card/service-card';
 
 @Component({
@@ -46,10 +45,6 @@ export class SolutionsPage {
           'Embrace Innovation and Stay Ahead of the Curve',
         ],
   );
-
-  thumbFor(slug: string): string {
-    return serviceImage(slug);
-  }
 
   constructor() {
     effect(() => {

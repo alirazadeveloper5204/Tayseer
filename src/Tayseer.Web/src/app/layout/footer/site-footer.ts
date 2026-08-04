@@ -16,9 +16,18 @@ export class SiteFooter {
 
   readonly services = computed(() => {
     const isAr = this.locale.lang() === 'ar';
-    return SOLUTION_LINKS.map((item) => ({
-      path: `/${this.locale.lang()}/solutions/${item.slug}`,
-      title: isAr ? item.titleAr : item.titleEn,
-    }));
+    const lang = this.locale.lang();
+    return SOLUTION_LINKS.map((item) => {
+      const path =
+        item.slug === 'software-management-systems'
+          ? `/${lang}/software-development`
+          : item.slug === 'managed-services'
+            ? `/${lang}/managed-services`
+            : `/${lang}/solutions/${item.slug}`;
+      return {
+        path,
+        title: isAr ? item.titleAr : item.titleEn,
+      };
+    });
   });
 }

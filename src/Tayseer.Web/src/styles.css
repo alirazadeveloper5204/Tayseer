@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @config "../tailwind.config.js";
 @import "./app/features/home/home-hero.css";
+@import "./app/shared/ui/page-kit.css";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -60,16 +61,16 @@
     z-index: -1;
     pointer-events: none;
     background:
-      radial-gradient(ellipse 80% 55% at 15% 8%, rgba(0, 242, 254, 0.1), transparent 55%),
-      radial-gradient(ellipse 70% 50% at 88% 18%, rgba(16, 185, 129, 0.08), transparent 50%),
-      linear-gradient(180deg, rgba(3, 7, 18, 0.42) 0%, rgba(3, 7, 18, 0.58) 50%, rgba(3, 7, 18, 0.68) 100%);
+      radial-gradient(ellipse 80% 55% at 15% 8%, rgba(0, 242, 254, 0.14), transparent 55%),
+      radial-gradient(ellipse 70% 50% at 88% 18%, rgba(16, 185, 129, 0.1), transparent 50%),
+      linear-gradient(180deg, rgba(3, 7, 18, 0.55) 0%, rgba(3, 7, 18, 0.68) 50%, rgba(3, 7, 18, 0.78) 100%);
   }
 
   html:not(.dark) body::after {
     background:
-      radial-gradient(ellipse 80% 55% at 15% 8%, rgba(0, 242, 254, 0.06), transparent 55%),
-      radial-gradient(ellipse 70% 50% at 88% 18%, rgba(16, 185, 129, 0.05), transparent 50%),
-      linear-gradient(180deg, rgba(247, 249, 252, 0.52) 0%, rgba(247, 249, 252, 0.68) 50%, rgba(247, 249, 252, 0.78) 100%);
+      radial-gradient(ellipse 80% 55% at 15% 8%, rgba(13, 90, 140, 0.1), transparent 55%),
+      radial-gradient(ellipse 70% 50% at 88% 18%, rgba(98, 169, 69, 0.09), transparent 50%),
+      linear-gradient(180deg, rgba(247, 249, 252, 0.35) 0%, rgba(247, 249, 252, 0.5) 45%, rgba(247, 249, 252, 0.72) 100%);
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -182,7 +183,7 @@
   }
 
   .type-eyebrow {
-    @apply font-mono text-fluid-xs font-semibold uppercase tracking-[0.22em] text-brand-green-700 dark:text-brand-green-300;
+    @apply font-mono text-fluid-xs font-semibold uppercase tracking-[0.22em] text-brand-green-700 dark:text-brand-cyan;
   }
 
   .glass-card {
@@ -207,6 +208,11 @@
 
   .glass-card:hover {
     transform: translateY(-6px) scale(1.015);
+    border-color: rgba(13, 90, 140, 0.35);
+    box-shadow: 0 20px 40px -15px rgba(13, 90, 140, 0.18);
+  }
+
+  html.dark .glass-card:hover {
     border-color: rgba(0, 242, 254, 0.4);
     box-shadow: 0 20px 40px -15px rgba(0, 242, 254, 0.15);
   }
@@ -223,9 +229,9 @@
 
   .btn-brand:hover {
     box-shadow:
-      0 0 0 1px rgba(0, 242, 254, 0.35),
-      0 18px 50px -20px rgba(0, 242, 254, 0.25),
-      0 0 26px rgba(0, 242, 254, 0.18);
+      0 0 0 1px rgba(98, 169, 69, 0.35),
+      0 18px 50px -20px rgba(13, 90, 140, 0.28),
+      0 0 22px rgba(98, 169, 69, 0.2);
     filter: brightness(1.06);
   }
 
@@ -266,15 +272,17 @@
     background: transparent !important;
   }
 
-  /* Sticky chrome — light frosted strip, not a solid opaque bar. */
+  /* Sticky chrome — readable frosted strip in both themes */
   .site-chrome {
-    background: rgba(3, 7, 18, 0.28);
-    backdrop-filter: blur(18px) saturate(1.1);
-    -webkit-backdrop-filter: blur(18px) saturate(1.1);
+    background: rgba(3, 7, 18, 0.72);
+    backdrop-filter: blur(20px) saturate(1.15);
+    -webkit-backdrop-filter: blur(20px) saturate(1.15);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
   }
 
   html:not(.dark) .site-chrome {
-    background: rgba(247, 249, 252, 0.35);
+    background: rgba(255, 255, 255, 0.88);
+    box-shadow: 0 8px 28px rgba(9, 90, 141, 0.08);
   }
 
   /*
@@ -289,10 +297,10 @@
   .trust-strip {
     position: relative;
     isolation: isolate;
-    background: rgba(3, 7, 18, 0.48) !important;
-    backdrop-filter: blur(18px) saturate(1.05);
-    -webkit-backdrop-filter: blur(18px) saturate(1.05);
-    border-block: 1px solid rgba(255, 255, 255, 0.07);
+    background: rgba(3, 7, 18, 0.58) !important;
+    backdrop-filter: blur(20px) saturate(1.05);
+    -webkit-backdrop-filter: blur(20px) saturate(1.05);
+    border-block: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   html:not(.dark) .module-glass,
@@ -301,18 +309,22 @@
   html:not(.dark) .clients-band,
   html:not(.dark) .site-band,
   html:not(.dark) .trust-strip {
-    background: rgba(247, 249, 252, 0.58) !important;
-    border-block-color: rgba(9, 90, 141, 0.1);
+    background: rgba(255, 255, 255, 0.78) !important;
+    border-block-color: rgba(9, 90, 141, 0.12);
   }
 
   /* Brand / values band — slightly stronger tint for white text */
   .site-band.bg-brand-blue {
-    background: rgba(0, 88, 120, 0.42) !important;
+    background: rgba(0, 88, 120, 0.55) !important;
     border-block-color: rgba(0, 242, 254, 0.12);
   }
 
   html.dark .site-band.bg-brand-blue {
-    background: rgba(3, 7, 18, 0.55) !important;
+    background: rgba(3, 7, 18, 0.62) !important;
+  }
+
+  html:not(.dark) .site-band.bg-brand-blue {
+    background: #0d5a8c !important;
   }
 
   .site-band.bg-brand-blue [class*='rounded-xl'],
@@ -322,18 +334,22 @@
     -webkit-backdrop-filter: blur(12px);
   }
 
-  /* Desktop nav active/hover accents over the photo */
+  /* Desktop nav — logo navy + green (light), cyan (dark) */
   @media (min-width: 1024px) {
-    .site-nav a:hover,
-    .site-nav .nav-scroll-active {
+    html:not(.dark) .site-nav a:hover,
+    html:not(.dark) .site-nav .nav-scroll-active {
+      color: #62a945 !important;
+    }
+
+    html.dark .site-nav a:hover,
+    html.dark .site-nav .nav-scroll-active {
       color: #00f2fe !important;
     }
   }
 
-  /* Scroll-spy active nav highlighting */
   .nav-scroll-active {
-    color: #00f2fe !important;
-    border-color: rgba(0, 242, 254, 0.5) !important;
+    color: #62a945 !important;
+    border-color: rgba(98, 169, 69, 0.45) !important;
   }
 
   html.dark .nav-scroll-active {
