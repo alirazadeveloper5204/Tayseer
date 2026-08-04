@@ -129,14 +129,67 @@ export class GsapService {
     });
   }
 
+  /** True when the user prefers reduced motion (also true during SSR). */
+  prefersReducedMotion(): boolean {
+    if (!this.isBrowser) {
+      return true;
+    }
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
   /** Skip zoom on touch / reduced-motion devices. */
-  private canHoverZoom(): boolean {
+  canHoverZoom(): boolean {
     if (!this.isBrowser) {
       return false;
     }
     const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    return fine && !reduce;
+    return fine && !this.prefersReducedMotion();
+  }
+
+  /** Animate a number from 0 → end (scroll-friendly). Formats into `target` text. */
+  countUp(
+    target: HTMLElement,
+    end: number,
+    options?: {
+      duration?: number;
+      decimals?: number;
+      prefix?: string;
+      suffix?: string;
+      scrollTrigger?: ScrollTrigger.Vars;
+    },
+  ): gsap.core.Tween | null {
+    const api = this.gsap;
+    if (!api || !target) {
+      return null;
+    }
+
+    const decimals = options?.decimals ?? 0;
+    const prefix = options?.prefix ?? '';
+    const suffix = options?.suffix ?? '';
+    const format = (n: number) => {
+      const body =
+        decimals > 0 ? n.toFixed(decimals) : String(Math.round(n));
+      return `${prefix}${body}${suffix}`;
+    };
+
+    if (this.prefersReducedMotion()) {
+      target.textContent = format(end);
+      return null;
+    }
+
+    const state = { val: 0 };
+    target.textContent = format(0);
+
+    return api.to(state, {
+      val: end,
+      duration: options?.duration ?? 2.2,
+      ease: 'power3.out',
+      overwrite: 'auto',
+      scrollTrigger: options?.scrollTrigger,
+      onUpdate: () => {
+        target.textContent = format(state.val);
+      },
+    });
   }
 
   /** Kill all active ScrollTriggers (e.g. on locale/route change). */

@@ -1,5 +1,7 @@
 import { Injectable, signal, inject } from '@angular/core';
+import { environment } from '../../environments/environment';
 import { ContentApiService } from '../core/api/content-api.service';
+import { staticServicesForLang } from '../core/content/static-services';
 import { LocaleService } from '../core/i18n/locale.service';
 import { ServiceListItemDto } from '../models/service.model';
 
@@ -23,6 +25,15 @@ export class ContentStore {
 
   loadServices(): void {
     const lang = this.locale.lang();
+
+    if (environment.useStaticContent) {
+      this.services.set(staticServicesForLang(lang));
+      this.error.set(null);
+      this.loading.set(false);
+      this.loadedForLang = lang;
+      return;
+    }
+
     this.loading.set(true);
     this.error.set(null);
 

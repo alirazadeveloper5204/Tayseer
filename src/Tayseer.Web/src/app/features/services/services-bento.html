@@ -1,18 +1,27 @@
-<section id="solutions" class="site-section">
+<section id="solutions" class="services-bento site-section">
   <div class="site-container">
-    <div class="mb-fluid-lg flex flex-col gap-fluid-md lg:flex-row lg:items-end lg:justify-between">
-      <div class="max-w-3xl">
-        <h2 class="type-title">
-          {{ copy().home.servicesTitle }}
-        </h2>
-        <p class="type-subtitle mt-fluid-xs">
-          {{ copy().home.servicesSubtitle }}
-        </p>
+    <header class="services-bento__header">
+      <div class="services-bento__intro">
+        <p class="type-eyebrow">{{ copy().home.servicesEyebrow }}</p>
+        <h2 class="services-bento__title">{{ copy().home.servicesTitle }}</h2>
+        <p class="services-bento__lead">{{ copy().home.servicesSubtitle }}</p>
       </div>
-      <a [routerLink]="'/' + lang() + '/solutions'" class="btn-brand shrink-0 self-start">
+      <a
+        [routerLink]="'/' + lang() + '/solutions'"
+        class="btn-brand services-bento__cta shrink-0"
+      >
         {{ copy().common.viewAllServices }}
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <path
+            d="M2 7h9M7.5 3.5 11 7l-3.5 3.5"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
       </a>
-    </div>
+    </header>
 
     @if (loading()) {
       <div class="flex items-center gap-fluid-sm text-ink-soft dark:text-white/60">
@@ -26,45 +35,13 @@
         on port 5095, then refresh.
       </div>
     } @else {
-      <div class="mb-fluid-md flex gap-3 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div class="services-bento__grid">
         @for (item of services(); track item.slug) {
-          <a
-            [routerLink]="'/' + lang() + '/solutions/' + item.slug"
-            class="group relative h-16 w-24 shrink-0 overflow-hidden rounded-xl border border-brand-blue/15 shadow-sm transition hover:-translate-y-0.5 hover:border-brand-green/40 dark:border-white/15"
-          >
-            <img
-              class="h-full w-full object-cover transition duration-500 group-hover:scale-110"
-              [src]="thumbFor(item.slug)"
-              [alt]="item.title"
-              width="140"
-              height="96"
-              loading="lazy"
-              decoding="async"
-            />
-            <span class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" aria-hidden="true"></span>
-          </a>
-        }
-      </div>
-
-      <div class="grid grid-cols-1 gap-fluid-md md:grid-cols-2 lg:grid-cols-6">
-        @for (item of featured(); track item.slug) {
-          <div class="lg:col-span-3">
-            <app-service-card
-              [service]="item"
-              [lang]="lang()"
-              [ctaLabel]="copy().common.readMore"
-              [featured]="true"
-            />
-          </div>
-        }
-        @for (item of rest(); track item.slug) {
-          <div class="lg:col-span-2">
-            <app-service-card
-              [service]="item"
-              [lang]="lang()"
-              [ctaLabel]="copy().common.readMore"
-            />
-          </div>
+          <app-service-card
+            [service]="item"
+            [lang]="lang()"
+            [ctaLabel]="copy().common.readMore"
+          />
         }
       </div>
     }

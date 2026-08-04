@@ -1,6 +1,4 @@
-<header
-  class="border-b border-brand-blue/10 bg-white/85 backdrop-blur-md dark:border-white/10 dark:bg-surface-dark-elevated/90"
->
+<header class="bg-transparent">
   <div class="site-container flex items-center justify-between gap-fluid-sm py-fluid-sm">
     <a [routerLink]="'/' + lang()" class="shrink-0" (click)="closeMenu()" aria-label="Tayseer Innovations">
       <img
@@ -13,14 +11,14 @@
     </a>
 
     <nav
-      class="fixed inset-x-0 bottom-0 z-40 overflow-y-auto bg-white transition-[top] duration-280 dark:bg-surface-dark-elevated lg:static lg:inset-auto lg:top-auto lg:flex lg:overflow-visible lg:bg-transparent"
+      class="site-nav fixed inset-x-0 z-40 overflow-y-auto bg-white/95 backdrop-blur-xl transition-[top] duration-280 max-lg:dark:bg-[#030712]/95 lg:static lg:inset-auto lg:top-auto lg:bottom-auto lg:z-auto lg:flex lg:overflow-visible lg:bg-transparent lg:backdrop-blur-none dark:lg:bg-transparent"
       [style.top]="chromeScroll.topBarHidden() ? '4rem' : '7.25rem'"
       [class.max-lg:hidden]="!menuOpen()"
       [class.max-lg:flex]="menuOpen()"
       aria-label="Primary"
     >
       <ul
-        class="flex w-full flex-col text-sm font-semibold text-[#585858] dark:text-ink-inverse/80 lg:w-auto lg:flex-row lg:items-center lg:gap-4 xl:gap-6 xl:text-[0.9375rem]"
+        class="flex w-full flex-col text-sm font-semibold text-[#585858] max-lg:dark:text-white/85 lg:w-auto lg:flex-row lg:items-center lg:gap-4 lg:text-white/85 xl:gap-6 xl:text-[0.9375rem]"
       >
         <li>
           <a
@@ -28,6 +26,7 @@
             routerLinkActive="text-brand-blue dark:text-brand-green"
             [routerLinkActiveOptions]="{ exact: true }"
             class="block border-b border-[#f1f1f1] px-6 py-4 whitespace-nowrap hover:text-brand-blue dark:border-white/10 dark:hover:text-brand-green lg:border-0 lg:px-0 lg:py-2"
+            [class.nav-scroll-active]="scrollActive() === 'home'"
             (click)="closeMenu()"
           >
             {{ copy().nav.home }}
@@ -40,6 +39,7 @@
               [routerLink]="'/' + lang() + '/solutions'"
               routerLinkActive="text-brand-blue dark:text-brand-green"
               class="block flex-1 px-6 py-4 whitespace-nowrap hover:text-brand-blue dark:hover:text-brand-green lg:px-0 lg:py-2"
+              [class.nav-scroll-active]="scrollActive() === 'solutions'"
               (click)="closeMenu()"
             >
               {{ copy().nav.solutions }}
@@ -82,6 +82,7 @@
             [routerLink]="'/' + lang() + '/about'"
             routerLinkActive="text-brand-blue dark:text-brand-green"
             class="block border-b border-[#f1f1f1] px-6 py-4 whitespace-nowrap hover:text-brand-blue dark:border-white/10 dark:hover:text-brand-green lg:border-0 lg:px-0 lg:py-2"
+            [class.nav-scroll-active]="scrollActive() === 'about'"
             (click)="closeMenu()"
           >
             {{ copy().nav.about }}
@@ -224,12 +225,3 @@
     </div>
   </div>
 </header>
-
-<!-- Sticky mobile CTA -->
-<div
-  class="fixed inset-x-0 bottom-0 z-40 border-t border-brand-blue/10 bg-white/95 p-3 backdrop-blur dark:border-white/10 dark:bg-surface-dark-elevated/95 sm:hidden"
->
-  <a [routerLink]="'/' + lang() + '/connect'" class="btn-brand w-full text-sm">
-    {{ copy().common.talkToUs }}
-  </a>
-</div>

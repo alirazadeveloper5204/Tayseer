@@ -1,0 +1,139 @@
+/* Services section — equal grid, clear hierarchy */
+.services-bento__header {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.25rem, 1rem + 1vw, 2rem);
+  margin-bottom: clamp(2rem, 1.4rem + 2vw, 3.25rem);
+}
+
+@media (min-width: 1024px) {
+  .services-bento__header {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+}
+
+.services-bento__intro {
+  max-width: 40rem;
+}
+
+.services-bento__title {
+  margin: 0.65rem 0 0;
+  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  font-size: clamp(1.85rem, 1.3rem + 2vw, 2.85rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  color: #042941;
+}
+
+html.dark .services-bento__title {
+  color: #f7fbff;
+}
+
+html[dir='rtl'] .services-bento__title {
+  font-family: 'IBM Plex Sans Arabic', 'Plus Jakarta Sans', system-ui, sans-serif;
+  letter-spacing: 0;
+}
+
+.services-bento__lead {
+  margin: 0.85rem 0 0;
+  max-width: 36rem;
+  font-size: clamp(0.95rem, 0.9rem + 0.25vw, 1.05rem);
+  line-height: 1.7;
+  font-weight: 500;
+  color: #1a2332;
+}
+
+html.dark .services-bento__lead {
+  color: rgba(232, 238, 245, 0.82);
+}
+
+html[dir='rtl'] .services-bento__lead {
+  font-family: 'IBM Plex Sans Arabic', 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+.services-bento__cta {
+  align-self: flex-start;
+}
+
+.services-bento__cta svg {
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html[dir='rtl'] .services-bento__cta svg {
+  transform: rotate(180deg);
+}
+
+.services-bento__cta:hover svg {
+  transform: translateX(4px);
+}
+
+html[dir='rtl'] .services-bento__cta:hover svg {
+  transform: rotate(180deg) translateX(4px);
+}
+
+/* Balanced 1 → 2 → 3 column grid — no orphan cards */
+.services-bento__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(1rem, 0.75rem + 1vw, 1.35rem);
+}
+
+@media (min-width: 640px) {
+  .services-bento__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .services-bento__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Card polish scoped to this section */
+.services-bento .service-card-host {
+  height: 100%;
+}
+
+.services-bento .service-card {
+  height: 100%;
+  border-color: rgba(0, 242, 254, 0.14);
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition:
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
+}
+
+html.dark .services-bento .service-card {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(15, 23, 42, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.services-bento .service-card:hover {
+  transform: translateY(-6px) scale(1.015);
+  border-color: rgba(0, 242, 254, 0.4);
+  box-shadow: 0 20px 40px -15px rgba(0, 242, 254, 0.15);
+}
+
+html.dark .services-bento .service-card:hover {
+  box-shadow: 0 20px 40px -15px rgba(0, 242, 254, 0.15);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .services-bento .service-card,
+  .services-bento__cta svg {
+    transition: none;
+  }
+
+  .services-bento .service-card:hover {
+    transform: none;
+  }
+}
