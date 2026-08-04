@@ -144,7 +144,7 @@ export class GsapService {
     if (!this.isBrowser) {
       return;
     }
-    ScrollTrigger.getAll().forEach((t) => t.kill());
+    ScrollTrigger.getAll().forEach((t: ScrollTrigger) => t.kill());
   }
 
   private ensurePlugins(): void {
