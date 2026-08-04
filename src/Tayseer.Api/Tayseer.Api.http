@@ -1,6 +1,28 @@
 @Tayseer.Api_HostAddress = http://localhost:5095
 
-GET {{Tayseer.Api_HostAddress}}/weatherforecast/
+GET {{Tayseer.Api_HostAddress}}/health
+Accept: application/json
+
+###
+
+POST {{Tayseer.Api_HostAddress}}/api/v1/chat
+Content-Type: application/json
+
+{
+  "lang": "en",
+  "messages": [
+    { "role": "user", "content": "What does Tayseer do?" }
+  ]
+}
+
+###
+
+GET {{Tayseer.Api_HostAddress}}/api/v1/chat/knowledge
+Accept: application/json
+
+###
+
+POST {{Tayseer.Api_HostAddress}}/api/v1/chat/knowledge/reindex
 Accept: application/json
 
 ###

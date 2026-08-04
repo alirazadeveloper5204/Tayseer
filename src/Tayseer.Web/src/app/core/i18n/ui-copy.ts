@@ -51,6 +51,19 @@ export interface UiCopy {
     terms: string;
     linkedIn: string;
   };
+  chat: {
+    eyebrow: string;
+    title: string;
+    open: string;
+    close: string;
+    expand: string;
+    collapse: string;
+    placeholder: string;
+    send: string;
+    welcome: string;
+    error: string;
+    offline: string;
+  };
 }
 
 export const UI_COPY: Record<AppLocale, UiCopy> = {
@@ -108,6 +121,20 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
       terms: 'Terms & Conditions',
       linkedIn: 'LinkedIn',
     },
+    chat: {
+      eyebrow: 'Fahim AI',
+      title: 'How can we help?',
+      open: 'Chat',
+      close: 'Close chat',
+      expand: 'Expand chat',
+      collapse: 'Collapse chat',
+      placeholder: 'Ask about our products or services…',
+      send: 'Send',
+      welcome:
+        'Hi — I am Fahim AI, Tayseer’s assistant. Ask me about Core Banking, Fahim AI, MBuke, or how to get in touch.',
+      error: 'Something went wrong. Please try again in a moment.',
+      offline: 'Cannot reach the chat service. Is the API and Ollama running?',
+    },
   },
   ar: {
     common: {
@@ -161,6 +188,20 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
       privacy: 'سياسة الخصوصية',
       terms: 'الشروط والأحكام',
       linkedIn: 'لينكدإن',
+    },
+    chat: {
+      eyebrow: 'فهيم للذكاء الاصطناعي',
+      title: 'كيف يمكننا مساعدتك؟',
+      open: 'محادثة',
+      close: 'إغلاق المحادثة',
+      expand: 'توسيع المحادثة',
+      collapse: 'تصغير المحادثة',
+      placeholder: 'اسأل عن منتجاتنا أو خدماتنا…',
+      send: 'إرسال',
+      welcome:
+        'مرحباً — أنا فهيم، مساعد تيسير. اسألني عن الخدمات المصرفية الأساسية أو فهيم أو إم بوكي أو كيفية التواصل معنا.',
+      error: 'حدث خطأ. حاول مرة أخرى بعد قليل.',
+      offline: 'تعذر الوصول إلى خدمة المحادثة. هل الـ API و Ollama يعملان؟',
     },
   },
 };

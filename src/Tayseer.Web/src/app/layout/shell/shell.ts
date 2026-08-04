@@ -12,12 +12,13 @@ import { RouterOutlet } from '@angular/router';
 import { TopBar } from '../top-bar/top-bar';
 import { SiteHeader } from '../header/site-header';
 import { SiteFooter } from '../footer/site-footer';
+import { ChatWidget } from '../../shared/ui/chat-widget/chat-widget';
 import { NavigationLoaderService } from '../../core/navigation/navigation-loader.service';
 import { ChromeScrollService } from '../../core/navigation/chrome-scroll.service';
 
 @Component({
   selector: 'app-shell',
-  imports: [RouterOutlet, TopBar, SiteHeader, SiteFooter],
+  imports: [RouterOutlet, TopBar, SiteHeader, SiteFooter, ChatWidget],
   templateUrl: './shell.html',
   styleUrl: './shell.css',
 })

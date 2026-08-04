@@ -51,6 +51,43 @@ npm start
 
 Open `http://localhost:4200`. Use header toggles for EN/AR (RTL) and dark/light.
 
+## Local AI chatbot (Ollama — free)
+
+The site includes a floating chat widget that calls `POST /api/v1/chat` on the API. The API proxies to a local [Ollama](https://ollama.com) model (fully free, runs on your PC).
+
+### 1. Install Ollama
+
+Download from https://ollama.com/download (Windows installer) or:
+
+```powershell
+winget install Ollama.Ollama
+```
+
+### 2. Pull models
+
+```powershell
+ollama pull llama3.2
+ollama pull nomic-embed-text
+```
+
+`nomic-embed-text` powers **RAG** (retrieval): CMS services/features/offices are embedded at API startup and injected into Fahim’s prompt so answers stay on Tayseer content.
+
+For stronger Arabic replies, try `ollama pull qwen2.5:3b` and set `"Model": "qwen2.5:3b"` under `Ollama` in `src/Tayseer.Api/appsettings.json`.
+
+### 3. Start everything
+
+1. Ensure Ollama is running (the Windows app usually starts the server on `http://localhost:11434`).
+2. Start the API (`dotnet run` in `src/Tayseer.Api`) — watch logs for `RAG index ready`.
+3. Start the web app (`npm start` in `src/Tayseer.Web`).
+4. Open the site and use the **Fahim AI** chat.
+
+Useful endpoints:
+
+- `GET /api/v1/chat/knowledge` — index status (chunk count)
+- `POST /api/v1/chat/knowledge/reindex` — rebuild after CMS content changes
+
+> Ollama is ideal for local/dev. Public production needs a hosted model (e.g. Gemini free tier) instead of `localhost:11434`.
+
 ## Brand
 
 Assets live in `assets/brand/` and `src/Tayseer.Web/public/brand/`.

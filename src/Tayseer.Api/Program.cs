@@ -2,6 +2,9 @@ using Microsoft.EntityFrameworkCore;
 using Tayseer.Api.Contracts;
 using Tayseer.Api.Data;
 using Tayseer.Api.Endpoints;
+using Tayseer.Api.Options;
+using Tayseer.Api.Services;
+using Tayseer.Api.Services.Rag;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +17,22 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
+
+builder.Services.Configure<OllamaOptions>(builder.Configuration.GetSection(OllamaOptions.SectionName));
+
+void ConfigureOllamaClient(IServiceProvider sp, HttpClient client)
+{
+    var ollama = sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<OllamaOptions>>().Value;
+    client.BaseAddress = new Uri(ollama.BaseUrl.TrimEnd('/') + "/");
+    client.Timeout = TimeSpan.FromSeconds(Math.Clamp(ollama.TimeoutSeconds, 15, 300));
+}
+
+builder.Services.AddHttpClient<OllamaChatService>(ConfigureOllamaClient);
+builder.Services.AddHttpClient<OllamaEmbeddingClient>(ConfigureOllamaClient);
+
+builder.Services.AddSingleton<InMemoryKnowledgeIndex>();
+builder.Services.AddScoped<CmsKnowledgeBuilder>();
+builder.Services.AddScoped<KnowledgeIndexService>();
 
 builder.Services.AddCors(options =>
 {
@@ -56,6 +75,7 @@ app.MapGet("/health", () =>
 app.MapHealthChecks("/health/ready");
 
 app.MapPublicContentEndpoints();
+app.MapChatEndpoints();
 
 using (var scope = app.Services.CreateScope())
 {
@@ -72,6 +92,24 @@ using (var scope = app.Services.CreateScope())
         await db.Database.EnsureDeletedAsync();
         await db.Database.EnsureCreatedAsync();
         await ContentSeeder.EnsureSeedAsync(db);
+    }
+
+    var ollama = scope.ServiceProvider.GetRequiredService<Microsoft.Extensions.Options.IOptions<OllamaOptions>>().Value;
+    if (ollama.RagEnabled)
+    {
+        try
+        {
+            var knowledge = scope.ServiceProvider.GetRequiredService<KnowledgeIndexService>();
+            var count = await knowledge.RebuildAsync(CancellationToken.None);
+            app.Logger.LogInformation("RAG index ready ({Count} chunks)", count);
+        }
+        catch (Exception ex)
+        {
+            app.Logger.LogWarning(
+                ex,
+                "RAG index not ready. Chat will run without retrieval until Ollama embeddings work. Pull with: ollama pull {Model}",
+                ollama.EmbeddingModel);
+        }
     }
 }
 
