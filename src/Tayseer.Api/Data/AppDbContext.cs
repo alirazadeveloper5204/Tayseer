@@ -11,6 +11,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<PageSection> PageSections => Set<PageSection>();
     public DbSet<SiteSetting> SiteSettings => Set<SiteSetting>();
     public DbSet<Office> Offices => Set<Office>();
+    public DbSet<AdminUser> AdminUsers => Set<AdminUser>();
+    public DbSet<AgentConversation> AgentConversations => Set<AgentConversation>();
+    public DbSet<AgentMessage> AgentMessages => Set<AgentMessage>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -36,6 +39,37 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<SiteSetting>(entity =>
         {
             entity.HasIndex(x => x.Key).IsUnique();
+        });
+
+        modelBuilder.Entity<AdminUser>(entity =>
+        {
+            entity.ToTable("AdminUsers");
+            entity.HasIndex(x => x.Email).IsUnique();
+            entity.Property(x => x.Email).IsRequired();
+            entity.Property(x => x.PasswordHash).IsRequired();
+        });
+
+        modelBuilder.Entity<AgentConversation>(entity =>
+        {
+            entity.ToTable("AgentConversations");
+            entity.HasIndex(x => x.VisitorKey).IsUnique();
+            entity.HasIndex(x => x.Status);
+            entity.HasIndex(x => x.UpdatedAt);
+            entity.HasMany(x => x.Messages)
+                .WithOne(x => x.Conversation)
+                .HasForeignKey(x => x.ConversationId)
+                .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(x => x.AssignedAdminUser)
+                .WithMany()
+                .HasForeignKey(x => x.AssignedAdminUserId)
+                .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        modelBuilder.Entity<AgentMessage>(entity =>
+        {
+            entity.ToTable("AgentMessages");
+            entity.HasIndex(x => new { x.ConversationId, x.CreatedAt });
+            entity.Property(x => x.Body).IsRequired();
         });
 
         SeedServices(modelBuilder);

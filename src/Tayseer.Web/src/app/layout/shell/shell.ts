@@ -13,6 +13,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { TopBar } from '../top-bar/top-bar';
 import { SiteHeader } from '../header/site-header';
 import { SiteFooter } from '../footer/site-footer';
+import { ChatWidget } from '../../shared/ui/chat-widget/chat-widget';
 import { NavigationLoaderService } from '../../core/navigation/navigation-loader.service';
 import { ChromeScrollService } from '../../core/navigation/chrome-scroll.service';
 import { LocaleService } from '../../core/i18n/locale.service';

@@ -1,0 +1,40 @@
+<div class="admin-shell" (pointerdown)="onShellPointerDown()">
+  <aside class="admin-shell__nav">
+    <div class="admin-shell__brand">
+      <p class="admin-shell__eyebrow">Tayseer</p>
+      <h1>Control Panel</h1>
+    </div>
+    <nav>
+      <a routerLink="/admin" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }">Dashboard</a>
+      <a routerLink="/admin/inbox" routerLinkActive="is-active">
+        Agent inbox
+        @if (notifications.unreadCount() > 0) {
+          <span class="admin-shell__badge">{{ notifications.unreadCount() }}</span>
+        }
+      </a>
+      <a routerLink="/admin/services" routerLinkActive="is-active">Services</a>
+      <a routerLink="/admin/offices" routerLinkActive="is-active">Offices</a>
+      <a routerLink="/admin/knowledge" routerLinkActive="is-active">Fahim Knowledge</a>
+    </nav>
+    <div class="admin-shell__footer">
+      <p>{{ auth.user()?.displayName }}</p>
+      <p class="admin-shell__email">{{ auth.user()?.email }}</p>
+      <button type="button" (click)="logout()">Sign out</button>
+      <a class="admin-shell__site" href="/en" target="_blank" rel="noopener">View site</a>
+    </div>
+  </aside>
+  <main class="admin-shell__main">
+    <router-outlet />
+  </main>
+
+  @if (notifications.items().length > 0 && notifications.unreadCount() > 0) {
+    <div class="admin-shell__toast" aria-live="polite">
+      @for (n of notifications.items().slice(0, 3); track n.conversationId + n.createdAt) {
+        <button type="button" class="admin-shell__toast-item" (click)="openNotification(n.conversationId)">
+          <strong>{{ n.title }}</strong>
+          <span>{{ n.body }}</span>
+        </button>
+      }
+    </div>
+  }
+</div>

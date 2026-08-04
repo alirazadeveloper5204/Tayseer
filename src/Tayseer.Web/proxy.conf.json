@@ -5,6 +5,13 @@
     "changeOrigin": true,
     "logLevel": "debug"
   },
+  "/hubs": {
+    "target": "http://localhost:5095",
+    "secure": false,
+    "changeOrigin": true,
+    "ws": true,
+    "logLevel": "debug"
+  },
   "/health": {
     "target": "http://localhost:5095",
     "secure": false,

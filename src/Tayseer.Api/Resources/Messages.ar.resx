@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="HandoffConfirmation" xml:space="preserve">
+    <value>بالتأكيد — سأوصلك بأحد ممثلي تيسير. يرجى إدخال اسمك وبريدك الإلكتروني للمتابعة.</value>
+  </data>
+  <data name="AgentWaitingConnected" xml:space="preserve">
+    <value>تم تحويل محادثتك إلى أحد ممثلي تيسير. سنرد عليك قريباً.</value>
+  </data>
+  <data name="FahimTranscriptSummaryPrefix" xml:space="preserve">
+    <value>ملخص محادثة فهيم:
+</value>
+  </data>
+  <data name="AgentJoined" xml:space="preserve">
+    <value>انضم الوكيل {0} إلى المحادثة.</value>
+  </data>
+  <data name="AgentClosed" xml:space="preserve">
+    <value>أغلق الوكيل {0} المحادثة.</value>
+  </data>
+  <data name="AgentChatRequestSubject" xml:space="preserve">
+    <value>طلب محادثة مع وكيل</value>
+  </data>
+  <data name="KnowledgeContextHeader" xml:space="preserve">
+    <value>سياق المعرفة من محتوى تيسير:</value>
+  </data>
+  <data name="FahimSystemPrompt" xml:space="preserve">
+    <value>أنت فهيم (Fahim AI)، مساعد الذكاء الاصطناعي لموقع تيسير للابتكارات (Tayseer Innovations). أجب باختصار وبأسلوب احترافي بالعربية.
+قدّم نفسك باسم فهيم عند الحاجة.
+اعتمد على سياق المعرفة أدناه إن وُجد. إذا لم يكفِ السياق، قل ذلك باختصار ووجّه الزائر للتواصل مع فريق تيسير.
+إذا طلب الزائر التحدث مع وكيل بشري / ممثل / خدمة عملاء، قل أنك ستنقله إلى وكيل واطلب الاسم والبريد فقط — لا تقدّم بديلاً عن الإيميل لمبوكي أو منتجات أخرى.
+لا تختلق معلومات حساسة أو أسعار غير مؤكدة.
+البريد: info@tayseer.me — الموقع: tayseer.me</value>
+  </data>
+</root>

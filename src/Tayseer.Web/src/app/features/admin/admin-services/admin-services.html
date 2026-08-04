@@ -1,0 +1,41 @@
+<section class="admin-page">
+  <header class="admin-page__header">
+    <div>
+      <p class="admin-page__eyebrow">CMS</p>
+      <h2>Services</h2>
+    </div>
+    <a class="admin-btn" routerLink="/admin/services/new">New service</a>
+  </header>
+
+  @if (error(); as err) {
+    <p class="admin-error">{{ err }}</p>
+  }
+
+  <div class="admin-panel">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Slug</th>
+          <th>Order</th>
+          <th>Published</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of items(); track item.id) {
+          <tr>
+            <td>{{ item.titleEn }}</td>
+            <td>{{ item.slug }}</td>
+            <td>{{ item.sortOrder }}</td>
+            <td>{{ item.isPublished ? 'Yes' : 'No' }}</td>
+            <td class="admin-actions">
+              <a class="admin-btn admin-btn--ghost" [routerLink]="['/admin/services', item.id]">Edit</a>
+              <button type="button" class="admin-btn admin-btn--danger" (click)="remove(item)">Delete</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

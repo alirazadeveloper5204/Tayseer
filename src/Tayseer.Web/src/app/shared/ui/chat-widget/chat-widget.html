@@ -1,0 +1,170 @@
+<div class="chat-widget" [class.chat-widget--open]="open()" [class.chat-widget--expanded]="expanded()">
+  @if (open()) {
+    <section
+      class="chat-panel"
+      [class.chat-panel--expanded]="expanded()"
+      role="dialog"
+      aria-modal="false"
+      [attr.aria-label]="copy().title"
+      [attr.dir]="isRtl() ? 'rtl' : 'ltr'"
+    >
+      <header class="chat-panel__header">
+        <div class="chat-panel__heading">
+          <span class="chat-panel__mark" aria-hidden="true">
+            <svg viewBox="0 0 120 120" fill="none">
+              <path d="M100 100V20H20" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M88 100V32H20" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" opacity="0.75"/>
+              <path d="M76 100V44H20" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+              <path d="M64 100V56H20" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
+              <path d="M52 100V68H20" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" opacity="0.25"/>
+            </svg>
+          </span>
+          <div>
+            <p class="chat-panel__eyebrow">{{ panelEyebrow() }}</p>
+            <h2 class="chat-panel__title">{{ panelTitle() }}</h2>
+          </div>
+        </div>
+        <div class="chat-panel__actions">
+          <button
+            type="button"
+            class="chat-panel__icon-btn"
+            (click)="toggleExpand()"
+            [attr.aria-label]="expanded() ? copy().collapse : copy().expand"
+            [attr.aria-pressed]="expanded()"
+            [title]="expanded() ? copy().collapse : copy().expand"
+          >
+            @if (expanded()) {
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M8 3v5H3M16 3v5h5M8 21v-5H3M16 21v-5h5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            } @else {
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M3 8V3h5M16 3h5v5M3 16v5h5M21 16v5h-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            }
+          </button>
+          <button type="button" class="chat-panel__icon-btn" (click)="close()" [attr.aria-label]="copy().close">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <div #transcript class="chat-panel__messages" tabindex="0">
+        @for (message of messages(); track $index) {
+          <div
+            class="chat-bubble"
+            [class.chat-bubble--user]="message.role === 'user'"
+            [class.chat-bubble--assistant]="message.role === 'assistant'"
+          >
+            <p>{{ message.content }}</p>
+          </div>
+        }
+        @if (busy()) {
+          <div class="chat-bubble chat-bubble--assistant chat-bubble--typing" aria-live="polite">
+            <span></span><span></span><span></span>
+          </div>
+        }
+        <div #bottomAnchor class="chat-panel__anchor" aria-hidden="true"></div>
+      </div>
+
+      @if (error(); as err) {
+        <p class="chat-panel__error" role="alert">{{ err }}</p>
+      }
+
+      @if (mode() === 'handoff') {
+        <form class="chat-panel__handoff-form" (ngSubmit)="startAgentChat()">
+          <p class="chat-panel__handoff-intro">{{ copy().handoffIntro }}</p>
+          <label>
+            <span>{{ copy().handoffNameLabel }}</span>
+            <input
+              type="text"
+              name="visitorName"
+              autocomplete="name"
+              [placeholder]="copy().handoffNamePlaceholder"
+              [ngModel]="visitorName()"
+              (ngModelChange)="visitorName.set($event)"
+              [disabled]="busy()"
+              required
+            />
+          </label>
+          <label>
+            <span>{{ copy().handoffEmailLabel }}</span>
+            <input
+              type="email"
+              name="visitorEmail"
+              autocomplete="email"
+              [placeholder]="copy().handoffEmailPlaceholder"
+              [ngModel]="visitorEmail()"
+              (ngModelChange)="visitorEmail.set($event)"
+              [disabled]="busy()"
+              required
+            />
+          </label>
+          <div class="chat-panel__handoff-actions">
+            <button type="button" class="chat-panel__handoff-link" (click)="cancelHandoff()" [disabled]="busy()">
+              {{ copy().handoffCancel }}
+            </button>
+            <button type="submit" class="chat-panel__send" [disabled]="!canSubmitHandoff()">
+              {{ busy() ? copy().handoffConnecting : copy().handoffSubmit }}
+            </button>
+          </div>
+        </form>
+      } @else {
+        <div class="chat-panel__handoff">
+          @if (mode() === 'fahim') {
+            <button type="button" class="chat-panel__handoff-btn" (click)="talkToAgent()" [disabled]="busy()">
+              {{ copy().talkToAgent }}
+            </button>
+          } @else {
+            <p class="chat-panel__handoff-note">{{ copy().agentWaiting }}</p>
+            <button type="button" class="chat-panel__handoff-link" (click)="backToFahim()" [disabled]="busy()">
+              {{ copy().backToFahim }}
+            </button>
+          }
+        </div>
+
+        <form class="chat-panel__composer" (ngSubmit)="send()">
+          <label class="sr-only" for="chat-input">{{ copy().placeholder }}</label>
+          <textarea
+            #composer
+            id="chat-input"
+            rows="2"
+            [placeholder]="mode() === 'agent' ? copy().agentPlaceholder : copy().placeholder"
+            [ngModel]="draft()"
+            (ngModelChange)="draft.set($event)"
+            (keydown)="onKeydown($event)"
+            [disabled]="busy()"
+            name="chatDraft"
+          ></textarea>
+          <button type="submit" class="chat-panel__send" [disabled]="busy() || !draft().trim()">
+            {{ copy().send }}
+          </button>
+        </form>
+      }
+    </section>
+  }
+
+  <button
+    type="button"
+    class="chat-fab"
+    (click)="toggle()"
+    [attr.aria-expanded]="open()"
+    [attr.aria-label]="open() ? copy().close : copy().open"
+  >
+    @if (open()) {
+      <svg class="chat-fab__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.25" stroke-linecap="round"/>
+      </svg>
+    } @else {
+      <svg class="chat-fab__icon chat-fab__icon--geo" viewBox="0 0 120 120" fill="none" aria-hidden="true">
+        <path d="M100 100V20H20" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M88 100V32H20" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" opacity="0.75"/>
+        <path d="M76 100V44H20" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+        <path d="M64 100V56H20" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
+        <path d="M52 100V68H20" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" opacity="0.25"/>
+      </svg>
+    }
+  </button>
+</div>

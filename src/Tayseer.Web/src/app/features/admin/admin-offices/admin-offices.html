@@ -1,0 +1,60 @@
+<section class="admin-page">
+  <header class="admin-page__header">
+    <div>
+      <p class="admin-page__eyebrow">CMS</p>
+      <h2>Offices</h2>
+    </div>
+    <button type="button" class="admin-btn admin-btn--ghost" (click)="startCreate()">New office</button>
+  </header>
+
+  @if (error(); as err) {
+    <p class="admin-error">{{ err }}</p>
+  }
+
+  <div class="admin-panel">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Country</th>
+          <th>Title</th>
+          <th>Phone</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of items(); track item.id) {
+          <tr>
+            <td>{{ item.countryCode }}</td>
+            <td>{{ item.titleEn }}</td>
+            <td>{{ item.phone }}</td>
+            <td class="admin-actions">
+              <button type="button" class="admin-btn admin-btn--ghost" (click)="startEdit(item)">Edit</button>
+              <button type="button" class="admin-btn admin-btn--danger" (click)="remove(item)">Delete</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <form class="admin-panel admin-form" (ngSubmit)="save()">
+    <h3 style="margin: 0">{{ editingId() ? 'Edit office' : 'Create office' }}</h3>
+    <div class="admin-form__row">
+      <label>Country code<input name="cc" [(ngModel)]="model.countryCode" required /></label>
+      <label>Sort order<input type="number" name="so" [(ngModel)]="model.sortOrder" /></label>
+    </div>
+    <div class="admin-form__row">
+      <label>Title EN<input name="te" [(ngModel)]="model.titleEn" required /></label>
+      <label>Title AR<input name="ta" [(ngModel)]="model.titleAr" required /></label>
+    </div>
+    <div class="admin-form__row">
+      <label>Address EN<textarea name="ae" [(ngModel)]="model.addressEn" required></textarea></label>
+      <label>Address AR<textarea name="aa" [(ngModel)]="model.addressAr" required></textarea></label>
+    </div>
+    <div class="admin-form__row">
+      <label>Phone<input name="ph" [(ngModel)]="model.phone" /></label>
+      <label>Email<input name="em" [(ngModel)]="model.email" /></label>
+    </div>
+    <button class="admin-btn" type="submit" [disabled]="busy()">{{ busy() ? 'Saving…' : 'Save office' }}</button>
+  </form>
+</section>

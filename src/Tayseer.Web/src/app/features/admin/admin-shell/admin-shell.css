@@ -1,0 +1,154 @@
+.admin-shell {
+  display: grid;
+  grid-template-columns: 16.5rem 1fr;
+  min-height: 100vh;
+  background: #f7f9fc;
+  color: #1a2332;
+  font-family: 'Kumbh Sans', system-ui, sans-serif;
+}
+
+.admin-shell__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.25rem 1rem;
+  background: #095a8d;
+  color: #fff;
+}
+
+.admin-shell__brand h1 {
+  margin: 0.2rem 0 0;
+  font-family: 'Space Grotesk', 'Kumbh Sans', system-ui, sans-serif;
+  font-size: 1.2rem;
+}
+
+.admin-shell__eyebrow {
+  margin: 0;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #62a845;
+}
+
+.admin-shell__nav nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.admin-shell__nav a {
+  border-radius: 0.65rem;
+  padding: 0.65rem 0.75rem;
+  color: rgb(255 255 255 / 85%);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.admin-shell__nav a:hover,
+.admin-shell__nav a.is-active {
+  background: rgb(255 255 255 / 12%);
+  color: #fff;
+}
+
+.admin-shell__footer {
+  margin-top: auto;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.admin-shell__footer p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.admin-shell__email {
+  opacity: 0.75;
+  font-size: 0.8rem !important;
+}
+
+.admin-shell__footer button,
+.admin-shell__site {
+  margin-top: 0.4rem;
+  border: 1px solid rgb(255 255 255 / 25%);
+  border-radius: 0.55rem;
+  background: transparent;
+  color: #fff;
+  padding: 0.5rem 0.7rem;
+  font: inherit;
+  font-size: 0.85rem;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.admin-shell__main {
+  padding: 1.5rem;
+}
+
+.admin-shell__badge {
+  display: inline-flex;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  margin-inline-start: 0.35rem;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  background: #62a845;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+}
+
+.admin-shell__toast {
+  position: fixed;
+  inset-inline-end: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 40;
+  display: grid;
+  gap: 0.5rem;
+  max-width: 20rem;
+}
+
+.admin-shell__toast-item {
+  border: 1px solid rgb(9 90 141 / 15%);
+  border-radius: 0.75rem;
+  background: #fff;
+  box-shadow: 0 10px 30px rgba(9, 90, 141, 0.12);
+  padding: 0.75rem 0.85rem;
+  text-align: start;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.admin-shell__toast-item strong {
+  display: block;
+  color: #095a8d;
+  margin-bottom: 0.2rem;
+}
+
+.admin-shell__toast-item span {
+  color: #5b6478;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 860px) {
+  .admin-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-shell__nav {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+
+  .admin-shell__nav nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
