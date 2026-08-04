@@ -17,9 +17,9 @@
 
 <section class="page-module site-band">
   <div class="site-container py-fluid-2xl">
-    <div class="grid gap-fluid-md sm:grid-cols-2">
+    <div class="fluid-grid">
       @for (pillar of c.pillars; track pillar.id) {
-        <article class="fintech-card overflow-hidden">
+        <article class="fintech-card overflow-hidden" [attr.id]="pillar.id">
           <div class="img-hover-box h-40">
             <img
               class="h-full w-full object-cover"

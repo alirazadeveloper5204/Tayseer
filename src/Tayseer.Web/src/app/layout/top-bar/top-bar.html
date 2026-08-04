@@ -1,29 +1,29 @@
 <div
-  class="border-b border-brand-blue/15 bg-transparent text-[0.85rem] text-brand-blue dark:border-white/10 dark:text-white/80"
+  class="border-b border-brand-blue/15 bg-transparent text-[clamp(0.72rem,0.65rem+0.35vw,0.85rem)] text-brand-blue dark:border-white/10 dark:text-white/80"
 >
-  <div class="site-container flex flex-wrap items-center justify-between gap-fluid-xs py-fluid-xs">
-    <div class="flex flex-wrap items-center gap-4 sm:gap-5">
+  <div class="site-container flex flex-wrap items-center justify-between gap-x-3 gap-y-1 py-fluid-xs">
+    <div class="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 sm:gap-x-5">
       <a
-        class="font-medium transition hover:text-brand-green dark:hover:text-brand-cyan"
+        class="truncate font-medium transition hover:text-brand-green dark:hover:text-brand-cyan"
         [href]="'mailto:' + copy().common.email"
       >
         {{ copy().common.email }}
       </a>
       <a
-        class="font-medium transition hover:text-brand-green dark:hover:text-brand-cyan"
+        class="whitespace-nowrap font-medium transition hover:text-brand-green dark:hover:text-brand-cyan"
         href="tel:+966555203079"
       >
         +966 555203079
       </a>
       <a
-        class="font-medium transition hover:text-brand-green dark:hover:text-brand-cyan"
+        class="whitespace-nowrap font-medium transition hover:text-brand-green dark:hover:text-brand-cyan"
         href="tel:+97143997558"
       >
         +971 43997558
       </a>
     </div>
     <a
-      class="hidden items-center transition hover:text-brand-green dark:hover:text-brand-cyan md:inline-flex"
+      class="inline-flex items-center transition hover:text-brand-green dark:hover:text-brand-cyan"
       href="https://www.linkedin.com/company/tayseer-innovations/"
       target="_blank"
       rel="noopener noreferrer"

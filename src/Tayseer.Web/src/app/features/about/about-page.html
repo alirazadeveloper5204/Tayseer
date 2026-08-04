@@ -29,7 +29,7 @@
 <section class="page-module site-band">
   <div class="site-container py-fluid-2xl">
     <h2 class="type-section page-ink">{{ credentialsTitle() }}</h2>
-    <div class="mt-fluid-lg grid gap-fluid-sm sm:grid-cols-2 lg:grid-cols-4">
+    <div class="mt-fluid-lg fluid-grid-sm">
       @for (cred of c.creds; track label(cred)) {
         <article class="fintech-card p-fluid-md text-center">
           <p class="font-display text-fluid-sm font-semibold page-ink">{{ label(cred) }}</p>
@@ -42,7 +42,7 @@
 <section class="page-module site-band">
   <div class="site-container py-fluid-2xl">
     <h2 class="type-section page-ink">{{ teamTitle() }}</h2>
-    <div class="mt-fluid-lg grid gap-fluid-md sm:grid-cols-2 lg:grid-cols-4">
+    <div class="mt-fluid-lg fluid-grid">
       @for (member of c.leaders; track member.id) {
         <article class="team-card fintech-card overflow-hidden">
           <div class="img-hover-box relative h-64">

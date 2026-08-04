@@ -412,3 +412,43 @@ export const SOLUTION_LINKS = [
   { slug: 'managed-services', titleEn: 'Managed Services', titleAr: 'الخدمات المُدارة' },
   { slug: 'banking-systems', titleEn: 'Banking Systems', titleAr: 'الأنظمة المصرفية' },
 ] as const;
+
+/** Primary Services mega-links (hub page anchors + dedicated service pages). */
+export const SERVICE_LINKS = [
+  {
+    slug: 'core',
+    titleEn: 'Core Banking Integration',
+    titleAr: 'تكامل الأنظمة المصرفية الأساسية',
+    href: 'services#core',
+  },
+  {
+    slug: 'payments',
+    titleEn: 'Payment Gateway APIs',
+    titleAr: 'واجهات بوابات الدفع',
+    href: 'services#payments',
+  },
+  {
+    slug: 'wallets',
+    titleEn: 'Digital Wallets',
+    titleAr: 'المحافظ الرقمية',
+    href: 'services#wallets',
+  },
+  {
+    slug: 'open',
+    titleEn: 'Open Banking',
+    titleAr: 'الخدمات المصرفية المفتوحة',
+    href: 'services#open',
+  },
+  {
+    slug: 'software-development',
+    titleEn: 'Software Development',
+    titleAr: 'تطوير البرمجيات',
+    href: 'software-development',
+  },
+  {
+    slug: 'managed-services',
+    titleEn: 'Managed Services',
+    titleAr: 'الخدمات المُدارة',
+    href: 'managed-services',
+  },
+] as const;

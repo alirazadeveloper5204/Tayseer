@@ -1,11 +1,21 @@
-import { Component, computed, inject, signal, afterNextRender, DestroyRef, PLATFORM_ID } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  signal,
+  afterNextRender,
+  DestroyRef,
+  PLATFORM_ID,
+} from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { LocaleService, AppLocale } from '../../core/i18n/locale.service';
 import { ThemeService } from '../../core/theme/theme.service';
 import { UiCopyService } from '../../core/i18n/ui-copy.service';
-import { SOLUTION_LINKS } from '../../core/i18n/ui-copy';
+import { SERVICE_LINKS, SOLUTION_LINKS } from '../../core/i18n/ui-copy';
 import { ChromeScrollService } from '../../core/navigation/chrome-scroll.service';
+
+type NavDropdown = 'services' | 'solutions';
 
 @Component({
   selector: 'app-site-header',
@@ -22,13 +32,27 @@ export class SiteHeader {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
 
-  readonly menuOpen = signal(false);
-  readonly solutionsOpen = signal(false);
+  readonly activeDropdown = signal<NavDropdown | null>(null);
+  private closeTimer: ReturnType<typeof setTimeout> | null = null;
 
   readonly lang = computed(() => this.locale.lang());
 
   /** Scroll-spy for the Home page sections only. */
   readonly scrollActive = signal<'home' | 'solutions' | 'about' | 'clients' | null>(null);
+
+  readonly serviceLinks = computed(() => {
+    const isAr = this.locale.lang() === 'ar';
+    const lang = this.locale.lang();
+    return SERVICE_LINKS.map((item) => {
+      const [pathPart, fragment] = item.href.split('#');
+      return {
+        slug: item.slug,
+        title: isAr ? item.titleAr : item.titleEn,
+        path: `/${lang}/${pathPart}`,
+        fragment: fragment || undefined,
+      };
+    });
+  });
 
   readonly solutionLinks = computed(() => {
     const isAr = this.locale.lang() === 'ar';
@@ -48,27 +72,43 @@ export class SiteHeader {
     });
   });
 
-  toggleMenu(): void {
-    this.menuOpen.update((v) => !v);
-    if (!this.menuOpen()) {
-      this.solutionsOpen.set(false);
-    }
+  openDropdown(which: NavDropdown): void {
+    this.clearCloseTimer();
+    this.activeDropdown.set(which);
+  }
+
+  keepDropdownOpen(): void {
+    this.clearCloseTimer();
+  }
+
+  scheduleDropdownClose(): void {
+    this.clearCloseTimer();
+    this.closeTimer = setTimeout(() => this.activeDropdown.set(null), 160);
+  }
+
+  toggleDropdown(which: NavDropdown, event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.clearCloseTimer();
+    this.activeDropdown.update((current) => (current === which ? null : which));
   }
 
   closeMenu(): void {
-    this.menuOpen.set(false);
-    this.solutionsOpen.set(false);
+    this.clearCloseTimer();
+    this.activeDropdown.set(null);
   }
 
-  toggleSolutions(): void {
-    this.solutionsOpen.update((v) => !v);
+  private clearCloseTimer(): void {
+    if (this.closeTimer !== null) {
+      clearTimeout(this.closeTimer);
+      this.closeTimer = null;
+    }
   }
 
   switchLocale(): void {
     const next: AppLocale = this.locale.lang() === 'en' ? 'ar' : 'en';
     const url = this.router.url;
     const updated = url.replace(/^\/(en|ar)(?=\/|$)/, `/${next}`);
-    // Locale is applied in localeGuard after the overlay has covered the page.
     void this.router.navigateByUrl(updated.startsWith(`/${next}`) ? updated : `/${next}`);
     this.closeMenu();
   }
@@ -78,6 +118,19 @@ export class SiteHeader {
       if (!isPlatformBrowser(this.platformId)) {
         return;
       }
+
+      const onDocClick = (event: MouseEvent) => {
+        const target = event.target as Node | null;
+        const root = document.querySelector('app-site-header');
+        if (root && target && !root.contains(target)) {
+          this.closeMenu();
+        }
+      };
+      document.addEventListener('click', onDocClick);
+      this.destroyRef.onDestroy(() => {
+        document.removeEventListener('click', onDocClick);
+        this.clearCloseTimer();
+      });
 
       const getActiveForHome = (): boolean => {
         const url = this.router.url.split('?')[0].split('#')[0];
@@ -99,7 +152,12 @@ export class SiteHeader {
       const sub = this.router.events.subscribe(() => syncEnabled());
       this.destroyRef.onDestroy(() => sub.unsubscribe());
 
-      const sectionIds: Array<'home' | 'solutions' | 'about' | 'clients'> = ['home', 'solutions', 'about', 'clients'];
+      const sectionIds: Array<'home' | 'solutions' | 'about' | 'clients'> = [
+        'home',
+        'solutions',
+        'about',
+        'clients',
+      ];
       const sections = sectionIds
         .map((id) => document.getElementById(id))
         .filter((el): el is HTMLElement => !!el);
@@ -116,7 +174,7 @@ export class SiteHeader {
             return;
           }
 
-          let bestId: typeof sectionIds[number] | null = null;
+          let bestId: (typeof sectionIds)[number] | null = null;
           let bestRatio = 0;
 
           for (const entry of entries) {
