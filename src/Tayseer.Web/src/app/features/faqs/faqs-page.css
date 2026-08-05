@@ -85,15 +85,12 @@ html.dark .faq-group__title {
 }
 
 .faq-item {
-  border-radius: 1rem;
-  border: 1px solid rgba(13, 90, 140, 0.12);
-  background: rgba(255, 255, 255, 0.9);
   overflow: hidden;
+  isolation: isolate;
 }
 
-html.dark .faq-item {
-  border-color: rgba(255, 255, 255, 0.1);
-  background: rgba(15, 23, 42, 0.72);
+.faq-item:hover {
+  transform: none;
 }
 
 .faq-item__trigger {
@@ -104,14 +101,10 @@ html.dark .faq-item {
   gap: 1rem;
   padding: 1rem 1.1rem;
   text-align: start;
-  font-weight: 650;
-  color: #0b1220;
+  font-weight: 600;
+  color: inherit;
   background: transparent;
   border: 0;
-}
-
-html.dark .faq-item__trigger {
-  color: #ffffff;
 }
 
 .faq-item__trigger:focus-visible {
@@ -124,7 +117,7 @@ html.dark .faq-item__trigger {
   height: 1.1rem;
   flex-shrink: 0;
   color: #0d5a8c;
-  transition: transform 420ms cubic-bezier(0.45, 0, 0.2, 1);
+  transition: transform 380ms cubic-bezier(0.45, 0, 0.2, 1);
 }
 
 html.dark .faq-item__icon {
@@ -138,22 +131,26 @@ html.dark .faq-item__icon {
 .faq-item__panel {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 420ms cubic-bezier(0.45, 0, 0.2, 1);
+  transition: grid-template-rows 380ms cubic-bezier(0.45, 0, 0.2, 1);
 }
 
 .faq-item.is-open .faq-item__panel {
   grid-template-rows: 1fr;
 }
 
-.faq-item__panel > p {
+.faq-item__body {
+  min-height: 0;
   overflow: hidden;
+}
+
+.faq-item__body p {
   margin: 0;
   padding: 0 1.1rem 1.1rem;
   color: #475569;
   line-height: 1.7;
 }
 
-html.dark .faq-item__panel > p {
+html.dark .faq-item__body p {
   color: rgba(232, 238, 245, 0.75);
 }
 

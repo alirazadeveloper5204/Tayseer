@@ -6,10 +6,12 @@ import { UiCopyService } from '../../core/i18n/ui-copy.service';
 import { SOLUTIONS_PAGE, t, type PageLocale } from '../../core/content/page-content';
 import { solutionPath } from '../../core/content/static-services';
 import { serviceImage } from '../../core/media/site-images';
+import { ProofCards } from '../../shared/ui/proof-cards/proof-cards';
+import { WorldCard } from '../../shared/ui/world-card/world-card';
 
 @Component({
   selector: 'app-solutions-page',
-  imports: [RouterLink],
+  imports: [RouterLink, ProofCards, WorldCard],
   templateUrl: './solutions-page.html',
 })
 export class SolutionsPage {

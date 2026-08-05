@@ -62,12 +62,8 @@
       <p class="text-fluid-base page-muted">{{ worldsLead() }}</p>
     </div>
     <div class="world-grid">
-      @for (world of c.worlds; track world.id; let i = $index) {
-        <article class="world-card fintech-card">
-          <span class="world-card__index">{{ i + 1 }}</span>
-          <h3>{{ label(world.title) }}</h3>
-          <p>{{ label(world.body) }}</p>
-        </article>
+      @for (world of c.worlds; track world.id) {
+        <app-world-card [icon]="world.id" [title]="label(world.title)" [body]="label(world.body)" />
       }
     </div>
   </div>
@@ -83,11 +79,16 @@
         <div class="value-split__checks">
           @for (item of c.splitItems; track label(item.title)) {
             <div class="value-check">
-              <span class="value-check__mark" aria-hidden="true">✓</span>
-              <p>
+              <span class="value-check__mark" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="12" fill="#62a945" />
+                  <path d="M7 12.25 10.4 15.7 17.1 8.6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+              <div class="value-check__copy">
                 <strong>{{ label(item.title) }}</strong>
-                <span>{{ label(item.body) }}</span>
-              </p>
+                <p>{{ label(item.body) }}</p>
+              </div>
             </div>
           }
         </div>

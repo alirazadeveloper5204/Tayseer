@@ -52,7 +52,7 @@
           <h2 class="faq-group__title">{{ group.title }}</h2>
           <div class="faq-list">
             @for (item of group.items; track item.key) {
-              <article class="faq-item" [class.is-open]="openKey() === item.key">
+              <article class="faq-item fintech-card" [class.is-open]="openKey() === item.key">
                 <h3>
                   <button
                     type="button"
@@ -62,13 +62,19 @@
                     (click)="toggle(item.key)"
                   >
                     <span>{{ item.q }}</span>
-                    <svg class="faq-item__icon rtl:-scale-x-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg class="faq-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                   </button>
                 </h3>
-                <div class="faq-item__panel" [id]="'faq-' + item.key" [attr.inert]="openKey() === item.key ? null : true">
-                  <p>{{ item.a }}</p>
+                <div
+                  class="faq-item__panel"
+                  [id]="'faq-' + item.key"
+                  [attr.inert]="openKey() === item.key ? null : true"
+                >
+                  <div class="faq-item__body">
+                    <p>{{ item.a }}</p>
+                  </div>
                 </div>
               </article>
             }

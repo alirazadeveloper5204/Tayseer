@@ -25,11 +25,12 @@
     overflow-x: clip;
     @apply antialiased;
     text-rendering: optimizeLegibility;
-    background: #030712;
+    background: #f7f9fc;
   }
 
   html.dark {
     color-scheme: dark;
+    background: #030712;
   }
 
   body {
@@ -45,22 +46,26 @@
   }
 
   /*
-   * True page canvas — one continuous background for the entire document.
-   * Content flows naturally on top (no separate background div / z-index stack).
+   * Page canvas — brand gradient wash only (no stock photography).
+   * Interior sections frost over this with .site-band / .page-module.
    */
   body::before {
     content: '';
     position: fixed;
-    inset: -8%;
+    inset: 0;
     z-index: -2;
     pointer-events: none;
-    background-image: url('/images/hero-fintech.jpg');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center center;
-    transform: translate3d(0, 0, 0) scale(1.06);
-    transform-origin: center center;
-    will-change: transform, background-position;
+    background:
+      radial-gradient(ellipse 80% 55% at 12% 8%, rgba(13, 90, 140, 0.16), transparent 58%),
+      radial-gradient(ellipse 70% 50% at 88% 12%, rgba(98, 169, 69, 0.12), transparent 52%),
+      linear-gradient(180deg, #eef4f8 0%, #f7f9fc 42%, #f3f6fa 100%);
+  }
+
+  html.dark body::before {
+    background:
+      radial-gradient(ellipse 80% 55% at 12% 8%, rgba(0, 242, 254, 0.1), transparent 58%),
+      radial-gradient(ellipse 70% 50% at 88% 12%, rgba(98, 169, 69, 0.1), transparent 52%),
+      linear-gradient(180deg, #071018 0%, #030712 48%, #050b14 100%);
   }
 
   body::after {
@@ -69,44 +74,19 @@
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    background:
-      radial-gradient(ellipse 80% 55% at 15% 8%, rgba(0, 242, 254, 0.14), transparent 55%),
-      radial-gradient(ellipse 70% 50% at 88% 18%, rgba(16, 185, 129, 0.1), transparent 50%),
-      linear-gradient(180deg, rgba(3, 7, 18, 0.55) 0%, rgba(3, 7, 18, 0.68) 50%, rgba(3, 7, 18, 0.78) 100%);
+    background-image:
+      linear-gradient(rgba(13, 90, 140, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(13, 90, 140, 0.05) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse at center, #000 35%, transparent 78%);
+    opacity: 0.55;
   }
 
-  html:not(.dark) body::after {
-    background:
-      radial-gradient(ellipse 80% 55% at 15% 8%, rgba(13, 90, 140, 0.1), transparent 55%),
-      radial-gradient(ellipse 70% 50% at 88% 18%, rgba(98, 169, 69, 0.09), transparent 50%),
-      linear-gradient(180deg, rgba(247, 249, 252, 0.35) 0%, rgba(247, 249, 252, 0.5) 45%, rgba(247, 249, 252, 0.72) 100%);
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    body::before {
-      animation: pageBgCinematic 44s cubic-bezier(0.42, 0, 0.16, 1) infinite alternate;
-    }
-  }
-
-  @keyframes pageBgCinematic {
-    0% {
-      transform: translate3d(-2.5%, -1.5%, 0) scale(1.08);
-      background-position: 44% 46%;
-    }
-    50% {
-      transform: translate3d(2%, 1.2%, 0) scale(1.14);
-      background-position: 56% 52%;
-    }
-    100% {
-      transform: translate3d(-1.5%, 2%, 0) scale(1.1);
-      background-position: 50% 58%;
-    }
-  }
-
-  @media (max-width: 768px) {
-    body::before {
-      background-position: 62% center;
-    }
+  html.dark body::after {
+    background-image:
+      linear-gradient(rgba(0, 242, 254, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 242, 254, 0.06) 1px, transparent 1px);
+    opacity: 0.4;
   }
 
   /* Kill paint transitions while theme flips under the loading cover. */
@@ -289,8 +269,7 @@
   /* Shell / main stay clear so body canvas shows through continuously. */
   .site-shell,
   .site-content,
-  main,
-  .home-hero {
+  main {
     background: transparent !important;
   }
 

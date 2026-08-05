@@ -2,10 +2,11 @@ import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LocaleService } from '../../core/i18n/locale.service';
 import { PAGE_COMMON, SERVICES_PAGE, t, type PageLocale } from '../../core/content/page-content';
+import { WorldCard } from '../../shared/ui/world-card/world-card';
 
 @Component({
   selector: 'app-services-page',
-  imports: [RouterLink],
+  imports: [RouterLink, WorldCard],
   templateUrl: './services-page.html',
 })
 export class ServicesPage {

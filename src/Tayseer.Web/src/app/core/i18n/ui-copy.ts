@@ -6,6 +6,7 @@ export interface UiCopy {
     readMore: string;
     requestDemo: string;
     talkToUs: string;
+    talkToTeam: string;
     viewAllServices: string;
     exploreSolutions: string;
     learnMore: string;
@@ -45,6 +46,7 @@ export interface UiCopy {
     mantraLead: string;
     deployTitle: string;
     deployLead: string;
+    trustSecurity: string;
   };
   trust: {
     iso: string;
@@ -104,6 +106,7 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
       readMore: 'Read More',
       requestDemo: 'Request Demo',
       talkToUs: 'Talk To Us',
+      talkToTeam: 'Talk to Our Team',
       viewAllServices: 'View All Services',
       exploreSolutions: 'Explore Solutions',
       learnMore: 'Learn more',
@@ -124,9 +127,9 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
     },
     home: {
       eyebrow: 'Financial Technology Solutions',
-      headline: 'Future-ready banking for the Gulf',
+      headline: 'Banking technology you can trust',
       subhead:
-        'AI and digital platforms for banks and enterprises across Saudi Arabia and the UAE — from core systems to managed operations.',
+        'Core banking, AI, mobile, and managed operations for banks and enterprises across Saudi Arabia and the UAE.',
       servicesEyebrow: 'What We Build',
       servicesTitle: 'All Your Business Needs, Covered',
       servicesSubtitle:
@@ -147,6 +150,7 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
       deployTitle: 'We Pioneer Flexible Technology',
       deployLead:
         'Deploy on your terms — on-site when control and customization come first, or in the cloud when agility and scale matter most.',
+      trustSecurity: 'Enterprise-grade security',
     },
     trust: {
       iso: 'ISO 27001 Certified',
@@ -207,6 +211,7 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
       readMore: 'اقرأ المزيد',
       requestDemo: 'اطلب عرضاً توضيحياً',
       talkToUs: 'تحدث معنا',
+      talkToTeam: 'تحدث مع فريقنا',
       viewAllServices: 'عرض جميع الخدمات',
       exploreSolutions: 'استكشف الحلول',
       learnMore: 'اعرف المزيد',
@@ -227,9 +232,9 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
     },
     home: {
       eyebrow: 'حلول التقنية المالية',
-      headline: 'خدمات مصرفية جاهزة للمستقبل في الخليج',
+      headline: 'تقنية مصرفية يمكن الوثوق بها',
       subhead:
-        'منصات ذكاء اصطناعي ورقمية للبنوك والمؤسسات في المملكة العربية السعودية والإمارات — من الأنظمة الأساسية إلى العمليات المُدارة.',
+        'أنظمة مصرفية أساسية وذكاء اصطناعي وجوال وعمليات مُدارة للبنوك والمؤسسات في السعودية والإمارات.',
       servicesEyebrow: 'ما نقدمه',
       servicesTitle: 'نغطي جميع احتياجات أعمالك',
       servicesSubtitle:
@@ -250,6 +255,7 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
       deployTitle: 'نقود تقنية مرنة',
       deployLead:
         'انشر وفق شروطك — في الموقع عندما تكون السيطرة والتخصيص أولاً، أو على السحابة عندما تكون المرونة والتوسع هما الأولوية.',
+      trustSecurity: 'أمن بمستوى المؤسسات',
     },
     trust: {
       iso: 'معتمد ISO 27001',
@@ -459,6 +465,36 @@ export const HOME_MANTRA = [
     titleAr: 'جودة ثابتة',
     bodyEn: 'Polished and tailored business-ready products and services.',
     bodyAr: 'منتجات وخدمات مصقولة ومصممة لتكون جاهزة للأعمال.',
+  },
+] as const;
+
+export const HOME_HERO_SEGMENTS = [
+  { en: 'Banks', ar: 'البنوك' },
+  { en: 'Islamic Finance', ar: 'التمويل الإسلامي' },
+  { en: 'Fintechs', ar: 'شركات التقنية المالية' },
+] as const;
+
+export const HOME_HERO_PROOF = [
+  {
+    icon: 'shield',
+    titleEn: 'ISO 27001 certified',
+    titleAr: 'معتمد ISO 27001',
+    detailEn: 'Information security management',
+    detailAr: 'إدارة أمن المعلومات',
+  },
+  {
+    icon: 'suite',
+    titleEn: 'Six solutions',
+    titleAr: 'ستة حلول',
+    detailEn: 'Core, AI, mobile, managed ops',
+    detailAr: 'الأساسية والذكاء الاصطناعي والجوال والعمليات',
+  },
+  {
+    icon: 'deploy',
+    titleEn: 'On-site or cloud',
+    titleAr: 'في الموقع أو على السحابة',
+    detailEn: 'Deploy on your terms',
+    detailAr: 'انشر وفق شروطك',
   },
 ] as const;
 
