@@ -33,6 +33,9 @@ interface StoredAgentSession {
 }
 
 const AGENT_SESSION_KEY = 'tayseer-agent-chat';
+const FAB_POS_KEY = 'tayseer-chat-fab-pos';
+const FAB_SIZE = 76;
+const FAB_PAD = 12;
 
 @Component({
   selector: 'app-chat-widget',
@@ -53,6 +56,11 @@ export class ChatWidget implements OnDestroy {
   private hubSub: Subscription | null = null;
   private scrollRaf = 0;
   private joinedConversationId: string | null = null;
+  private dragPointerId: number | null = null;
+  private dragOrigin = { x: 0, y: 0, left: 0, top: 0 };
+  private dragMoved = false;
+  private suppressClick = false;
+  private onViewportChange = () => this.keepFabInViewport();
 
   @ViewChild('transcript') private transcriptRef?: ElementRef<HTMLElement>;
   @ViewChild('bottomAnchor') private bottomAnchorRef?: ElementRef<HTMLElement>;
@@ -69,6 +77,54 @@ export class ChatWidget implements OnDestroy {
   readonly agentStatus = signal<string | null>(null);
   readonly visitorName = signal('');
   readonly visitorEmail = signal('');
+  readonly fabX = signal<number | null>(null);
+  readonly fabY = signal<number | null>(null);
+  readonly dragging = signal(false);
+  readonly viewportW = signal(0);
+  readonly viewportH = signal(0);
+
+  readonly hasCustomPos = computed(() => this.fabX() !== null && this.fabY() !== null);
+  readonly panelBox = computed(() => {
+    if (!this.open() || !this.hasCustomPos()) {
+      return null;
+    }
+    const vw = this.viewportW() || 1280;
+    const vh = this.viewportH() || 800;
+    if (this.expanded() && vw < 481) {
+      return null;
+    }
+
+    const fabX = this.fabX() ?? FAB_PAD;
+    const fabY = this.fabY() ?? FAB_PAD;
+    const pad = FAB_PAD;
+    const gap = 10;
+    const mobileCta = vw < 640 ? 88 : 0;
+    const preferredW = this.expanded() ? Math.min(vw - pad * 2, 640) : Math.min(vw - pad * 2, 360);
+    const preferredH = this.expanded()
+      ? Math.min(vh - pad * 2 - mobileCta, 736)
+      : Math.min(vh * 0.7, 544);
+
+    const spaceLeft = fabX + FAB_SIZE - pad;
+    const spaceRight = vw - fabX - pad;
+    const openLeft = spaceLeft >= spaceRight;
+    const width = Math.max(240, Math.min(preferredW, openLeft ? spaceLeft : spaceRight));
+    let left = openLeft ? fabX + FAB_SIZE - width : fabX;
+    left = Math.min(Math.max(left, pad), Math.max(pad, vw - width - pad));
+
+    const spaceAbove = fabY - pad - gap;
+    const spaceBelow = vh - (fabY + FAB_SIZE) - pad - gap - mobileCta;
+    const openAbove = spaceAbove >= Math.min(preferredH, 260) || spaceAbove >= spaceBelow;
+    let height = Math.max(220, Math.min(preferredH, openAbove ? spaceAbove : spaceBelow));
+    let top = openAbove ? fabY - gap - height : fabY + FAB_SIZE + gap;
+
+    if (height < 220) {
+      height = Math.max(220, Math.min(preferredH, vh - pad * 2 - mobileCta));
+      top = pad;
+    }
+
+    top = Math.min(Math.max(top, pad), Math.max(pad, vh - height - pad - mobileCta));
+    return { left, top, width, height };
+  });
 
   readonly copy = computed(() => this.ui.copy().chat);
   readonly isRtl = this.locale.isRtl;
@@ -100,6 +156,10 @@ export class ChatWidget implements OnDestroy {
       }
       this.seedWelcome();
       void this.restoreAgentSession();
+      this.restoreFabPosition();
+      this.viewportW.set(window.innerWidth);
+      this.viewportH.set(window.innerHeight);
+      window.addEventListener('resize', this.onViewportChange);
     });
 
     effect(() => {
@@ -124,6 +184,63 @@ export class ChatWidget implements OnDestroy {
     if (this.joinedConversationId) {
       void this.hub.leaveConversation(this.joinedConversationId);
     }
+    if (isPlatformBrowser(this.platformId)) {
+      window.removeEventListener('resize', this.onViewportChange);
+    }
+  }
+
+  onFabPointerDown(event: PointerEvent): void {
+    if (!isPlatformBrowser(this.platformId) || event.button !== 0) {
+      return;
+    }
+    const target = event.currentTarget as HTMLElement;
+    const rect = target.getBoundingClientRect();
+    this.dragPointerId = event.pointerId;
+    this.dragMoved = false;
+    this.dragOrigin = {
+      x: event.clientX,
+      y: event.clientY,
+      left: rect.left,
+      top: rect.top,
+    };
+    target.setPointerCapture(event.pointerId);
+  }
+
+  onFabPointerMove(event: PointerEvent): void {
+    if (this.dragPointerId !== event.pointerId) {
+      return;
+    }
+    const dx = event.clientX - this.dragOrigin.x;
+    const dy = event.clientY - this.dragOrigin.y;
+    if (!this.dragMoved && Math.hypot(dx, dy) < 8) {
+      return;
+    }
+    this.dragMoved = true;
+    this.dragging.set(true);
+    this.setFabPosition(this.dragOrigin.left + dx, this.dragOrigin.top + dy);
+  }
+
+  onFabPointerUp(event: PointerEvent): void {
+    if (this.dragPointerId !== event.pointerId) {
+      return;
+    }
+    this.dragPointerId = null;
+    if (this.dragMoved) {
+      this.suppressClick = true;
+      this.persistFabPosition();
+    }
+    this.dragging.set(false);
+  }
+
+  onFabClick(event: MouseEvent): void {
+    if (this.suppressClick || this.dragMoved) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.suppressClick = false;
+      this.dragMoved = false;
+      return;
+    }
+    this.toggle();
   }
 
   toggle(): void {
@@ -470,5 +587,56 @@ export class ChatWidget implements OnDestroy {
 
   private clearSession(): void {
     sessionStorage.removeItem(AGENT_SESSION_KEY);
+  }
+
+  private restoreFabPosition(): void {
+    try {
+      const raw = localStorage.getItem(FAB_POS_KEY);
+      if (!raw) {
+        return;
+      }
+      const pos = JSON.parse(raw) as { x: number; y: number };
+      if (typeof pos.x === 'number' && typeof pos.y === 'number') {
+        this.setFabPosition(pos.x, pos.y);
+      }
+    } catch {
+      localStorage.removeItem(FAB_POS_KEY);
+    }
+  }
+
+  private persistFabPosition(): void {
+    const x = this.fabX();
+    const y = this.fabY();
+    if (x === null || y === null) {
+      return;
+    }
+    localStorage.setItem(FAB_POS_KEY, JSON.stringify({ x, y }));
+  }
+
+  private keepFabInViewport(): void {
+    this.viewportW.set(window.innerWidth);
+    this.viewportH.set(window.innerHeight);
+    const x = this.fabX();
+    const y = this.fabY();
+    if (x === null || y === null) {
+      return;
+    }
+    this.setFabPosition(x, y);
+  }
+
+  private setFabPosition(x: number, y: number): void {
+    const bounds = this.fabBounds();
+    this.fabX.set(Math.min(bounds.maxX, Math.max(bounds.minX, x)));
+    this.fabY.set(Math.min(bounds.maxY, Math.max(bounds.minY, y)));
+  }
+
+  private fabBounds(): { minX: number; minY: number; maxX: number; maxY: number } {
+    const mobileCta = window.innerWidth < 640 ? 88 : 0;
+    return {
+      minX: FAB_PAD,
+      minY: FAB_PAD,
+      maxX: Math.max(FAB_PAD, window.innerWidth - FAB_SIZE - FAB_PAD),
+      maxY: Math.max(FAB_PAD, window.innerHeight - FAB_SIZE - FAB_PAD - mobileCta),
+    };
   }
 }

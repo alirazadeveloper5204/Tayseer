@@ -1,8 +1,19 @@
-<div class="chat-widget" [class.chat-widget--open]="open()" [class.chat-widget--expanded]="expanded()">
+<div
+  class="chat-widget"
+  [class.chat-widget--open]="open()"
+  [class.chat-widget--expanded]="expanded()"
+  [class.chat-widget--free]="hasCustomPos()"
+  [class.chat-widget--dragging]="dragging()"
+>
   @if (open()) {
     <section
       class="chat-panel"
       [class.chat-panel--expanded]="expanded()"
+      [style.left.px]="panelBox()?.left"
+      [style.top.px]="panelBox()?.top"
+      [style.width.px]="panelBox()?.width"
+      [style.height.px]="panelBox()?.height"
+      [style.max-height.px]="panelBox()?.height"
       role="dialog"
       aria-modal="false"
       [attr.aria-label]="copy().title"
@@ -149,22 +160,58 @@
   <button
     type="button"
     class="chat-fab"
-    (click)="toggle()"
+    [class.is-open]="open()"
+    [class.is-dragging]="dragging()"
+    [style.left.px]="hasCustomPos() ? fabX() : null"
+    [style.top.px]="hasCustomPos() ? fabY() : null"
+    (pointerdown)="onFabPointerDown($event)"
+    (pointermove)="onFabPointerMove($event)"
+    (pointerup)="onFabPointerUp($event)"
+    (pointercancel)="onFabPointerUp($event)"
+    (click)="onFabClick($event)"
     [attr.aria-expanded]="open()"
     [attr.aria-label]="open() ? copy().close : copy().open"
+    [title]="open() ? copy().close : copy().open"
   >
-    @if (open()) {
-      <svg class="chat-fab__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.25" stroke-linecap="round"/>
-      </svg>
-    } @else {
-      <svg class="chat-fab__icon chat-fab__icon--geo" viewBox="0 0 120 120" fill="none" aria-hidden="true">
-        <path d="M100 100V20H20" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M88 100V32H20" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" opacity="0.75"/>
-        <path d="M76 100V44H20" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
-        <path d="M64 100V56H20" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
-        <path d="M52 100V68H20" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" opacity="0.25"/>
-      </svg>
+    <span class="chat-fab__ring" aria-hidden="true"></span>
+    <span class="chat-fab__ring chat-fab__ring--delay" aria-hidden="true"></span>
+    <span class="chat-fab__core">
+      @if (open()) {
+        <svg class="chat-fab__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.25" stroke-linecap="round"/>
+        </svg>
+      } @else {
+        <svg class="chat-fab__mark" viewBox="0 0 64 64" aria-hidden="true">
+          <path
+            class="chat-fab__bubble"
+            d="M12.5 11h39a8.5 8.5 0 0 1 8.5 8.5v23A8.5 8.5 0 0 1 51.5 51H29.2L18 60.2V51h-5.5A8.5 8.5 0 0 1 4 42.5v-23A8.5 8.5 0 0 1 12.5 11Z"
+          />
+          <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M44 43.5V20H21" stroke="#0D5A8C" stroke-width="3.4" />
+            <path d="M39.2 43.5V24.2H21" stroke="#0D5A8C" stroke-width="3.4" opacity="0.78" />
+            <path d="M34.4 43.5V28.4H21" stroke="#0D5A8C" stroke-width="3.4" opacity="0.55" />
+            <path d="M29.6 43.5V32.6H21" stroke="#62A945" stroke-width="3.4" />
+          </g>
+          <circle cx="48.5" cy="18.5" r="5.2" fill="#62A945" />
+          <path d="M48.5 16.2v4.6M46.2 18.5h4.6" stroke="#fff" stroke-width="1.4" stroke-linecap="round" />
+        </svg>
+      }
+    </span>
+    @if (!open()) {
+      <span class="chat-fab__avatar" aria-hidden="true">
+        <svg viewBox="0 0 40 40" fill="none">
+          <circle cx="20" cy="20" r="20" fill="#0D5A8C" />
+          <circle cx="20" cy="20" r="18.2" fill="#0F172A" />
+          <rect x="11" y="13.2" width="18" height="13.2" rx="6.6" fill="#E8F3F9" />
+          <circle cx="16.2" cy="19.4" r="1.7" fill="#0D5A8C" />
+          <circle cx="23.8" cy="19.4" r="1.7" fill="#0D5A8C" />
+          <path d="M17.4 23.1c.8.8 1.7 1.2 2.6 1.2s1.8-.4 2.6-1.2" stroke="#62A945" stroke-width="1.5" stroke-linecap="round" />
+          <path d="M12.2 18.2V15c0-1.3 1-2.4 2.3-2.4h1.1" stroke="#62A945" stroke-width="1.7" stroke-linecap="round" />
+          <path d="M27.8 18.2V15c0-1.3-1-2.4-2.3-2.4h-1.1" stroke="#62A945" stroke-width="1.7" stroke-linecap="round" />
+          <circle cx="20" cy="10.4" r="1.5" fill="#00F2FE" />
+          <path d="M13.4 29.4c1.7-2.2 4-3.3 6.6-3.3s4.9 1.1 6.6 3.3" stroke="#62A945" stroke-width="1.8" stroke-linecap="round" />
+        </svg>
+      </span>
     }
   </button>
 </div>

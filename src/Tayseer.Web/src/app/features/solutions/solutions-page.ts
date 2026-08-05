@@ -6,12 +6,11 @@ import { UiCopyService } from '../../core/i18n/ui-copy.service';
 import { SOLUTIONS_PAGE, t, type PageLocale } from '../../core/content/page-content';
 import { solutionPath } from '../../core/content/static-services';
 import { serviceImage } from '../../core/media/site-images';
-import { ProofCards } from '../../shared/ui/proof-cards/proof-cards';
 import { WorldCard } from '../../shared/ui/world-card/world-card';
 
 @Component({
   selector: 'app-solutions-page',
-  imports: [RouterLink, ProofCards, WorldCard],
+  imports: [RouterLink, WorldCard],
   templateUrl: './solutions-page.html',
 })
 export class SolutionsPage {
@@ -29,6 +28,11 @@ export class SolutionsPage {
   readonly title = computed(() => t(this.c.title, this.lang()));
   readonly eyebrow = computed(() => t(this.c.eyebrow, this.lang()));
   readonly intro = computed(() => t(this.c.lead, this.lang()));
+  readonly heroSecondary = computed(() => t(this.c.heroSecondary, this.lang()));
+  readonly heroMetaSuite = computed(() => t(this.c.heroMetaSuite, this.lang()));
+  readonly heroMetaAi = computed(() => t(this.c.heroMetaAi, this.lang()));
+  readonly heroMetaOps = computed(() => t(this.c.heroMetaOps, this.lang()));
+  readonly heroBadgeKicker = computed(() => t(this.c.heroBadgeKicker, this.lang()));
   readonly featuresTitle = computed(() => t(this.c.featuresTitle, this.lang()));
   readonly featuresLead = computed(() => t(this.c.featuresLead, this.lang()));
   readonly worldsTitle = computed(() => t(this.c.worldsTitle, this.lang()));

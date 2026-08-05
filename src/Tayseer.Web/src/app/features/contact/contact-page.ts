@@ -1,16 +1,21 @@
 import { Component, computed, inject, signal } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { LocaleService } from '../../core/i18n/locale.service';
+import { UiCopyService } from '../../core/i18n/ui-copy.service';
 import { CONTACT_PAGE, PAGE_COMMON, t, type PageLocale } from '../../core/content/page-content';
 
 @Component({
   selector: 'app-contact-page',
   imports: [RouterLink, FormsModule],
   templateUrl: './contact-page.html',
+  styleUrl: './contact-page.css',
 })
 export class ContactPage {
   private readonly locale = inject(LocaleService);
+  private readonly sanitizer = inject(DomSanitizer);
+  private readonly ui = inject(UiCopyService);
   readonly lang = computed(() => this.locale.lang() as PageLocale);
   readonly c = CONTACT_PAGE;
   readonly common = PAGE_COMMON;
@@ -18,6 +23,7 @@ export class ContactPage {
   readonly step = signal(1);
   readonly submitted = signal(false);
   private readonly touched = signal(false);
+  readonly activeOffice = signal(0);
 
   readonly name = signal('');
   readonly email = signal('');
@@ -28,9 +34,31 @@ export class ContactPage {
   readonly title = computed(() => t(this.c.title, this.lang()));
   readonly eyebrow = computed(() => t(this.c.eyebrow, this.lang()));
   readonly lead = computed(() => t(this.c.lead, this.lang()));
+  readonly heroCta = computed(() => t(this.c.heroCta, this.lang()));
+  readonly heroEmail = computed(() => t(this.c.heroEmail, this.lang()));
+  readonly heroMetaResponse = computed(() => t(this.c.heroMetaResponse, this.lang()));
+  readonly heroMetaCoverage = computed(() => t(this.c.heroMetaCoverage, this.lang()));
+  readonly heroMetaSince = computed(() => t(this.c.heroMetaSince, this.lang()));
   readonly officesTitle = computed(() => t(this.c.officesTitle, this.lang()));
+  readonly mapTitle = computed(() => t(this.c.mapTitle, this.lang()));
+  readonly mapOpen = computed(() => t(this.c.mapOpen, this.lang()));
   readonly successTitle = computed(() => t(this.common.submittedTitle, this.lang()));
   readonly successBody = computed(() => t(this.common.submitted, this.lang()));
+  readonly teamEmail = computed(() => this.ui.copy().common.email);
+
+  readonly selectedOffice = computed(() => this.c.offices[this.activeOffice()] ?? this.c.offices[0]);
+
+  readonly mapEmbedUrl = computed(() => {
+    const office = this.selectedOffice();
+    const hl = this.lang() === 'ar' ? 'ar' : 'en';
+    const src = `https://maps.google.com/maps?q=${encodeURIComponent(office.query)}&hl=${hl}&z=16&output=embed`;
+    return this.sanitizer.bypassSecurityTrustResourceUrl(src);
+  });
+
+  readonly mapExternalUrl = computed(() => {
+    const office = this.selectedOffice();
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(office.query)}`;
+  });
 
   readonly nameError = computed(() => {
     if (!this.touched() || this.step() !== 1) return '';
@@ -45,6 +73,14 @@ export class ContactPage {
 
   label(item: { en: string; ar: string }): string {
     return t(item, this.lang());
+  }
+
+  selectOffice(index: number): void {
+    this.activeOffice.set(index);
+  }
+
+  telHref(phone: string): string {
+    return `tel:${phone.replace(/\s+/g, '')}`;
   }
 
   next(): void {

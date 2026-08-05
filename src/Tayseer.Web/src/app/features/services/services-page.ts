@@ -18,6 +18,11 @@ export class ServicesPage {
   readonly title = computed(() => t(this.c.title, this.lang()));
   readonly eyebrow = computed(() => t(this.c.eyebrow, this.lang()));
   readonly lead = computed(() => t(this.c.lead, this.lang()));
+  readonly heroSecondary = computed(() => t(this.c.heroSecondary, this.lang()));
+  readonly heroMetaCore = computed(() => t(this.c.heroMetaCore, this.lang()));
+  readonly heroMetaPayments = computed(() => t(this.c.heroMetaPayments, this.lang()));
+  readonly heroMetaOpen = computed(() => t(this.c.heroMetaOpen, this.lang()));
+  readonly heroBadgeKicker = computed(() => t(this.c.heroBadgeKicker, this.lang()));
   readonly featuresTitle = computed(() => t(this.c.featuresTitle, this.lang()));
   readonly featuresLead = computed(() => t(this.c.featuresLead, this.lang()));
   readonly worldsTitle = computed(() => t(this.c.worldsTitle, this.lang()));

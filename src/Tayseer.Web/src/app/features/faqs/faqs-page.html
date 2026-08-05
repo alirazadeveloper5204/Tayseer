@@ -1,14 +1,50 @@
-<section class="page-hero site-band">
+<section class="faq-hero site-band" aria-labelledby="faq-hero-title">
   <div class="page-hero__glow" aria-hidden="true"></div>
-  <div class="site-container relative z-10 py-fluid-2xl">
-    <p class="type-eyebrow">{{ eyebrow() }}</p>
-    <h1 class="type-title mt-fluid-sm page-ink max-w-3xl">{{ title() }}</h1>
-    <p class="mt-fluid-md max-w-2xl text-fluid-base leading-relaxed page-muted">{{ lead() }}</p>
+  <div class="faq-hero__grid site-container relative z-10">
+    <div class="faq-hero__copy">
+      <p class="type-eyebrow">{{ eyebrow() }}</p>
+      <h1 id="faq-hero-title" class="faq-hero__title page-ink">{{ title() }}</h1>
+      <p class="faq-hero__lead page-muted">{{ lead() }}</p>
+
+      <div class="faq-hero__actions">
+        <a href="#faq-browse" class="btn-brand">{{ heroCta() }}</a>
+        <a [routerLink]="'/' + lang() + '/contact'" class="page-ghost-btn">{{ heroSecondary() }}</a>
+      </div>
+
+      <ul class="faq-hero__meta">
+        <li>{{ heroMetaTopics() }}</li>
+        <li>{{ heroMetaCoverage() }}</li>
+        <li>{{ heroMetaResponse() }}</li>
+      </ul>
+    </div>
+
+    <aside class="faq-hero__aside" aria-hidden="true">
+      <div class="faq-hero__media">
+        <img
+          class="faq-hero__shot faq-hero__shot--main"
+          src="/images/gallery-analytics.jpg"
+          alt=""
+          width="1200"
+          height="900"
+        />
+        <img
+          class="faq-hero__shot faq-hero__shot--side"
+          src="/images/gallery-meeting.jpg"
+          alt=""
+          width="900"
+          height="675"
+        />
+        <div class="faq-hero__badge">
+          <span>{{ heroBadgeKicker() }}</span>
+          <strong>{{ heroMetaCoverage() }}</strong>
+        </div>
+      </div>
+    </aside>
   </div>
 </section>
 
 <section class="page-module site-band">
-  <div class="site-container py-fluid-2xl">
+  <div id="faq-browse" class="site-container py-fluid-2xl">
     <div class="faq-toolbar">
       <label class="faq-search">
         <span class="sr-only">{{ searchPlaceholder() }}</span>
