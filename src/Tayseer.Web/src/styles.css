@@ -382,8 +382,8 @@
   /* Image hover polish (Services / About / Clients) */
   @media (hover: hover) and (pointer: fine) {
     html.dark .services-bento img,
-    html.dark .about-band img,
-    html.dark .clients-band img {
+    html.dark .about-band img:not(.media-zoom__img),
+    html.dark .clients-band img:not(.clients-slider__photo):not(.clients-slider__avatar):not(.media-zoom__img) {
       opacity: 0.85;
       filter: grayscale(20%) brightness(0.95);
       transition:

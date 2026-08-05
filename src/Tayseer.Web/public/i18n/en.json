@@ -4,13 +4,15 @@
     "readMore": "Read More",
     "requestDemo": "Request Demo",
     "talkToUs": "Talk To Us",
-    "viewAllServices": "View All Services"
+    "viewAllServices": "View All Services",
+    "exploreSolutions": "Explore Solutions",
+    "learnMore": "Learn more"
   },
   "nav": {
     "home": "Home",
     "solutions": "Solutions",
     "about": "About Us",
-    "blog": "Blogs and Resources",
+    "faqs": "FAQs",
     "careers": "Careers",
     "connect": "Connect",
     "submitQuery": "Submit A Query"

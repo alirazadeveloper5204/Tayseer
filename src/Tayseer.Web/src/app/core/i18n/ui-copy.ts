@@ -7,6 +7,8 @@ export interface UiCopy {
     requestDemo: string;
     talkToUs: string;
     viewAllServices: string;
+    exploreSolutions: string;
+    learnMore: string;
     email: string;
     previous: string;
     next: string;
@@ -17,7 +19,7 @@ export interface UiCopy {
     solutions: string;
     caseStudies: string;
     about: string;
-    blog: string;
+    faqs: string;
     careers: string;
     connect: string;
     submitQuery: string;
@@ -33,16 +35,24 @@ export interface UiCopy {
     aboutLead: string;
     aboutBody: string;
     statsTitle: string;
+    whyChooseTitle: string;
+    whyChooseSubtitle: string;
+    testimonialsEyebrow: string;
     testimonialsTitle: string;
+    testimonialsCardTitle: string;
     valuesTitle: string;
     mantraTitle: string;
+    mantraLead: string;
     deployTitle: string;
+    deployLead: string;
   };
   trust: {
     iso: string;
     regions: string;
     since: string;
     focus: string;
+    solutions: string;
+    cities: string;
   };
   footer: {
     tagline: string;
@@ -95,6 +105,8 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
       requestDemo: 'Request Demo',
       talkToUs: 'Talk To Us',
       viewAllServices: 'View All Services',
+      exploreSolutions: 'Explore Solutions',
+      learnMore: 'Learn more',
       email: 'info@tayseer.me',
       previous: 'Previous',
       next: 'Next',
@@ -105,16 +117,16 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
       solutions: 'Solutions',
       caseStudies: 'Case Studies',
       about: 'About Us',
-      blog: 'Blogs and Resources',
+      faqs: 'FAQs',
       careers: 'Careers',
       connect: 'Contact',
       submitQuery: 'Submit A Query',
     },
     home: {
-      eyebrow: 'Future-ready FinTech',
-      headline: 'Innovative approach',
+      eyebrow: 'Financial Technology Solutions',
+      headline: 'Future-ready banking for the Gulf',
       subhead:
-        'Future-ready AI & Digital Solutions for banks and enterprises across Saudi Arabia and the UAE.',
+        'AI and digital platforms for banks and enterprises across Saudi Arabia and the UAE — from core systems to managed operations.',
       servicesEyebrow: 'What We Build',
       servicesTitle: 'All Your Business Needs, Covered',
       servicesSubtitle:
@@ -124,16 +136,25 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
       aboutBody:
         'Established in 2016, Tayseer Innovations emerges as a premier FinTech company in the UAE. We specialize in elevating businesses through advanced financial technology solutions, enhancing financial accessibility and fostering regional growth. As more than just a service provider, we position ourselves as your committed ally in the digital landscape, dedicated to facilitating your journey towards digital excellence.',
       statsTitle: 'Tayseer By Numbers',
-      testimonialsTitle: 'Our Client Speak',
+      whyChooseTitle: 'Why Choose Tayseer?',
+      whyChooseSubtitle: 'Empower your business with innovation and reliability.',
+      testimonialsEyebrow: 'Testimonials',
+      testimonialsTitle: 'What People Say About Us',
+      testimonialsCardTitle: 'Work with us',
       valuesTitle: 'Become Future-Ready With Our Cutting Edge Products & Services',
       mantraTitle: 'Our Success Mantra',
+      mantraLead: 'How we deliver with banks and enterprises across the region.',
       deployTitle: 'We Pioneer Flexible Technology',
+      deployLead:
+        'Deploy on your terms — on-site when control and customization come first, or in the cloud when agility and scale matter most.',
     },
     trust: {
       iso: 'ISO 27001 Certified',
       regions: 'Saudi Arabia · UAE',
       since: 'Est. 2016',
       focus: 'Core Banking · AI · Mobile',
+      solutions: '6 Solutions',
+      cities: 'Riyadh & Dubai',
     },
     footer: {
       tagline:
@@ -187,6 +208,8 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
       requestDemo: 'اطلب عرضاً توضيحياً',
       talkToUs: 'تحدث معنا',
       viewAllServices: 'عرض جميع الخدمات',
+      exploreSolutions: 'استكشف الحلول',
+      learnMore: 'اعرف المزيد',
       email: 'info@tayseer.me',
       previous: 'السابق',
       next: 'التالي',
@@ -197,15 +220,16 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
       solutions: 'الحلول',
       caseStudies: 'دراسات الحالة',
       about: 'من نحن',
-      blog: 'المدونة والموارد',
+      faqs: 'الأسئلة الشائعة',
       careers: 'الوظائف',
       connect: 'تواصل معنا',
       submitQuery: 'أرسل استفساراً',
     },
     home: {
-      eyebrow: 'تقنية مالية للمستقبل',
-      headline: 'نهج مبتكر',
-      subhead: 'حلول ذكاء اصطناعي ورقمية للبنوك والمؤسسات في المملكة العربية السعودية والإمارات.',
+      eyebrow: 'حلول التقنية المالية',
+      headline: 'خدمات مصرفية جاهزة للمستقبل في الخليج',
+      subhead:
+        'منصات ذكاء اصطناعي ورقمية للبنوك والمؤسسات في المملكة العربية السعودية والإمارات — من الأنظمة الأساسية إلى العمليات المُدارة.',
       servicesEyebrow: 'ما نقدمه',
       servicesTitle: 'نغطي جميع احتياجات أعمالك',
       servicesSubtitle:
@@ -215,16 +239,25 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
       aboutBody:
         'تأسست تيسير للابتكارات عام 2016 كشركة تقنية مالية رائدة في الإمارات. نتخصص في الارتقاء بالأعمال عبر حلول تقنية مالية متقدمة، وتعزيز الوصول المالي ودعم النمو الإقليمي. لسنا مجرد مزود خدمة، بل شريك ملتزم في رحلتكم نحو التميز الرقمي.',
       statsTitle: 'تيسير بالأرقام',
-      testimonialsTitle: 'آراء عملائنا',
+      whyChooseTitle: 'لماذا تيسير؟',
+      whyChooseSubtitle: 'مكّن أعمالك بالابتكار والموثوقية.',
+      testimonialsEyebrow: 'آراء العملاء',
+      testimonialsTitle: 'ماذا يقول عملاؤنا عنا',
+      testimonialsCardTitle: 'اعمل معنا',
       valuesTitle: 'كن مستعداً للمستقبل مع منتجاتنا وخدماتنا المتطورة',
       mantraTitle: 'شعار نجاحنا',
+      mantraLead: 'كيف نعمل مع البنوك والمؤسسات في المنطقة.',
       deployTitle: 'نقود تقنية مرنة',
+      deployLead:
+        'انشر وفق شروطك — في الموقع عندما تكون السيطرة والتخصيص أولاً، أو على السحابة عندما تكون المرونة والتوسع هما الأولوية.',
     },
     trust: {
       iso: 'معتمد ISO 27001',
       regions: 'السعودية · الإمارات',
       since: 'تأسست 2016',
       focus: 'الخدمات المصرفية · الذكاء الاصطناعي · الجوال',
+      solutions: '6 حلول',
+      cities: 'الرياض ودبي',
     },
     footer: {
       tagline:
@@ -361,6 +394,51 @@ export const HOME_VALUES = [
   { titleEn: 'Robust Fraud Detection', titleAr: 'كشف احتيال قوي' },
   { titleEn: 'Streamlined Operations', titleAr: 'عمليات مبسّطة' },
   { titleEn: 'Personalized Customer Strategies', titleAr: 'استراتيجيات عملاء مخصصة' },
+] as const;
+
+export const HOME_WHY_FEATURES = [
+  {
+    icon: 'experience',
+    titleEn: 'Enhanced Customer Experience',
+    titleAr: 'تجربة عملاء محسّنة',
+    bodyEn: 'Deliver intuitive digital journeys that keep banking customers engaged and loyal.',
+    bodyAr: 'قدّم رحلات رقمية بديهية تبقي عملاء الخدمات المصرفية متفاعلين ومخلصين.',
+  },
+  {
+    icon: 'data',
+    titleEn: 'Data Driven Decision Making',
+    titleAr: 'قرارات مبنية على البيانات',
+    bodyEn: 'Turn live operational data into clearer decisions across products, risk, and growth.',
+    bodyAr: 'حوّل البيانات التشغيلية المباشرة إلى قرارات أوضح عبر المنتجات والمخاطر والنمو.',
+  },
+  {
+    icon: 'security',
+    titleEn: 'Robust Fraud Detection',
+    titleAr: 'كشف احتيال قوي',
+    bodyEn: 'Protect every transaction with layered controls built for Gulf banking environments.',
+    bodyAr: 'احمِ كل معاملة بضوابط متعددة الطبقات مصممة للبيئة المصرفية الخليجية.',
+  },
+  {
+    icon: 'operations',
+    titleEn: 'Streamlined Operations',
+    titleAr: 'عمليات مبسّطة',
+    bodyEn: 'Reduce manual work and unify delivery so teams move faster with fewer handoffs.',
+    bodyAr: 'قلّل العمل اليدوي ووحّد التسليم حتى تتحرك الفرق أسرع وبعدد أقل من التمريرات.',
+  },
+  {
+    icon: 'personal',
+    titleEn: 'Personalized Customer Strategies',
+    titleAr: 'استراتيجيات عملاء مخصصة',
+    bodyEn: 'Tailor offers and journeys with insights that match each customer segment.',
+    bodyAr: 'خصّص العروض والرحلات برؤى تناسب كل شريحة من العملاء.',
+  },
+  {
+    icon: 'support',
+    titleEn: 'Expert Support',
+    titleAr: 'دعم متخصص',
+    bodyEn: 'Dedicated specialists stay with you from implementation through ongoing success.',
+    bodyAr: 'يبقى المختصون معكم من التنفيذ حتى النجاح المستمر.',
+  },
 ] as const;
 
 export const HOME_MANTRA = [

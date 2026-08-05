@@ -2,7 +2,7 @@
   <div class="site-container">
     <header class="services-bento__header">
       <div class="services-bento__intro">
-        <p class="type-eyebrow">{{ copy().home.servicesEyebrow }}</p>
+        <p class="type-eyebrow" id="services-slider-title">{{ copy().home.servicesEyebrow }}</p>
         <h2 class="services-bento__title">{{ copy().home.servicesTitle }}</h2>
         <p class="services-bento__lead">{{ copy().home.servicesSubtitle }}</p>
       </div>
@@ -35,15 +35,24 @@
         on port 5095, then refresh.
       </div>
     } @else {
-      <div class="services-bento__grid">
-        @for (item of services(); track item.slug) {
-          <app-service-card
-            [service]="item"
-            [lang]="lang()"
-            [ctaLabel]="copy().common.readMore"
-          />
+      <app-site-carousel
+        labelledBy="services-slider-title"
+        [previousLabel]="copy().common.previous"
+        [nextLabel]="copy().common.next"
+        [loop]="true"
+        [itemCount]="services().length"
+        [visibleCount]="3"
+      >
+        @for (item of loopedServices(); track $index + '-' + item.slug) {
+          <div class="site-carousel__slide">
+            <app-service-card
+              [service]="item"
+              [lang]="lang()"
+              [ctaLabel]="copy().common.learnMore"
+            />
+          </div>
         }
-      </div>
+      </app-site-carousel>
     }
   </div>
 </section>

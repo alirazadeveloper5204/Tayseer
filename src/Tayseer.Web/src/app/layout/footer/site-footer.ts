@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { LocaleService } from '../../core/i18n/locale.service';
 import { UiCopyService } from '../../core/i18n/ui-copy.service';
 import { SOLUTION_LINKS } from '../../core/i18n/ui-copy';
+import { solutionPath } from '../../core/content/static-services';
 
 @Component({
   selector: 'app-site-footer',
@@ -17,17 +18,9 @@ export class SiteFooter {
   readonly services = computed(() => {
     const isAr = this.locale.lang() === 'ar';
     const lang = this.locale.lang();
-    return SOLUTION_LINKS.map((item) => {
-      const path =
-        item.slug === 'software-management-systems'
-          ? `/${lang}/software-development`
-          : item.slug === 'managed-services'
-            ? `/${lang}/managed-services`
-            : `/${lang}/solutions/${item.slug}`;
-      return {
-        path,
-        title: isAr ? item.titleAr : item.titleEn,
-      };
-    });
+    return SOLUTION_LINKS.map((item) => ({
+      path: solutionPath(lang, item.slug),
+      title: isAr ? item.titleAr : item.titleEn,
+    }));
   });
 }

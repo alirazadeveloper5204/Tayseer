@@ -1,0 +1,52 @@
+<section class="page-hero site-band">
+  <div class="page-hero__glow" aria-hidden="true"></div>
+  <div class="site-container relative z-10 py-fluid-2xl">
+    <p class="type-eyebrow">{{ eyebrow() }}</p>
+    <h1 class="type-title mt-fluid-sm page-ink max-w-3xl">{{ title() }}</h1>
+    <p class="mt-fluid-md max-w-2xl text-fluid-base leading-relaxed page-muted">{{ lead() }}</p>
+  </div>
+</section>
+
+<section class="page-module site-band">
+  <div class="site-container py-fluid-2xl">
+    <header class="careers-head">
+      <h2 class="type-section page-ink">{{ whyTitle() }}</h2>
+      <p class="page-muted">{{ whyLead() }}</p>
+    </header>
+    <div class="careers-values">
+      @for (value of values(); track value.id) {
+        <article class="careers-value">
+          <span class="careers-value__index">0{{ value.id + 1 }}</span>
+          <h3>{{ value.title }}</h3>
+          <p>{{ value.body }}</p>
+        </article>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="page-module site-band">
+  <div class="site-container pb-fluid-2xl">
+    <h2 class="type-section page-ink">{{ rolesTitle() }}</h2>
+    <!-- TODO: real content needed — wire open roles when a jobs source exists -->
+    <div class="careers-empty glass-card">
+      <h3>{{ rolesEmptyTitle() }}</h3>
+      <p>{{ rolesEmptyBody() }}</p>
+    </div>
+  </div>
+</section>
+
+<section class="page-module site-band">
+  <div class="site-container pb-fluid-2xl">
+    <div class="careers-cta elevate-cta">
+      <div>
+        <h2 class="type-section page-ink">{{ ctaTitle() }}</h2>
+        <p class="mt-fluid-sm page-muted">{{ ctaLead() }}</p>
+      </div>
+      <div class="careers-cta__actions">
+        <a class="btn-brand" href="mailto:info@tayseer.me?subject=Tayseer%20Careers">{{ ctaMail() }}</a>
+        <a class="page-ghost-btn" [routerLink]="'/' + lang() + '/contact'">{{ ctaContact() }}</a>
+      </div>
+    </div>
+  </div>
+</section>

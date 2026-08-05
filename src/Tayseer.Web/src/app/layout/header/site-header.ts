@@ -13,6 +13,7 @@ import { LocaleService, AppLocale } from '../../core/i18n/locale.service';
 import { ThemeService } from '../../core/theme/theme.service';
 import { UiCopyService } from '../../core/i18n/ui-copy.service';
 import { SERVICE_LINKS, SOLUTION_LINKS } from '../../core/i18n/ui-copy';
+import { solutionPath } from '../../core/content/static-services';
 import { ChromeScrollService } from '../../core/navigation/chrome-scroll.service';
 
 type NavDropdown = 'services' | 'solutions';
@@ -38,7 +39,7 @@ export class SiteHeader {
   readonly lang = computed(() => this.locale.lang());
 
   /** Scroll-spy for the Home page sections only. */
-  readonly scrollActive = signal<'home' | 'solutions' | 'about' | 'clients' | null>(null);
+  readonly scrollActive = signal<'home' | 'solutions' | 'clients' | null>(null);
 
   readonly serviceLinks = computed(() => {
     const isAr = this.locale.lang() === 'ar';
@@ -57,19 +58,11 @@ export class SiteHeader {
   readonly solutionLinks = computed(() => {
     const isAr = this.locale.lang() === 'ar';
     const lang = this.locale.lang();
-    return SOLUTION_LINKS.map((item) => {
-      const dedicated =
-        item.slug === 'software-management-systems'
-          ? `/${lang}/software-development`
-          : item.slug === 'managed-services'
-            ? `/${lang}/managed-services`
-            : `/${lang}/solutions/${item.slug}`;
-      return {
-        slug: item.slug,
-        title: isAr ? item.titleAr : item.titleEn,
-        path: dedicated,
-      };
-    });
+    return SOLUTION_LINKS.map((item) => ({
+      slug: item.slug,
+      title: isAr ? item.titleAr : item.titleEn,
+      path: solutionPath(lang, item.slug),
+    }));
   });
 
   openDropdown(which: NavDropdown): void {
@@ -152,10 +145,9 @@ export class SiteHeader {
       const sub = this.router.events.subscribe(() => syncEnabled());
       this.destroyRef.onDestroy(() => sub.unsubscribe());
 
-      const sectionIds: Array<'home' | 'solutions' | 'about' | 'clients'> = [
+      const sectionIds: Array<'home' | 'solutions' | 'clients'> = [
         'home',
         'solutions',
-        'about',
         'clients',
       ];
       const sections = sectionIds

@@ -4,13 +4,15 @@
     "readMore": "اقرأ المزيد",
     "requestDemo": "اطلب عرضاً توضيحياً",
     "talkToUs": "تحدث معنا",
-    "viewAllServices": "عرض جميع الخدمات"
+    "viewAllServices": "عرض جميع الخدمات",
+    "exploreSolutions": "استكشف الحلول",
+    "learnMore": "اعرف المزيد"
   },
   "nav": {
     "home": "الرئيسية",
     "solutions": "الحلول",
     "about": "من نحن",
-    "blog": "المدونة والموارد",
+    "faqs": "الأسئلة الشائعة",
     "careers": "الوظائف",
     "connect": "تواصل معنا",
     "submitQuery": "أرسل استفساراً"

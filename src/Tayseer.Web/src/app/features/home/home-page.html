@@ -20,7 +20,7 @@
     </svg>
   </div>
 
-  <div class="home-hero__content site-container relative flex min-h-[inherit] flex-col justify-center pb-24 pt-fluid-2xl sm:pb-28">
+  <div class="home-hero__content site-container relative flex min-h-[inherit] flex-col justify-center py-fluid-2xl">
     <div class="home-hero__copy">
       <p class="home-hero__eyebrow home-hero__reveal">
         {{ copy().home.eyebrow }}
@@ -31,17 +31,22 @@
       <p class="home-hero__lead home-hero__reveal">
         {{ copy().home.subhead }}
       </p>
-      <div class="home-hero__cta mt-fluid-lg flex flex-wrap gap-fluid-sm">
-        <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand home-hero__cta-item home-hero__reveal">
-          {{ copy().common.requestDemo }}
+      <div class="home-hero__cta home-hero__reveal mt-fluid-lg flex flex-wrap gap-fluid-sm">
+        <a [routerLink]="'/' + lang() + '/solutions'" class="btn-brand home-hero__cta-item">
+          {{ copy().common.exploreSolutions }}
         </a>
         <a
-          [routerLink]="'/' + lang() + '/services'"
-          class="home-hero__cta-item home-hero__cta-secondary home-hero__reveal"
+          [routerLink]="'/' + lang() + '/contact'"
+          class="home-hero__cta-item home-hero__cta-secondary"
         >
-          {{ copy().common.viewAllServices }}
+          {{ copy().common.talkToUs }}
         </a>
       </div>
+      <ul class="home-hero__trust home-hero__reveal" aria-label="Trust">
+        <li>{{ copy().trust.solutions }}</li>
+        <li>{{ copy().trust.cities }}</li>
+        <li>{{ copy().trust.iso }}</li>
+      </ul>
     </div>
   </div>
 
@@ -55,6 +60,5 @@
   </div>
 </section>
 
-<app-trust-strip />
 <app-services-bento />
 <app-home-story />

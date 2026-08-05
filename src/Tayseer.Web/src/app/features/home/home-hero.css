@@ -64,7 +64,7 @@ html.dark .home-hero__photo-veil {
 /* Dedicated scrim behind copy — guarantees legibility on any photo */
 .home-hero__copy {
   position: relative;
-  max-width: 36rem;
+  max-width: 40rem;
   padding: clamp(1.25rem, 1rem + 1vw, 2rem);
   margin-inline-start: calc(-1 * clamp(0.5rem, 0.25rem + 0.5vw, 1rem));
 }
@@ -262,7 +262,7 @@ html.dark .home-hero__title {
 
 html[dir='rtl'] .home-hero__title {
   font-family: 'IBM Plex Sans Arabic', 'Kumbh Sans', system-ui, sans-serif;
-  max-width: 12ch;
+  max-width: 18ch;
 }
 
 .home-hero__lead {
@@ -319,6 +319,43 @@ html.dark .home-hero__cta-secondary:hover {
   background: rgba(98, 168, 69, 0.22);
   border-color: #62a845;
   color: #ffffff;
+}
+
+.home-hero__cta-secondary:focus-visible,
+.home-hero__cta .btn-brand:focus-visible {
+  outline: 2px solid #62a945;
+  outline-offset: 3px;
+}
+
+.home-hero__trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 0.35rem;
+  margin: 1.35rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.home-hero__trust li {
+  display: inline-flex;
+  align-items: center;
+  font-size: clamp(0.75rem, 0.7rem + 0.2vw, 0.875rem);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #094266;
+}
+
+.home-hero__trust li:not(:last-child)::after {
+  content: '';
+  width: 0.28rem;
+  height: 0.28rem;
+  margin-inline: 0.7rem;
+  border-radius: 999px;
+  background: #62a945;
+}
+
+html.dark .home-hero__trust li {
+  color: rgba(232, 238, 245, 0.82);
 }
 
 /* Hide hero copy until GSAP entrance runs (avoids FOUC). */
@@ -539,6 +576,22 @@ html.dark .home-hero__scroll-chevron {
 
   .home-hero__title {
     font-size: clamp(2.1rem, 1.4rem + 3.5vw, 3.25rem);
+    max-width: none;
+  }
+
+  html[dir='rtl'] .home-hero__title {
+    max-width: none;
+  }
+
+  .home-hero__cta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .home-hero__cta-item {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
   }
 
   .home-hero__mark {

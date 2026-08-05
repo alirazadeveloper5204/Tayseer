@@ -4,14 +4,14 @@
   (pointerenter)="onCoverEnter()"
   (pointerleave)="onCoverLeave()"
 >
-  <div class="service-card__media relative h-44 overflow-hidden sm:h-48">
+  <div class="service-card__media">
     <img
       #coverImg
-      class="h-full w-full object-cover will-change-transform"
+      class="service-card__image will-change-transform"
       [src]="coverImage()"
       [alt]="service().title"
-      width="640"
-      height="360"
+      width="900"
+      height="600"
       loading="lazy"
       decoding="async"
     />
