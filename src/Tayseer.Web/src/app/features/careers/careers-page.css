@@ -36,17 +36,29 @@
   background: rgba(15, 23, 42, 0.72);
 }
 
-.careers-value__index {
+.careers-value__icon {
   display: inline-flex;
-  margin-bottom: 0.85rem;
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: #0d5a8c;
+  align-items: center;
+  justify-content: center;
+  width: 2.55rem;
+  height: 2.55rem;
+  margin-bottom: 0.95rem;
+  border-radius: 999px;
+  background: #0d5a8c;
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(13, 90, 140, 0.22);
 }
 
-:host-context(html.dark) .careers-value__index {
-  color: #62a945;
+.careers-value__icon svg {
+  display: block;
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+:host-context(html.dark) .careers-value__icon {
+  background: #62a945;
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(98, 169, 69, 0.28);
 }
 
 .careers-value h3 {

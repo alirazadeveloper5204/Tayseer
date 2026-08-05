@@ -469,18 +469,18 @@ export const ABOUT_PAGE = {
     },
     {
       year: '2022',
-      title: { en: 'Fahim.AI Launch', ar: 'إطلاق فهيم.AI' },
-      text: {
-        en: 'Launched Fahim.AI and mobile delivery frameworks for modern banking journeys.',
-        ar: 'إطلاق فهيم.AI وأطر التسليم عبر الجوال لرحلات مصرفية حديثة.',
-      },
-    },
-    {
-      year: '2026',
       title: { en: 'Managed Excellence', ar: 'تميّز مُدار' },
       text: {
         en: 'Enterprise managed SOC and open banking accelerators for regulated institutions.',
         ar: 'SOC مُدار للمؤسسات ومسرّعات الخدمات المصرفية المفتوحة للجهات المنظمة.',
+      },
+    },
+    {
+      year: '2026',
+      title: { en: 'Fahim.AI Launch', ar: 'إطلاق فهيم.AI' },
+      text: {
+        en: 'Launched Fahim.AI and mobile delivery frameworks for modern banking journeys.',
+        ar: 'إطلاق فهيم.AI وأطر التسليم عبر الجوال لرحلات مصرفية حديثة.',
       },
     },
   ],
@@ -584,7 +584,7 @@ export const ABOUT_PAGE = {
       id: 'aisha',
       name: { en: 'Aisha Al Mansoori', ar: 'عائشة المنصوري' },
       role: { en: 'Chief Executive Officer', ar: 'الرئيسة التنفيذية' },
-      img: '/images/about-thumb-1.jpg',
+      img: '/images/leader-aisha.jpg',
       links: [
         { label: { en: 'LinkedIn', ar: 'لينكدإن' }, href: 'https://www.linkedin.com/' },
       ],
@@ -593,7 +593,7 @@ export const ABOUT_PAGE = {
       id: 'omar',
       name: { en: 'Omar Haddad', ar: 'عمر حداد' },
       role: { en: 'Chief Technology Officer', ar: 'رئيس التقنية' },
-      img: '/images/about-thumb-2.jpg',
+      img: '/images/leader-omar.jpg',
       links: [
         { label: { en: 'LinkedIn', ar: 'لينكدإن' }, href: 'https://www.linkedin.com/' },
       ],
@@ -602,7 +602,7 @@ export const ABOUT_PAGE = {
       id: 'sara',
       name: { en: 'Sara Nasser', ar: 'سارة ناصر' },
       role: { en: 'Head of Delivery', ar: 'رئيسة التسليم' },
-      img: '/images/about-thumb-3.jpg',
+      img: '/images/leader-sara.jpg',
       links: [
         { label: { en: 'LinkedIn', ar: 'لينكدإن' }, href: 'https://www.linkedin.com/' },
       ],
@@ -611,7 +611,7 @@ export const ABOUT_PAGE = {
       id: 'khalid',
       name: { en: 'Khalid Rahman', ar: 'خالد رحمن' },
       role: { en: 'Head of Security', ar: 'رئيس الأمن' },
-      img: '/images/gallery-meeting.jpg',
+      img: '/images/leader-khalid.jpg',
       links: [
         { label: { en: 'LinkedIn', ar: 'لينكدإن' }, href: 'https://www.linkedin.com/' },
       ],

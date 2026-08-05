@@ -13,7 +13,7 @@
   padding: 0.85rem 1rem;
 }
 
-html.dark .faq-search__input {
+:host-context(html.dark) .faq-search__input {
   border-color: rgba(255, 255, 255, 0.16);
   background: rgba(15, 23, 42, 0.78);
   color: #e8eef5;
@@ -47,13 +47,13 @@ html.dark .faq-search__input {
   color: #ffffff;
 }
 
-html.dark .faq-tab {
+:host-context(html.dark) .faq-tab {
   border-color: rgba(255, 255, 255, 0.18);
   color: #e8eef5;
 }
 
-html.dark .faq-tab.is-active,
-html.dark .faq-tab:hover {
+:host-context(html.dark) .faq-tab.is-active,
+:host-context(html.dark) .faq-tab:hover {
   background: rgba(98, 169, 69, 0.22);
   border-color: #62a945;
   color: #ffffff;
@@ -75,7 +75,7 @@ html.dark .faq-tab:hover {
   color: #0d5a8c;
 }
 
-html.dark .faq-group__title {
+:host-context(html.dark) .faq-group__title {
   color: #ffffff;
 }
 
@@ -101,10 +101,14 @@ html.dark .faq-group__title {
   gap: 1rem;
   padding: 1rem 1.1rem;
   text-align: start;
-  font-weight: 600;
-  color: inherit;
+  font-weight: 700;
+  color: #0d5a8c;
   background: transparent;
   border: 0;
+}
+
+:host-context(html.dark) .faq-item__trigger {
+  color: #ffffff;
 }
 
 .faq-item__trigger:focus-visible {
@@ -120,7 +124,7 @@ html.dark .faq-group__title {
   transition: transform 380ms cubic-bezier(0.45, 0, 0.2, 1);
 }
 
-html.dark .faq-item__icon {
+:host-context(html.dark) .faq-item__icon {
   color: #62a945;
 }
 
@@ -143,23 +147,33 @@ html.dark .faq-item__icon {
   overflow: hidden;
 }
 
-.faq-item__body p {
-  margin: 0;
-  padding: 0 1.1rem 1.1rem;
-  color: #475569;
-  line-height: 1.7;
+.faq-item.is-open .faq-item__body {
+  border-top: 1px solid rgba(98, 169, 69, 0.35);
 }
 
-html.dark .faq-item__body p {
-  color: rgba(232, 238, 245, 0.75);
+:host-context(html.dark) .faq-item.is-open .faq-item__body {
+  border-top-color: rgba(98, 169, 69, 0.45);
+}
+
+.faq-item__body p {
+  margin: 0;
+  padding: 0.95rem 1.1rem 1.15rem;
+  color: #1e3a4c;
+  font-size: 0.98rem;
+  font-weight: 500;
+  line-height: 1.75;
+}
+
+:host-context(html.dark) .faq-item__body p {
+  color: #e8eef5;
 }
 
 .faq-empty {
-  color: #475569;
+  color: #1e3a4c;
 }
 
-html.dark .faq-empty {
-  color: rgba(232, 238, 245, 0.72);
+:host-context(html.dark) .faq-empty {
+  color: #e8eef5;
 }
 
 .faq-cta {

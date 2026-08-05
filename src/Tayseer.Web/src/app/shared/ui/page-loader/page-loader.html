@@ -10,8 +10,8 @@
     aria-label="Loading"
   >
     @for (gen of [loader.generation()]; track gen) {
-      <div class="page-loader__panel">
-        <div class="page-loader__mark-wrap">
+      <div #loaderPanel class="page-loader__panel">
+        <div #loaderMark class="page-loader__mark-wrap">
           <div class="page-loader__aura" aria-hidden="true"></div>
           <svg
             class="page-loader__mark"
@@ -52,13 +52,16 @@
             </g>
           </svg>
         </div>
-        <img
-          class="page-loader__logo"
-          src="/brand/logo-light.svg"
-          alt="Tayseer"
-          width="220"
-          height="48"
-        />
+        <div #loaderLogo class="page-loader__logo-wrap">
+          <img
+            class="page-loader__logo"
+            src="/brand/logo-light.svg"
+            alt="Tayseer"
+            width="220"
+            height="48"
+          />
+          <span class="page-loader__logo-shine" aria-hidden="true"></span>
+        </div>
       </div>
     }
   </div>

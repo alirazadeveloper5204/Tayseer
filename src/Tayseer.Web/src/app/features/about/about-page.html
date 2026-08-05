@@ -22,7 +22,34 @@
       @for (item of c.timeline; track item.year; let i = $index; let last = $last) {
         <li class="journey__item" [class.journey__item--alt]="i % 2 === 1" [class.journey__item--last]="last">
           <div class="journey__rail" aria-hidden="true">
-            <span class="about-count">{{ i + 1 }}</span>
+            <span class="about-count">
+              @switch (i) {
+                @case (0) {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M5 20V5.5L19 4v12.2L5 18" stroke-linejoin="round" />
+                    <path d="M5 20V4" stroke-linecap="round" />
+                  </svg>
+                }
+                @case (1) {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <circle cx="12" cy="12" r="8.2" />
+                    <path d="M3.8 12h16.4M12 3.8c2.2 2.4 3.4 5.2 3.4 8.2S14.2 17.8 12 20.2C9.8 17.8 8.6 15 8.6 12S9.8 6.2 12 3.8Z" />
+                  </svg>
+                }
+                @case (2) {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M12 3 4.8 6.4v5.1c0 4.4 3.1 8.4 7.2 9.5 4.1-1.1 7.2-5.1 7.2-9.5V6.4L12 3Z" stroke-linejoin="round" />
+                    <path d="m9 12 2.1 2.1L15.4 10" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                }
+                @default {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <circle cx="12" cy="12" r="3" />
+                    <path d="M12 4.2v1.8M12 18v1.8M4.2 12h1.8M18 12h1.8M6.4 6.4l1.3 1.3M16.3 16.3l1.3 1.3M17.6 6.4l-1.3 1.3M7.7 16.3l-1.3 1.3" stroke-linecap="round" />
+                  </svg>
+                }
+              }
+            </span>
           </div>
           <article class="journey__card fintech-card">
             <span class="journey__year financial-number">{{ item.year }}</span>
@@ -90,22 +117,74 @@
     </div>
     <div class="about-vm">
       <article class="about-vm__card fintech-card">
-        <span class="about-vm__mark" aria-hidden="true">V</span>
-        <h3>{{ visionCardTitle() }}</h3>
+        <div class="about-vm__head">
+          <span class="about-vm__mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M12 5c-5 0-8.5 4.2-9.5 7 1 2.8 4.5 7 9.5 7s8.5-4.2 9.5-7c-1-2.8-4.5-7-9.5-7Z" stroke-linejoin="round" />
+              <circle cx="12" cy="12" r="2.6" />
+            </svg>
+          </span>
+          <h3>{{ visionCardTitle() }}</h3>
+        </div>
         <p>{{ visionCardBody() }}</p>
       </article>
       <article class="about-vm__card fintech-card">
-        <span class="about-vm__mark" aria-hidden="true">M</span>
-        <h3>{{ missionCardTitle() }}</h3>
+        <div class="about-vm__head">
+          <span class="about-vm__mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <circle cx="12" cy="12" r="8.2" />
+              <circle cx="12" cy="12" r="3.2" />
+              <path d="M12 3.8v2.4M12 17.8v2.4M3.8 12h2.4M17.8 12h2.4" stroke-linecap="round" />
+            </svg>
+          </span>
+          <h3>{{ missionCardTitle() }}</h3>
+        </div>
         <p>{{ missionCardBody() }}</p>
       </article>
       <article class="about-vm__card fintech-card about-vm__card--wide">
-        <span class="about-vm__mark" aria-hidden="true">A</span>
-        <h3>{{ approachTitle() }}</h3>
+        <div class="about-vm__head">
+          <span class="about-vm__mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M5 19V8.5L12 4l7 4.5V19" stroke-linejoin="round" />
+              <path d="M9.2 19v-5.2h5.6V19M5 12.5h14" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+          <h3>{{ approachTitle() }}</h3>
+        </div>
         <ul class="about-approach">
           @for (step of c.approach; track label(step.title); let i = $index) {
             <li>
-              <span class="about-count" aria-hidden="true">{{ i + 1 }}</span>
+              <span class="about-step-icon" aria-hidden="true">
+                @switch (i) {
+                  @case (0) {
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                      <path d="M5 11.5c0-3.4 2.9-6 7-6s7 2.6 7 6c0 2.1-1.1 3.9-2.8 5 .4 1.3 1.1 2.2 2.1 2.8-1.7.1-3.4-.4-4.7-1.4-.5.1-1 .2-1.6.2-4.1 0-7-2.6-7-6Z" stroke-linejoin="round" />
+                      <path d="M9 11.2h.01M12 11.2h.01M15 11.2h.01" stroke-linecap="round" />
+                    </svg>
+                  }
+                  @case (1) {
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                      <path d="M4.8 16.8 15.2 6.4l2.4 2.4L7.2 19.2H4.8v-2.4Z" stroke-linejoin="round" />
+                      <path d="m13.6 8 2.4 2.4" stroke-linecap="round" />
+                    </svg>
+                  }
+                  @case (2) {
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                      <rect x="4.5" y="4.5" width="6.2" height="6.2" rx="1.1" />
+                      <rect x="13.3" y="4.5" width="6.2" height="6.2" rx="1.1" />
+                      <rect x="4.5" y="13.3" width="6.2" height="6.2" rx="1.1" />
+                      <path d="M14.4 16.4h4M16.4 14.4v4" stroke-linecap="round" />
+                    </svg>
+                  }
+                  @default {
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                      <path d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+                      <path d="M5.2 18.2c.8-2.2 3.1-3.7 6.8-3.7s6 1.5 6.8 3.7" stroke-linecap="round" />
+                      <path d="M18.2 8.2c.9.4 1.5 1.3 1.5 2.4 0 1.4-1.1 2.5-2.5 2.5h-.3" stroke-linecap="round" />
+                    </svg>
+                  }
+                }
+              </span>
               <p>
                 <strong>{{ label(step.title) }}</strong>
                 <span>{{ label(step.body) }}</span>
@@ -128,7 +207,34 @@
       @for (value of c.values; track label(value.title); let i = $index) {
         <article class="about-values__card fintech-card">
           <div class="about-values__head">
-            <span class="about-count" aria-hidden="true">{{ i + 1 }}</span>
+            <span class="about-count" aria-hidden="true">
+              @switch (i) {
+                @case (0) {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M12 3.5 13.8 9H19l-4.2 3.2L16.5 18 12 14.8 7.5 18l1.7-5.8L5 9h5.2L12 3.5Z" stroke-linejoin="round" />
+                  </svg>
+                }
+                @case (1) {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M4 12s3.2-6 8-6 8 6 8 6-3.2 6-8 6-8-6-8-6Z" stroke-linejoin="round" />
+                    <circle cx="12" cy="12" r="2.4" />
+                  </svg>
+                }
+                @case (2) {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M12 3 4.8 6.4v5.1c0 4.4 3.1 8.4 7.2 9.5 4.1-1.1 7.2-5.1 7.2-9.5V6.4L12 3Z" stroke-linejoin="round" />
+                    <path d="m9 12 2.1 2.1L15.4 10" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                }
+                @default {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <circle cx="8.2" cy="9" r="2.4" />
+                    <circle cx="15.8" cy="9" r="2.4" />
+                    <path d="M4.2 18c.5-2.6 2.4-4 4-4s3.5 1.4 4 4M11.8 18c.5-2.6 2.4-4 4-4s3.5 1.4 4 4" stroke-linecap="round" />
+                  </svg>
+                }
+              }
+            </span>
             <h3>{{ label(value.title) }}</h3>
           </div>
           <p>{{ label(value.body) }}</p>

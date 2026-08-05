@@ -47,7 +47,7 @@
         </div>
         @if (coverImage(); as image) {
           <div class="product-hero__media">
-            <img [src]="image" [alt]="s.title" width="960" height="720" decoding="async" />
+            <img [src]="image" [alt]="s.title" width="1536" height="1024" decoding="async" fetchpriority="high" />
           </div>
         }
       </div>

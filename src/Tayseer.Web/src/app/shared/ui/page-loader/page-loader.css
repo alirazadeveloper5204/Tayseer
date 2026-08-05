@@ -32,32 +32,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.25rem;
-  opacity: 0;
-  transform: translateY(8px) scale(0.98);
-  transition:
-    opacity 320ms cubic-bezier(0.33, 1, 0.68, 1) 60ms,
-    transform 320ms cubic-bezier(0.33, 1, 0.68, 1) 60ms;
-}
-
-.page-loader--visible:not(.page-loader--leaving) .page-loader__panel {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-.page-loader--leaving .page-loader__panel {
-  opacity: 0;
-  transform: translateY(-4px) scale(0.99);
-  transition:
-    opacity 280ms cubic-bezier(0.4, 0, 0.2, 1),
-    transform 280ms cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 1.35rem;
 }
 
 .page-loader__mark-wrap {
   position: relative;
   display: grid;
   place-items: center;
-  animation: page-loader-mark-breathe 3.6s ease-in-out infinite;
 }
 
 .page-loader__aura {
@@ -146,12 +127,39 @@
   animation-delay: 2.34s;
 }
 
+.page-loader__logo-wrap {
+  position: relative;
+  overflow: hidden;
+  display: block;
+}
+
 .page-loader__logo {
   width: clamp(10rem, 36vw, 14rem);
   height: auto;
   display: block;
-  opacity: 0.88;
-  animation: page-loader-logo 3.6s ease-in-out infinite;
+}
+
+.page-loader__logo-shine {
+  position: absolute;
+  inset: -10% -40%;
+  background: linear-gradient(
+    105deg,
+    transparent 38%,
+    rgba(255, 255, 255, 0.42) 50%,
+    transparent 62%
+  );
+  transform: translateX(-80%);
+  animation: page-loader-shine 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite 0.45s;
+  pointer-events: none;
+}
+
+.page-loader--light .page-loader__logo-shine {
+  background: linear-gradient(
+    105deg,
+    transparent 38%,
+    rgba(13, 90, 140, 0.22) 50%,
+    transparent 62%
+  );
 }
 
 /**
@@ -291,15 +299,19 @@
   }
 }
 
-@keyframes page-loader-logo {
+@keyframes page-loader-shine {
   0%,
-  100% {
-    opacity: 0.78;
-    transform: translateY(0);
+  28% {
+    transform: translateX(-80%);
+    opacity: 0;
   }
-  55% {
+  42% {
     opacity: 1;
-    transform: translateY(-2px);
+  }
+  58%,
+  100% {
+    transform: translateX(80%);
+    opacity: 0;
   }
 }
 
@@ -313,7 +325,7 @@
   .page-loader__mark-wrap,
   .page-loader__aura,
   .page-loader__ghost path,
-  .page-loader__logo {
+  .page-loader__logo-shine {
     animation: none;
   }
 

@@ -16,9 +16,10 @@
           <img
             src="/images/solutions-banner.jpg"
             [alt]="title()"
-            width="960"
-            height="720"
+            width="1536"
+            height="1024"
             decoding="async"
+            fetchpriority="high"
           />
         </div>
         <app-proof-cards />
@@ -40,8 +41,8 @@
             <img
               [src]="row.image"
               [alt]="row.title"
-              width="960"
-              height="600"
+              width="1536"
+              height="1024"
               loading="lazy"
               decoding="async"
             />

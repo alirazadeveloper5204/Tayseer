@@ -170,32 +170,29 @@
     <div class="home-mantra__grid">
       @for (step of mantra(); track step.id; let i = $index) {
         <article class="home-mantra__card" [style.--delay]="i * 120 + 'ms'">
-          <div class="home-mantra__top">
-            <span class="home-mantra__index">0{{ i + 1 }}</span>
-            <div class="home-mantra__icon" aria-hidden="true">
-              @switch (step.icon) {
-                @case ('team') {
-                  <svg class="size-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                    <circle cx="9" cy="8" r="3" />
-                    <circle cx="17" cy="9" r="2.5" />
-                    <path d="M3.5 19c.4-3 2.6-5 5.5-5s5.1 2 5.5 5" stroke-linecap="round" />
-                    <path d="M14 19c.3-2.2 1.8-3.8 4-3.8 1.5 0 2.7.7 3.4 1.8" stroke-linecap="round" />
-                  </svg>
-                }
-                @case ('transparency') {
-                  <svg class="size-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                    <path d="M4 12s3.2-6 8-6 8 6 8 6-3.2 6-8 6-8-6-8-6Z" stroke-linejoin="round" />
-                    <circle cx="12" cy="12" r="2.5" />
-                  </svg>
-                }
-                @case ('quality') {
-                  <svg class="size-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                    <path d="M12 3 4.5 6.5v5.2c0 4.6 3.2 8.8 7.5 9.8 4.3-1 7.5-5.2 7.5-9.8V6.5L12 3Z" stroke-linejoin="round" />
-                    <path d="m9 12 2 2 4-4" stroke-linecap="round" stroke-linejoin="round" />
-                  </svg>
-                }
+          <div class="home-mantra__icon" aria-hidden="true">
+            @switch (step.icon) {
+              @case ('team') {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                  <circle cx="9" cy="8" r="3" />
+                  <circle cx="17" cy="9" r="2.5" />
+                  <path d="M3.5 19c.4-3 2.6-5 5.5-5s5.1 2 5.5 5" stroke-linecap="round" />
+                  <path d="M14 19c.3-2.2 1.8-3.8 4-3.8 1.5 0 2.7.7 3.4 1.8" stroke-linecap="round" />
+                </svg>
               }
-            </div>
+              @case ('transparency') {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                  <path d="M4 12s3.2-6 8-6 8 6 8 6-3.2 6-8 6-8-6-8-6Z" stroke-linejoin="round" />
+                  <circle cx="12" cy="12" r="2.5" />
+                </svg>
+              }
+              @case ('quality') {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                  <path d="M12 3 4.5 6.5v5.2c0 4.6 3.2 8.8 7.5 9.8 4.3-1 7.5-5.2 7.5-9.8V6.5L12 3Z" stroke-linejoin="round" />
+                  <path d="m9 12 2 2 4-4" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              }
+            }
           </div>
           <h3 class="font-display text-fluid-lg font-semibold text-ink dark:text-white">{{ step.title }}</h3>
           <p class="mt-2 text-fluid-sm leading-relaxed text-ink-soft dark:text-white/70">{{ step.body }}</p>

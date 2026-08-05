@@ -74,6 +74,10 @@ export class NavigationLoaderService {
           return;
         }
 
+        if (event instanceof NavigationEnd && !this.router.parseUrl(event.urlAfterRedirects).fragment) {
+          this.scrollToTopInstant();
+        }
+
         this.navigationDepth = Math.max(0, this.navigationDepth - 1);
         if (this.navigationDepth === 0) {
           this.scheduleHide();
@@ -149,6 +153,9 @@ export class NavigationLoaderService {
     // Freeze overlay colors to the pre-transition theme (avoids dark↔light flash).
     const isDark = this.document.documentElement.classList.contains('dark');
     this.surface.set(isDark ? 'dark' : 'light');
+
+    // Jump to top under the cover so the next page never opens mid-scroll.
+    this.scrollToTopInstant();
 
     // Mount at opacity 0, then fade in over the current page.
     this.visible.set(false);
@@ -227,6 +234,21 @@ export class NavigationLoaderService {
       this.resolveCover(true);
       this.resolveCover = null;
     }
+  }
+
+  private scrollToTopInstant(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    const win = this.document.defaultView;
+    const root = this.document.documentElement;
+    const previous = root.style.scrollBehavior;
+    root.style.scrollBehavior = 'auto';
+    win?.scrollTo(0, 0);
+    root.scrollTop = 0;
+    this.document.body.scrollTop = 0;
+    root.style.scrollBehavior = previous;
   }
 
   private blurActiveElement(): void {
