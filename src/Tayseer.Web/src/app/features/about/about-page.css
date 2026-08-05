@@ -1,5 +1,5 @@
-.about-hero-copy {
-  max-width: 48rem;
+#about-journey {
+  scroll-margin-top: calc(var(--site-chrome-offset-expanded, 6rem) + 1rem);
 }
 
 .about-who {

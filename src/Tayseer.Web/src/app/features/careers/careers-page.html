@@ -1,9 +1,45 @@
-<section class="page-hero site-band">
+<section class="careers-hero site-band" aria-labelledby="careers-hero-title">
   <div class="page-hero__glow" aria-hidden="true"></div>
-  <div class="site-container relative z-10 py-fluid-2xl">
-    <p class="type-eyebrow">{{ eyebrow() }}</p>
-    <h1 class="type-title mt-fluid-sm page-ink max-w-3xl">{{ title() }}</h1>
-    <p class="mt-fluid-md max-w-2xl text-fluid-base leading-relaxed page-muted">{{ lead() }}</p>
+  <div class="careers-hero__grid site-container relative z-10">
+    <div class="careers-hero__copy">
+      <p class="type-eyebrow">{{ eyebrow() }}</p>
+      <h1 id="careers-hero-title" class="careers-hero__title page-ink">{{ title() }}</h1>
+      <p class="careers-hero__lead page-muted">{{ lead() }}</p>
+
+      <div class="careers-hero__actions">
+        <a class="btn-brand" href="mailto:info@tayseer.me?subject=Tayseer%20Careers">{{ heroCta() }}</a>
+        <a class="page-ghost-btn" href="#careers-roles">{{ heroSecondary() }}</a>
+      </div>
+
+      <ul class="careers-hero__meta">
+        <li>{{ heroMetaSince() }}</li>
+        <li>{{ heroMetaCoverage() }}</li>
+        <li>{{ heroMetaFocus() }}</li>
+      </ul>
+    </div>
+
+    <aside class="careers-hero__aside" aria-hidden="true">
+      <div class="careers-hero__media">
+        <img
+          class="careers-hero__shot careers-hero__shot--main"
+          src="/images/gallery-workspace.jpg"
+          alt=""
+          width="1200"
+          height="900"
+        />
+        <img
+          class="careers-hero__shot careers-hero__shot--side"
+          src="/images/gallery-meeting.jpg"
+          alt=""
+          width="900"
+          height="675"
+        />
+        <div class="careers-hero__badge">
+          <span>{{ heroBadgeKicker() }}</span>
+          <strong>{{ heroMetaCoverage() }}</strong>
+        </div>
+      </div>
+    </aside>
   </div>
 </section>
 
@@ -56,7 +92,7 @@
 
 <section class="page-module site-band">
   <div class="site-container pb-fluid-2xl">
-    <h2 class="type-section page-ink">{{ rolesTitle() }}</h2>
+    <h2 id="careers-roles" class="type-section page-ink">{{ rolesTitle() }}</h2>
     <!-- TODO: real content needed — wire open roles when a jobs source exists -->
     <div class="careers-empty fintech-card">
       <h3>{{ rolesEmptyTitle() }}</h3>

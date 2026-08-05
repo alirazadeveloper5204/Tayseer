@@ -1,19 +1,47 @@
-<section class="page-hero site-band about-hero-band">
+<section class="spotlight-hero site-band" aria-labelledby="about-hero-title">
   <div class="page-hero__glow" aria-hidden="true"></div>
-  <div class="site-container relative z-10">
-    <div class="about-hero-copy">
+  <div class="spotlight-hero__grid site-container relative z-10">
+    <div>
       <p class="type-eyebrow">{{ eyebrow() }}</p>
-      <h1 class="type-title mt-fluid-sm page-ink">{{ title() }}</h1>
-      <p class="mt-fluid-md max-w-3xl text-fluid-lg leading-relaxed page-muted">{{ lead() }}</p>
-      <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand mt-fluid-lg inline-flex">
-        {{ heroCta() }}
-      </a>
+      <h1 id="about-hero-title" class="spotlight-hero__title page-ink">{{ title() }}</h1>
+      <p class="spotlight-hero__lead page-muted">{{ lead() }}</p>
+      <div class="spotlight-hero__actions">
+        <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand">{{ heroCta() }}</a>
+        <a href="#about-journey" class="page-ghost-btn">{{ heroSecondary() }}</a>
+      </div>
+      <ul class="spotlight-hero__meta">
+        <li>{{ heroMetaSince() }}</li>
+        <li>{{ heroMetaCoverage() }}</li>
+        <li>{{ heroMetaFocus() }}</li>
+      </ul>
     </div>
+    <aside aria-hidden="true">
+      <div class="spotlight-hero__media">
+        <img
+          class="spotlight-hero__shot spotlight-hero__shot--main"
+          src="/images/about-main.jpg"
+          alt=""
+          width="1800"
+          height="1350"
+        />
+        <img
+          class="spotlight-hero__shot spotlight-hero__shot--side"
+          src="/images/gallery-workspace.jpg"
+          alt=""
+          width="900"
+          height="675"
+        />
+        <div class="spotlight-hero__badge">
+          <span>{{ heroBadgeKicker() }}</span>
+          <strong>{{ heroMetaCoverage() }}</strong>
+        </div>
+      </div>
+    </aside>
   </div>
 </section>
 
 <section class="page-module site-band">
-  <div class="site-container py-fluid-2xl">
+  <div id="about-journey" class="site-container py-fluid-2xl">
     <div class="feature-head">
       <h2 class="type-section page-ink">{{ timelineTitle() }}</h2>
       <p class="text-fluid-base page-muted">{{ timelineLead() }}</p>

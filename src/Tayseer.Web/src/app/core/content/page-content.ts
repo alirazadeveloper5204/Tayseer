@@ -38,6 +38,11 @@ export const SERVICES_PAGE = {
     en: 'Integrate, orchestrate, and scale mission-critical banking capabilities with Tayseer’s certified delivery teams.',
     ar: 'ادمج ونظّم ووسّع قدرات الخدمات المصرفية الحرجة مع فرق تيسير المعتمدة.',
   },
+  heroSecondary: { en: 'Explore solutions', ar: 'استكشف الحلول' },
+  heroMetaCore: { en: 'Core banking integration', ar: 'تكامل الأنظمة المصرفية' },
+  heroMetaPayments: { en: 'Payments, wallets & APIs', ar: 'المدفوعات والمحافظ والواجهات' },
+  heroMetaOpen: { en: 'Open banking ready', ar: 'جاهز للخدمات المصرفية المفتوحة' },
+  heroBadgeKicker: { en: 'Certified delivery', ar: 'تسليم معتمد' },
   pillars: [
     {
       id: 'core',
@@ -186,6 +191,11 @@ export const SOLUTIONS_PAGE = {
     en: 'Intelligent platforms for banks and fintechs — from core modernization to AI, mobile, and managed operations.',
     ar: 'منصات ذكية للبنوك وشركات التقنية المالية — من تحديث النواة إلى الذكاء الاصطناعي والجوال والتشغيل المُدار.',
   },
+  heroSecondary: { en: 'Browse services', ar: 'تصفح الخدمات' },
+  heroMetaSuite: { en: 'Six connected solutions', ar: 'ستة حلول مترابطة' },
+  heroMetaAi: { en: 'Core, AI & mobile', ar: 'النواة والذكاء الاصطناعي والجوال' },
+  heroMetaOps: { en: 'Managed operations', ar: 'تشغيل مُدار' },
+  heroBadgeKicker: { en: 'Product suite', ar: 'مجموعة المنتجات' },
   featuresTitle: { en: 'Game-Changing Features', ar: 'ميزات تغيّر قواعد اللعبة' },
   featuresLead: {
     en: 'One suite. Clear outcomes. Built to modernize banking without fragmenting the customer journey.',
@@ -431,6 +441,11 @@ export const ABOUT_PAGE = {
     ar: 'نصنع تقنية مصرفية موثوقة وتجارب رقمية تساعد المؤسسات على النمو عبر الخليج.',
   },
   heroCta: { en: 'Join Our Journey', ar: 'انضم إلى رحلتنا' },
+  heroSecondary: { en: 'Explore our story', ar: 'استكشف قصتنا' },
+  heroMetaSince: { en: 'Established 2016', ar: 'تأسست عام 2016' },
+  heroMetaCoverage: { en: 'Riyadh & Dubai', ar: 'الرياض ودبي' },
+  heroMetaFocus: { en: 'FinTech for the Gulf', ar: 'تقنية مالية للخليج' },
+  heroBadgeKicker: { en: 'Our company', ar: 'شركتنا' },
   story: {
     en: 'Established in 2016, Tayseer Innovations emerges as a premier FinTech company in the UAE. We specialize in elevating businesses through advanced financial technology solutions, enhancing financial accessibility and fostering regional growth. As more than just a service provider, we position ourselves as your committed ally in the digital landscape, dedicated to facilitating your journey towards digital excellence.',
     ar: 'تأسست تيسير للابتكارات عام 2016 كشركة تقنية مالية رائدة في الإمارات. نتخصص في الارتقاء بالأعمال عبر حلول تقنية مالية متقدمة، وتعزيز الوصول المالي ودعم النمو الإقليمي. لسنا مجرد مزود خدمة، بل شريك ملتزم في رحلتكم نحو التميز الرقمي.',
@@ -706,12 +721,19 @@ export const CASE_STUDIES_PAGE = {
 } as const;
 
 export const CONTACT_PAGE = {
-  eyebrow: { en: 'Enterprise Inquiries', ar: 'استفسارات المؤسسات' },
-  title: { en: 'Schedule a Demo', ar: 'جدولة عرض توضيحي' },
+  eyebrow: { en: 'Enterprise Contact', ar: 'تواصل المؤسسات' },
+  title: { en: 'Talk with the Tayseer team', ar: 'تحدث مع فريق تيسير' },
   lead: {
-    en: 'Tell us about your banking or enterprise program — we respond within one business day.',
-    ar: 'أخبرنا عن برنامجك المصرفي أو المؤسسي — نرد خلال يوم عمل واحد.',
+    en: 'Partner with our Riyadh and Dubai teams on core banking, AI, and managed services. Tell us about your programme — we respond within one business day.',
+    ar: 'تعاون مع فرقنا في الرياض ودبي في الأنظمة المصرفية والذكاء الاصطناعي والخدمات المدارة. أخبرنا عن برنامجك — نرد خلال يوم عمل واحد.',
   },
+  heroCta: { en: 'Start an inquiry', ar: 'ابدأ استفساراً' },
+  heroEmail: { en: 'Email the team', ar: 'راسل الفريق' },
+  heroMetaResponse: { en: 'Reply within 1 business day', ar: 'الرد خلال يوم عمل واحد' },
+  heroMetaCoverage: { en: 'Offices in Riyadh & Dubai', ar: 'مكاتب في الرياض ودبي' },
+  heroMetaSince: { en: 'Established 2016', ar: 'تأسست عام 2016' },
+  mapOpen: { en: 'Open in Google Maps', ar: 'افتح في خرائط Google' },
+  mapRegion: { en: 'GCC coverage', ar: 'تغطية الخليج' },
   steps: [
     { en: 'About You', ar: 'عنك' },
     { en: 'Project Scope', ar: 'نطاق المشروع' },
@@ -735,19 +757,31 @@ export const CONTACT_PAGE = {
   officesTitle: { en: 'Office Locations', ar: 'مواقع المكاتب' },
   offices: [
     {
+      id: 'riyadh',
       city: { en: 'Riyadh', ar: 'الرياض' },
-      detail: { en: 'Kingdom of Saudi Arabia', ar: 'المملكة العربية السعودية' },
-      phone: '+966 11 000 0000',
+      detail: {
+        en: 'Office 7, 2nd Floor, Selam Building, Prince Saad bin Abdulrahman Alawal Branch Road, Al Rawabi, Riyadh',
+        ar: 'مكتب 7، الطابق الثاني، مبنى سلام، طريق الأمير سعد بن عبدالرحمن الأول الفرعي، الروابي، الرياض',
+      },
+      country: { en: 'Kingdom of Saudi Arabia', ar: 'المملكة العربية السعودية' },
+      phone: '+966 555203079',
       map: '/images/thumb-skyline.jpg',
+      query: 'Selam Building, Prince Saad bin Abdulrahman Alawal Branch Road, Al Rawabi, Riyadh Saudi Arabia',
     },
     {
+      id: 'dubai',
       city: { en: 'Dubai', ar: 'دبي' },
-      detail: { en: 'United Arab Emirates', ar: 'الإمارات العربية المتحدة' },
-      phone: '+971 4 000 0000',
+      detail: {
+        en: '601, One Lake Plaza, Cluster T, JLT, Dubai',
+        ar: '601، ون ليك بلازا، كلاستر T، أبراج بحيرات جميرا، دبي',
+      },
+      country: { en: 'United Arab Emirates', ar: 'الإمارات العربية المتحدة' },
+      phone: '+971 43997558',
       map: '/images/thumb-dubai.jpg',
+      query: 'One Lake Plaza, Cluster T, Jumeirah Lakes Towers, Dubai',
     },
   ],
-  mapTitle: { en: 'Interactive Map — GCC coverage', ar: 'خريطة تفاعلية — تغطية الخليج' },
+  mapTitle: { en: 'Live map — GCC coverage', ar: 'خريطة مباشرة — تغطية الخليج' },
   errors: {
     name: { en: 'Please enter your full name.', ar: 'يرجى إدخال الاسم الكامل.' },
     email: { en: 'Enter a valid work email.', ar: 'أدخل بريداً مهنياً صالحاً.' },
@@ -763,6 +797,12 @@ export const FAQ_PAGE = {
     en: 'Answers about Tayseer, our six solutions, onboarding, security, and how to reach the team in Riyadh and Dubai.',
     ar: 'إجابات حول تيسير وحلولنا الستة والانضمام والأمن وكيفية التواصل مع الفريق في الرياض ودبي.',
   },
+  heroCta: { en: 'Browse questions', ar: 'تصفح الأسئلة' },
+  heroSecondary: { en: 'Contact us', ar: 'تواصل معنا' },
+  heroMetaTopics: { en: 'Solutions, security & onboarding', ar: 'الحلول والأمن والانضمام' },
+  heroMetaCoverage: { en: 'Support in Riyadh & Dubai', ar: 'دعم في الرياض ودبي' },
+  heroMetaResponse: { en: 'Enterprise answers, ready now', ar: 'إجابات مؤسسية جاهزة الآن' },
+  heroBadgeKicker: { en: 'Help Centre', ar: 'مركز المساعدة' },
   searchPlaceholder: { en: 'Search questions…', ar: 'ابحث في الأسئلة…' },
   allLabel: { en: 'All', ar: 'الكل' },
   empty: { en: 'No matching questions. Try another search or category.', ar: 'لا توجد أسئلة مطابقة. جرّب بحثاً أو تصنيفاً آخر.' },
@@ -891,12 +931,18 @@ export const FAQ_PAGE = {
 } as const;
 
 export const CAREERS_PAGE = {
-  eyebrow: { en: 'Careers', ar: 'الوظائف' },
+  eyebrow: { en: 'Careers at Tayseer', ar: 'الوظائف في تيسير' },
   title: { en: 'Build the region’s banking future with us', ar: 'ابنِ مستقبل الخدمات المصرفية في المنطقة معنا' },
   lead: {
-    en: 'Tayseer is a fintech team in Riyadh and Dubai delivering core banking, AI, mobile, and managed services for banks and enterprises.',
-    ar: 'تيسير فريق تقنية مالية في الرياض ودبي يقدّم الأنظمة المصرفية الأساسية والذكاء الاصطناعي والجوال والخدمات المُدارة للبنوك والمؤسسات.',
+    en: 'Join a fintech team in Riyadh and Dubai delivering core banking, AI, mobile, and managed services for banks and enterprises.',
+    ar: 'انضم إلى فريق تقنية مالية في الرياض ودبي يقدّم الأنظمة المصرفية الأساسية والذكاء الاصطناعي والجوال والخدمات المُدارة للبنوك والمؤسسات.',
   },
+  heroCta: { en: 'Email your CV', ar: 'أرسل سيرتك بالبريد' },
+  heroSecondary: { en: 'View open roles', ar: 'عرض الوظائف المتاحة' },
+  heroMetaSince: { en: 'Established 2016', ar: 'تأسست عام 2016' },
+  heroMetaCoverage: { en: 'Teams in Riyadh & Dubai', ar: 'فرق في الرياض ودبي' },
+  heroMetaFocus: { en: 'Banking, AI & delivery', ar: 'الخدمات المصرفية والذكاء الاصطناعي' },
+  heroBadgeKicker: { en: 'Join the team', ar: 'انضم إلى الفريق' },
   whyTitle: { en: 'Why Tayseer', ar: 'لماذا تيسير' },
   whyLead: {
     en: 'The same delivery principles we use with clients guide how we work together.',

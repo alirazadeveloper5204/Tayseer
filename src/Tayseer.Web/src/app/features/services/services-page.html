@@ -1,20 +1,24 @@
-<section class="page-hero site-band">
+<section class="spotlight-hero site-band" aria-labelledby="services-hero-title">
   <div class="page-hero__glow" aria-hidden="true"></div>
-  <div class="site-container relative z-10">
-    <div class="product-hero__inner">
-      <div class="product-hero__copy">
-        <p class="type-eyebrow">{{ eyebrow() }}</p>
-        <h1 class="type-title mt-fluid-sm page-ink">{{ title() }}</h1>
-        <p class="mt-fluid-md text-fluid-base leading-relaxed page-muted">{{ lead() }}</p>
-        <div class="mt-fluid-lg flex flex-wrap gap-fluid-sm">
-          <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand">{{ label(common.requestDemo) }}</a>
-          <a [routerLink]="'/' + lang() + '/solutions'" class="page-ghost-btn">
-            {{ label(common.learnMore) }}
-          </a>
-        </div>
+  <div class="spotlight-hero__grid site-container relative z-10">
+    <div>
+      <p class="type-eyebrow">{{ eyebrow() }}</p>
+      <h1 id="services-hero-title" class="spotlight-hero__title page-ink">{{ title() }}</h1>
+      <p class="spotlight-hero__lead page-muted">{{ lead() }}</p>
+      <div class="spotlight-hero__actions">
+        <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand">{{ label(common.requestDemo) }}</a>
+        <a [routerLink]="'/' + lang() + '/solutions'" class="page-ghost-btn">{{ heroSecondary() }}</a>
       </div>
-      <div class="product-hero__media">
+      <ul class="spotlight-hero__meta">
+        <li>{{ heroMetaCore() }}</li>
+        <li>{{ heroMetaPayments() }}</li>
+        <li>{{ heroMetaOpen() }}</li>
+      </ul>
+    </div>
+    <aside aria-hidden="true">
+      <div class="spotlight-hero__media">
         <img
+          class="spotlight-hero__shot spotlight-hero__shot--main"
           src="/images/service-core-banking.jpg"
           [alt]="title()"
           width="1536"
@@ -22,8 +26,20 @@
           decoding="async"
           fetchpriority="high"
         />
+        <img
+          class="spotlight-hero__shot spotlight-hero__shot--side"
+          src="/images/service-banking-systems.jpg"
+          alt=""
+          width="900"
+          height="675"
+          decoding="async"
+        />
+        <div class="spotlight-hero__badge">
+          <span>{{ heroBadgeKicker() }}</span>
+          <strong>{{ heroMetaCore() }}</strong>
+        </div>
       </div>
-    </div>
+    </aside>
   </div>
 </section>
 

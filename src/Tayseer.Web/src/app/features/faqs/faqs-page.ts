@@ -22,6 +22,12 @@ export class FaqsPage {
   readonly title = computed(() => t(this.c.title, this.lang()));
   readonly eyebrow = computed(() => t(this.c.eyebrow, this.lang()));
   readonly lead = computed(() => t(this.c.lead, this.lang()));
+  readonly heroCta = computed(() => t(this.c.heroCta, this.lang()));
+  readonly heroSecondary = computed(() => t(this.c.heroSecondary, this.lang()));
+  readonly heroMetaTopics = computed(() => t(this.c.heroMetaTopics, this.lang()));
+  readonly heroMetaCoverage = computed(() => t(this.c.heroMetaCoverage, this.lang()));
+  readonly heroMetaResponse = computed(() => t(this.c.heroMetaResponse, this.lang()));
+  readonly heroBadgeKicker = computed(() => t(this.c.heroBadgeKicker, this.lang()));
   readonly searchPlaceholder = computed(() => t(this.c.searchPlaceholder, this.lang()));
   readonly empty = computed(() => t(this.c.empty, this.lang()));
   readonly ctaTitle = computed(() => t(this.c.ctaTitle, this.lang()));

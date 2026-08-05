@@ -55,6 +55,11 @@ export class AboutPage {
   readonly eyebrow = computed(() => t(this.c.eyebrow, this.lang()));
   readonly lead = computed(() => t(this.c.lead, this.lang()));
   readonly heroCta = computed(() => t(this.c.heroCta, this.lang()));
+  readonly heroSecondary = computed(() => t(this.c.heroSecondary, this.lang()));
+  readonly heroMetaSince = computed(() => t(this.c.heroMetaSince, this.lang()));
+  readonly heroMetaCoverage = computed(() => t(this.c.heroMetaCoverage, this.lang()));
+  readonly heroMetaFocus = computed(() => t(this.c.heroMetaFocus, this.lang()));
+  readonly heroBadgeKicker = computed(() => t(this.c.heroBadgeKicker, this.lang()));
   readonly story = computed(() => t(this.c.story, this.lang()));
   readonly whoTitle = computed(() => t(this.c.whoTitle, this.lang()));
   readonly whoLead = computed(() => t(this.c.whoLead, this.lang()));

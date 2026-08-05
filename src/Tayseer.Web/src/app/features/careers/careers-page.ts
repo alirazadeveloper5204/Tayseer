@@ -17,6 +17,12 @@ export class CareersPage {
   readonly title = computed(() => t(this.c.title, this.lang()));
   readonly eyebrow = computed(() => t(this.c.eyebrow, this.lang()));
   readonly lead = computed(() => t(this.c.lead, this.lang()));
+  readonly heroCta = computed(() => t(this.c.heroCta, this.lang()));
+  readonly heroSecondary = computed(() => t(this.c.heroSecondary, this.lang()));
+  readonly heroMetaSince = computed(() => t(this.c.heroMetaSince, this.lang()));
+  readonly heroMetaCoverage = computed(() => t(this.c.heroMetaCoverage, this.lang()));
+  readonly heroMetaFocus = computed(() => t(this.c.heroMetaFocus, this.lang()));
+  readonly heroBadgeKicker = computed(() => t(this.c.heroBadgeKicker, this.lang()));
   readonly whyTitle = computed(() => t(this.c.whyTitle, this.lang()));
   readonly whyLead = computed(() => t(this.c.whyLead, this.lang()));
   readonly rolesTitle = computed(() => t(this.c.rolesTitle, this.lang()));

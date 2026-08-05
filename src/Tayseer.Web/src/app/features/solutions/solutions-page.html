@@ -1,30 +1,45 @@
-<section class="page-hero site-band">
+<section class="spotlight-hero site-band" aria-labelledby="solutions-hero-title">
   <div class="page-hero__glow" aria-hidden="true"></div>
-  <div class="site-container relative z-10">
-    <div class="product-hero__inner">
-      <div class="product-hero__copy">
-        <p class="type-eyebrow">{{ eyebrow() }}</p>
-        <h1 class="type-title mt-fluid-sm page-ink">{{ title() }}</h1>
-        <p class="product-hero__lead mt-fluid-md text-fluid-base leading-relaxed page-muted">{{ intro() }}</p>
-        <div class="mt-fluid-lg flex flex-wrap gap-fluid-sm">
-          <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand">{{ copy().common.requestDemo }}</a>
-          <a [routerLink]="'/' + lang() + '/services'" class="page-ghost-btn">{{ copy().nav.services }}</a>
-        </div>
+  <div class="spotlight-hero__grid site-container relative z-10">
+    <div>
+      <p class="type-eyebrow">{{ eyebrow() }}</p>
+      <h1 id="solutions-hero-title" class="spotlight-hero__title page-ink">{{ title() }}</h1>
+      <p class="spotlight-hero__lead page-muted">{{ intro() }}</p>
+      <div class="spotlight-hero__actions">
+        <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand">{{ copy().common.requestDemo }}</a>
+        <a [routerLink]="'/' + lang() + '/services'" class="page-ghost-btn">{{ heroSecondary() }}</a>
       </div>
-      <div class="product-hero__visual">
-        <div class="product-hero__media">
-          <img
-            src="/images/solutions-banner.jpg"
-            [alt]="title()"
-            width="1536"
-            height="1024"
-            decoding="async"
-            fetchpriority="high"
-          />
-        </div>
-        <app-proof-cards />
-      </div>
+      <ul class="spotlight-hero__meta">
+        <li>{{ heroMetaSuite() }}</li>
+        <li>{{ heroMetaAi() }}</li>
+        <li>{{ heroMetaOps() }}</li>
+      </ul>
     </div>
+    <aside aria-hidden="true">
+      <div class="spotlight-hero__media">
+        <img
+          class="spotlight-hero__shot spotlight-hero__shot--main"
+          src="/images/solutions-banner.jpg"
+          [alt]="title()"
+          width="1536"
+          height="1024"
+          decoding="async"
+          fetchpriority="high"
+        />
+        <img
+          class="spotlight-hero__shot spotlight-hero__shot--side"
+          src="/images/service-fahim-ai.jpg"
+          alt=""
+          width="900"
+          height="675"
+          decoding="async"
+        />
+        <div class="spotlight-hero__badge">
+          <span>{{ heroBadgeKicker() }}</span>
+          <strong>{{ heroMetaSuite() }}</strong>
+        </div>
+      </div>
+    </aside>
   </div>
 </section>
 
