@@ -73,39 +73,53 @@ export class TrustStrip {
 
     const tweens: { scrollTrigger?: { kill(): void }; kill(): void }[] = [];
 
-    HOME_KPI_STATS.forEach((meta, i) => {
-      const state = { val: 0 };
-      const tween = api.to(state, {
-        val: meta.value,
-        duration: 2.2,
-        ease: 'power3.out',
-        overwrite: 'auto',
-        scrollTrigger: {
-          trigger: el,
-          start: 'top 85%',
-          once: true,
-        },
-        onUpdate: () => {
-          this.displays.update((list) => {
-            const next = [...list];
-            next[i] = formatKpi(
-              state.val,
-              meta.decimals,
-              meta.prefix,
-              meta.suffix,
-            );
-            return next;
-          });
-        },
+    const play = () => {
+      tweens.forEach((t) => t.kill());
+      tweens.length = 0;
+      this.displays.set(
+        HOME_KPI_STATS.map((s) => formatKpi(0, s.decimals, s.prefix, s.suffix)),
+      );
+
+      HOME_KPI_STATS.forEach((meta, i) => {
+        const state = { val: 0 };
+        const tween = api.to(state, {
+          val: meta.value,
+          duration: 2.2,
+          ease: 'power3.out',
+          overwrite: 'auto',
+          onUpdate: () => {
+            this.displays.update((list) => {
+              const next = [...list];
+              next[i] = formatKpi(state.val, meta.decimals, meta.prefix, meta.suffix);
+              return next;
+            });
+          },
+        });
+        tweens.push(tween);
       });
-      tweens.push(tween);
+    };
+
+    const reset = () => {
+      tweens.forEach((t) => t.kill());
+      tweens.length = 0;
+      this.displays.set(
+        HOME_KPI_STATS.map((s) => formatKpi(0, s.decimals, s.prefix, s.suffix)),
+      );
+    };
+
+    const trigger = this.motion.ScrollTrigger?.create({
+      trigger: el,
+      start: 'top 85%',
+      end: 'bottom 15%',
+      onEnter: play,
+      onEnterBack: play,
+      onLeave: reset,
+      onLeaveBack: reset,
     });
 
     this.destroyRef.onDestroy(() => {
-      tweens.forEach((t) => {
-        t.scrollTrigger?.kill();
-        t.kill();
-      });
+      trigger?.kill();
+      tweens.forEach((t) => t.kill());
     });
   }
 }

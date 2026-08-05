@@ -1,5 +1,6 @@
 import { Component, computed, inject, input, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { solutionPath } from '../../../core/content/static-services';
 import { serviceImage } from '../../../core/media/site-images';
 import { GsapService } from '../../../core/motion/gsap.service';
 import { ServiceListItemDto } from '../../../models/service.model';
@@ -22,7 +23,7 @@ export class ServiceCard {
 
   private readonly coverImg = viewChild<HTMLImageElement>('coverImg');
 
-  readonly link = computed(() => `/${this.lang()}/solutions/${this.service().slug}`);
+  readonly link = computed(() => solutionPath(this.lang(), this.service().slug));
 
   readonly isGreen = computed(() => this.service().accent === 'green');
 

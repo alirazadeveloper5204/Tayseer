@@ -1,12 +1,13 @@
-<section class="site-band bg-surface-light dark:bg-surface-dark">
-  <div class="site-container py-fluid-2xl">
+<section class="page-hero site-band">
+  <div class="page-hero__glow" aria-hidden="true"></div>
+  <div class="site-container relative z-10">
     @if (loading()) {
-      <div class="flex justify-center py-fluid-2xl">
+      <div class="flex justify-center py-fluid-xl">
         <span class="geometric-loader h-10 w-10"></span>
       </div>
     } @else if (error() || !service()) {
       <p class="type-eyebrow">{{ copy().nav.solutions }}</p>
-      <h1 class="type-title mt-fluid-sm">
+      <h1 class="type-title mt-fluid-sm page-ink">
         {{ isAr() ? 'الحل غير موجود' : 'Solution not found' }}
       </h1>
       <a [routerLink]="'/' + lang() + '/solutions'" class="btn-brand mt-fluid-lg inline-flex">
@@ -15,7 +16,7 @@
     } @else {
       @let s = service()!;
       <nav
-        class="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-fluid-xs text-ink-soft dark:text-white/50"
+        class="mb-fluid-md flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-fluid-xs page-muted"
         aria-label="Breadcrumb"
       >
         <a [routerLink]="'/' + lang()" class="shrink-0 hover:text-brand-green">{{ copy().nav.home }}</a>
@@ -24,105 +25,117 @@
           copy().nav.solutions
         }}</a>
         <span class="shrink-0" aria-hidden="true">/</span>
-        <span class="min-w-0 truncate text-brand-blue dark:text-white">{{ s.title }}</span>
+        <span class="min-w-0 truncate page-ink">{{ s.title }}</span>
       </nav>
 
-      <p class="type-eyebrow mt-fluid-md">{{ copy().nav.solutions }}</p>
-      <h1 class="type-title mt-fluid-sm">{{ s.title }}</h1>
-      <p class="type-lead mt-fluid-md max-w-3xl">{{ s.shortDescription }}</p>
-
-      @if (coverImage(); as image) {
-        <div
-          class="relative mt-fluid-lg overflow-hidden rounded-2xl border border-brand-blue/10 shadow-lg dark:border-white/10"
-        >
-          <img
-            class="aspect-[16/10] w-full object-cover sm:aspect-[21/9]"
-            [src]="image"
-            [alt]="s.title"
-            width="1400"
-            height="600"
-            decoding="async"
-          />
-          <div
-            class="pointer-events-none absolute inset-0 bg-gradient-to-tr from-brand-blue/35 via-transparent to-brand-green/20"
-            aria-hidden="true"
-          ></div>
-        </div>
-      }
-
-      <div
-        class="relative mt-fluid-md"
-      >
-        <div
-          class="flex flex-wrap gap-3 sm:flex-nowrap sm:overflow-x-auto sm:pb-1 sm:[-ms-overflow-style:none] sm:[scrollbar-width:none] sm:[&::-webkit-scrollbar]:hidden"
-        >
-          @for (thumb of relatedThumbs(); track thumb.slug) {
-            <a
-              [routerLink]="'/' + lang() + '/solutions/' + thumb.slug"
-              class="group relative h-[4.5rem] w-[calc(33.333%-0.5rem)] min-w-0 overflow-hidden rounded-xl border transition sm:h-[4.5rem] sm:w-24 sm:shrink-0"
-              [class.border-brand-green]="thumb.slug === s.slug"
-              [class.ring-2]="thumb.slug === s.slug"
-              [class.ring-brand-green/40]="thumb.slug === s.slug"
-              [class.border-brand-blue/15]="thumb.slug !== s.slug"
-              [class.dark:border-white/15]="thumb.slug !== s.slug"
-              [attr.aria-current]="thumb.slug === s.slug ? 'page' : null"
-            >
-              <img
-                class="h-full w-full object-cover transition duration-500 group-hover:scale-110"
-                [src]="thumb.src"
-                [alt]="thumb.slug"
-                width="140"
-                height="100"
-                loading="lazy"
-                decoding="async"
-              />
+      <div class="product-hero__inner">
+        <div class="product-hero__copy">
+          <p class="type-eyebrow">{{ copy().nav.solutions }}</p>
+          <h1 class="type-title mt-fluid-sm page-ink">{{ s.title }}</h1>
+          <p class="mt-fluid-md text-fluid-base leading-relaxed page-muted">{{ s.shortDescription }}</p>
+          @if (s.body) {
+            <p class="mt-fluid-sm text-fluid-sm leading-relaxed page-muted">{{ s.body }}</p>
+          }
+          <div class="mt-fluid-lg flex flex-wrap gap-fluid-sm">
+            <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand">
+              {{ s.ctaLabel || copy().common.requestDemo }}
             </a>
-          }
+            <a [routerLink]="'/' + lang() + '/solutions'" class="page-ghost-btn">
+              {{ copy().common.viewAllServices }}
+            </a>
+          </div>
         </div>
-        <div
-          class="pointer-events-none absolute inset-y-0 end-0 hidden w-8 bg-gradient-to-l from-surface-light to-transparent dark:from-surface-dark sm:block"
-          aria-hidden="true"
-        ></div>
+        @if (coverImage(); as image) {
+          <div class="product-hero__media">
+            <img [src]="image" [alt]="s.title" width="1536" height="1024" decoding="async" fetchpriority="high" />
+          </div>
+        }
       </div>
-
-      @if (s.body) {
-        <p class="mt-fluid-md max-w-3xl text-fluid-base leading-relaxed text-ink-soft dark:text-white/75">
-          {{ s.body }}
-        </p>
-      }
-
-      <div class="mt-fluid-lg flex flex-wrap gap-fluid-sm">
-        <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand">
-          {{ s.ctaLabel || copy().common.requestDemo }}
-        </a>
-        <a
-          [routerLink]="'/' + lang() + '/solutions'"
-          class="inline-flex items-center justify-center rounded-xl border border-brand-blue/25 px-fluid-md py-fluid-sm text-fluid-sm font-semibold text-brand-blue transition hover:border-brand-green hover:text-brand-green dark:border-white/20 dark:text-ink-inverse"
-        >
-          {{ copy().common.viewAllServices }}
-        </a>
-      </div>
-
-      @if (s.features.length) {
-        <h2 class="type-section mt-fluid-2xl text-brand-blue dark:text-white">
-          {{ isAr() ? 'القدرات الرئيسية' : 'Key capabilities' }}
-        </h2>
-        <div class="mt-fluid-lg grid gap-fluid-md sm:grid-cols-2">
-          @for (feature of s.features; track feature.title) {
-            <article
-              class="glass-card p-fluid-md"
-              [class.border-brand-green/25]="isGreen()"
-            >
-              <h3 class="font-display text-fluid-lg font-semibold text-brand-blue dark:text-white">
-                {{ feature.title }}
-              </h3>
-              <p class="mt-2 text-fluid-sm leading-relaxed text-ink-soft dark:text-white/70">
-                {{ feature.description }}
-              </p>
-            </article>
-          }
-        </div>
-      }
     }
   </div>
 </section>
+
+@if (service(); as s) {
+  @if (s.features.length) {
+    <section class="page-module site-band">
+      <div class="site-container py-fluid-2xl">
+        <div class="feature-head">
+          <h2 class="type-section page-ink">{{ featuresTitle() }}</h2>
+        </div>
+        <div class="zigzag">
+          @for (row of featureRows(); track row.title) {
+            <article class="zigzag__row" [class.zigzag__row--flip]="row.flip">
+              <div class="zigzag__media">
+                <img
+                  [src]="row.image"
+                  [alt]="row.title"
+                  width="960"
+                  height="600"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <div class="zigzag__copy">
+                <h3>{{ row.title }}</h3>
+                <p>{{ row.body }}</p>
+              </div>
+            </article>
+          }
+        </div>
+      </div>
+    </section>
+  }
+
+  <section class="page-module site-band">
+    <div class="site-container py-fluid-2xl">
+      <div class="value-split">
+        <div>
+          <p class="type-eyebrow">{{ splitEyebrow() }}</p>
+          <h2 class="type-section mt-fluid-sm page-ink">{{ s.title }}</h2>
+          <p class="mt-fluid-sm text-fluid-base page-muted">{{ s.shortDescription }}</p>
+          <div class="value-split__checks">
+            @for (feature of highlightFeatures(); track feature.title) {
+              <div class="value-check">
+                <span class="value-check__mark" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="12" fill="#62a945" />
+                    <path d="M7 12.25 10.4 15.7 17.1 8.6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+                <div class="value-check__copy">
+                  <strong>{{ feature.title }}</strong>
+                  <p>{{ feature.description }}</p>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+        <div class="value-split__media img-hover-box">
+          <img
+            [src]="coverImage() || '/images/solutions-banner.jpg'"
+            [alt]="s.title"
+            width="900"
+            height="720"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-module site-band">
+    <div class="site-container py-fluid-2xl">
+      <div class="elevate-cta fintech-card">
+        <h2 class="type-section page-ink">{{ elevateTitle() }}</h2>
+        <p class="text-fluid-base page-muted">{{ elevateLead() }}</p>
+        <div class="elevate-cta__actions">
+          <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand">
+            {{ s.ctaLabel || copy().common.requestDemo }}
+          </a>
+          <a [routerLink]="'/' + lang() + '/contact'" class="page-ghost-btn">{{ copy().common.talkToUs }}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+}

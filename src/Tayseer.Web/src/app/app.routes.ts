@@ -13,6 +13,8 @@ import { AboutPage } from './features/about/about-page';
 import { CaseStudiesPage } from './features/case-studies/case-studies-page';
 import { CaseStudyDetailPage } from './features/case-studies/case-study-detail-page';
 import { ContactPage } from './features/contact/contact-page';
+import { FaqsPage } from './features/faqs/faqs-page';
+import { CareersPage } from './features/careers/careers-page';
 import { PlaceholderPage } from './shared/ui/placeholder-page/placeholder-page';
 import { AdminShell } from './features/admin/admin-shell/admin-shell';
 import { AdminLogin } from './features/admin/admin-login/admin-login';
@@ -70,16 +72,9 @@ export const routes: Routes = [
       },
       { path: 'contact', component: ContactPage },
       { path: 'connect', component: ContactPage },
-      {
-        path: 'blog',
-        component: PlaceholderPage,
-        data: { titleEn: 'Blogs and Resources', titleAr: 'المدونة والموارد' },
-      },
-      {
-        path: 'careers',
-        component: PlaceholderPage,
-        data: { titleEn: 'Careers', titleAr: 'الوظائف' },
-      },
+      { path: 'faqs', component: FaqsPage },
+      { path: 'blog', redirectTo: 'faqs', pathMatch: 'full' },
+      { path: 'careers', component: CareersPage },
       {
         path: 'legal/privacy',
         component: PlaceholderPage,

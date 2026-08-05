@@ -1,28 +1,117 @@
 <section class="page-hero site-band">
   <div class="page-hero__glow" aria-hidden="true"></div>
   <div class="site-container relative z-10">
-    <div class="page-hero__panel">
-      <p class="type-eyebrow">{{ copy().nav.solutions }}</p>
-      <h1 class="type-title mt-fluid-sm page-ink">{{ title() }}</h1>
-      <p class="mt-fluid-md text-fluid-base leading-relaxed page-muted">{{ intro() }}</p>
+    <div class="product-hero__inner">
+      <div class="product-hero__copy">
+        <p class="type-eyebrow">{{ eyebrow() }}</p>
+        <h1 class="type-title mt-fluid-sm page-ink">{{ title() }}</h1>
+        <p class="product-hero__lead mt-fluid-md text-fluid-base leading-relaxed page-muted">{{ intro() }}</p>
+        <div class="mt-fluid-lg flex flex-wrap gap-fluid-sm">
+          <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand">{{ copy().common.requestDemo }}</a>
+          <a [routerLink]="'/' + lang() + '/services'" class="page-ghost-btn">{{ copy().nav.services }}</a>
+        </div>
+      </div>
+      <div class="product-hero__visual">
+        <div class="product-hero__media">
+          <img
+            src="/images/solutions-banner.jpg"
+            [alt]="title()"
+            width="1536"
+            height="1024"
+            decoding="async"
+            fetchpriority="high"
+          />
+        </div>
+        <app-proof-cards />
+      </div>
     </div>
   </div>
 </section>
 
 <section class="page-module site-band">
   <div class="site-container py-fluid-2xl">
+    <div class="feature-head">
+      <h2 class="type-section page-ink">{{ featuresTitle() }}</h2>
+      <p class="text-fluid-base page-muted">{{ featuresLead() }}</p>
+    </div>
+    <div class="zigzag">
+      @for (row of featureRows(); track row.id) {
+        <article class="zigzag__row" [class.zigzag__row--flip]="row.flip">
+          <div class="zigzag__media">
+            <img
+              [src]="row.image"
+              [alt]="row.title"
+              width="1536"
+              height="1024"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <div class="zigzag__copy">
+            <h3>{{ row.title }}</h3>
+            <p>{{ row.body }}</p>
+          </div>
+        </article>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="page-module site-band">
+  <div class="site-container py-fluid-2xl">
+    <div class="feature-head">
+      <h2 class="type-section page-ink">{{ worldsTitle() }}</h2>
+      <p class="text-fluid-base page-muted">{{ worldsLead() }}</p>
+    </div>
+    <div class="world-path">
+      @for (world of c.worlds; track world.id; let last = $last) {
+        <app-world-card [icon]="world.id" [title]="label(world.title)" [body]="label(world.body)" />
+        @if (!last) {
+          <span class="world-path__join" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+        }
+      }
+    </div>
+  </div>
+</section>
+
+<section class="page-module site-band">
+  <div class="site-container py-fluid-2xl">
+    <div class="feature-head">
+      <h2 class="type-section page-ink">{{ catalogTitle() }}</h2>
+      <p class="text-fluid-base page-muted">{{ catalogLead() }}</p>
+    </div>
     @if (loading()) {
       <div class="flex justify-center py-fluid-xl">
         <span class="geometric-loader h-10 w-10"></span>
       </div>
     } @else if (error()) {
-      <p class="text-fluid-sm page-muted">
+      <p class="mt-fluid-lg text-center text-fluid-sm page-muted">
         {{ isAr() ? 'تعذر تحميل الحلول حالياً.' : 'Solutions are temporarily unavailable.' }}
       </p>
     } @else {
-      <div class="fluid-grid">
-        @for (service of services(); track service.slug) {
-          <app-service-card [service]="service" [lang]="lang()" [ctaLabel]="copy().common.readMore" />
+      <div class="zigzag">
+        @for (row of catalogRows(); track row.slug) {
+          <article class="zigzag__row" [class.zigzag__row--flip]="row.flip">
+            <div class="zigzag__media">
+              <img
+                [src]="row.image"
+                [alt]="row.title"
+                width="960"
+                height="600"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <div class="zigzag__copy">
+              <h3>{{ row.title }}</h3>
+              <p>{{ row.shortDescription }}</p>
+              <a [routerLink]="row.link" class="btn-brand">{{ copy().common.readMore }}</a>
+            </div>
+          </article>
         }
       </div>
     }
@@ -31,21 +120,51 @@
 
 <section class="page-module site-band">
   <div class="site-container py-fluid-2xl">
-    <div class="fintech-card p-fluid-lg">
-      <h2 class="font-display text-fluid-xl font-semibold page-ink">
-        {{ benefitsTitle() }}
-      </h2>
-      <ul class="mt-fluid-md grid gap-3 sm:grid-cols-2">
-        @for (item of benefits(); track item) {
-          <li class="flex items-start gap-2 text-fluid-sm page-muted">
-            <span class="mt-1.5 size-1.5 shrink-0 rounded-full bg-brand-green" aria-hidden="true"></span>
-            {{ item }}
-          </li>
-        }
-      </ul>
-      <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand mt-fluid-lg inline-flex">
-        {{ copy().common.talkToUs }}
-      </a>
+    <div class="value-split">
+      <div>
+        <p class="type-eyebrow">{{ splitEyebrow() }}</p>
+        <h2 class="type-section mt-fluid-sm page-ink">{{ splitTitle() }}</h2>
+        <p class="mt-fluid-sm text-fluid-base page-muted">{{ splitLead() }}</p>
+        <div class="value-split__checks">
+          @for (item of c.splitItems; track label(item.title)) {
+            <div class="value-check">
+              <span class="value-check__mark" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="12" fill="#62a945" />
+                  <path d="M7 12.25 10.4 15.7 17.1 8.6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+              <div class="value-check__copy">
+                <strong>{{ label(item.title) }}</strong>
+                <p>{{ label(item.body) }}</p>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+      <div class="value-split__media img-hover-box">
+        <img
+          src="/images/gallery-workspace.jpg"
+          [alt]="splitTitle()"
+          width="900"
+          height="720"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page-module site-band">
+  <div class="site-container py-fluid-2xl">
+    <div class="elevate-cta fintech-card">
+      <h2 class="type-section page-ink">{{ elevateTitle() }}</h2>
+      <p class="text-fluid-base page-muted">{{ elevateLead() }}</p>
+      <div class="elevate-cta__actions">
+        <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand">{{ copy().common.requestDemo }}</a>
+        <a [routerLink]="'/' + lang() + '/contact'" class="page-ghost-btn">{{ copy().common.talkToUs }}</a>
+      </div>
     </div>
   </div>
 </section>

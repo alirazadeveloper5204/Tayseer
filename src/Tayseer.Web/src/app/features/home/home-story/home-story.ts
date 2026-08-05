@@ -8,69 +8,83 @@ import {
   ElementRef,
   viewChild,
   DestroyRef,
+  NgZone,
   PLATFORM_ID,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { LocaleService } from '../../../core/i18n/locale.service';
 import { UiCopyService } from '../../../core/i18n/ui-copy.service';
 import {
   HOME_DEPLOY,
+  HOME_KPI_STATS,
   HOME_MANTRA,
-  HOME_STATS,
   HOME_TESTIMONIALS,
-  HOME_VALUES,
+  HOME_WHY_FEATURES,
 } from '../../../core/i18n/ui-copy';
-import { ABOUT_COLLAGE, CLIENT_GALLERIES } from '../../../core/media/site-images';
-import { fadeInUp, slideFade } from '../../../core/motion';
+import { CLIENT_GALLERIES } from '../../../core/media/site-images';
+import { GsapService } from '../../../core/motion/gsap.service';
+import type BsCarousel from 'bootstrap/js/dist/carousel';
+import { SITE_SLIDER } from '../../../shared/ui/site-carousel/site-slider';
+
+function formatKpi(value: number, decimals: number, prefix: string, suffix: string): string {
+  const body = decimals > 0 ? value.toFixed(decimals) : String(Math.round(value));
+  return `${prefix}${body}${suffix}`;
+}
 
 @Component({
   selector: 'app-home-story',
-  imports: [RouterLink],
   templateUrl: './home-story.html',
   styleUrl: './home-story.css',
   encapsulation: ViewEncapsulation.None,
-  animations: [fadeInUp, slideFade],
 })
 export class HomeStory {
   private readonly locale = inject(LocaleService);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly zone = inject(NgZone);
+  private readonly motion = inject(GsapService);
   readonly copy = inject(UiCopyService).copy;
-  readonly lang = computed(() => this.locale.lang());
   readonly isAr = computed(() => this.locale.lang() === 'ar');
 
-  readonly aboutCollage = ABOUT_COLLAGE;
+  private readonly whyChoosePanel = viewChild<ElementRef<HTMLElement>>('whyChoosePanel');
+  private readonly clientsCarousel = viewChild<ElementRef<HTMLElement>>('clientsCarousel');
+  private readonly mantraSection = viewChild<ElementRef<HTMLElement>>('mantraSection');
+  private readonly pioneerSection = viewChild<ElementRef<HTMLElement>>('pioneerSection');
 
-  private readonly aboutVisual = viewChild<ElementRef<HTMLElement>>('aboutVisual');
-  private readonly quoteVisual = viewChild<ElementRef<HTMLElement>>('quoteVisual');
-
-  readonly aboutInView = signal(false);
-  readonly quoteInView = signal(false);
-
-  readonly stats = computed(() =>
-    HOME_STATS.map((s, i) => ({
-      id: i,
-      value: s.value,
-      suffix: s.suffix,
-      label: this.isAr() ? s.labelAr : s.labelEn,
-    })),
+  readonly testimonialIndex = signal(0);
+  readonly kpiDisplays = signal(
+    HOME_KPI_STATS.map((s) => formatKpi(0, s.decimals, s.prefix, s.suffix)),
   );
+
+  readonly kpiStats = computed(() => {
+    const displays = this.kpiDisplays();
+    return HOME_KPI_STATS.map((s, i) => ({
+      id: i,
+      label: this.isAr() ? s.labelAr : s.labelEn,
+      display: displays[i] ?? formatKpi(0, s.decimals, s.prefix, s.suffix),
+    }));
+  });
 
   readonly testimonials = computed(() =>
-    HOME_TESTIMONIALS.map((t, i) => ({
-      id: i,
-      name: t.name,
-      role: this.isAr() ? t.roleAr : t.roleEn,
-      quote: this.isAr() ? t.quoteAr : t.quoteEn,
-      gallery: CLIENT_GALLERIES[i % CLIENT_GALLERIES.length],
-    })),
+    HOME_TESTIMONIALS.map((t, i) => {
+      const gallery = CLIENT_GALLERIES[i % CLIENT_GALLERIES.length];
+      return {
+        id: i,
+        name: t.name,
+        role: this.isAr() ? t.roleAr : t.roleEn,
+        quote: this.isAr() ? t.quoteAr : t.quoteEn,
+        portrait: gallery.main,
+        avatar: gallery.thumbs[0] ?? gallery.main,
+      };
+    }),
   );
 
-  readonly values = computed(() =>
-    HOME_VALUES.map((v, i) => ({
+  readonly whyFeatures = computed(() =>
+    HOME_WHY_FEATURES.map((item, i) => ({
       id: i,
-      title: this.isAr() ? v.titleAr : v.titleEn,
+      icon: item.icon,
+      title: this.isAr() ? item.titleAr : item.titleEn,
+      body: this.isAr() ? item.bodyAr : item.bodyEn,
     })),
   );
 
@@ -96,19 +110,10 @@ export class HomeStory {
     })),
   );
 
-  readonly testimonialIndex = signal(0);
-  /** Slide direction for enter animations. */
-  readonly slideDir = signal<'next' | 'prev'>('next');
-  readonly slideBusy = signal(false);
-
-  readonly activeTestimonial = computed(() => {
-    const list = this.testimonials();
-    return list[this.testimonialIndex() % list.length];
-  });
-
-  readonly activeGallery = computed(() => this.activeTestimonial().gallery);
-
-  private autoplayId: ReturnType<typeof setInterval> | null = null;
+  private carousel: BsCarousel | null = null;
+  private testimonialTimer: ReturnType<typeof setTimeout> | null = null;
+  private testimonialPaused = false;
+  private counterTweens: { kill(): void }[] = [];
 
   constructor() {
     afterNextRender(() => {
@@ -116,95 +121,196 @@ export class HomeStory {
         return;
       }
 
-      const observers: IntersectionObserver[] = [];
-      const watch = (
-        el: HTMLElement | undefined,
-        setVisible: (value: boolean) => void,
-      ) => {
-        if (!el) {
-          return;
-        }
-        const io = new IntersectionObserver(
-          ([entry]) => {
-            if (entry?.isIntersecting) {
-              setVisible(true);
-              io.unobserve(el);
-            }
-          },
-          { threshold: 0.35 },
-        );
-        io.observe(el);
-        observers.push(io);
-      };
-
-      watch(this.aboutVisual()?.nativeElement, (v) => this.aboutInView.set(v));
-      watch(this.quoteVisual()?.nativeElement, (v) => this.quoteInView.set(v));
-
-      this.startAutoplay();
+      this.watchWhyChooseCounters();
+      this.watchSectionReveal(this.mantraSection()?.nativeElement);
+      this.watchSectionReveal(this.pioneerSection()?.nativeElement);
+      void this.initCarousel();
 
       this.destroyRef.onDestroy(() => {
-        observers.forEach((o) => o.disconnect());
-        this.stopAutoplay();
+        this.killCounters();
+        this.clearTestimonialTimer();
+        this.carousel?.dispose();
+        this.carousel = null;
       });
     });
   }
 
   prevTestimonial(): void {
-    this.goToRelative(-1);
+    this.carousel?.prev();
+    this.restartTestimonialTimer();
   }
 
   nextTestimonial(): void {
-    this.goToRelative(1);
+    this.carousel?.next();
+    this.restartTestimonialTimer();
   }
 
   goToTestimonial(index: number): void {
-    const len = this.testimonials().length;
-    const next = ((index % len) + len) % len;
-    if (next === this.testimonialIndex() || this.slideBusy()) {
+    this.carousel?.to(index);
+    this.restartTestimonialTimer();
+  }
+
+  pauseTestimonials(): void {
+    this.testimonialPaused = true;
+    this.clearTestimonialTimer();
+  }
+
+  resumeTestimonials(): void {
+    this.testimonialPaused = false;
+    this.restartTestimonialTimer();
+  }
+
+  private watchWhyChooseCounters(): void {
+    const panel = this.whyChoosePanel()?.nativeElement;
+    if (!panel) {
       return;
     }
-    this.slideDir.set(next > this.testimonialIndex() ? 'next' : 'prev');
-    this.applySlide(next);
+
+    let visible = false;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          if (!visible) {
+            visible = true;
+            this.playWhyCounters();
+          }
+          return;
+        }
+        visible = false;
+        this.resetWhyCounters();
+      },
+      { threshold: 0.35 },
+    );
+    io.observe(panel);
+    this.destroyRef.onDestroy(() => io.disconnect());
   }
 
-  private goToRelative(step: number): void {
-    if (this.slideBusy()) {
+  private resetWhyCounters(): void {
+    this.killCounters();
+    this.zone.run(() => {
+      this.kpiDisplays.set(HOME_KPI_STATS.map((s) => formatKpi(0, s.decimals, s.prefix, s.suffix)));
+    });
+  }
+
+  private playWhyCounters(): void {
+    const api = this.motion.gsap;
+    this.killCounters();
+    this.zone.run(() => {
+      this.kpiDisplays.set(HOME_KPI_STATS.map((s) => formatKpi(0, s.decimals, s.prefix, s.suffix)));
+    });
+
+    if (!api || this.motion.prefersReducedMotion()) {
+      this.zone.run(() => {
+        this.kpiDisplays.set(
+          HOME_KPI_STATS.map((s) => formatKpi(s.value, s.decimals, s.prefix, s.suffix)),
+        );
+      });
       return;
     }
-    const len = this.testimonials().length;
-    this.slideDir.set(step > 0 ? 'next' : 'prev');
-    this.applySlide((this.testimonialIndex() + step + len) % len);
+
+    HOME_KPI_STATS.forEach((meta, i) => {
+      const state = { val: 0 };
+      const tween = api.to(state, {
+        val: meta.value,
+        duration: 1.8,
+        ease: 'power3.out',
+        overwrite: 'auto',
+        onUpdate: () => {
+          this.zone.run(() => {
+            this.kpiDisplays.update((list) => {
+              const next = [...list];
+              next[i] = formatKpi(state.val, meta.decimals, meta.prefix, meta.suffix);
+              return next;
+            });
+          });
+        },
+      });
+      this.counterTweens.push(tween);
+    });
   }
 
-  private applySlide(index: number): void {
-    this.slideBusy.set(true);
-    this.testimonialIndex.set(index);
-    this.restartAutoplay();
-    // Match richer CSS transition (~780ms).
-    window.setTimeout(() => this.slideBusy.set(false), 780);
+  private watchSectionReveal(section?: HTMLElement): void {
+    if (!section) {
+      return;
+    }
+    if (this.motion.prefersReducedMotion()) {
+      section.classList.add('is-revealed');
+      return;
+    }
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          section.classList.add('is-revealed');
+          io.disconnect();
+        }
+      },
+      { threshold: 0.2 },
+    );
+    io.observe(section);
+    this.destroyRef.onDestroy(() => io.disconnect());
   }
 
-  private startAutoplay(): void {
-    this.stopAutoplay();
-    this.autoplayId = setInterval(() => {
-      if (!this.quoteInView() || this.slideBusy()) {
+  private killCounters(): void {
+    this.counterTweens.forEach((tween) => tween.kill());
+    this.counterTweens = [];
+  }
+
+  private async initCarousel(): Promise<void> {
+    const el = this.clientsCarousel()?.nativeElement;
+    if (!el) {
+      return;
+    }
+
+    const mod = await import('bootstrap/js/dist/carousel');
+    const CarouselCtor = (mod as { default?: typeof BsCarousel }).default ?? (mod as unknown as typeof BsCarousel);
+    if (typeof CarouselCtor !== 'function' || !this.clientsCarousel()?.nativeElement) {
+      return;
+    }
+
+    el.querySelectorAll('.carousel-item').forEach((item, index) => {
+      item.classList.toggle('active', index === 0);
+    });
+
+    this.carousel = new CarouselCtor(el, {
+      interval: false,
+      wrap: true,
+      ride: false,
+      pause: false,
+      touch: true,
+      keyboard: true,
+    });
+    this.zone.run(() => this.testimonialIndex.set(0));
+
+    const syncIndex = (event: Event) => {
+      const nextIndex = (event as unknown as BsCarousel.Event).to;
+      if (typeof nextIndex !== 'number') {
         return;
       }
-      this.nextTestimonial();
-    }, 7000);
+      this.zone.run(() => this.testimonialIndex.set(nextIndex));
+    };
+
+    el.addEventListener('slid.bs.carousel', syncIndex);
+    this.destroyRef.onDestroy(() => el.removeEventListener('slid.bs.carousel', syncIndex));
+    this.restartTestimonialTimer();
   }
 
-  private restartAutoplay(): void {
-    if (!isPlatformBrowser(this.platformId)) {
+  private restartTestimonialTimer(): void {
+    this.clearTestimonialTimer();
+    if (!isPlatformBrowser(this.platformId) || this.testimonialPaused || !this.carousel) {
       return;
     }
-    this.startAutoplay();
+    this.testimonialTimer = setTimeout(() => {
+      this.zone.run(() => {
+        this.carousel?.next();
+        this.restartTestimonialTimer();
+      });
+    }, SITE_SLIDER.intervalMs);
   }
 
-  private stopAutoplay(): void {
-    if (this.autoplayId !== null) {
-      clearInterval(this.autoplayId);
-      this.autoplayId = null;
+  private clearTestimonialTimer(): void {
+    if (this.testimonialTimer) {
+      clearTimeout(this.testimonialTimer);
+      this.testimonialTimer = null;
     }
   }
 }

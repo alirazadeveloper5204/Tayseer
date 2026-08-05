@@ -1,4 +1,4 @@
-/** Local professional imagery under /public/images (Unsplash, free license). */
+/** Site imagery under /public/images — high-res branded + editorial assets. */
 export const SITE_IMAGES = {
   hero: '/images/hero-fintech.jpg',
   about: '/images/about-main.jpg',

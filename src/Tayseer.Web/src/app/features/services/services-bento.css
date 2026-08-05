@@ -28,11 +28,11 @@
   color: #042941;
 }
 
-html.dark .services-bento__title {
-  color: #f7fbff;
+:host-context(html.dark) .services-bento__title {
+  color: #ffffff;
 }
 
-html[dir='rtl'] .services-bento__title {
+:host-context(html[dir='rtl']) .services-bento__title {
   font-family: 'IBM Plex Sans Arabic', 'Plus Jakarta Sans', system-ui, sans-serif;
   letter-spacing: 0;
 }
@@ -43,14 +43,14 @@ html[dir='rtl'] .services-bento__title {
   font-size: clamp(0.95rem, 0.9rem + 0.25vw, 1.05rem);
   line-height: 1.7;
   font-weight: 500;
-  color: #1a2332;
+  color: #475569;
 }
 
-html.dark .services-bento__lead {
-  color: rgba(232, 238, 245, 0.82);
+:host-context(html.dark) .services-bento__lead {
+  color: rgba(232, 238, 245, 0.88);
 }
 
-html[dir='rtl'] .services-bento__lead {
+:host-context(html[dir='rtl']) .services-bento__lead {
   font-family: 'IBM Plex Sans Arabic', 'Plus Jakarta Sans', system-ui, sans-serif;
 }
 
@@ -62,7 +62,7 @@ html[dir='rtl'] .services-bento__lead {
   transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-html[dir='rtl'] .services-bento__cta svg {
+:host-context(html[dir='rtl']) .services-bento__cta svg {
   transform: rotate(180deg);
 }
 
@@ -70,27 +70,8 @@ html[dir='rtl'] .services-bento__cta svg {
   transform: translateX(4px);
 }
 
-html[dir='rtl'] .services-bento__cta:hover svg {
+:host-context(html[dir='rtl']) .services-bento__cta:hover svg {
   transform: rotate(180deg) translateX(4px);
-}
-
-/* Balanced 1 → 2 → 3 column grid — no orphan cards */
-.services-bento__grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: clamp(1rem, 0.75rem + 1vw, 1.35rem);
-}
-
-@media (min-width: 640px) {
-  .services-bento__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 1024px) {
-  .services-bento__grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
 }
 
 /* Card polish scoped to this section */
@@ -100,7 +81,7 @@ html[dir='rtl'] .services-bento__cta:hover svg {
 
 .services-bento .service-card {
   height: 100%;
-  border-color: rgba(0, 242, 254, 0.14);
+  border-color: rgba(13, 90, 140, 0.14);
   background: rgba(255, 255, 255, 0.78);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -110,7 +91,23 @@ html[dir='rtl'] .services-bento__cta:hover svg {
     border-color 0.35s ease;
 }
 
-html.dark .services-bento .service-card {
+.services-bento .service-card h3 {
+  display: -webkit-box;
+  min-height: 2.55em;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.services-bento .service-card p {
+  display: -webkit-box;
+  min-height: 4.8em;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+:host-context(html.dark) .services-bento .service-card {
   border-color: rgba(255, 255, 255, 0.12);
   background: rgba(15, 23, 42, 0.72);
   backdrop-filter: blur(16px);
@@ -118,12 +115,12 @@ html.dark .services-bento .service-card {
 }
 
 .services-bento .service-card:hover {
-  transform: translateY(-6px) scale(1.015);
-  border-color: rgba(0, 242, 254, 0.4);
-  box-shadow: 0 20px 40px -15px rgba(0, 242, 254, 0.15);
+  transform: translateY(-4px);
+  border-color: rgba(13, 90, 140, 0.35);
+  box-shadow: 0 20px 40px -15px rgba(13, 90, 140, 0.18);
 }
 
-html.dark .services-bento .service-card:hover {
+:host-context(html.dark) .services-bento .service-card:hover {
   box-shadow: 0 20px 40px -15px rgba(0, 242, 254, 0.15);
 }
 

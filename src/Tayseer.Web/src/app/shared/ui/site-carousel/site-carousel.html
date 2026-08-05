@@ -1,0 +1,55 @@
+<div
+  class="site-carousel"
+  role="region"
+  [attr.aria-labelledby]="labelledBy()"
+  [attr.aria-label]="label()"
+  (mouseenter)="pause()"
+  (mouseleave)="resume()"
+>
+  <div
+    #viewport
+    class="site-carousel__viewport"
+    tabindex="0"
+    (keydown)="onKey($event)"
+    (pointerdown)="onPointerDown($event)"
+    (pointermove)="onPointerMove($event)"
+    (pointerup)="onPointerUp($event)"
+    (pointercancel)="onPointerUp($event)"
+  >
+    <div
+      class="site-carousel__track"
+      [class.is-dragging]="dragging() || jumping()"
+      [style.transform]="trackTransform()"
+    >
+      <ng-content />
+    </div>
+  </div>
+
+  <div class="site-carousel__controls">
+    <button type="button" class="site-carousel__nav" (click)="prev()" [attr.aria-label]="previousLabel()">
+      <svg class="size-4 rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <path d="M15 6l-6 6 6 6" />
+      </svg>
+    </button>
+
+    <div class="site-carousel__dots" role="tablist">
+      @for (dot of dots(); track dot) {
+        <button
+          type="button"
+          class="site-carousel__dot"
+          role="tab"
+          [class.is-active]="activeDot() === dot"
+          [attr.aria-selected]="activeDot() === dot"
+          [attr.aria-label]="'Slide ' + (dot + 1)"
+          (click)="goToDot(dot)"
+        ></button>
+      }
+    </div>
+
+    <button type="button" class="site-carousel__nav" (click)="next()" [attr.aria-label]="nextLabel()">
+      <svg class="size-4 rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <path d="M9 6l6 6-6 6" />
+      </svg>
+    </button>
+  </div>
+</div>

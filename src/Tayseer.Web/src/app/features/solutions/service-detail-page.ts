@@ -5,7 +5,8 @@ import { catchError, combineLatest, map, of, startWith, switchMap } from 'rxjs';
 import { ContentApiService } from '../../core/api/content-api.service';
 import { LocaleService } from '../../core/i18n/locale.service';
 import { UiCopyService } from '../../core/i18n/ui-copy.service';
-import { serviceImage, SERVICE_IMAGE_ENTRIES } from '../../core/media/site-images';
+import { SOLUTIONS_PAGE, t, type PageLocale } from '../../core/content/page-content';
+import { serviceImage } from '../../core/media/site-images';
 import { ServiceDto } from '../../models/service.model';
 
 @Component({
@@ -18,8 +19,9 @@ export class ServiceDetailPage {
   private readonly api = inject(ContentApiService);
   private readonly locale = inject(LocaleService);
   readonly copy = inject(UiCopyService).copy;
+  readonly c = SOLUTIONS_PAGE;
 
-  readonly lang = computed(() => this.locale.lang());
+  readonly lang = computed(() => this.locale.lang() as PageLocale);
   readonly isAr = computed(() => this.locale.lang() === 'ar');
 
   private readonly load = toSignal(
@@ -45,12 +47,45 @@ export class ServiceDetailPage {
   readonly error = computed(() => this.load().status === 'error');
   readonly service = computed(() => this.load().service);
 
-  readonly isGreen = computed(() => this.service()?.accent === 'green');
-
   readonly coverImage = computed(() => {
     const slug = this.service()?.slug;
     return slug ? serviceImage(slug) : null;
   });
 
-  readonly relatedThumbs = computed(() => SERVICE_IMAGE_ENTRIES);
+  readonly featuresTitle = computed(() => t(this.c.detailFeaturesTitle, this.lang()));
+  readonly splitEyebrow = computed(() => t(this.c.detailSplitEyebrow, this.lang()));
+  readonly elevateTitle = computed(() => t(this.c.detailElevateTitle, this.lang()));
+  readonly elevateLead = computed(() => t(this.c.detailElevateLead, this.lang()));
+
+  readonly highlightFeatures = computed(() => {
+    const features = this.service()?.features ?? [];
+    if (features.length) {
+      return features.slice(0, 4);
+    }
+    const fallback = this.service()?.shortDescription;
+    return fallback
+      ? [{ title: this.service()?.title ?? '', description: fallback, sortOrder: 0 }]
+      : [];
+  });
+
+  readonly featureRows = computed(() => {
+    const service = this.service();
+    if (!service?.features.length) {
+      return [];
+    }
+    const images = [
+      serviceImage(service.slug),
+      '/images/gallery-workspace.jpg',
+      '/images/gallery-meeting.jpg',
+      '/images/gallery-analytics.jpg',
+      '/images/gallery-mobile.jpg',
+      '/images/thumb-dubai.jpg',
+    ];
+    return service.features.map((feature, index) => ({
+      title: feature.title,
+      body: feature.description,
+      image: images[index % images.length],
+      flip: index % 2 === 1,
+    }));
+  });
 }

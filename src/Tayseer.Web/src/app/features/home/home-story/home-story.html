@@ -1,250 +1,179 @@
-<!-- About teaser -->
-<section id="about" class="about-band site-band">
-  <div class="site-container grid items-center gap-fluid-xl py-fluid-2xl lg:grid-cols-2 lg:gap-x-fluid-2xl">
-    <div class="about-band__copy max-w-xl">
-      <h2 class="type-section text-brand-blue dark:text-white">{{ copy().home.aboutTitle }}</h2>
-      <p class="mt-fluid-sm text-fluid-lg font-semibold text-ink dark:text-ink-inverse">
-        {{ copy().home.aboutLead }}
-      </p>
-      <p class="mt-fluid-md text-fluid-base leading-relaxed text-ink-soft dark:text-white/70">
-        {{ copy().home.aboutBody }}
-      </p>
-      <a [routerLink]="'/' + lang() + '/about'" class="btn-brand mt-fluid-lg inline-flex">
-        {{ copy().common.readMore }}
-      </a>
-    </div>
+<!-- Why Choose Tayseer -->
+<section id="why-choose" class="why-choose site-band">
+  <div class="site-container py-fluid-2xl">
+    <h2 class="type-section text-center text-brand-blue dark:text-white">
+      {{ copy().home.whyChooseTitle }}
+    </h2>
+    <p class="why-choose__subtitle">{{ copy().home.whyChooseSubtitle }}</p>
 
-    <div
-      #aboutVisual
-      class="about-media home-story__about-visual relative mx-auto w-full max-w-xl lg:max-w-none"
-      [class.is-inview]="aboutInView()"
-    >
-      <div class="about-media__glow" aria-hidden="true"></div>
-
-      <figure class="about-media__hero media-zoom">
-        <img
-          class="media-zoom__img"
-          [src]="aboutCollage.main"
-          [alt]="copy().home.aboutTitle"
-          width="1800"
-          height="1350"
-          sizes="(max-width: 1024px) 92vw, 34rem"
-          loading="lazy"
-          decoding="async"
-        />
-        <span class="about-media__accent" aria-hidden="true"></span>
-      </figure>
-
-      <div class="about-media__thumbs">
-        @for (thumb of aboutCollage.thumbs; track thumb; let i = $index) {
-          <figure class="about-media__thumb media-zoom" [style.--i]="i">
-            <img
-              class="media-zoom__img"
-              [src]="thumb"
-              alt=""
-              width="900"
-              height="675"
-              loading="lazy"
-              decoding="async"
-            />
-          </figure>
+    <div #whyChoosePanel class="why-choose__panel">
+      <div class="why-choose__kpis" [attr.aria-label]="copy().home.statsTitle">
+        @for (stat of kpiStats(); track stat.id; let last = $last) {
+          <div class="why-choose__kpi" [class.why-choose__kpi--last]="last">
+            <p class="why-choose__kpi-value financial-number">{{ stat.display }}</p>
+            <p class="why-choose__kpi-label">{{ stat.label }}</p>
+          </div>
         }
       </div>
-    </div>
-  </div>
-</section>
 
-<!-- Stats -->
-<section class="site-band">
-  <div class="site-container py-fluid-2xl">
-    <h2 class="type-section text-center text-brand-blue dark:text-white">{{ copy().home.statsTitle }}</h2>
-    <div
-      class="mt-fluid-lg grid grid-cols-2 gap-fluid-md rounded-2xl border border-brand-blue/10 bg-white/80 p-fluid-lg backdrop-blur-md dark:border-white/10 dark:bg-surface-dark-elevated/70 sm:grid-cols-4"
-    >
-      @for (stat of stats(); track stat.id) {
-        <div class="text-center">
-          <p class="font-display financial-number text-fluid-3xl font-bold text-ink dark:text-white">
-            {{ stat.value }}{{ stat.suffix }}
-          </p>
-          <p class="mt-1 text-fluid-sm font-medium text-brand-blue dark:text-brand-green">
-            {{ stat.label }}
-          </p>
-        </div>
-      }
+      <div class="why-choose__grid">
+        @for (item of whyFeatures(); track item.id) {
+          <article class="why-choose__card">
+            <div class="why-choose__icon" aria-hidden="true">
+              @switch (item.icon) {
+                @case ('experience') {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                    <path d="M13 3 4 14h7l-1 7 9-11h-7l1-7Z" stroke-linejoin="round" />
+                  </svg>
+                }
+                @case ('data') {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                    <path d="M4 19V9M10 19V5M16 19v-7M22 19V8" stroke-linecap="round" />
+                  </svg>
+                }
+                @case ('security') {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                    <path d="M12 3 5 6.5v5.2c0 4.6 3.2 8.8 7 9.8 3.8-1 7-5.2 7-9.8V6.5L12 3Z" stroke-linejoin="round" />
+                    <path d="m9 12 2 2 4-4" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                }
+                @case ('operations') {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                    <rect x="3" y="4" width="18" height="6" rx="1.5" />
+                    <rect x="3" y="14" width="18" height="6" rx="1.5" />
+                  </svg>
+                }
+                @case ('personal') {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                    <circle cx="12" cy="8" r="3.2" />
+                    <path d="M5 19c.8-3.2 3.4-5 7-5s6.2 1.8 7 5" stroke-linecap="round" />
+                  </svg>
+                }
+                @case ('support') {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                    <path d="M4 12a8 8 0 0 1 16 0v5a2 2 0 0 1-2 2h-2v-7h4M4 12v5a2 2 0 0 0 2 2h2v-7H4" stroke-linejoin="round" />
+                  </svg>
+                }
+              }
+            </div>
+            <h3 class="why-choose__card-title">{{ item.title }}</h3>
+            <p class="why-choose__card-body">{{ item.body }}</p>
+          </article>
+        }
+      </div>
     </div>
   </div>
 </section>
 
 <!-- Testimonials -->
 <section id="clients" class="clients-band home-story__testimonials site-band">
-  <div class="site-container grid items-center gap-fluid-xl py-fluid-2xl lg:grid-cols-2 lg:gap-x-fluid-2xl">
+  <div class="site-container py-fluid-2xl">
+    <p class="clients-slider__eyebrow">{{ copy().home.testimonialsEyebrow }}</p>
+    <h2 class="type-section mt-fluid-sm text-center text-brand-blue dark:text-white">
+      {{ copy().home.testimonialsTitle }}
+    </h2>
+
     <div
-      #quoteVisual
-      class="clients-media home-story__quote-visual relative mx-auto w-full max-w-xl lg:max-w-none"
-      [class.is-inview]="quoteInView()"
-      [class.is-switching]="slideBusy()"
-      [attr.data-dir]="slideDir()"
+      #clientsCarousel
+      class="clients-slider carousel slide"
+      (mouseenter)="pauseTestimonials()"
+      (mouseleave)="resumeTestimonials()"
     >
-      <div class="clients-media__glow" aria-hidden="true"></div>
-      <div class="clients-media__veil" aria-hidden="true"></div>
+      <div class="carousel-inner">
+        @for (t of testimonials(); track t.id; let i = $index) {
+          <div class="carousel-item">
+            <div class="clients-slider__stage">
+              <article class="clients-slider__card">
+                <h3 class="clients-slider__card-title">{{ copy().home.testimonialsCardTitle }}</h3>
+                <p class="clients-slider__quote">{{ t.quote }}</p>
+                <div class="clients-slider__author">
+                  <img
+                    class="clients-slider__avatar"
+                    [src]="t.avatar"
+                    [alt]="t.name"
+                    width="56"
+                    height="56"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div>
+                    <p class="clients-slider__name">{{ t.name }}</p>
+                    <p class="clients-slider__role">{{ t.role }}</p>
+                  </div>
+                </div>
+              </article>
 
-      @for (slide of [activeTestimonial()]; track slide.id) {
-        <div class="clients-media__thumbs">
-          @for (thumb of slide.gallery.thumbs; track thumb; let i = $index) {
-            <figure
-              class="clients-media__thumb clients-media__anim clients-media__anim--thumb media-zoom"
-              [style.--i]="i"
-            >
-              <img
-                class="media-zoom__img"
-                [src]="thumb"
-                alt=""
-                width="900"
-                height="675"
-                loading="lazy"
-                decoding="async"
-              />
-            </figure>
-          }
-        </div>
-
-        <figure class="clients-media__hero clients-media__anim clients-media__anim--hero media-zoom">
-          <img
-            class="clients-media__hero-img media-zoom__img"
-            [src]="slide.gallery.main"
-            [alt]="slide.name"
-            width="1800"
-            height="1350"
-            sizes="(max-width: 1024px) 92vw, 34rem"
-            loading="lazy"
-            decoding="async"
-          />
-          <span class="clients-media__accent" aria-hidden="true"></span>
-        </figure>
-      }
-    </div>
-
-    <div class="clients-band__copy relative min-w-0">
-      <h2 class="type-section text-brand-blue dark:text-white">
-        {{ copy().home.testimonialsTitle }}
-      </h2>
-
-      <div
-        class="clients-quote relative mt-fluid-lg max-w-xl"
-        [class.is-switching]="slideBusy()"
-        [attr.data-dir]="slideDir()"
-      >
-        <svg
-          class="clients-quote__mark absolute -top-2 end-0 text-brand-blue dark:text-brand-green"
-          width="48"
-          height="36"
-          viewBox="0 0 50 37"
-          fill="currentColor"
-          aria-hidden="true"
-        >
-          <path d="M0 0V37L18.75 18.5V0H0ZM31.25 0V37L50 18.5V0H31.25Z" />
-        </svg>
-
-        @for (t of [activeTestimonial()]; track t.id) {
-          <div
-            class="clients-quote__body clients-quote__anim pe-12"
-            [@slideFade]="slideDir()"
-          >
-            <p class="clients-quote__name font-display text-fluid-xl font-semibold text-ink dark:text-white">
-              {{ t.name }}
-            </p>
-            <p class="clients-quote__role mt-1 text-fluid-sm font-medium text-brand-blue dark:text-brand-green">
-              {{ t.role }}
-            </p>
-            <p class="clients-quote__text mt-fluid-md text-fluid-base leading-relaxed text-ink-soft dark:text-white/75">
-              {{ t.quote }}
-            </p>
+              <figure class="clients-slider__portrait">
+                <img
+                  class="clients-slider__photo"
+                  [src]="t.portrait"
+                  [alt]="t.name"
+                  width="900"
+                  height="1100"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </figure>
+            </div>
           </div>
         }
+      </div>
 
-        <div class="mt-fluid-md flex items-center justify-center gap-2" role="tablist" [attr.aria-label]="copy().home.testimonialsTitle">
-          @for (t of testimonials(); track t.id) {
+      <div class="clients-slider__controls">
+        <button
+          type="button"
+          class="clients-slider__nav"
+          (click)="prevTestimonial()"
+          [attr.aria-label]="copy().common.previous"
+        >
+          <svg class="size-4 rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M15 6l-6 6 6 6" />
+          </svg>
+        </button>
+
+        <div class="clients-slider__dots" role="tablist" [attr.aria-label]="copy().home.testimonialsTitle">
+          @for (item of testimonials(); track item.id) {
             <button
               type="button"
               class="clients-dot"
               role="tab"
-              [class.is-active]="testimonialIndex() === t.id"
-              [attr.aria-selected]="testimonialIndex() === t.id"
-              [attr.aria-label]="t.name"
-              (click)="goToTestimonial(t.id)"
+              [class.is-active]="testimonialIndex() === item.id"
+              [attr.aria-selected]="testimonialIndex() === item.id"
+              [attr.aria-label]="item.name"
+              (click)="goToTestimonial(item.id)"
             ></button>
           }
         </div>
 
-        <div class="mt-fluid-md flex items-center gap-3">
-          <div class="h-px flex-1 bg-brand-blue/15 dark:bg-white/15"></div>
-          <button
-            type="button"
-            class="inline-flex size-11 items-center justify-center rounded-full border border-brand-blue bg-white text-brand-blue transition hover:bg-brand-blue hover:text-white disabled:opacity-50 dark:border-white/30 dark:bg-transparent dark:text-white dark:hover:border-brand-green dark:hover:bg-brand-green"
-            (click)="prevTestimonial()"
-            [disabled]="slideBusy()"
-            [attr.aria-label]="copy().common.previous"
-          >
-            <svg class="size-4 rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <path d="M15 6l-6 6 6 6" />
-            </svg>
-          </button>
-          <button
-            type="button"
-            class="inline-flex size-11 items-center justify-center rounded-full bg-brand-blue text-white transition hover:brightness-110 disabled:opacity-50 dark:bg-brand-green"
-            (click)="nextTestimonial()"
-            [disabled]="slideBusy()"
-            [attr.aria-label]="copy().common.next"
-          >
-            <svg class="size-4 rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <path d="M9 6l6 6-6 6" />
-            </svg>
-          </button>
-          <div class="h-px flex-1 bg-brand-blue/15 dark:bg-white/15"></div>
-        </div>
+        <button
+          type="button"
+          class="clients-slider__nav"
+          (click)="nextTestimonial()"
+          [attr.aria-label]="copy().common.next"
+        >
+          <svg class="size-4 rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M9 6l6 6-6 6" />
+          </svg>
+        </button>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Value props -->
-<section class="site-band bg-brand-blue text-white">
-  <div class="site-container py-fluid-2xl">
-    <h2 class="type-section mx-auto max-w-3xl text-center text-white">
-      {{ copy().home.valuesTitle }}
-    </h2>
-    <div class="mt-fluid-xl fluid-grid-sm">
-      @for (item of values(); track item.id; let i = $index) {
-        <div
-          class="relative flex min-h-36 flex-col items-center justify-center rounded-xl border border-white/20 px-4 pb-6 pt-10 text-center"
-        >
-          <span
-            class="absolute -top-5 inline-flex size-12 items-center justify-center rounded-full bg-white text-brand-blue shadow-md dark:bg-surface-dark-elevated dark:text-brand-green"
-            aria-hidden="true"
-          >
-            <span class="font-display text-sm font-bold">{{ i + 1 }}</span>
-          </span>
-          <h3 class="text-fluid-sm font-semibold leading-snug">{{ item.title }}</h3>
-        </div>
-      }
-    </div>
-  </div>
-</section>
-
 <!-- Success mantra -->
-<section class="site-band">
+<section id="mantra" class="site-band home-mantra" #mantraSection>
   <div class="site-container py-fluid-2xl">
-    <h2 class="type-section text-center text-brand-blue dark:text-white">{{ copy().home.mantraTitle }}</h2>
-    <div class="mt-fluid-xl grid gap-fluid-lg md:grid-cols-3">
-      @for (step of mantra(); track step.id) {
-        <div class="text-center">
-          <div
-            class="mx-auto mb-fluid-md flex size-20 items-center justify-center rounded-full border-2 border-brand-blue/20 bg-brand-blue/5 text-brand-blue dark:border-brand-green/30 dark:bg-brand-green/10 dark:text-brand-green"
-            aria-hidden="true"
-          >
+    <header class="home-mantra__head">
+      <h2 class="type-section text-brand-blue dark:text-white">{{ copy().home.mantraTitle }}</h2>
+      <p class="home-mantra__lead">{{ copy().home.mantraLead }}</p>
+    </header>
+    <div class="home-mantra__grid">
+      @for (step of mantra(); track step.id; let i = $index) {
+        <article class="home-mantra__card" [style.--delay]="i * 120 + 'ms'">
+          <div class="home-mantra__icon" aria-hidden="true">
             @switch (step.icon) {
               @case ('team') {
-                <svg class="size-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
                   <circle cx="9" cy="8" r="3" />
                   <circle cx="17" cy="9" r="2.5" />
                   <path d="M3.5 19c.4-3 2.6-5 5.5-5s5.1 2 5.5 5" stroke-linecap="round" />
@@ -252,13 +181,13 @@
                 </svg>
               }
               @case ('transparency') {
-                <svg class="size-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
                   <path d="M4 12s3.2-6 8-6 8 6 8 6-3.2 6-8 6-8-6-8-6Z" stroke-linejoin="round" />
                   <circle cx="12" cy="12" r="2.5" />
                 </svg>
               }
               @case ('quality') {
-                <svg class="size-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
                   <path d="M12 3 4.5 6.5v5.2c0 4.6 3.2 8.8 7.5 9.8 4.3-1 7.5-5.2 7.5-9.8V6.5L12 3Z" stroke-linejoin="round" />
                   <path d="m9 12 2 2 4-4" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
@@ -267,30 +196,24 @@
           </div>
           <h3 class="font-display text-fluid-lg font-semibold text-ink dark:text-white">{{ step.title }}</h3>
           <p class="mt-2 text-fluid-sm leading-relaxed text-ink-soft dark:text-white/70">{{ step.body }}</p>
-        </div>
+        </article>
       }
     </div>
   </div>
 </section>
 
 <!-- Deployment -->
-<section class="site-band">
-  <div class="site-container py-fluid-2xl">
-    <h2 class="type-section text-center text-brand-blue dark:text-white">{{ copy().home.deployTitle }}</h2>
-    <div class="mt-fluid-xl grid gap-fluid-lg md:grid-cols-2">
+<section id="pioneer" class="site-band home-pioneer" #pioneerSection>
+  <div class="site-container py-fluid-2xl home-pioneer__layout">
+    <div class="home-pioneer__copy">
+      <h2 class="type-section text-brand-blue dark:text-white">{{ copy().home.deployTitle }}</h2>
+      <p class="home-pioneer__lead">{{ copy().home.deployLead }}</p>
+    </div>
+    <div class="home-pioneer__modes">
       @for (mode of deploy(); track mode.id; let i = $index) {
-        <article class="glass-card overflow-hidden p-0">
-          <div
-            class="home-story__deploy-banner flex h-44 items-end p-fluid-md sm:h-52"
-            [class.home-story__deploy-banner--site]="i === 0"
-            [class.home-story__deploy-banner--cloud]="i === 1"
-            aria-hidden="true"
-          >
-            <span class="rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-brand-blue shadow-sm dark:bg-surface-dark/80 dark:text-brand-green">
-              {{ i === 0 ? 'On-Prem' : 'Cloud' }}
-            </span>
-          </div>
-          <div class="p-fluid-md">
+        <article class="home-pioneer__card" [style.--delay]="i * 140 + 'ms'">
+          <span class="home-pioneer__badge">{{ i === 0 ? '01' : '02' }}</span>
+          <div>
             <h3 class="font-display text-fluid-lg font-semibold text-ink dark:text-white">{{ mode.title }}</h3>
             <p class="mt-2 text-fluid-sm leading-relaxed text-ink-soft dark:text-white/70">{{ mode.body }}</p>
           </div>

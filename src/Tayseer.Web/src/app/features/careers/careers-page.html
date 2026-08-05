@@ -1,0 +1,81 @@
+<section class="page-hero site-band">
+  <div class="page-hero__glow" aria-hidden="true"></div>
+  <div class="site-container relative z-10 py-fluid-2xl">
+    <p class="type-eyebrow">{{ eyebrow() }}</p>
+    <h1 class="type-title mt-fluid-sm page-ink max-w-3xl">{{ title() }}</h1>
+    <p class="mt-fluid-md max-w-2xl text-fluid-base leading-relaxed page-muted">{{ lead() }}</p>
+  </div>
+</section>
+
+<section class="page-module site-band">
+  <div class="site-container py-fluid-2xl">
+    <header class="careers-head">
+      <h2 class="type-section page-ink">{{ whyTitle() }}</h2>
+      <p class="page-muted">{{ whyLead() }}</p>
+    </header>
+    <div class="careers-values">
+      @for (value of values(); track value.id) {
+        <article class="careers-value">
+          <span class="careers-value__icon" aria-hidden="true">
+            @switch (value.id) {
+              @case (0) {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <circle cx="8.2" cy="8.5" r="2.5" />
+                  <circle cx="16.2" cy="9" r="2.2" />
+                  <path d="M3.8 18.5c.5-2.8 2.6-4.5 4.4-4.5s3.9 1.7 4.4 4.5" stroke-linecap="round" />
+                  <path d="M13.2 18.5c.4-2.2 1.9-3.6 3.6-3.6 1.4 0 2.6.8 3.3 2" stroke-linecap="round" />
+                </svg>
+              }
+              @case (1) {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M4 12s3.2-6 8-6 8 6 8 6-3.2 6-8 6-8-6-8-6Z" stroke-linejoin="round" />
+                  <circle cx="12" cy="12" r="2.4" />
+                </svg>
+              }
+              @case (2) {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M12 3 4.8 6.4v5.1c0 4.4 3.1 8.4 7.2 9.5 4.1-1.1 7.2-5.1 7.2-9.5V6.4L12 3Z" stroke-linejoin="round" />
+                  <path d="m9 12 2.1 2.1L15.4 10" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              }
+              @default {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M12 20.4s-6.2-4.1-6.2-8.6A3.8 3.8 0 0 1 12 8.4a3.8 3.8 0 0 1 6.2 3.4c0 4.5-6.2 8.6-6.2 8.6Z" stroke-linejoin="round" />
+                  <circle cx="12" cy="11.8" r="1.3" />
+                </svg>
+              }
+            }
+          </span>
+          <h3>{{ value.title }}</h3>
+          <p>{{ value.body }}</p>
+        </article>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="page-module site-band">
+  <div class="site-container pb-fluid-2xl">
+    <h2 class="type-section page-ink">{{ rolesTitle() }}</h2>
+    <!-- TODO: real content needed — wire open roles when a jobs source exists -->
+    <div class="careers-empty fintech-card">
+      <h3>{{ rolesEmptyTitle() }}</h3>
+      <p>{{ rolesEmptyBody() }}</p>
+    </div>
+  </div>
+</section>
+
+<section class="page-module site-band">
+  <div class="site-container pb-fluid-2xl">
+    <div class="careers-cta elevate-cta">
+      <div>
+        <h2 class="type-section page-ink">{{ ctaTitle() }}</h2>
+        <p class="mt-fluid-sm page-muted">{{ ctaLead() }}</p>
+      </div>
+      <div class="careers-cta__actions">
+        <a class="btn-brand" href="mailto:info@tayseer.me?subject=Tayseer%20Careers">{{ ctaMail() }}</a>
+        <a class="page-ghost-btn" [routerLink]="'/' + lang() + '/contact'">{{ ctaContact() }}</a>
+      </div>
+    </div>
+  </div>
+</section>

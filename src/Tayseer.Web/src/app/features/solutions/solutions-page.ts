@@ -3,47 +3,67 @@ import { RouterLink } from '@angular/router';
 import { ContentStore } from '../../state/content.store';
 import { LocaleService } from '../../core/i18n/locale.service';
 import { UiCopyService } from '../../core/i18n/ui-copy.service';
-import { ServiceCard } from '../../shared/ui/service-card/service-card';
+import { SOLUTIONS_PAGE, t, type PageLocale } from '../../core/content/page-content';
+import { solutionPath } from '../../core/content/static-services';
+import { serviceImage } from '../../core/media/site-images';
+import { ProofCards } from '../../shared/ui/proof-cards/proof-cards';
+import { WorldCard } from '../../shared/ui/world-card/world-card';
 
 @Component({
   selector: 'app-solutions-page',
-  imports: [RouterLink, ServiceCard],
+  imports: [RouterLink, ProofCards, WorldCard],
   templateUrl: './solutions-page.html',
 })
 export class SolutionsPage {
   private readonly store = inject(ContentStore);
   private readonly locale = inject(LocaleService);
   readonly copy = inject(UiCopyService).copy;
-  readonly lang = computed(() => this.locale.lang());
+  readonly lang = computed(() => this.locale.lang() as PageLocale);
   readonly isAr = computed(() => this.locale.lang() === 'ar');
+  readonly c = SOLUTIONS_PAGE;
 
   readonly services = this.store.services;
   readonly loading = this.store.loading;
   readonly error = this.store.error;
 
-  readonly title = computed(() => (this.isAr() ? 'الحلول' : 'Solutions'));
-  readonly intro = computed(() =>
-    this.isAr()
-      ? 'نقدّم مجموعة شاملة من حلول الذكاء الاصطناعي والرقمية المصممة لاحتياجات أعمالك.'
-      : 'Intelligent solutions for your business — a comprehensive suite of AI and digital offerings tailored to your needs.',
-  );
-  readonly benefitsTitle = computed(() =>
-    this.isAr() ? 'صُممت منتجاتنا وخدماتنا من أجل:' : 'Our Products & Services are designed to:',
-  );
-  readonly benefits = computed(() =>
-    this.isAr()
-      ? [
-          'تبسيط العمليات ورفع الكفاءة',
-          'تعزيز تجربة العملاء ورضاهم',
-          'تخفيف المخاطر وضمان الأمن',
-          'تبنّي الابتكار والبقاء في الطليعة',
-        ]
-      : [
-          'Streamline Operations and Boost Efficiency',
-          'Enhance Customer Experience and Satisfaction',
-          'Mitigate Risk and Ensure Security',
-          'Embrace Innovation and Stay Ahead of the Curve',
-        ],
+  readonly title = computed(() => t(this.c.title, this.lang()));
+  readonly eyebrow = computed(() => t(this.c.eyebrow, this.lang()));
+  readonly intro = computed(() => t(this.c.lead, this.lang()));
+  readonly featuresTitle = computed(() => t(this.c.featuresTitle, this.lang()));
+  readonly featuresLead = computed(() => t(this.c.featuresLead, this.lang()));
+  readonly worldsTitle = computed(() => t(this.c.worldsTitle, this.lang()));
+  readonly worldsLead = computed(() => t(this.c.worldsLead, this.lang()));
+  readonly catalogTitle = computed(() => t(this.c.catalogTitle, this.lang()));
+  readonly catalogLead = computed(() => t(this.c.catalogLead, this.lang()));
+  readonly splitEyebrow = computed(() => t(this.c.splitEyebrow, this.lang()));
+  readonly splitTitle = computed(() => t(this.c.splitTitle, this.lang()));
+  readonly splitLead = computed(() => t(this.c.splitLead, this.lang()));
+  readonly elevateTitle = computed(() => t(this.c.elevateTitle, this.lang()));
+  readonly elevateLead = computed(() => t(this.c.elevateLead, this.lang()));
+
+  readonly featureRows = computed(() => {
+    const images: Record<string, string> = {
+      platforms: '/images/service-core-banking.jpg',
+      experience: '/images/service-mbuke.jpg',
+      control: '/images/service-fahim-ai.jpg',
+      delivery: '/images/service-managed.jpg',
+    };
+    return this.c.features.map((feature, index) => ({
+      id: feature.id,
+      title: t(feature.title, this.lang()),
+      body: t(feature.body, this.lang()),
+      image: images[feature.id] ?? '/images/solutions-banner.jpg',
+      flip: index % 2 === 1,
+    }));
+  });
+
+  readonly catalogRows = computed(() =>
+    this.services().map((service, index) => ({
+      ...service,
+      image: serviceImage(service.slug),
+      link: solutionPath(this.lang(), service.slug),
+      flip: index % 2 === 1,
+    })),
   );
 
   constructor() {
@@ -51,5 +71,9 @@ export class SolutionsPage {
       const _ = this.locale.lang();
       this.store.reloadForLocale();
     });
+  }
+
+  label(item: { en: string; ar: string }): string {
+    return t(item, this.lang());
   }
 }

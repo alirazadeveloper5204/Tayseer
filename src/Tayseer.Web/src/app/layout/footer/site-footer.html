@@ -1,4 +1,4 @@
-<footer class="border-t border-white/10 bg-[#030712]/65 text-ink-inverse backdrop-blur-xl">
+<footer class="border-t border-white/10 bg-[#042233] text-ink-inverse dark:bg-[#030712]">
   <div class="site-container grid gap-fluid-lg py-fluid-2xl md:grid-cols-2 lg:grid-cols-4">
     <div class="lg:col-span-1">
       <img src="/brand/logo-light.svg" alt="Tayseer Innovations" class="h-10 w-auto brightness-110" />
@@ -63,7 +63,7 @@
           <a [routerLink]="'/' + lang() + '/about'" class="hover:text-brand-green">{{ copy().nav.about }}</a>
         </li>
         <li>
-          <a [routerLink]="'/' + lang() + '/blog'" class="hover:text-brand-green">{{ copy().nav.blog }}</a>
+          <a [routerLink]="'/' + lang() + '/faqs'" class="hover:text-brand-green">{{ copy().nav.faqs }}</a>
         </li>
         <li>
           <a [routerLink]="'/' + lang() + '/careers'" class="hover:text-brand-green">{{
@@ -101,7 +101,7 @@
   </div>
 
   <div
-    class="border-t border-white/10 px-4 py-4 text-center text-xs text-white/50 pb-[var(--site-mobile-cta-height)] sm:pb-4"
+    class="border-t border-white/10 bg-black/20 px-4 py-4 text-center text-xs text-white/50 pb-[var(--site-mobile-cta-height)] sm:pb-4"
   >
     <div class="site-container flex flex-col items-center justify-between gap-3 sm:flex-row sm:text-start">
       <p>{{ copy().footer.rights }}</p>

@@ -1,0 +1,98 @@
+<section class="page-hero site-band">
+  <div class="page-hero__glow" aria-hidden="true"></div>
+  <div class="site-container relative z-10 py-fluid-2xl">
+    <p class="type-eyebrow">{{ eyebrow() }}</p>
+    <h1 class="type-title mt-fluid-sm page-ink max-w-3xl">{{ title() }}</h1>
+    <p class="mt-fluid-md max-w-2xl text-fluid-base leading-relaxed page-muted">{{ lead() }}</p>
+  </div>
+</section>
+
+<section class="page-module site-band">
+  <div class="site-container py-fluid-2xl">
+    <div class="faq-toolbar">
+      <label class="faq-search">
+        <span class="sr-only">{{ searchPlaceholder() }}</span>
+        <input
+          type="search"
+          class="faq-search__input"
+          [placeholder]="searchPlaceholder()"
+          [ngModel]="query()"
+          (ngModelChange)="query.set($event)"
+        />
+      </label>
+      <div class="faq-tabs" role="tablist">
+        <button
+          type="button"
+          class="faq-tab"
+          role="tab"
+          [class.is-active]="activeCategory() === 'all'"
+          (click)="setCategory('all')"
+        >
+          {{ allLabel() }}
+        </button>
+        @for (category of categories(); track category.id) {
+          <button
+            type="button"
+            class="faq-tab"
+            role="tab"
+            [class.is-active]="activeCategory() === category.id"
+            (click)="setCategory(category.id)"
+          >
+            {{ category.title }}
+          </button>
+        }
+      </div>
+    </div>
+
+    @if (groups().length === 0) {
+      <p class="faq-empty">{{ empty() }}</p>
+    } @else {
+      @for (group of groups(); track group.id) {
+        <section class="faq-group">
+          <h2 class="faq-group__title">{{ group.title }}</h2>
+          <div class="faq-list">
+            @for (item of group.items; track item.key) {
+              <article class="faq-item fintech-card" [class.is-open]="openKey() === item.key">
+                <h3>
+                  <button
+                    type="button"
+                    class="faq-item__trigger"
+                    [attr.aria-expanded]="openKey() === item.key"
+                    [attr.aria-controls]="'faq-' + item.key"
+                    (click)="toggle(item.key)"
+                  >
+                    <span>{{ item.q }}</span>
+                    <svg class="faq-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </button>
+                </h3>
+                <div
+                  class="faq-item__panel"
+                  [id]="'faq-' + item.key"
+                  [attr.inert]="openKey() === item.key ? null : true"
+                >
+                  <div class="faq-item__body">
+                    <p>{{ item.a }}</p>
+                  </div>
+                </div>
+              </article>
+            }
+          </div>
+        </section>
+      }
+    }
+  </div>
+</section>
+
+<section class="page-module site-band">
+  <div class="site-container pb-fluid-2xl">
+    <div class="faq-cta elevate-cta">
+      <div>
+        <h2 class="type-section page-ink">{{ ctaTitle() }}</h2>
+        <p class="mt-fluid-sm page-muted">{{ ctaLead() }}</p>
+      </div>
+      <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand">{{ ctaAction() }}</a>
+    </div>
+  </div>
+</section>

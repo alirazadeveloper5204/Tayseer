@@ -185,6 +185,68 @@
   margin-inline-start: auto;
 }
 
+.site-chrome-toggles {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.site-chrome-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  padding: 0;
+  border-radius: 999px;
+  border: 1.5px solid rgba(13, 90, 140, 0.28);
+  background: #ffffff;
+  color: #0d5a8c;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.site-chrome-btn:hover {
+  border-color: #0d5a8c;
+  background: rgba(13, 90, 140, 0.08);
+}
+
+.site-chrome-btn:focus-visible {
+  outline: 2px solid #62a945;
+  outline-offset: 2px;
+}
+
+:host-context(html.dark) .site-chrome-btn {
+  border-color: rgba(255, 255, 255, 0.28);
+  background: rgba(15, 23, 42, 0.78);
+  color: #e8eef5;
+}
+
+:host-context(html.dark) .site-chrome-btn:hover {
+  border-color: #00f2fe;
+  color: #00f2fe;
+  background: rgba(0, 242, 254, 0.1);
+}
+
+.site-chrome-btn__label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.site-chrome-btn__icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.site-chrome-btn__icon.is-hidden {
+  display: none;
+}
+
 .site-header__cta {
   font-size: clamp(0.65rem, 0.58rem + 0.35vw, 0.875rem) !important;
   padding-inline: clamp(0.65rem, 0.5rem + 0.6vw, 1.1rem) !important;
