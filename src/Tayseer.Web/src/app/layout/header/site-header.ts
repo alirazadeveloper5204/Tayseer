@@ -8,7 +8,8 @@ import {
   PLATFORM_ID,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { RouterLink, RouterLinkActive, Router } from '@angular/router';
+import { RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { LocaleService, AppLocale } from '../../core/i18n/locale.service';
 import { ThemeService } from '../../core/theme/theme.service';
 import { UiCopyService } from '../../core/i18n/ui-copy.service';
@@ -34,6 +35,7 @@ export class SiteHeader {
   private readonly destroyRef = inject(DestroyRef);
 
   readonly activeDropdown = signal<NavDropdown | null>(null);
+  readonly menuOpen = signal(false);
   private closeTimer: ReturnType<typeof setTimeout> | null = null;
 
   readonly lang = computed(() => this.locale.lang());
@@ -89,6 +91,36 @@ export class SiteHeader {
   closeMenu(): void {
     this.clearCloseTimer();
     this.activeDropdown.set(null);
+    this.menuOpen.set(false);
+    this.unlockBodyScroll();
+  }
+
+  toggleMenu(event?: Event): void {
+    event?.preventDefault();
+    event?.stopPropagation();
+    this.clearCloseTimer();
+    this.activeDropdown.set(null);
+    const next = !this.menuOpen();
+    this.menuOpen.set(next);
+    if (next) {
+      this.lockBodyScroll();
+    } else {
+      this.unlockBodyScroll();
+    }
+  }
+
+  private lockBodyScroll(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    document.documentElement.classList.add('nav-menu-open');
+  }
+
+  private unlockBodyScroll(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    document.documentElement.classList.remove('nav-menu-open');
   }
 
   private clearCloseTimer(): void {
@@ -112,6 +144,11 @@ export class SiteHeader {
         return;
       }
 
+      const navSub = this.router.events
+        .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
+        .subscribe(() => this.closeMenu());
+      this.destroyRef.onDestroy(() => navSub.unsubscribe());
+
       const onDocClick = (event: MouseEvent) => {
         const target = event.target as Node | null;
         const root = document.querySelector('app-site-header');
@@ -120,9 +157,19 @@ export class SiteHeader {
         }
       };
       document.addEventListener('click', onDocClick);
+
+      const onKey = (event: KeyboardEvent) => {
+        if (event.key === 'Escape') {
+          this.closeMenu();
+        }
+      };
+      document.addEventListener('keydown', onKey);
+
       this.destroyRef.onDestroy(() => {
         document.removeEventListener('click', onDocClick);
+        document.removeEventListener('keydown', onKey);
         this.clearCloseTimer();
+        this.unlockBodyScroll();
       });
 
       const getActiveForHome = (): boolean => {

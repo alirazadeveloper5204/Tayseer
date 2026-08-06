@@ -1,6 +1,7 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, PLATFORM_ID } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LocaleService } from '../../core/i18n/locale.service';
+import { scrollToSectionId } from '../../core/navigation/scroll-to-section';
 import { CAREERS_PAGE, t, type PageLocale } from '../../core/content/page-content';
 
 @Component({
@@ -11,6 +12,7 @@ import { CAREERS_PAGE, t, type PageLocale } from '../../core/content/page-conten
 })
 export class CareersPage {
   private readonly locale = inject(LocaleService);
+  private readonly platformId = inject(PLATFORM_ID);
   readonly lang = computed(() => this.locale.lang() as PageLocale);
   readonly c = CAREERS_PAGE;
 
@@ -40,4 +42,8 @@ export class CareersPage {
       body: t(value.body, this.lang()),
     })),
   );
+
+  scrollToRoles(event: Event): void {
+    scrollToSectionId(this.platformId, 'careers-roles', event);
+  }
 }

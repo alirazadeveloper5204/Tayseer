@@ -17,6 +17,7 @@ import { LocaleService } from '../../core/i18n/locale.service';
 import { ABOUT_PAGE, PAGE_COMMON, t, type PageLocale } from '../../core/content/page-content';
 import { HOME_TESTIMONIALS } from '../../core/i18n/ui-copy';
 import { ABOUT_COLLAGE, SITE_IMAGES } from '../../core/media/site-images';
+import { scrollToSectionId } from '../../core/navigation/scroll-to-section';
 import type BsCarousel from 'bootstrap/js/dist/carousel';
 import { SITE_SLIDER } from '../../shared/ui/site-carousel/site-slider';
 
@@ -106,6 +107,10 @@ export class AboutPage {
 
   label(item: { en: string; ar: string }): string {
     return t(item, this.lang());
+  }
+
+  scrollToJourney(event: Event): void {
+    scrollToSectionId(this.platformId, 'about-journey', event);
   }
 
   goToSlide(index: number): void {

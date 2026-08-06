@@ -7,7 +7,7 @@
       <p class="spotlight-hero__lead page-muted">{{ lead() }}</p>
       <div class="spotlight-hero__actions">
         <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand">{{ heroCta() }}</a>
-        <a href="#about-journey" class="page-ghost-btn">{{ heroSecondary() }}</a>
+        <a href="#about-journey" class="page-ghost-btn" (click)="scrollToJourney($event)">{{ heroSecondary() }}</a>
       </div>
       <ul class="spotlight-hero__meta">
         <li>{{ heroMetaSince() }}</li>

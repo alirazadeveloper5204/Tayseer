@@ -3,6 +3,7 @@ import {
   Component,
   computed,
   DestroyRef,
+  effect,
   ElementRef,
   inject,
   input,
@@ -14,6 +15,8 @@ import {
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { LocaleService } from '../../../core/i18n/locale.service';
+import { GsapService } from '../../../core/motion/gsap.service';
+import { MOTION } from '../../../core/motion/motion-tokens';
 import { SITE_SLIDER } from './site-slider';
 
 @Component({
@@ -28,7 +31,9 @@ export class SiteCarousel {
   private readonly host = inject(ElementRef<HTMLElement>);
   private readonly zone = inject(NgZone);
   private readonly locale = inject(LocaleService);
+  private readonly motion = inject(GsapService);
   private readonly viewport = viewChild<ElementRef<HTMLElement>>('viewport');
+  private readonly trackRef = viewChild<ElementRef<HTMLElement>>('track');
 
   readonly labelledBy = input<string | undefined>();
   readonly label = input<string | undefined>();
@@ -42,8 +47,9 @@ export class SiteCarousel {
   readonly index = signal(0);
   readonly dots = signal<number[]>([]);
   readonly dragging = signal(false);
-  readonly dragX = signal(0);
   readonly jumping = signal(false);
+  readonly pausedUi = signal(false);
+  readonly progressRunning = signal(false);
   readonly activeDot = computed(() => {
     const real = this.realCount();
     return real ? ((this.index() % real) + real) % real : 0;
@@ -52,18 +58,22 @@ export class SiteCarousel {
   private readonly slideStep = signal(0);
   private timer: ReturnType<typeof setTimeout> | null = null;
   private jumpTimer: ReturnType<typeof setTimeout> | null = null;
+  private slideTween: { kill: () => void } | null = null;
   private paused = false;
   private pointerStartX = 0;
+  private dragOriginX = 0;
   private suppressClick = false;
 
   constructor() {
     afterNextRender(() => this.init());
-  }
 
-  trackTransform(): string {
-    const dir = this.isRtl() ? 1 : -1;
-    const x = dir * this.index() * this.slideStep() + this.dragX();
-    return `translate3d(${x}px, 0, 0)`;
+    effect(() => {
+      this.index();
+      this.dragging();
+      if (isPlatformBrowser(this.platformId)) {
+        queueMicrotask(() => this.updateSlideStates());
+      }
+    });
   }
 
   prev(): void {
@@ -72,18 +82,13 @@ export class SiteCarousel {
       return;
     }
     if (this.loop() && this.index() === 0) {
-      this.jumping.set(true);
-      this.index.set(real);
-      this.dragX.set(0);
+      this.jumpTo(real, false);
       requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          this.jumping.set(false);
-          this.goTo(real - 1);
-        });
+        requestAnimationFrame(() => this.goTo(real - 1, true));
       });
       return;
     }
-    this.goTo(this.index() - 1);
+    this.goTo(this.index() - 1, true);
   }
 
   next(): void {
@@ -93,16 +98,16 @@ export class SiteCarousel {
     }
     if (this.loop()) {
       const next = this.index() + 1;
-      this.goTo(next);
+      this.goTo(next, true);
       if (next >= real) {
         this.queueJump(0);
       }
       return;
     }
-    this.goTo(this.index() + 1);
+    this.goTo(this.index() + 1, true);
   }
 
-  goTo(i: number): void {
+  goTo(i: number, animate = true): void {
     const total = this.slides().length;
     const real = this.realCount();
     if (!total || !real) {
@@ -112,16 +117,18 @@ export class SiteCarousel {
     const max = this.loop() ? total - this.currentVisibleCount() : real - 1;
     const next = Math.min(Math.max(i, 0), Math.max(0, max));
     this.index.set(next);
-    this.dragX.set(0);
+    this.moveTrack(this.xForIndex(next), animate);
+    this.restartProgress();
   }
 
   goToDot(dot: number): void {
     this.clearJump();
-    this.goTo(dot);
+    this.goTo(dot, true);
   }
 
   pause(): void {
     this.paused = true;
+    this.pausedUi.set(true);
     this.clearTimer();
   }
 
@@ -130,6 +137,7 @@ export class SiteCarousel {
       return;
     }
     this.paused = false;
+    this.pausedUi.set(false);
     this.startTimer();
   }
 
@@ -155,9 +163,10 @@ export class SiteCarousel {
       return;
     }
     this.measure();
+    this.killSlideTween();
     this.dragging.set(true);
     this.pointerStartX = event.clientX;
-    this.dragX.set(0);
+    this.dragOriginX = this.xForIndex(this.index());
     (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
   }
 
@@ -165,7 +174,8 @@ export class SiteCarousel {
     if (!this.dragging()) {
       return;
     }
-    this.dragX.set(event.clientX - this.pointerStartX);
+    const delta = event.clientX - this.pointerStartX;
+    this.moveTrack(this.dragOriginX + delta, false);
   }
 
   onPointerUp(event: PointerEvent): void {
@@ -174,13 +184,15 @@ export class SiteCarousel {
     }
     const delta = event.clientX - this.pointerStartX;
     this.dragging.set(false);
-    this.dragX.set(0);
 
     if (Math.abs(delta) >= 48) {
       this.suppressClick = true;
       const rtl = this.isRtl();
       const goingNext = rtl ? delta > 0 : delta < 0;
       goingNext ? this.next() : this.prev();
+    } else {
+      // Snap back to current index with smooth settle.
+      this.goTo(this.index(), true);
     }
 
     this.resume();
@@ -191,9 +203,12 @@ export class SiteCarousel {
       return;
     }
 
+    this.applyMotionVars();
     this.syncVisibleCount();
     this.refreshDots();
     this.measure();
+    this.moveTrack(this.xForIndex(this.index()), false);
+    this.updateSlideStates();
     this.startTimer();
 
     const viewport = this.viewport()?.nativeElement;
@@ -209,8 +224,17 @@ export class SiteCarousel {
 
     const resize = new ResizeObserver(() => {
       this.zone.run(() => {
+        const prevVisible = Number(this.host.nativeElement.getAttribute('data-visible') || '0');
         this.syncVisibleCount();
+        const nextVisible = this.currentVisibleCount();
         this.measure();
+        // Keep the active slide in range when the viewport gains/loses columns.
+        if (prevVisible !== nextVisible) {
+          this.goTo(this.activeDot(), false);
+        } else {
+          this.moveTrack(this.xForIndex(this.index()), false);
+          this.updateSlideStates();
+        }
       });
     });
     if (viewport) {
@@ -221,11 +245,13 @@ export class SiteCarousel {
       this.zone.run(() => {
         this.refreshDots();
         this.measure();
+        this.moveTrack(this.xForIndex(this.index()), false);
+        this.updateSlideStates();
       });
     });
-    const track = viewport?.querySelector('.site-carousel__track');
+    const track = this.trackEl();
     if (track) {
-      mutation.observe(track, { childList: true, subtree: true });
+      mutation.observe(track, { childList: true });
     }
 
     this.destroyRef.onDestroy(() => {
@@ -234,18 +260,101 @@ export class SiteCarousel {
       mutation.disconnect();
       this.clearTimer();
       this.clearJump();
+      this.killSlideTween();
+    });
+  }
+
+  private xForIndex(index: number): number {
+    const dir = this.isRtl() ? 1 : -1;
+    return dir * index * this.slideStep();
+  }
+
+  private moveTrack(x: number, animate: boolean): void {
+    const track = this.trackEl();
+    const api = this.motion.gsap;
+    if (!track || !api) {
+      return;
+    }
+
+    this.killSlideTween();
+
+    if (!animate || this.motion.prefersReducedMotion()) {
+      api.set(track, { x, force3D: true });
+      return;
+    }
+
+    this.slideTween = api.to(track, {
+      x,
+      duration: MOTION.duration.slider,
+      ease: MOTION.ease.snappy,
+      overwrite: 'auto',
+      force3D: true,
+    });
+  }
+
+  private killSlideTween(): void {
+    this.slideTween?.kill();
+    this.slideTween = null;
+  }
+
+  private trackEl(): HTMLElement | null {
+    return this.trackRef()?.nativeElement ?? null;
+  }
+
+  private applyMotionVars(): void {
+    const el = this.host.nativeElement;
+    el.style.setProperty('--site-slider-duration', `${SITE_SLIDER.durationMs}ms`);
+    el.style.setProperty('--site-slider-interval', `${this.intervalMs()}ms`);
+    el.style.setProperty('--site-slider-ease', SITE_SLIDER.easing);
+    el.style.setProperty('--site-slider-ease-soft', SITE_SLIDER.easeSoft);
+    el.style.setProperty('--site-neighbor-opacity', String(SITE_SLIDER.neighborOpacity));
+    el.style.setProperty('--site-neighbor-scale', String(SITE_SLIDER.neighborScale));
+  }
+
+  private updateSlideStates(): void {
+    const slides = this.slides();
+    if (!slides.length) {
+      return;
+    }
+    const visible = this.currentVisibleCount();
+    const start = this.index();
+    const end = start + visible - 1;
+    const mid = start + Math.floor(visible / 2);
+
+    slides.forEach((slide, i) => {
+      const inView = i >= start && i <= end;
+      if (visible >= 3) {
+        slide.classList.toggle('is-active', i === mid);
+        slide.classList.toggle('is-neighbor', inView && i !== mid);
+      } else {
+        slide.classList.toggle('is-active', inView);
+        slide.classList.toggle('is-neighbor', false);
+      }
+    });
+  }
+
+  private restartProgress(): void {
+    if (!isPlatformBrowser(this.platformId) || this.paused) {
+      this.progressRunning.set(false);
+      return;
+    }
+    this.progressRunning.set(false);
+    requestAnimationFrame(() => {
+      if (!this.paused) {
+        this.progressRunning.set(true);
+      }
     });
   }
 
   private queueJump(i: number): void {
     this.clearJump();
-    this.jumpTimer = setTimeout(() => this.jumpTo(i), SITE_SLIDER.durationMs);
+    this.jumpTimer = setTimeout(() => this.jumpTo(i, false), SITE_SLIDER.durationMs);
   }
 
-  private jumpTo(i: number): void {
+  private jumpTo(i: number, animate: boolean): void {
     this.jumping.set(true);
     this.index.set(i);
-    this.dragX.set(0);
+    this.moveTrack(this.xForIndex(i), animate);
     requestAnimationFrame(() => {
       requestAnimationFrame(() => this.jumping.set(false));
     });
@@ -266,9 +375,17 @@ export class SiteCarousel {
       return forced;
     }
     if (!isPlatformBrowser(this.platformId)) {
+      return 1;
+    }
+    const width = window.innerWidth;
+    // Phone: 1 · tablet: 2 · desktop: 3
+    if (width >= 1024) {
       return 3;
     }
-    return window.innerWidth >= 768 ? 3 : 1;
+    if (width >= 700) {
+      return 2;
+    }
+    return 1;
   }
 
   private realCount(): number {
@@ -290,7 +407,7 @@ export class SiteCarousel {
 
   private measure(): void {
     const slide = this.slides()[0];
-    const track = this.viewport()?.nativeElement.querySelector('.site-carousel__track');
+    const track = this.trackEl();
     if (!slide || !track) {
       this.slideStep.set(0);
       return;
@@ -301,11 +418,11 @@ export class SiteCarousel {
   }
 
   private slides(): HTMLElement[] {
-    const vp = this.viewport()?.nativeElement;
-    if (!vp) {
+    const track = this.trackEl();
+    if (!track) {
       return [];
     }
-    return Array.from(vp.querySelectorAll<HTMLElement>('.site-carousel__track > *'));
+    return Array.from(track.children) as HTMLElement[];
   }
 
   private isRtl(): boolean {
@@ -315,8 +432,10 @@ export class SiteCarousel {
   private startTimer(): void {
     this.clearTimer();
     if (!isPlatformBrowser(this.platformId) || this.paused) {
+      this.progressRunning.set(false);
       return;
     }
+    this.restartProgress();
     this.timer = setTimeout(() => {
       if (this.paused || document.hidden) {
         this.startTimer();

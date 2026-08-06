@@ -41,7 +41,6 @@
         [nextLabel]="copy().common.next"
         [loop]="true"
         [itemCount]="services().length"
-        [visibleCount]="3"
       >
         @for (item of loopedServices(); track $index + '-' + item.slug) {
           <div class="site-carousel__slide">

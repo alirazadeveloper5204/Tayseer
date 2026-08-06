@@ -25,6 +25,7 @@ export const PAGE_COMMON = {
   },
   backToList: { en: 'Back to case studies', ar: 'العودة إلى دراسات الحالة' },
   backHome: { en: 'Back to home', ar: 'العودة للرئيسية' },
+  submitAnother: { en: 'Submit another inquiry', ar: 'إرسال استفسار آخر' },
   notFound: { en: 'Case study not found', ar: 'دراسة الحالة غير موجودة' },
   problem: { en: 'Problem', ar: 'التحدي' },
   solution: { en: 'Solution Architecture', ar: 'بنية الحل' },
@@ -735,7 +736,7 @@ export const CONTACT_PAGE = {
   mapOpen: { en: 'Open in Google Maps', ar: 'افتح في خرائط Google' },
   mapRegion: { en: 'GCC coverage', ar: 'تغطية الخليج' },
   steps: [
-    { en: 'About You', ar: 'عنك' },
+    { en: 'Contact Us', ar: 'تواصل معنا' },
     { en: 'Project Scope', ar: 'نطاق المشروع' },
     { en: 'Preferences', ar: 'التفضيلات' },
   ],

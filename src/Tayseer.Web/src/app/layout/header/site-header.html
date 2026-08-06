@@ -1,4 +1,4 @@
-<header class="bg-transparent">
+<header class="site-header bg-transparent">
   <div class="site-container site-header__bar">
     <a
       [routerLink]="'/' + lang()"
@@ -14,7 +14,7 @@
       />
     </a>
 
-    <nav class="site-nav" aria-label="Primary">
+    <nav class="site-nav" [class.is-open]="menuOpen()" aria-label="Primary" id="site-primary-nav">
       <ul class="site-nav__list">
         <!-- Services -->
         <li
@@ -148,6 +148,12 @@
             {{ copy().nav.careers }}
           </a>
         </li>
+
+        <li class="site-nav__mobile-cta">
+          <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand w-full justify-center" (click)="closeMenu()">
+            {{ copy().nav.submitQuery }}
+          </a>
+        </li>
       </ul>
     </nav>
 
@@ -199,6 +205,29 @@
       <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand site-header__cta inline-flex">
         {{ copy().nav.submitQuery }}
       </a>
+
+      <button
+        type="button"
+        class="site-header__menu-btn"
+        (click)="toggleMenu($event)"
+        [attr.aria-expanded]="menuOpen()"
+        aria-controls="site-primary-nav"
+        [attr.aria-label]="menuOpen() ? 'Close menu' : 'Open menu'"
+      >
+        @if (menuOpen()) {
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+            <path d="M6 6l12 12M18 6L6 18" stroke-linecap="round" />
+          </svg>
+        } @else {
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+            <path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round" />
+          </svg>
+        }
+      </button>
     </div>
   </div>
+
+  @if (menuOpen()) {
+    <button type="button" class="site-header__backdrop" (click)="closeMenu()" aria-label="Close menu"></button>
+  }
 </header>

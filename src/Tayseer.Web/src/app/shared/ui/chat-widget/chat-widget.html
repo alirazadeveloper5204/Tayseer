@@ -85,7 +85,7 @@
       }
 
       @if (mode() === 'handoff') {
-        <form class="chat-panel__handoff-form" (ngSubmit)="startAgentChat()">
+        <form class="chat-panel__handoff-form" (ngSubmit)="startAgentChat($event)">
           <p class="chat-panel__handoff-intro">{{ copy().handoffIntro }}</p>
           <label>
             <span>{{ copy().handoffNameLabel }}</span>

@@ -95,6 +95,8 @@
   display: -webkit-box;
   min-height: 2.55em;
   overflow: hidden;
+  overflow-wrap: anywhere;
+  word-break: break-word;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
@@ -103,8 +105,25 @@
   display: -webkit-box;
   min-height: 4.8em;
   overflow: hidden;
+  overflow-wrap: anywhere;
+  word-break: break-word;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
+}
+
+/* Full readable copy when only one card is in view */
+@media (max-width: 699px) {
+  .services-bento .service-card h3,
+  .services-bento .service-card p {
+    display: block;
+    min-height: 0;
+    overflow: visible;
+    -webkit-line-clamp: unset;
+  }
+
+  .services-bento .service-card__media {
+    aspect-ratio: 16 / 10;
+  }
 }
 
 :host-context(html.dark) .services-bento .service-card {

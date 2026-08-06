@@ -1,10 +1,13 @@
 <div
   class="site-carousel"
+  [class.is-paused]="pausedUi()"
   role="region"
   [attr.aria-labelledby]="labelledBy()"
   [attr.aria-label]="label()"
   (mouseenter)="pause()"
   (mouseleave)="resume()"
+  (focusin)="pause()"
+  (focusout)="resume()"
 >
   <div
     #viewport
@@ -17,12 +20,19 @@
     (pointercancel)="onPointerUp($event)"
   >
     <div
+      #track
       class="site-carousel__track"
       [class.is-dragging]="dragging() || jumping()"
-      [style.transform]="trackTransform()"
     >
       <ng-content />
     </div>
+  </div>
+
+  <div class="site-carousel__progress" aria-hidden="true">
+    <span
+      class="site-carousel__progress-bar"
+      [class.is-running]="progressRunning()"
+    ></span>
   </div>
 
   <div class="site-carousel__controls">

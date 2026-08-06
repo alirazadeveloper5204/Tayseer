@@ -7,7 +7,7 @@
       <p class="contact-hero__lead page-muted">{{ lead() }}</p>
 
       <div class="contact-hero__actions">
-        <a href="#contact-inquiry" class="btn-brand">{{ heroCta() }}</a>
+        <a href="#contact-inquiry" class="btn-brand" (click)="startInquiry($event)">{{ heroCta() }}</a>
         <a class="page-ghost-btn" [href]="'mailto:' + teamEmail()">{{ heroEmail() }}</a>
       </div>
 
@@ -49,115 +49,119 @@
       @if (submitted()) {
         <h2 class="font-display text-fluid-2xl font-semibold page-accent-green">{{ successTitle() }}</h2>
         <p class="mt-3 text-fluid-sm leading-relaxed page-muted">{{ successBody() }}</p>
-        <a [routerLink]="'/' + lang()" class="btn-brand mt-fluid-lg inline-flex">{{ label(common.backHome) }}</a>
+        <button type="button" class="btn-brand mt-fluid-lg inline-flex" (click)="submitAnother()">
+          {{ label(common.submitAnother) }}
+        </button>
       } @else {
-        <div class="mb-fluid-lg flex gap-2" aria-hidden="true">
-          @for (n of [1, 2, 3]; track n) {
-            <span class="step-rail h-1.5 flex-1 rounded-full transition" [class.is-active]="step() >= n"></span>
-          }
-        </div>
-
-        @if (step() === 1) {
-          <h2 class="font-display text-fluid-xl font-semibold page-ink">{{ label(c.steps[0]) }}</h2>
-          <div class="mt-fluid-md space-y-4">
-            <label class="block">
-              <span class="mb-1.5 block text-fluid-xs uppercase tracking-wider page-muted">{{
-                label(c.fields.name)
-              }}</span>
-              <input
-                class="form-input"
-                type="text"
-                name="name"
-                autocomplete="name"
-                [ngModel]="name()"
-                (ngModelChange)="name.set($event)"
-              />
-              @if (nameError()) {
-                <span class="mt-1 block text-fluid-xs text-rose-500">{{ nameError() }}</span>
-              }
-            </label>
-            <label class="block">
-              <span class="mb-1.5 block text-fluid-xs uppercase tracking-wider page-muted">{{
-                label(c.fields.email)
-              }}</span>
-              <input
-                class="form-input"
-                type="email"
-                name="email"
-                autocomplete="email"
-                [ngModel]="email()"
-                (ngModelChange)="email.set($event)"
-              />
-              @if (emailError()) {
-                <span class="mt-1 block text-fluid-xs text-rose-500">{{ emailError() }}</span>
-              }
-            </label>
-            <label class="block">
-              <span class="mb-1.5 block text-fluid-xs uppercase tracking-wider page-muted">{{
-                label(c.fields.company)
-              }}</span>
-              <input
-                class="form-input"
-                type="text"
-                name="company"
-                autocomplete="organization"
-                [ngModel]="company()"
-                (ngModelChange)="company.set($event)"
-              />
-            </label>
+        <form class="contact-form" (ngSubmit)="onFormSubmit($event)" novalidate>
+          <div class="mb-fluid-lg flex gap-2" aria-hidden="true">
+            @for (n of [1, 2, 3]; track n) {
+              <span class="step-rail h-1.5 flex-1 rounded-full transition" [class.is-active]="step() >= n"></span>
+            }
           </div>
-        }
 
-        @if (step() === 2) {
-          <h2 class="font-display text-fluid-xl font-semibold page-ink">{{ label(c.steps[1]) }}</h2>
-          <div class="mt-fluid-md grid gap-2 sm:grid-cols-2">
-            @for (opt of c.interests; track label(opt)) {
-              <button
-                type="button"
-                class="choice-chip px-fluid-md py-fluid-sm text-start text-fluid-sm"
-                [class.is-selected]="interest() === label(opt)"
-                (click)="interest.set(label(opt))"
-              >
-                {{ label(opt) }}
+          @if (step() === 1) {
+            <h2 class="font-display text-fluid-xl font-semibold page-ink">{{ label(c.steps[0]) }}</h2>
+            <div class="mt-fluid-md space-y-4">
+              <label class="block">
+                <span class="mb-1.5 block text-fluid-xs uppercase tracking-wider page-muted">{{
+                  label(c.fields.name)
+                }}</span>
+                <input
+                  class="form-input"
+                  type="text"
+                  name="name"
+                  autocomplete="name"
+                  [ngModel]="name()"
+                  (ngModelChange)="name.set($event)"
+                />
+                @if (nameError()) {
+                  <span class="mt-1 block text-fluid-xs text-rose-500">{{ nameError() }}</span>
+                }
+              </label>
+              <label class="block">
+                <span class="mb-1.5 block text-fluid-xs uppercase tracking-wider page-muted">{{
+                  label(c.fields.email)
+                }}</span>
+                <input
+                  class="form-input"
+                  type="email"
+                  name="email"
+                  autocomplete="email"
+                  [ngModel]="email()"
+                  (ngModelChange)="email.set($event)"
+                />
+                @if (emailError()) {
+                  <span class="mt-1 block text-fluid-xs text-rose-500">{{ emailError() }}</span>
+                }
+              </label>
+              <label class="block">
+                <span class="mb-1.5 block text-fluid-xs uppercase tracking-wider page-muted">{{
+                  label(c.fields.company)
+                }}</span>
+                <input
+                  class="form-input"
+                  type="text"
+                  name="company"
+                  autocomplete="organization"
+                  [ngModel]="company()"
+                  (ngModelChange)="company.set($event)"
+                />
+              </label>
+            </div>
+          }
+
+          @if (step() === 2) {
+            <h2 class="font-display text-fluid-xl font-semibold page-ink">{{ label(c.steps[1]) }}</h2>
+            <div class="mt-fluid-md grid gap-2 sm:grid-cols-2">
+              @for (opt of c.interests; track label(opt)) {
+                <button
+                  type="button"
+                  class="choice-chip px-fluid-md py-fluid-sm text-start text-fluid-sm"
+                  [class.is-selected]="interest() === label(opt)"
+                  (click)="interest.set(label(opt))"
+                >
+                  {{ label(opt) }}
+                </button>
+              }
+            </div>
+            @if (interestError()) {
+              <span class="mt-2 block text-fluid-xs text-rose-500">{{ interestError() }}</span>
+            }
+          }
+
+          @if (step() === 3) {
+            <h2 class="font-display text-fluid-xl font-semibold page-ink">{{ label(c.steps[2]) }}</h2>
+            <label class="mt-fluid-md block">
+              <span class="mb-1.5 block text-fluid-xs uppercase tracking-wider page-muted">{{
+                label(c.fields.message)
+              }}</span>
+              <textarea
+                class="form-input min-h-32"
+                name="message"
+                rows="5"
+                [ngModel]="message()"
+                (ngModelChange)="message.set($event)"
+              ></textarea>
+              @if (messageError()) {
+                <span class="mt-1 block text-fluid-xs text-rose-500">{{ messageError() }}</span>
+              }
+            </label>
+          }
+
+          <div class="mt-fluid-lg flex flex-wrap gap-3">
+            @if (step() > 1) {
+              <button type="button" class="page-ghost-btn" (click)="back()">
+                {{ label(common.prevStep) }}
               </button>
             }
-          </div>
-          @if (interestError()) {
-            <span class="mt-2 block text-fluid-xs text-rose-500">{{ interestError() }}</span>
-          }
-        }
-
-        @if (step() === 3) {
-          <h2 class="font-display text-fluid-xl font-semibold page-ink">{{ label(c.steps[2]) }}</h2>
-          <label class="mt-fluid-md block">
-            <span class="mb-1.5 block text-fluid-xs uppercase tracking-wider page-muted">{{
-              label(c.fields.message)
-            }}</span>
-            <textarea
-              class="form-input min-h-32"
-              name="message"
-              rows="5"
-              [ngModel]="message()"
-              (ngModelChange)="message.set($event)"
-            ></textarea>
-            @if (messageError()) {
-              <span class="mt-1 block text-fluid-xs text-rose-500">{{ messageError() }}</span>
+            @if (step() < 3) {
+              <button type="submit" class="btn-brand">{{ label(common.nextStep) }}</button>
+            } @else {
+              <button type="submit" class="btn-brand">{{ label(common.submit) }}</button>
             }
-          </label>
-        }
-
-        <div class="mt-fluid-lg flex flex-wrap gap-3">
-          @if (step() > 1) {
-            <button type="button" class="page-ghost-btn" (click)="back()">
-              {{ label(common.prevStep) }}
-            </button>
-          }
-          @if (step() < 3) {
-            <button type="button" class="btn-brand" (click)="next()">{{ label(common.nextStep) }}</button>
-          } @else {
-            <button type="button" class="btn-brand" (click)="submit()">{{ label(common.submit) }}</button>
-          }
-        </div>
+          </div>
+        </form>
       }
     </div>
 

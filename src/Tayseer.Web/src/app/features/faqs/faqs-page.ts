@@ -1,7 +1,8 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, PLATFORM_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { LocaleService } from '../../core/i18n/locale.service';
+import { scrollToSectionId } from '../../core/navigation/scroll-to-section';
 import { FAQ_PAGE, t, type PageLocale } from '../../core/content/page-content';
 
 @Component({
@@ -12,6 +13,7 @@ import { FAQ_PAGE, t, type PageLocale } from '../../core/content/page-content';
 })
 export class FaqsPage {
   private readonly locale = inject(LocaleService);
+  private readonly platformId = inject(PLATFORM_ID);
   readonly lang = computed(() => this.locale.lang() as PageLocale);
   readonly c = FAQ_PAGE;
 
@@ -70,5 +72,9 @@ export class FaqsPage {
   setCategory(id: string): void {
     this.activeCategory.set(id);
     this.openKey.set(null);
+  }
+
+  browseFaqs(event: Event): void {
+    scrollToSectionId(this.platformId, 'faq-browse', event);
   }
 }
