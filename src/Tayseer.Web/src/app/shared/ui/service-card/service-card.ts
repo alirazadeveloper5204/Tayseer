@@ -23,7 +23,11 @@ export class ServiceCard {
 
   private readonly coverImg = viewChild<HTMLImageElement>('coverImg');
 
-  readonly link = computed(() => solutionPath(this.lang(), this.service().slug));
+  readonly link = computed(() => {
+    const service = this.service();
+    // Prefer slug-based routing so special modules (software / managed) resolve correctly.
+    return solutionPath(this.lang(), service.slug);
+  });
 
   readonly isGreen = computed(() => this.service().accent === 'green');
 

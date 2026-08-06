@@ -1,29 +1,21 @@
 import {
-  afterNextRender,
   Component,
   computed,
-  DestroyRef,
-  ElementRef,
   inject,
-  NgZone,
   PLATFORM_ID,
-  signal,
-  viewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { LocaleService } from '../../core/i18n/locale.service';
 import { ABOUT_PAGE, PAGE_COMMON, t, type PageLocale } from '../../core/content/page-content';
 import { HOME_TESTIMONIALS } from '../../core/i18n/ui-copy';
 import { ABOUT_COLLAGE, SITE_IMAGES } from '../../core/media/site-images';
 import { scrollToSectionId } from '../../core/navigation/scroll-to-section';
-import type BsCarousel from 'bootstrap/js/dist/carousel';
-import { SITE_SLIDER } from '../../shared/ui/site-carousel/site-slider';
+import { SiteCarousel } from '../../shared/ui/site-carousel/site-carousel';
 
 @Component({
   selector: 'app-about-page',
-  imports: [RouterLink],
+  imports: [RouterLink, SiteCarousel],
   templateUrl: './about-page.html',
   styleUrl: './about-page.css',
   encapsulation: ViewEncapsulation.None,
@@ -31,16 +23,10 @@ import { SITE_SLIDER } from '../../shared/ui/site-carousel/site-slider';
 export class AboutPage {
   private readonly locale = inject(LocaleService);
   private readonly platformId = inject(PLATFORM_ID);
-  private readonly destroyRef = inject(DestroyRef);
-  private readonly zone = inject(NgZone);
-  private readonly aboutSlider = viewChild<ElementRef<HTMLElement>>('aboutSlider');
-  private carousel: BsCarousel | null = null;
-  private sliderTimer: ReturnType<typeof setTimeout> | null = null;
 
   readonly lang = computed(() => this.locale.lang() as PageLocale);
   readonly c = ABOUT_PAGE;
   readonly common = PAGE_COMMON;
-  readonly sliderIndex = signal(0);
 
   readonly sliderImages = [
     { src: ABOUT_COLLAGE.main, alt: 'Tayseer team collaboration' },
@@ -91,88 +77,11 @@ export class AboutPage {
     }));
   });
 
-  constructor() {
-    afterNextRender(() => {
-      if (!isPlatformBrowser(this.platformId)) {
-        return;
-      }
-      void this.initSlider();
-      this.destroyRef.onDestroy(() => {
-        this.clearSliderTimer();
-        this.carousel?.dispose();
-        this.carousel = null;
-      });
-    });
-  }
-
   label(item: { en: string; ar: string }): string {
     return t(item, this.lang());
   }
 
   scrollToJourney(event: Event): void {
     scrollToSectionId(this.platformId, 'about-journey', event);
-  }
-
-  goToSlide(index: number): void {
-    this.carousel?.to(index);
-    this.restartSliderTimer();
-  }
-
-  private async initSlider(): Promise<void> {
-    const el = this.aboutSlider()?.nativeElement;
-    if (!el) {
-      return;
-    }
-
-    const mod = await import('bootstrap/js/dist/carousel');
-    const CarouselCtor =
-      (mod as { default?: typeof BsCarousel }).default ?? (mod as unknown as typeof BsCarousel);
-    if (typeof CarouselCtor !== 'function' || !this.aboutSlider()?.nativeElement) {
-      return;
-    }
-
-    el.querySelectorAll('.carousel-item').forEach((item, index) => {
-      item.classList.toggle('active', index === 0);
-    });
-
-    this.carousel = new CarouselCtor(el, {
-      interval: false,
-      wrap: true,
-      ride: false,
-      pause: false,
-      touch: true,
-      keyboard: true,
-    });
-    this.zone.run(() => this.sliderIndex.set(0));
-
-    const syncIndex = (event: Event) => {
-      const nextIndex = (event as unknown as BsCarousel.Event).to;
-      if (typeof nextIndex === 'number') {
-        this.zone.run(() => this.sliderIndex.set(nextIndex));
-      }
-    };
-    el.addEventListener('slid.bs.carousel', syncIndex);
-    this.destroyRef.onDestroy(() => el.removeEventListener('slid.bs.carousel', syncIndex));
-    this.restartSliderTimer();
-  }
-
-  private restartSliderTimer(): void {
-    this.clearSliderTimer();
-    if (!isPlatformBrowser(this.platformId) || !this.carousel) {
-      return;
-    }
-    this.sliderTimer = setTimeout(() => {
-      this.zone.run(() => {
-        this.carousel?.next();
-        this.restartSliderTimer();
-      });
-    }, SITE_SLIDER.intervalMs);
-  }
-
-  private clearSliderTimer(): void {
-    if (this.sliderTimer) {
-      clearTimeout(this.sliderTimer);
-      this.sliderTimer = null;
-    }
   }
 }

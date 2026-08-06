@@ -113,6 +113,10 @@
 
 /* Full readable copy when only one card is in view */
 @media (max-width: 699px) {
+  .services-bento .site-carousel {
+    --slide-peek: 1.25rem;
+  }
+
   .services-bento .service-card h3,
   .services-bento .service-card p {
     display: block;

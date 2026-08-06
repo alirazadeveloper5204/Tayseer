@@ -73,90 +73,53 @@
       {{ copy().home.testimonialsTitle }}
     </h2>
 
-    <div
-      #clientsCarousel
-      class="clients-slider carousel slide"
-      (mouseenter)="pauseTestimonials()"
-      (mouseleave)="resumeTestimonials()"
+    <app-site-carousel
+      class="clients-slider"
+      [loop]="true"
+      [itemCount]="testimonials().length"
+      [visibleCount]="1"
+      [label]="copy().home.testimonialsTitle"
+      [previousLabel]="copy().common.previous"
+      [nextLabel]="copy().common.next"
     >
-      <div class="carousel-inner">
-        @for (t of testimonials(); track t.id; let i = $index) {
-          <div class="carousel-item">
-            <div class="clients-slider__stage">
-              <article class="clients-slider__card">
-                <h3 class="clients-slider__card-title">{{ copy().home.testimonialsCardTitle }}</h3>
-                <p class="clients-slider__quote">{{ t.quote }}</p>
-                <div class="clients-slider__author">
-                  <img
-                    class="clients-slider__avatar"
-                    [src]="t.avatar"
-                    [alt]="t.name"
-                    width="56"
-                    height="56"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                  <div>
-                    <p class="clients-slider__name">{{ t.name }}</p>
-                    <p class="clients-slider__role">{{ t.role }}</p>
-                  </div>
-                </div>
-              </article>
-
-              <figure class="clients-slider__portrait">
+      @for (t of loopedTestimonials(); track $index + '-' + t.id) {
+        <div class="site-carousel__slide">
+          <div class="clients-slider__stage">
+            <article class="clients-slider__card">
+              <h3 class="clients-slider__card-title">{{ copy().home.testimonialsCardTitle }}</h3>
+              <p class="clients-slider__quote">{{ t.quote }}</p>
+              <div class="clients-slider__author">
                 <img
-                  class="clients-slider__photo"
-                  [src]="t.portrait"
+                  class="clients-slider__avatar"
+                  [src]="t.avatar"
                   [alt]="t.name"
-                  width="900"
-                  height="1100"
+                  width="56"
+                  height="56"
                   loading="lazy"
                   decoding="async"
                 />
-              </figure>
-            </div>
+                <div>
+                  <p class="clients-slider__name">{{ t.name }}</p>
+                  <p class="clients-slider__role">{{ t.role }}</p>
+                </div>
+              </div>
+            </article>
+
+            <figure class="clients-slider__portrait">
+              <img
+                class="clients-slider__photo"
+                [src]="t.portrait"
+                [alt]="t.name"
+                width="900"
+                height="1100"
+                loading="lazy"
+                decoding="async"
+              />
+            </figure>
           </div>
-        }
-      </div>
-
-      <div class="clients-slider__controls">
-        <button
-          type="button"
-          class="clients-slider__nav"
-          (click)="prevTestimonial()"
-          [attr.aria-label]="copy().common.previous"
-        >
-          <svg class="size-4 rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-            <path d="M15 6l-6 6 6 6" />
-          </svg>
-        </button>
-
-        <div class="clients-slider__dots" role="tablist" [attr.aria-label]="copy().home.testimonialsTitle">
-          @for (item of testimonials(); track item.id) {
-            <button
-              type="button"
-              class="clients-dot"
-              role="tab"
-              [class.is-active]="testimonialIndex() === item.id"
-              [attr.aria-selected]="testimonialIndex() === item.id"
-              [attr.aria-label]="item.name"
-              (click)="goToTestimonial(item.id)"
-            ></button>
-          }
         </div>
-
-        <button
-          type="button"
-          class="clients-slider__nav"
-          (click)="nextTestimonial()"
-          [attr.aria-label]="copy().common.next"
-        >
-          <svg class="size-4 rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-            <path d="M9 6l6 6-6 6" />
-          </svg>
-        </button>
-      </div>
-    </div>
+      }
+    </app-site-carousel>
   </div>
 </section>
 

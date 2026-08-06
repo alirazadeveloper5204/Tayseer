@@ -302,7 +302,9 @@ html[dir='rtl'] .home-hero__graphic {
   z-index: 1;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.55rem 0.25rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem 0.15rem;
   margin: clamp(1.5rem, 1rem + 2vw, 2.5rem) auto 0;
   padding: 0;
   list-style: none;
@@ -311,15 +313,21 @@ html[dir='rtl'] .home-hero__graphic {
   color: #094266;
 }
 
+.home-hero__trust li {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
 .home-hero__trust li:not(:last-child)::after {
   content: '';
   display: inline-block;
   width: 0.28rem;
   height: 0.28rem;
-  margin-inline: 0.75rem;
+  margin-inline: 0.85rem;
   border-radius: 999px;
   background: #62a945;
-  vertical-align: middle;
+  flex-shrink: 0;
 }
 
 html.dark .home-hero__trust {

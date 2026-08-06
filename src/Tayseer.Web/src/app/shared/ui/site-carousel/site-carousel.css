@@ -1,14 +1,14 @@
 .site-carousel {
-  --site-slider-duration: 650ms;
-  --site-slider-interval: 4500ms;
-  --site-slider-ease: cubic-bezier(0.19, 1, 0.22, 1);
+  --site-slider-duration: 950ms;
+  --site-slider-interval: 6000ms;
+  --site-slider-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --site-slider-ease-soft: cubic-bezier(0.25, 1, 0.5, 1);
   --site-neighbor-opacity: 0.72;
   --site-neighbor-scale: 0.985;
   /* SSR / pre-JS fallback — JS data-visible overrides these */
   --slide-count: 1;
   --slide-gap: 0.85rem;
-  --slide-peek: 1.25rem;
+  --slide-peek: 0px;
   display: grid;
   gap: 1.25rem;
   width: 100%;
@@ -34,7 +34,7 @@
 /* Runtime visible count from SiteCarousel (wins over media fallbacks) */
 app-site-carousel[data-visible='1'] .site-carousel {
   --slide-count: 1;
-  --slide-peek: 1.25rem;
+  --slide-peek: 0px;
 }
 
 app-site-carousel[data-visible='2'] .site-carousel {
@@ -65,6 +65,14 @@ app-site-carousel {
   min-width: 0;
 }
 
+/* Keep projected links clickable inside the rail */
+.site-carousel__track a {
+  cursor: pointer;
+  pointer-events: auto;
+  position: relative;
+  z-index: 1;
+}
+
 .site-carousel__viewport:active {
   cursor: grabbing;
 }
@@ -78,12 +86,15 @@ app-site-carousel {
   display: flex;
   align-items: stretch;
   gap: var(--slide-gap);
+  --site-track-x: 0px;
+  transform: translate3d(var(--site-track-x), 0, 0);
+  transition: transform var(--site-slider-duration) var(--site-slider-ease);
   will-change: transform;
-  /* Position driven by GSAP (x) — CSS transition kept as reduced-motion fallback only */
 }
 
-.site-carousel__track.is-dragging {
-  cursor: grabbing;
+.site-carousel__track.is-dragging,
+.site-carousel__track.is-instant {
+  transition: none;
 }
 
 .site-carousel__track > * {
@@ -255,11 +266,89 @@ html.dark .site-carousel__dot.is-active {
   outline-offset: 2px;
 }
 
+/* ——— Type B: full-bleed crossfade ——— */
+app-site-carousel[data-mode='fade'] .site-carousel__viewport {
+  cursor: grab;
+}
+
+app-site-carousel[data-mode='fade'] .site-carousel__track {
+  display: grid;
+  grid-template-areas: 'stack';
+  align-items: stretch;
+  gap: 0;
+  width: 100%;
+  min-height: inherit;
+  transform: none;
+  transition: none;
+  will-change: auto;
+}
+
+app-site-carousel[data-mode='fade'] .site-carousel__track > * {
+  grid-area: stack;
+  flex: none;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  opacity: 0;
+  --fade-x: 0px;
+  transform: translate3d(var(--fade-x), 0, 0);
+  transition:
+    opacity var(--site-slider-duration) var(--site-slider-ease-out, var(--site-slider-ease)),
+    transform var(--site-slider-duration) var(--site-slider-ease-out, var(--site-slider-ease));
+  pointer-events: none;
+  z-index: 1;
+  align-self: stretch;
+}
+
+app-site-carousel[data-mode='fade'] .site-carousel__track > *.is-active {
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 2;
+}
+
+app-site-carousel[data-mode='fade'] .site-carousel__track > *.is-entering {
+  transition: none;
+  opacity: 0;
+}
+
+app-site-carousel[data-mode='fade'] .site-carousel__track > *.is-leaving {
+  opacity: 0;
+  z-index: 1;
+  transition:
+    opacity 360ms var(--site-slider-ease-exit, cubic-bezier(0.4, 0, 1, 1)),
+    transform 360ms var(--site-slider-ease-exit, cubic-bezier(0.4, 0, 1, 1));
+}
+
+app-site-carousel[data-mode='fade'] .site-carousel__track > *.is-neighbor {
+  opacity: 0;
+  transform: translate3d(var(--fade-x, 0px), 0, 0);
+}
+
+/* About overlay dots layout helper */
+app-site-carousel.about-hero__slider .site-carousel__controls {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0.85rem;
+  z-index: 4;
+  pointer-events: none;
+}
+
+app-site-carousel.about-hero__slider .site-carousel__dot {
+  pointer-events: auto;
+  background: rgba(255, 255, 255, 0.45);
+}
+
+app-site-carousel.about-hero__slider .site-carousel__dot.is-active {
+  background: #62a945;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .site-carousel__track,
   .site-carousel__track > *,
   .site-carousel__nav,
-  .site-carousel__dot {
-    transition: none;
+  .site-carousel__dot,
+  app-site-carousel[data-mode='fade'] .site-carousel__track > * {
+    transition: none !important;
   }
 
   .site-carousel__nav:hover {

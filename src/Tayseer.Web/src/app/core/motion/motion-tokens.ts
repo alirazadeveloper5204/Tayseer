@@ -7,8 +7,10 @@ export const MOTION = {
     instant: 0.12,
     fast: 0.2,
     base: 0.45,
-    slider: 0.65,
+    slider: 0.95,
     scroll: 0.7,
+    /** Continuous logo / trust marquee loop (seconds). */
+    marquee: 32,
   },
   /** GSAP ease names mapped to design tokens. */
   ease: {

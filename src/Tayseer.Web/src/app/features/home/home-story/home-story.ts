@@ -23,8 +23,8 @@ import {
 } from '../../../core/i18n/ui-copy';
 import { CLIENT_GALLERIES } from '../../../core/media/site-images';
 import { GsapService } from '../../../core/motion/gsap.service';
-import type BsCarousel from 'bootstrap/js/dist/carousel';
-import { SITE_SLIDER } from '../../../shared/ui/site-carousel/site-slider';
+import { MOTION } from '../../../core/motion/motion-tokens';
+import { SiteCarousel } from '../../../shared/ui/site-carousel/site-carousel';
 
 function formatKpi(value: number, decimals: number, prefix: string, suffix: string): string {
   const body = decimals > 0 ? value.toFixed(decimals) : String(Math.round(value));
@@ -33,6 +33,7 @@ function formatKpi(value: number, decimals: number, prefix: string, suffix: stri
 
 @Component({
   selector: 'app-home-story',
+  imports: [SiteCarousel],
   templateUrl: './home-story.html',
   styleUrl: './home-story.css',
   encapsulation: ViewEncapsulation.None,
@@ -47,11 +48,9 @@ export class HomeStory {
   readonly isAr = computed(() => this.locale.lang() === 'ar');
 
   private readonly whyChoosePanel = viewChild<ElementRef<HTMLElement>>('whyChoosePanel');
-  private readonly clientsCarousel = viewChild<ElementRef<HTMLElement>>('clientsCarousel');
   private readonly mantraSection = viewChild<ElementRef<HTMLElement>>('mantraSection');
   private readonly pioneerSection = viewChild<ElementRef<HTMLElement>>('pioneerSection');
 
-  readonly testimonialIndex = signal(0);
   readonly kpiDisplays = signal(
     HOME_KPI_STATS.map((s) => formatKpi(0, s.decimals, s.prefix, s.suffix)),
   );
@@ -78,6 +77,12 @@ export class HomeStory {
       };
     }),
   );
+
+  /** Duplicated for seamless rail loop (matches services bento). */
+  readonly loopedTestimonials = computed(() => {
+    const items = this.testimonials();
+    return items.length ? [...items, ...items] : [];
+  });
 
   readonly whyFeatures = computed(() =>
     HOME_WHY_FEATURES.map((item, i) => ({
@@ -110,9 +115,6 @@ export class HomeStory {
     })),
   );
 
-  private carousel: BsCarousel | null = null;
-  private testimonialTimer: ReturnType<typeof setTimeout> | null = null;
-  private testimonialPaused = false;
   private counterTweens: { kill(): void }[] = [];
 
   constructor() {
@@ -124,40 +126,11 @@ export class HomeStory {
       this.watchWhyChooseCounters();
       this.watchSectionReveal(this.mantraSection()?.nativeElement);
       this.watchSectionReveal(this.pioneerSection()?.nativeElement);
-      void this.initCarousel();
 
       this.destroyRef.onDestroy(() => {
         this.killCounters();
-        this.clearTestimonialTimer();
-        this.carousel?.dispose();
-        this.carousel = null;
       });
     });
-  }
-
-  prevTestimonial(): void {
-    this.carousel?.prev();
-    this.restartTestimonialTimer();
-  }
-
-  nextTestimonial(): void {
-    this.carousel?.next();
-    this.restartTestimonialTimer();
-  }
-
-  goToTestimonial(index: number): void {
-    this.carousel?.to(index);
-    this.restartTestimonialTimer();
-  }
-
-  pauseTestimonials(): void {
-    this.testimonialPaused = true;
-    this.clearTestimonialTimer();
-  }
-
-  resumeTestimonials(): void {
-    this.testimonialPaused = false;
-    this.restartTestimonialTimer();
   }
 
   private watchWhyChooseCounters(): void {
@@ -213,7 +186,7 @@ export class HomeStory {
       const tween = api.to(state, {
         val: meta.value,
         duration: 1.8,
-        ease: 'power3.out',
+        ease: MOTION.ease.out,
         overwrite: 'auto',
         onUpdate: () => {
           this.zone.run(() => {
@@ -253,64 +226,5 @@ export class HomeStory {
   private killCounters(): void {
     this.counterTweens.forEach((tween) => tween.kill());
     this.counterTweens = [];
-  }
-
-  private async initCarousel(): Promise<void> {
-    const el = this.clientsCarousel()?.nativeElement;
-    if (!el) {
-      return;
-    }
-
-    const mod = await import('bootstrap/js/dist/carousel');
-    const CarouselCtor = (mod as { default?: typeof BsCarousel }).default ?? (mod as unknown as typeof BsCarousel);
-    if (typeof CarouselCtor !== 'function' || !this.clientsCarousel()?.nativeElement) {
-      return;
-    }
-
-    el.querySelectorAll('.carousel-item').forEach((item, index) => {
-      item.classList.toggle('active', index === 0);
-    });
-
-    this.carousel = new CarouselCtor(el, {
-      interval: false,
-      wrap: true,
-      ride: false,
-      pause: false,
-      touch: true,
-      keyboard: true,
-    });
-    this.zone.run(() => this.testimonialIndex.set(0));
-
-    const syncIndex = (event: Event) => {
-      const nextIndex = (event as unknown as BsCarousel.Event).to;
-      if (typeof nextIndex !== 'number') {
-        return;
-      }
-      this.zone.run(() => this.testimonialIndex.set(nextIndex));
-    };
-
-    el.addEventListener('slid.bs.carousel', syncIndex);
-    this.destroyRef.onDestroy(() => el.removeEventListener('slid.bs.carousel', syncIndex));
-    this.restartTestimonialTimer();
-  }
-
-  private restartTestimonialTimer(): void {
-    this.clearTestimonialTimer();
-    if (!isPlatformBrowser(this.platformId) || this.testimonialPaused || !this.carousel) {
-      return;
-    }
-    this.testimonialTimer = setTimeout(() => {
-      this.zone.run(() => {
-        this.carousel?.next();
-        this.restartTestimonialTimer();
-      });
-    }, SITE_SLIDER.intervalMs);
-  }
-
-  private clearTestimonialTimer(): void {
-    if (this.testimonialTimer) {
-      clearTimeout(this.testimonialTimer);
-      this.testimonialTimer = null;
-    }
   }
 }

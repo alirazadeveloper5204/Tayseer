@@ -101,33 +101,28 @@
         <p class="mt-fluid-md text-fluid-base leading-relaxed page-muted">{{ mission() }}</p>
       </div>
       <div class="about-hero__media">
-        <div #aboutSlider class="about-hero__slider carousel slide" [attr.aria-label]="whoTitle()">
-          <div class="carousel-inner">
-            @for (slide of sliderImages; track slide.src; let first = $first) {
-              <div class="carousel-item">
-                <img
-                  [src]="slide.src"
-                  [alt]="slide.alt"
-                  width="900"
-                  height="1100"
-                  [attr.loading]="first ? 'eager' : 'lazy'"
-                  decoding="async"
-                />
-              </div>
-            }
-          </div>
-          <div class="about-hero__dots" role="tablist" [attr.aria-label]="whoTitle()">
-            @for (slide of sliderImages; track slide.src; let i = $index) {
-              <button
-                type="button"
-                class="about-hero__dot"
-                [class.is-active]="sliderIndex() === i"
-                [attr.aria-label]="slide.alt"
-                (click)="goToSlide(i)"
-              ></button>
-            }
-          </div>
-        </div>
+        <app-site-carousel
+          class="about-hero__slider"
+          mode="fade"
+          [loop]="true"
+          [itemCount]="sliderImages.length"
+          [label]="whoTitle()"
+          [showNav]="false"
+          [showProgress]="false"
+        >
+          @for (slide of sliderImages; track slide.src; let first = $first) {
+            <div class="site-carousel__slide">
+              <img
+                [src]="slide.src"
+                [alt]="slide.alt"
+                width="900"
+                height="1100"
+                [attr.loading]="first ? 'eager' : 'lazy'"
+                decoding="async"
+              />
+            </div>
+          }
+        </app-site-carousel>
       </div>
     </div>
     <div class="about-creds">

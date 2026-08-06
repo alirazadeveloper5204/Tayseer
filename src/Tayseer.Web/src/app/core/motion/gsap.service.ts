@@ -59,7 +59,10 @@ export class GsapService {
     return tl;
   }
 
-  /** Fade + slight rise — common portal entrance. */
+  /** Named ease map — design direction tokens. */
+  readonly easings = MOTION.ease;
+
+  /** Fade + slight rise — common portal entrance (scroll reveal default). */
   fadeUp(
     targets: gsap.TweenTarget,
     vars?: gsap.TweenVars,
@@ -81,7 +84,7 @@ export class GsapService {
     );
   }
 
-  /** Stagger children into view (cards, thumbs, etc.). */
+  /** Stagger children into view (cards, thumbs, etc.). Max ~6 items recommended. */
   staggerIn(
     targets: gsap.TweenTarget,
     vars?: gsap.TweenVars,
@@ -92,10 +95,10 @@ export class GsapService {
     }
     return api.from(targets, {
       autoAlpha: 0,
-      y: 24,
-      duration: 0.55,
+      y: 32,
+      duration: MOTION.duration.scroll,
       stagger: 0.1,
-      ease: MOTION.ease.soft,
+      ease: MOTION.ease.out,
       ...vars,
     });
   }
