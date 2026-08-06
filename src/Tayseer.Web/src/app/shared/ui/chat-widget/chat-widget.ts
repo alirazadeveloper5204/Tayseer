@@ -334,7 +334,8 @@ export class ChatWidget implements OnDestroy {
     this.focusComposer();
   }
 
-  startAgentChat(): void {
+  startAgentChat(event?: Event): void {
+    event?.preventDefault();
     if (!isPlatformBrowser(this.platformId) || this.busy() || this.mode() !== 'handoff') {
       return;
     }

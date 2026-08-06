@@ -7,7 +7,7 @@
       <p class="faq-hero__lead page-muted">{{ lead() }}</p>
 
       <div class="faq-hero__actions">
-        <a href="#faq-browse" class="btn-brand">{{ heroCta() }}</a>
+        <a href="#faq-browse" class="btn-brand" (click)="browseFaqs($event)">{{ heroCta() }}</a>
         <a [routerLink]="'/' + lang() + '/contact'" class="page-ghost-btn">{{ heroSecondary() }}</a>
       </div>
 
@@ -54,6 +54,7 @@
           [placeholder]="searchPlaceholder()"
           [ngModel]="query()"
           (ngModelChange)="query.set($event)"
+          (keydown.enter)="$event.preventDefault()"
         />
       </label>
       <div class="faq-tabs" role="tablist">

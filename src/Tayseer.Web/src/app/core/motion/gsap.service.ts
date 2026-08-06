@@ -2,6 +2,7 @@ import { Injectable, PLATFORM_ID, inject, DestroyRef } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { MOTION } from './motion-tokens';
 
 /**
  * Browser-only GSAP access for the Tayseer portal.
@@ -58,7 +59,10 @@ export class GsapService {
     return tl;
   }
 
-  /** Fade + slight rise — common portal entrance. */
+  /** Named ease map — design direction tokens. */
+  readonly easings = MOTION.ease;
+
+  /** Fade + slight rise — common portal entrance (scroll reveal default). */
   fadeUp(
     targets: gsap.TweenTarget,
     vars?: gsap.TweenVars,
@@ -73,14 +77,14 @@ export class GsapService {
       {
         autoAlpha: 1,
         y: 0,
-        duration: 0.7,
-        ease: 'power3.out',
+        duration: MOTION.duration.scroll,
+        ease: MOTION.ease.out,
         ...vars,
       },
     );
   }
 
-  /** Stagger children into view (cards, thumbs, etc.). */
+  /** Stagger children into view (cards, thumbs, etc.). Max ~6 items recommended. */
   staggerIn(
     targets: gsap.TweenTarget,
     vars?: gsap.TweenVars,
@@ -91,10 +95,10 @@ export class GsapService {
     }
     return api.from(targets, {
       autoAlpha: 0,
-      y: 24,
-      duration: 0.55,
-      stagger: 0.08,
-      ease: 'power2.out',
+      y: 32,
+      duration: MOTION.duration.scroll,
+      stagger: 0.1,
+      ease: MOTION.ease.out,
       ...vars,
     });
   }
@@ -107,8 +111,8 @@ export class GsapService {
     }
     return api.to(target, {
       scale,
-      duration: 0.6,
-      ease: 'power3.out',
+      duration: MOTION.duration.slider,
+      ease: MOTION.ease.out,
       overwrite: 'auto',
       force3D: true,
     });
@@ -123,7 +127,7 @@ export class GsapService {
     return api.to(target, {
       scale: 1,
       duration: 0.55,
-      ease: 'power3.out',
+      ease: MOTION.ease.out,
       overwrite: 'auto',
       force3D: true,
     });
@@ -183,7 +187,7 @@ export class GsapService {
     return api.to(state, {
       val: end,
       duration: options?.duration ?? 2.2,
-      ease: 'power3.out',
+      ease: MOTION.ease.out,
       overwrite: 'auto',
       scrollTrigger: options?.scrollTrigger,
       onUpdate: () => {

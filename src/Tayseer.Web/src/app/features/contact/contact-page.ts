@@ -1,14 +1,14 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 import { LocaleService } from '../../core/i18n/locale.service';
 import { UiCopyService } from '../../core/i18n/ui-copy.service';
+import { scrollToSectionId } from '../../core/navigation/scroll-to-section';
 import { CONTACT_PAGE, PAGE_COMMON, t, type PageLocale } from '../../core/content/page-content';
 
 @Component({
   selector: 'app-contact-page',
-  imports: [RouterLink, FormsModule],
+  imports: [FormsModule],
   templateUrl: './contact-page.html',
   styleUrl: './contact-page.css',
 })
@@ -16,6 +16,7 @@ export class ContactPage {
   private readonly locale = inject(LocaleService);
   private readonly sanitizer = inject(DomSanitizer);
   private readonly ui = inject(UiCopyService);
+  private readonly platformId = inject(PLATFORM_ID);
   readonly lang = computed(() => this.locale.lang() as PageLocale);
   readonly c = CONTACT_PAGE;
   readonly common = PAGE_COMMON;
@@ -83,6 +84,10 @@ export class ContactPage {
     return `tel:${phone.replace(/\s+/g, '')}`;
   }
 
+  startInquiry(event: Event): void {
+    scrollToSectionId(this.platformId, 'contact-inquiry', event);
+  }
+
   next(): void {
     this.touched.set(true);
     if (this.step() === 1) {
@@ -109,6 +114,28 @@ export class ContactPage {
     this.touched.set(true);
     if (!this.message().trim()) return;
     this.submitted.set(true);
+  }
+
+  /** Reset the wizard on the same page — never navigate away after submit. */
+  submitAnother(): void {
+    this.submitted.set(false);
+    this.step.set(1);
+    this.touched.set(false);
+    this.name.set('');
+    this.email.set('');
+    this.company.set('');
+    this.interest.set('');
+    this.message.set('');
+  }
+
+  onFormSubmit(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    if (this.step() < 3) {
+      this.next();
+      return;
+    }
+    this.submit();
   }
 
   interestError(): string {

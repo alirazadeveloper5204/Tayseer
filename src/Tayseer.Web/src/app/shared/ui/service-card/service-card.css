@@ -1,6 +1,21 @@
 :host {
   display: block;
   height: 100%;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.service-card {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.service-card h3,
+.service-card p {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .service-card__media {

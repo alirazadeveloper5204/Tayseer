@@ -12,6 +12,7 @@ import { LocaleService } from '../../../core/i18n/locale.service';
 import { HOME_HERO_SEGMENTS } from '../../../core/i18n/ui-copy';
 import { UiCopyService } from '../../../core/i18n/ui-copy.service';
 import { GsapService } from '../../../core/motion/gsap.service';
+import { MOTION } from '../../../core/motion/motion-tokens';
 import { ProofCards } from '../../../shared/ui/proof-cards/proof-cards';
 
 @Component({
@@ -87,18 +88,31 @@ export class HomeHero {
       api.set(trust, { autoAlpha: 0, y: 12 });
     }
 
-    tl.to(text, { autoAlpha: 1, y: 0, duration: 0.45, stagger: 0.12, ease: 'power3.out' }, 0);
+    // ~1.1s total — text → visual → proof → trust (design direction).
+    tl.to(
+      text,
+      { autoAlpha: 1, y: 0, duration: 0.5, stagger: 0.14, ease: MOTION.ease.out },
+      0,
+    );
     if (visual) {
-      tl.to(visual, { autoAlpha: 1, y: 0, scale: 1, duration: 0.5, ease: 'power3.out' }, 0.2);
+      tl.to(
+        visual,
+        { autoAlpha: 1, y: 0, scale: 1, duration: 0.55, ease: MOTION.ease.out },
+        0.22,
+      );
     }
     if (cards.length) {
-      tl.to(cards, { autoAlpha: 1, y: 0, duration: 0.4, stagger: 0.12, ease: 'power3.out' }, 0.62);
+      tl.to(
+        cards,
+        { autoAlpha: 1, y: 0, duration: 0.45, stagger: 0.12, ease: MOTION.ease.out },
+        0.7,
+      );
     }
     if (mobileProof) {
-      tl.to(mobileProof, { autoAlpha: 1, y: 0, duration: 0.4, ease: 'power3.out' }, 0.62);
+      tl.to(mobileProof, { autoAlpha: 1, y: 0, duration: 0.45, ease: MOTION.ease.out }, 0.7);
     }
     if (trust) {
-      tl.to(trust, { autoAlpha: 1, y: 0, duration: 0.4, ease: 'power3.out' }, 0.88);
+      tl.to(trust, { autoAlpha: 1, y: 0, duration: 0.45, ease: MOTION.ease.out }, 1.0);
     }
 
     tl.eventCallback('onComplete', () => {

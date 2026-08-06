@@ -39,6 +39,11 @@ export class NavigationLoaderService {
   private firstNavigation = true;
   /** First child activation should not wait for a cover animation. */
   private skipCoverWait = true;
+  /**
+   * True when the current navigation (or theme cover) owns the page loader.
+   * Route transitions only enable this when the destination is Home.
+   */
+  private loaderSession = false;
 
   /** Must match `.page-loader` enter transition. */
   private readonly enterMs = 320;
@@ -68,9 +73,18 @@ export class NavigationLoaderService {
           this.navigationDepth++;
           if (this.firstNavigation) {
             this.firstNavigation = false;
+            // Initial boot keeps the boot/home loader; later navigations are gated.
+            this.loaderSession = this.isHomeDestination(event.url);
             return;
           }
-          this.show();
+
+          // Only show the branded page loader when navigating to Home.
+          if (this.isHomeDestination(event.url)) {
+            this.loaderSession = true;
+            this.show();
+          } else {
+            this.loaderSession = false;
+          }
           return;
         }
 
@@ -80,7 +94,10 @@ export class NavigationLoaderService {
 
         this.navigationDepth = Math.max(0, this.navigationDepth - 1);
         if (this.navigationDepth === 0) {
-          this.scheduleHide();
+          if (this.loaderSession || this.active()) {
+            this.scheduleHide();
+          }
+          this.loaderSession = false;
         }
       });
 
@@ -93,10 +110,10 @@ export class NavigationLoaderService {
 
   /**
    * Blocks route activation until the overlay has faded in over the current page.
-   * Prevents the destination page flashing through a semi-transparent cover.
+   * No-ops when this navigation does not use the page loader (non-home routes).
    */
   waitUntilCovered(): Promise<boolean> {
-    if (!isPlatformBrowser(this.platformId) || this.skipCoverWait) {
+    if (!isPlatformBrowser(this.platformId) || this.skipCoverWait || !this.loaderSession) {
       this.skipCoverWait = false;
       return Promise.resolve(true);
     }
@@ -120,6 +137,7 @@ export class NavigationLoaderService {
 
   runCovered(work: () => void, minVisibleMs = 1100): void {
     this.navigationDepth++;
+    this.loaderSession = true;
     this.show();
 
     const run = () => {
@@ -127,6 +145,7 @@ export class NavigationLoaderService {
       this.navigationDepth = Math.max(0, this.navigationDepth - 1);
       if (this.navigationDepth === 0) {
         this.scheduleHideWithMin(minVisibleMs);
+        this.loaderSession = false;
       }
     };
 
@@ -138,6 +157,12 @@ export class NavigationLoaderService {
     }
 
     run();
+  }
+
+  /** Home destinations: `/en`, `/ar` (optional trailing slash / query / hash). */
+  private isHomeDestination(url: string): boolean {
+    const path = url.split('?')[0].split('#')[0].replace(/\/+$/, '') || '/';
+    return /^\/?(en|ar)$/i.test(path);
   }
 
   private show(): void {

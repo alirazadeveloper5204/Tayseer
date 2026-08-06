@@ -275,14 +275,23 @@ html[dir='rtl'] .careers-hero__title {
   color: rgba(232, 238, 245, 0.82);
 }
 
-.careers-cta,
+.careers-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1.35rem;
+}
+
+.careers-cta > div:first-child {
+  max-width: 40rem;
+}
+
 .careers-cta__actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: 0.85rem;
-}
-
-.careers-cta {
-  justify-content: space-between;
 }

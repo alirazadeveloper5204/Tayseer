@@ -477,6 +477,7 @@ html.dark .tab-pill.is-active {
   display: grid;
   gap: clamp(1.75rem, 1.2rem + 2.4vw, 3.5rem);
   align-items: center;
+  min-width: 0;
 }
 
 @media (min-width: 960px) {
@@ -723,6 +724,7 @@ html.dark .product-hero__media {
   display: grid;
   gap: clamp(1.15rem, 2.8vw, 3.25rem);
   align-items: center;
+  min-width: 0;
 }
 
 @media (min-width: 900px) {

@@ -341,10 +341,19 @@ html[dir='rtl'] .faq-hero__title {
 
 .faq-cta {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  justify-content: center;
+  text-align: center;
+  gap: 1.35rem;
+}
+
+.faq-cta > div {
+  max-width: 40rem;
+}
+
+.faq-cta .btn-brand {
+  margin-inline: auto;
 }
 
 @media (prefers-reduced-motion: reduce) {

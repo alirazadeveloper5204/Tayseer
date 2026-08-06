@@ -1,10 +1,14 @@
 <div
   class="site-carousel"
+  [class.is-paused]="pausedUi()"
+  [class.site-carousel--fade]="mode() === 'fade'"
   role="region"
   [attr.aria-labelledby]="labelledBy()"
   [attr.aria-label]="label()"
   (mouseenter)="pause()"
   (mouseleave)="resume()"
+  (focusin)="pause()"
+  (focusout)="resume()"
 >
   <div
     #viewport
@@ -17,39 +21,56 @@
     (pointercancel)="onPointerUp($event)"
   >
     <div
+      #track
       class="site-carousel__track"
       [class.is-dragging]="dragging() || jumping()"
-      [style.transform]="trackTransform()"
     >
       <ng-content />
     </div>
   </div>
 
-  <div class="site-carousel__controls">
-    <button type="button" class="site-carousel__nav" (click)="prev()" [attr.aria-label]="previousLabel()">
-      <svg class="size-4 rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-        <path d="M15 6l-6 6 6 6" />
-      </svg>
-    </button>
+  @if (showProgress()) {
+    <div class="site-carousel__progress" aria-hidden="true">
+      <span
+        class="site-carousel__progress-bar"
+        [class.is-running]="progressRunning()"
+      ></span>
+    </div>
+  }
 
-    <div class="site-carousel__dots" role="tablist">
-      @for (dot of dots(); track dot) {
-        <button
-          type="button"
-          class="site-carousel__dot"
-          role="tab"
-          [class.is-active]="activeDot() === dot"
-          [attr.aria-selected]="activeDot() === dot"
-          [attr.aria-label]="'Slide ' + (dot + 1)"
-          (click)="goToDot(dot)"
-        ></button>
+  @if (showNav() || showDots()) {
+    <div class="site-carousel__controls">
+      @if (showNav()) {
+        <button type="button" class="site-carousel__nav" (click)="prev()" [attr.aria-label]="previousLabel()">
+          <svg class="size-4 rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M15 6l-6 6 6 6" />
+          </svg>
+        </button>
+      }
+
+      @if (showDots()) {
+        <div class="site-carousel__dots" role="tablist">
+          @for (dot of dots(); track dot) {
+            <button
+              type="button"
+              class="site-carousel__dot"
+              role="tab"
+              [class.is-active]="activeDot() === dot"
+              [attr.aria-selected]="activeDot() === dot"
+              [attr.aria-label]="'Slide ' + (dot + 1)"
+              (click)="goToDot(dot)"
+            ></button>
+          }
+        </div>
+      }
+
+      @if (showNav()) {
+        <button type="button" class="site-carousel__nav" (click)="next()" [attr.aria-label]="nextLabel()">
+          <svg class="size-4 rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M9 6l6 6-6 6" />
+          </svg>
+        </button>
       }
     </div>
-
-    <button type="button" class="site-carousel__nav" (click)="next()" [attr.aria-label]="nextLabel()">
-      <svg class="size-4 rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-        <path d="M9 6l6 6-6 6" />
-      </svg>
-    </button>
-  </div>
+  }
 </div>

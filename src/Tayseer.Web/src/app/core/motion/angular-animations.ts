@@ -6,6 +6,7 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
+import { MOTION } from './motion-tokens';
 
 /**
  * Shared Angular animation triggers for the Tayseer portal.
@@ -18,18 +19,23 @@ import {
  * Keep using these triggers where TypeScript-driven control is clearer.
  */
 
+const enterMs = Math.round(MOTION.duration.slider * 1000);
+const leaveMs = 280;
+const routeEnterMs = 420;
+const routeLeaveMs = 220;
+
 /** Simple fade + rise (cards, panels, quote body). */
 export const fadeInUp = trigger('fadeInUp', [
   transition(':enter', [
     style({ opacity: 0, transform: 'translateY(1rem)' }),
     animate(
-      '480ms cubic-bezier(0.22, 1, 0.36, 1)',
+      `${enterMs}ms ${MOTION.css.out}`,
       style({ opacity: 1, transform: 'translateY(0)' }),
     ),
   ]),
   transition(':leave', [
     animate(
-      '280ms ease',
+      `${leaveMs}ms ${MOTION.css.exit}`,
       style({ opacity: 0, transform: 'translateY(-0.5rem)' }),
     ),
   ]),
@@ -39,9 +45,11 @@ export const fadeInUp = trigger('fadeInUp', [
 export const fadeIn = trigger('fadeIn', [
   transition(':enter', [
     style({ opacity: 0 }),
-    animate('400ms ease', style({ opacity: 1 })),
+    animate(`${Math.round(MOTION.duration.base * 1000)}ms ${MOTION.css.soft}`, style({ opacity: 1 })),
   ]),
-  transition(':leave', [animate('250ms ease', style({ opacity: 0 }))]),
+  transition(':leave', [
+    animate(`${leaveMs}ms ${MOTION.css.exit}`, style({ opacity: 0 })),
+  ]),
 ]);
 
 /** Horizontal slide keyed by direction data: next | prev */
@@ -49,14 +57,14 @@ export const slideFade = trigger('slideFade', [
   transition('* => next', [
     style({ opacity: 0, transform: 'translateX(1.25rem)' }),
     animate(
-      '520ms cubic-bezier(0.22, 1, 0.36, 1)',
+      `${enterMs}ms ${MOTION.css.out}`,
       style({ opacity: 1, transform: 'translateX(0)' }),
     ),
   ]),
   transition('* => prev', [
     style({ opacity: 0, transform: 'translateX(-1.25rem)' }),
     animate(
-      '520ms cubic-bezier(0.22, 1, 0.36, 1)',
+      `${enterMs}ms ${MOTION.css.out}`,
       style({ opacity: 1, transform: 'translateX(0)' }),
     ),
   ]),
@@ -79,7 +87,7 @@ export const routeFadeSlide = trigger('routeFadeSlide', [
         ':leave',
         [
           animate(
-            '220ms ease',
+            `${routeLeaveMs}ms ${MOTION.css.exit}`,
             style({ opacity: 0, transform: 'translateY(0.5rem)' }),
           ),
         ],
@@ -90,7 +98,7 @@ export const routeFadeSlide = trigger('routeFadeSlide', [
         [
           style({ opacity: 0, transform: 'translateY(0.75rem)' }),
           animate(
-            '380ms 40ms cubic-bezier(0.22, 1, 0.36, 1)',
+            `${routeEnterMs}ms 40ms ${MOTION.css.out}`,
             style({ opacity: 1, transform: 'translateY(0)' }),
           ),
         ],
