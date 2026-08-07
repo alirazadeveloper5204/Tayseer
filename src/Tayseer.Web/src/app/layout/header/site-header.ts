@@ -40,7 +40,7 @@ export class SiteHeader {
 
   readonly lang = computed(() => this.locale.lang());
 
-  /** Scroll-spy for the Home page sections only. */
+
   readonly scrollActive = signal<'home' | 'solutions' | 'clients' | null>(null);
 
   readonly serviceLinks = computed(() => {

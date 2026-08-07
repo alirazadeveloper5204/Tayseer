@@ -47,16 +47,18 @@
   <div class="site-container grid gap-fluid-xl py-fluid-2xl lg:grid-cols-2">
     <div id="contact-inquiry" class="fintech-card p-fluid-lg">
       @if (submitted()) {
-        <h2 class="font-display text-fluid-2xl font-semibold page-accent-green">{{ successTitle() }}</h2>
-        <p class="mt-3 text-fluid-sm leading-relaxed page-muted">{{ successBody() }}</p>
-        <button type="button" class="btn-brand mt-fluid-lg inline-flex" (click)="submitAnother()">
-          {{ label(common.submitAnother) }}
-        </button>
+        <div role="status" aria-live="polite">
+          <h2 class="font-display text-fluid-2xl font-semibold page-accent-green">{{ successTitle() }}</h2>
+          <p class="mt-3 text-fluid-sm leading-relaxed page-muted">{{ successBody() }}</p>
+          <button type="button" class="btn-brand mt-fluid-lg inline-flex" (click)="submitAnother()">
+            {{ label(common.submitAnother) }}
+          </button>
+        </div>
       } @else {
         <form class="contact-form" (ngSubmit)="onFormSubmit($event)" novalidate>
-          <div class="mb-fluid-lg flex gap-2" aria-hidden="true">
+          <div class="mb-fluid-lg flex gap-2" role="progressbar" [attr.aria-valuenow]="step()" aria-valuemin="1" aria-valuemax="3" [attr.aria-label]="label(c.steps[step() - 1])">
             @for (n of [1, 2, 3]; track n) {
-              <span class="step-rail h-1.5 flex-1 rounded-full transition" [class.is-active]="step() >= n"></span>
+              <span class="step-rail h-1.5 flex-1 rounded-full transition" [class.is-active]="step() >= n" aria-hidden="true"></span>
             }
           </div>
 
@@ -72,11 +74,13 @@
                   type="text"
                   name="name"
                   autocomplete="name"
+                  [attr.aria-invalid]="!!nameError()"
+                  [attr.aria-describedby]="nameError() ? 'contact-name-error' : null"
                   [ngModel]="name()"
                   (ngModelChange)="name.set($event)"
                 />
                 @if (nameError()) {
-                  <span class="mt-1 block text-fluid-xs text-rose-500">{{ nameError() }}</span>
+                  <span id="contact-name-error" class="mt-1 block text-fluid-xs text-rose-500" role="alert">{{ nameError() }}</span>
                 }
               </label>
               <label class="block">
@@ -88,11 +92,13 @@
                   type="email"
                   name="email"
                   autocomplete="email"
+                  [attr.aria-invalid]="!!emailError()"
+                  [attr.aria-describedby]="emailError() ? 'contact-email-error' : null"
                   [ngModel]="email()"
                   (ngModelChange)="email.set($event)"
                 />
                 @if (emailError()) {
-                  <span class="mt-1 block text-fluid-xs text-rose-500">{{ emailError() }}</span>
+                  <span id="contact-email-error" class="mt-1 block text-fluid-xs text-rose-500" role="alert">{{ emailError() }}</span>
                 }
               </label>
               <label class="block">
@@ -113,20 +119,27 @@
 
           @if (step() === 2) {
             <h2 class="font-display text-fluid-xl font-semibold page-ink">{{ label(c.steps[1]) }}</h2>
-            <div class="mt-fluid-md grid gap-2 sm:grid-cols-2">
-              @for (opt of c.interests; track label(opt)) {
+            <div
+              class="mt-fluid-md grid gap-2 sm:grid-cols-2"
+              role="group"
+              [attr.aria-label]="label(c.fields.interest)"
+              [attr.aria-invalid]="!!interestError()"
+              [attr.aria-describedby]="interestError() ? 'contact-interest-error' : null"
+            >
+              @for (opt of c.interests; track opt.id) {
                 <button
                   type="button"
                   class="choice-chip px-fluid-md py-fluid-sm text-start text-fluid-sm"
-                  [class.is-selected]="interest() === label(opt)"
-                  (click)="interest.set(label(opt))"
+                  [class.is-selected]="interest() === opt.id"
+                  [attr.aria-pressed]="interest() === opt.id"
+                  (click)="interest.set(opt.id)"
                 >
                   {{ label(opt) }}
                 </button>
               }
             </div>
             @if (interestError()) {
-              <span class="mt-2 block text-fluid-xs text-rose-500">{{ interestError() }}</span>
+              <span id="contact-interest-error" class="mt-2 block text-fluid-xs text-rose-500" role="alert">{{ interestError() }}</span>
             }
           }
 
@@ -140,27 +153,34 @@
                 class="form-input min-h-32"
                 name="message"
                 rows="5"
+                [attr.aria-invalid]="!!messageError()"
+                [attr.aria-describedby]="messageError() ? 'contact-message-error' : null"
                 [ngModel]="message()"
                 (ngModelChange)="message.set($event)"
               ></textarea>
               @if (messageError()) {
-                <span class="mt-1 block text-fluid-xs text-rose-500">{{ messageError() }}</span>
+                <span id="contact-message-error" class="mt-1 block text-fluid-xs text-rose-500" role="alert">{{ messageError() }}</span>
               }
             </label>
           }
 
           <div class="mt-fluid-lg flex flex-wrap gap-3">
             @if (step() > 1) {
-              <button type="button" class="page-ghost-btn" (click)="back()">
+              <button type="button" class="page-ghost-btn" (click)="back()" [disabled]="submitting()">
                 {{ label(common.prevStep) }}
               </button>
             }
             @if (step() < 3) {
               <button type="submit" class="btn-brand">{{ label(common.nextStep) }}</button>
             } @else {
-              <button type="submit" class="btn-brand">{{ label(common.submit) }}</button>
+              <button type="submit" class="btn-brand" [disabled]="submitting()">
+                {{ submitting() ? label(common.submitting) : label(common.submit) }}
+              </button>
             }
           </div>
+          @if (submitError()) {
+            <p class="mt-fluid-md text-fluid-sm text-rose-500" role="alert">{{ submitError() }}</p>
+          }
         </form>
       }
     </div>
@@ -173,7 +193,7 @@
             class="contact-office fintech-card"
             [class.is-active]="activeOffice() === i"
             (click)="selectOffice(i)"
-            (keydown.enter)="selectOffice(i)"
+            (keydown)="onOfficeKeydown($event, i)"
             tabindex="0"
             role="button"
             [attr.aria-pressed]="activeOffice() === i"

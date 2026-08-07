@@ -13,10 +13,7 @@ export class LocaleService {
   readonly isRtl = computed(() => this.locale() === 'ar');
   readonly dir = computed(() => (this.locale() === 'ar' ? 'rtl' : 'ltr'));
 
-  init(): void {
-    const stored = this.readStored();
-    this.setLocale(stored ?? 'en');
-  }
+  init(): void {}
 
   toggle(): void {
     this.setLocale(this.locale() === 'en' ? 'ar' : 'en');
@@ -30,13 +27,5 @@ export class LocaleService {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem('tayseer-locale', locale);
     }
-  }
-
-  private readStored(): AppLocale | null {
-    if (!isPlatformBrowser(this.platformId)) {
-      return null;
-    }
-    const value = localStorage.getItem('tayseer-locale');
-    return value === 'en' || value === 'ar' ? value : null;
   }
 }

@@ -7,7 +7,6 @@ import {
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { provideClientHydration, withEventReplay, withHttpTransferCacheOptions } from '@angular/platform-browser';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 import { routes } from './app.routes';
 import { ThemeService } from './core/theme/theme.service';
@@ -26,11 +25,9 @@ export const appConfig: ApplicationConfig = {
       }),
     ),
     provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
-    // Lazy-loads the animations module (SSR + smaller initial bundle).
-    provideAnimationsAsync(),
     provideClientHydration(
       withEventReplay(),
-      // Reuse SSR HTTP responses on the client (no double-fetch flash).
+
       withHttpTransferCacheOptions({
         includeRequestsWithAuthHeaders: false,
       }),
@@ -38,7 +35,7 @@ export const appConfig: ApplicationConfig = {
     provideAppInitializer(() => {
       inject(ThemeService).init();
       inject(LocaleService).init();
-      // Instantiate early so the first NavigationStart is never missed.
+
       inject(NavigationLoaderService);
     }),
   ],

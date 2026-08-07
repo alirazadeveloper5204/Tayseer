@@ -26,7 +26,7 @@ public sealed class AgentChatHub : Hub<IAgentChatClient>
         await base.OnConnectedAsync();
     }
 
-    /// <summary>Visitor joins a conversation stream using the visitor key (validated by the API when posting).</summary>
+
     public Task JoinConversation(string conversationId)
     {
         if (!Guid.TryParse(conversationId, out var id))

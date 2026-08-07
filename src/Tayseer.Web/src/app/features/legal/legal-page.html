@@ -1,0 +1,24 @@
+<section class="page-hero site-band">
+  <div class="page-hero__glow" aria-hidden="true"></div>
+  <div class="site-container relative z-10">
+    <div class="page-hero__panel">
+      <p class="type-eyebrow">{{ updated() }}</p>
+      <h1 class="type-title mt-fluid-sm page-ink">{{ title() }}</h1>
+      <p class="mt-fluid-md text-fluid-base leading-relaxed page-muted">{{ lead() }}</p>
+    </div>
+  </div>
+</section>
+
+<section class="page-module site-band">
+  <div class="site-container py-fluid-2xl max-w-3xl">
+    <div class="space-y-fluid-lg">
+      @for (section of sections(); track label(section.heading)) {
+        <article>
+          <h2 class="font-display text-fluid-xl font-semibold page-ink">{{ label(section.heading) }}</h2>
+          <p class="mt-fluid-sm text-fluid-base leading-relaxed page-muted">{{ label(section.body) }}</p>
+        </article>
+      }
+    </div>
+    <a [routerLink]="homeLink()" class="btn-brand mt-fluid-xl inline-flex">{{ label(common.backHome) }}</a>
+  </div>
+</section>

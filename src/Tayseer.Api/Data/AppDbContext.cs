@@ -14,6 +14,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<AdminUser> AdminUsers => Set<AdminUser>();
     public DbSet<AgentConversation> AgentConversations => Set<AgentConversation>();
     public DbSet<AgentMessage> AgentMessages => Set<AgentMessage>();
+    public DbSet<ContactInquiry> ContactInquiries => Set<ContactInquiry>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -70,6 +71,16 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             entity.ToTable("AgentMessages");
             entity.HasIndex(x => new { x.ConversationId, x.CreatedAt });
             entity.Property(x => x.Body).IsRequired();
+        });
+
+        modelBuilder.Entity<ContactInquiry>(entity =>
+        {
+            entity.ToTable("ContactInquiries");
+            entity.HasIndex(x => x.CreatedAt);
+            entity.Property(x => x.Name).IsRequired();
+            entity.Property(x => x.Email).IsRequired();
+            entity.Property(x => x.Interest).IsRequired();
+            entity.Property(x => x.Message).IsRequired();
         });
 
         SeedServices(modelBuilder);

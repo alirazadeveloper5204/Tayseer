@@ -3,9 +3,6 @@
 @import "./app/features/home/home-hero.css";
 @import "./app/shared/ui/page-kit.css";
 
-/* Bootstrap utilities only — avoids reboot/grid clash with Tailwind */
-@import "bootstrap/dist/css/bootstrap-utilities.min.css" layer(bootstrap);
-
 @custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
@@ -13,12 +10,12 @@
     color-scheme: light;
     --site-gutter: clamp(1rem, 0.6rem + 2vw, 2rem);
     --site-content: 72rem;
-    /* Shared chrome: mobile sticky CTA + header drawer offsets */
+
     --site-mobile-cta-height: calc(4.75rem + env(safe-area-inset-bottom, 0px));
     --site-chrome-offset-collapsed: 4rem;
     --site-chrome-offset-expanded: 7.25rem;
 
-    /* Tayseer motion tokens — keep in sync with motion-tokens.ts / SITE_SLIDER */
+
     --motion-instant: 120ms;
     --motion-fast: 200ms;
     --motion-base: 450ms;
@@ -63,10 +60,7 @@
     overflow: hidden;
   }
 
-  /*
-   * Page canvas — brand gradient wash only (no stock photography).
-   * Interior sections frost over this with .site-band / .page-module.
-   */
+
   body::before {
     content: '';
     position: fixed;
@@ -107,7 +101,7 @@
     opacity: 0.4;
   }
 
-  /* Kill paint transitions while theme flips under the loading cover. */
+
   html.theme-switching,
   html.theme-switching * {
     transition: none !important;
@@ -117,7 +111,7 @@
     @apply font-arabic;
   }
 
-  /* Smooth scrollbar (WebKit) */
+
   ::-webkit-scrollbar {
     width: 7px;
   }
@@ -136,7 +130,7 @@
   }
 
   html {
-    scrollbar-color: #1e293b #030712; /* Firefox */
+    scrollbar-color: #1e293b #030712;
   }
 
   h1,
@@ -155,7 +149,7 @@
     height: auto;
   }
 
-  /* Prevent flex/grid children from forcing horizontal page scroll */
+
   .site-container,
   .site-section,
   .site-band,
@@ -166,10 +160,7 @@
 }
 
 @layer components {
-  /**
-   * Edge-to-edge band + constrained content column.
-   * Use .site-band for full-bleed backgrounds; .site-container for readable width.
-   */
+
   .site-band {
     @apply relative w-full;
   }
@@ -179,7 +170,7 @@
     margin-inline: auto;
   }
 
-  /* Fluid auto-fit grid for cards/sections at any viewport */
+
   .fluid-grid {
     display: grid;
     gap: clamp(0.75rem, 0.5rem + 1vw, 1.5rem);
@@ -196,20 +187,12 @@
     @apply relative w-full py-fluid-xl sm:py-fluid-2xl;
   }
 
-  .type-display {
-    @apply font-display font-extrabold uppercase text-fluid-5xl text-brand-blue dark:text-white;
-  }
-
   .type-title {
     @apply font-display font-bold text-fluid-3xl text-brand-blue-800 dark:text-white;
   }
 
   .type-section {
     @apply font-display font-semibold text-fluid-3xl tracking-tight text-brand-blue-800 dark:text-white;
-  }
-
-  .type-subtitle {
-    @apply font-display font-semibold text-fluid-xl text-brand-blue-700 dark:text-white/85;
   }
 
   .type-lead {
@@ -286,7 +269,7 @@
   .site-content--veiled {
     opacity: 0;
     pointer-events: none;
-    /* Instant — only applied once the overlay is already fully opaque. */
+
     transition: none;
   }
 
@@ -298,14 +281,14 @@
     @apply inline-block h-10 w-10 bg-geometric-corner bg-contain bg-no-repeat animate-geometric-pulse;
   }
 
-  /* Shell / main stay clear so body canvas shows through continuously. */
+
   .site-shell,
   .site-content,
   main {
     background: transparent !important;
   }
 
-  /* Sticky chrome — readable frosted strip in both themes */
+
   .site-chrome {
     background: rgba(3, 7, 18, 0.72);
     backdrop-filter: blur(20px) saturate(1.15);
@@ -318,16 +301,10 @@
     box-shadow: 0 8px 28px rgba(9, 90, 141, 0.08);
   }
 
-  /*
-   * Module panels — slightly transparent frosted backgrounds over the page canvas.
-   * Applied to every home content module so text/cards read clearly.
-   */
-  .module-glass,
+
   .services-bento,
-  .about-band,
   .clients-band,
-  .site-band,
-  .trust-strip {
+  .site-band {
     position: relative;
     isolation: isolate;
     background: rgba(3, 7, 18, 0.58) !important;
@@ -336,38 +313,14 @@
     border-block: 1px solid rgba(255, 255, 255, 0.08);
   }
 
-  html:not(.dark) .module-glass,
   html:not(.dark) .services-bento,
-  html:not(.dark) .about-band,
   html:not(.dark) .clients-band,
-  html:not(.dark) .site-band,
-  html:not(.dark) .trust-strip {
+  html:not(.dark) .site-band {
     background: rgba(255, 255, 255, 0.78) !important;
     border-block-color: rgba(9, 90, 141, 0.12);
   }
 
-  /* Brand / values band — slightly stronger tint for white text */
-  .site-band.bg-brand-blue {
-    background: rgba(0, 88, 120, 0.55) !important;
-    border-block-color: rgba(0, 242, 254, 0.12);
-  }
 
-  html.dark .site-band.bg-brand-blue {
-    background: rgba(3, 7, 18, 0.62) !important;
-  }
-
-  html:not(.dark) .site-band.bg-brand-blue {
-    background: #0d5a8c !important;
-  }
-
-  .site-band.bg-brand-blue [class*='rounded-xl'],
-  .site-band.bg-brand-blue [class*='rounded-2xl'] {
-    background: rgba(3, 7, 18, 0.4);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-  }
-
-  /* Desktop nav — logo navy + green (light), cyan (dark) */
   @media (min-width: 1024px) {
     html:not(.dark) .site-nav a:hover,
     html:not(.dark) .site-nav .nav-scroll-active {
@@ -390,11 +343,10 @@
     border-color: rgba(0, 242, 254, 0.5) !important;
   }
 
-  /* Image hover polish (Services / About / Clients) */
+
   @media (hover: hover) and (pointer: fine) {
     html.dark .services-bento img,
-    html.dark .about-band img:not(.media-zoom__img),
-    html.dark .clients-band img:not(.clients-slider__photo):not(.clients-slider__avatar):not(.media-zoom__img) {
+    html.dark .clients-band img:not(.clients-slider__photo):not(.clients-slider__avatar) {
       opacity: 0.85;
       filter: grayscale(20%) brightness(0.95);
       transition:
@@ -405,15 +357,7 @@
       transform: translateZ(0);
     }
 
-    /* Collage cards scale image smoothly */
-    html.dark .about-media .media-zoom:hover > .media-zoom__img,
-    html.dark .clients-media:not(.is-switching) .media-zoom:hover > .media-zoom__img {
-      transform: scale(1.05) translateZ(0);
-      opacity: 1;
-      filter: grayscale(0%) brightness(1.1);
-    }
 
-    /* Service cards: GSAP handles scale; we only polish clarity */
     html.dark .services-bento a:hover .service-card__media img {
       opacity: 1;
       filter: grayscale(0%) brightness(1.1);

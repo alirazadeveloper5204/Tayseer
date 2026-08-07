@@ -95,7 +95,7 @@
   animation-name: page-loader-pen-green;
 }
 
-/* One segment finishes before the next starts (~0.26s apart) */
+
 .page-loader__stroke--1a {
   animation-delay: 0s;
 }
@@ -162,10 +162,7 @@
   );
 }
 
-/**
- * Pen draw with pressure + glow bloom at the tip, then settle.
- * Reset happens while invisible (no reverse erase).
- */
+
 @keyframes page-loader-pen {
   0% {
     stroke-dashoffset: 100;
@@ -253,19 +250,6 @@
     opacity: 0;
     stroke-width: 4.5;
     filter: drop-shadow(0 0 0 rgba(98, 168, 69, 0));
-  }
-}
-
-@keyframes page-loader-mark-breathe {
-  0%,
-  100% {
-    transform: scale(0.97);
-  }
-  55% {
-    transform: scale(1.03);
-  }
-  70% {
-    transform: scale(1);
   }
 }
 

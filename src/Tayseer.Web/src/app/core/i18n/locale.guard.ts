@@ -10,7 +10,7 @@ export const localeGuard: CanActivateFn = async (route) => {
   const loader = inject(NavigationLoaderService);
 
   if (lang === 'en' || lang === 'ar') {
-    // Wait until overlay covers the current page before flipping dir/lang.
+
     await loader.waitUntilCovered();
     locale.setLocale(lang as AppLocale);
     return true;

@@ -7,7 +7,7 @@
     role="status"
     aria-live="polite"
     [attr.aria-busy]="!loader.leaving()"
-    aria-label="Loading"
+    [attr.aria-label]="copy().a11y.loading"
   >
     @for (gen of [loader.generation()]; track gen) {
       <div #loaderPanel class="page-loader__panel">

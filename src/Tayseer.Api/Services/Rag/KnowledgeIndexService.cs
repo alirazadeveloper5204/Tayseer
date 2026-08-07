@@ -68,7 +68,7 @@ public sealed class KnowledgeIndexService(
             .Select(item =>
             {
                 var score = CosineSimilarity(queryVector, item.Embedding);
-                // Mild language preference so Arabic UI surfaces Arabic chunks first.
+
                 if (preferAr && item.Chunk.Language == "ar")
                 {
                     score += 0.03f;

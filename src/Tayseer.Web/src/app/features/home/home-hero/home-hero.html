@@ -1,4 +1,4 @@
-<section id="home" class="home-hero site-band" aria-label="Hero" [class.home-hero--revealed]="revealed()">
+<section id="home" class="home-hero site-band" [attr.aria-label]="copy().a11y.hero" [class.home-hero--revealed]="revealed()">
   <div class="page-hero__glow" aria-hidden="true"></div>
 
   <div class="site-container home-hero__layout">
@@ -16,7 +16,7 @@
         </a>
       </div>
 
-      <ul class="home-hero__segments" aria-label="Audience">
+      <ul class="home-hero__segments" [attr.aria-label]="copy().a11y.audience">
         @for (segment of segments(); track segment) {
           <li>{{ segment }}</li>
         }

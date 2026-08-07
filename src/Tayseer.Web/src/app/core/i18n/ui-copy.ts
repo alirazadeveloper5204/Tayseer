@@ -3,6 +3,7 @@ export type AppLocale = 'en' | 'ar';
 export interface UiCopy {
   common: {
     loading: string;
+    servicesUnavailable: string;
     readMore: string;
     requestDemo: string;
     talkToUs: string;
@@ -13,6 +14,23 @@ export interface UiCopy {
     email: string;
     previous: string;
     next: string;
+  };
+  a11y: {
+    primaryNav: string;
+    toggleServices: string;
+    toggleSolutions: string;
+    openMenu: string;
+    closeMenu: string;
+    switchToArabic: string;
+    switchToEnglish: string;
+    switchToLight: string;
+    switchToDark: string;
+    brandHome: string;
+    hero: string;
+    audience: string;
+    sectorFilter: string;
+    loading: string;
+    linkedIn: string;
   };
   nav: {
     home: string;
@@ -103,6 +121,7 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
   en: {
     common: {
       loading: 'Loading',
+      servicesUnavailable: 'Services are temporarily unavailable. Please try again shortly.',
       readMore: 'Read More',
       requestDemo: 'Request Demo',
       talkToUs: 'Talk To Us',
@@ -113,6 +132,23 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
       email: 'info@tayseer.me',
       previous: 'Previous',
       next: 'Next',
+    },
+    a11y: {
+      primaryNav: 'Primary',
+      toggleServices: 'Toggle services menu',
+      toggleSolutions: 'Toggle solutions menu',
+      openMenu: 'Open menu',
+      closeMenu: 'Close menu',
+      switchToArabic: 'Switch to Arabic',
+      switchToEnglish: 'Switch to English',
+      switchToLight: 'Switch to light mode',
+      switchToDark: 'Switch to dark mode',
+      brandHome: 'Tayseer Innovations',
+      hero: 'Hero',
+      audience: 'Audience',
+      sectorFilter: 'Sector filter',
+      loading: 'Loading',
+      linkedIn: 'LinkedIn',
     },
     nav: {
       home: 'Home',
@@ -208,6 +244,7 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
   ar: {
     common: {
       loading: 'جاري التحميل',
+      servicesUnavailable: 'الخدمات غير متاحة مؤقتاً. يرجى المحاولة مرة أخرى قريباً.',
       readMore: 'اقرأ المزيد',
       requestDemo: 'اطلب عرضاً توضيحياً',
       talkToUs: 'تحدث معنا',
@@ -218,6 +255,23 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
       email: 'info@tayseer.me',
       previous: 'السابق',
       next: 'التالي',
+    },
+    a11y: {
+      primaryNav: 'القائمة الرئيسية',
+      toggleServices: 'تبديل قائمة الخدمات',
+      toggleSolutions: 'تبديل قائمة الحلول',
+      openMenu: 'فتح القائمة',
+      closeMenu: 'إغلاق القائمة',
+      switchToArabic: 'التبديل إلى العربية',
+      switchToEnglish: 'التبديل إلى الإنجليزية',
+      switchToLight: 'التبديل إلى الوضع الفاتح',
+      switchToDark: 'التبديل إلى الوضع الداكن',
+      brandHome: 'تيسير إنوفيشنز',
+      hero: 'القسم الرئيسي',
+      audience: 'الجمهور',
+      sectorFilter: 'تصفية حسب القطاع',
+      loading: 'جاري التحميل',
+      linkedIn: 'لينكدإن',
     },
     nav: {
       home: 'الرئيسية',
@@ -312,14 +366,7 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
   },
 };
 
-export const HOME_STATS = [
-  { value: 100, suffix: '+', labelEn: 'Satisfied Clients', labelAr: 'عملاء راضون' },
-  { value: 15, suffix: '+', labelEn: 'Countries', labelAr: 'دول' },
-  { value: 600, suffix: '+', labelEn: 'Finished Products', labelAr: 'منتجات مكتملة' },
-  { value: 100, suffix: '+', labelEn: 'Skilled Experts', labelAr: 'خبراء مهرة' },
-] as const;
 
-/** Under-hero KPI strip (Figma Make reference layout — brand-mapped). */
 export const HOME_KPI_STATS = [
   {
     value: 14,
@@ -392,14 +439,6 @@ export const HOME_TESTIMONIALS = [
     quoteAr:
       'تكيّفت منتجات وخدمات تيسير القابلة للتوسع بسلاسة مع احتياجاتنا المتغيرة وأصبحت أساسية لنمونا. فريق الدعم لديهم شريك محوري في التنفيذ والنجاح المستمر.',
   },
-] as const;
-
-export const HOME_VALUES = [
-  { titleEn: 'Enhanced Customer Experience', titleAr: 'تجربة عملاء محسّنة' },
-  { titleEn: 'Data Driven Decision Making', titleAr: 'قرارات مبنية على البيانات' },
-  { titleEn: 'Robust Fraud Detection', titleAr: 'كشف احتيال قوي' },
-  { titleEn: 'Streamlined Operations', titleAr: 'عمليات مبسّطة' },
-  { titleEn: 'Personalized Customer Strategies', titleAr: 'استراتيجيات عملاء مخصصة' },
 ] as const;
 
 export const HOME_WHY_FEATURES = [
@@ -527,7 +566,7 @@ export const SOLUTION_LINKS = [
   { slug: 'banking-systems', titleEn: 'Banking Systems', titleAr: 'الأنظمة المصرفية' },
 ] as const;
 
-/** Primary Services mega-links (hub page anchors + dedicated service pages). */
+
 export const SERVICE_LINKS = [
   {
     slug: 'core',

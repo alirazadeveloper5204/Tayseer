@@ -4,7 +4,7 @@
       [routerLink]="'/' + lang()"
       class="site-header__logo"
       (click)="closeMenu()"
-      aria-label="Tayseer Innovations"
+      [attr.aria-label]="copy().a11y.brandHome"
     >
       <img
         src="/brand/logo-light.svg"
@@ -14,9 +14,9 @@
       />
     </a>
 
-    <nav class="site-nav" [class.is-open]="menuOpen()" aria-label="Primary" id="site-primary-nav">
+    <nav class="site-nav" [class.is-open]="menuOpen()" [attr.aria-label]="copy().a11y.primaryNav" id="site-primary-nav">
       <ul class="site-nav__list">
-        <!-- Services -->
+
         <li
           class="nav-dd"
           [class.is-open]="activeDropdown() === 'services'"
@@ -36,7 +36,7 @@
               type="button"
               class="site-nav__chevron"
               [attr.aria-expanded]="activeDropdown() === 'services'"
-              aria-label="Toggle services menu"
+              [attr.aria-label]="copy().a11y.toggleServices"
               (click)="toggleDropdown('services', $event)"
             >
               <svg width="10" height="10" viewBox="0 0 320 512" fill="currentColor" aria-hidden="true">
@@ -69,7 +69,7 @@
           </div>
         </li>
 
-        <!-- Solutions -->
+
         <li
           class="nav-dd"
           [class.is-open]="activeDropdown() === 'solutions'"
@@ -90,7 +90,7 @@
               type="button"
               class="site-nav__chevron"
               [attr.aria-expanded]="activeDropdown() === 'solutions'"
-              aria-label="Toggle solutions menu"
+              [attr.aria-label]="copy().a11y.toggleSolutions"
               (click)="toggleDropdown('solutions', $event)"
             >
               <svg width="10" height="10" viewBox="0 0 320 512" fill="currentColor" aria-hidden="true">
@@ -163,7 +163,7 @@
           type="button"
           class="site-chrome-btn"
           (click)="switchLocale()"
-          [attr.aria-label]="lang() === 'en' ? 'Switch to Arabic' : 'Switch to English'"
+          [attr.aria-label]="lang() === 'en' ? copy().a11y.switchToArabic : copy().a11y.switchToEnglish"
         >
           <span class="site-chrome-btn__label">{{ lang() === 'en' ? 'AR' : 'EN' }}</span>
         </button>
@@ -173,7 +173,7 @@
           class="site-chrome-btn"
           (click)="theme.toggle()"
           [attr.aria-pressed]="theme.isDark()"
-          [attr.aria-label]="theme.isDark() ? 'Switch to light mode' : 'Switch to dark mode'"
+          [attr.aria-label]="theme.isDark() ? copy().a11y.switchToLight : copy().a11y.switchToDark"
         >
           <svg
             class="site-chrome-btn__icon"
@@ -212,7 +212,7 @@
         (click)="toggleMenu($event)"
         [attr.aria-expanded]="menuOpen()"
         aria-controls="site-primary-nav"
-        [attr.aria-label]="menuOpen() ? 'Close menu' : 'Open menu'"
+        [attr.aria-label]="menuOpen() ? copy().a11y.closeMenu : copy().a11y.openMenu"
       >
         @if (menuOpen()) {
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
@@ -228,6 +228,6 @@
   </div>
 
   @if (menuOpen()) {
-    <button type="button" class="site-header__backdrop" (click)="closeMenu()" aria-label="Close menu"></button>
+    <button type="button" class="site-header__backdrop" (click)="closeMenu()" [attr.aria-label]="copy().a11y.closeMenu"></button>
   }
 </header>

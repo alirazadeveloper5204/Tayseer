@@ -5,7 +5,7 @@ import { LocaleService } from '../../core/i18n/locale.service';
 import { UiCopyService } from '../../core/i18n/ui-copy.service';
 import { SOLUTIONS_PAGE, t, type PageLocale } from '../../core/content/page-content';
 import { solutionPath } from '../../core/content/static-services';
-import { serviceImage } from '../../core/media/site-images';
+import { serviceHeroCollage } from '../../core/media/site-images';
 import { WorldCard } from '../../shared/ui/world-card/world-card';
 
 @Component({
@@ -62,12 +62,16 @@ export class SolutionsPage {
   });
 
   readonly catalogRows = computed(() =>
-    this.services().map((service, index) => ({
-      ...service,
-      image: serviceImage(service.slug),
-      link: solutionPath(this.lang(), service.slug),
-      flip: index % 2 === 1,
-    })),
+    this.services().map((service, index) => {
+      const collage = serviceHeroCollage(service.slug);
+      return {
+        ...service,
+        image: collage.main,
+        side: collage.side,
+        link: solutionPath(this.lang(), service.slug),
+        flip: index % 2 === 1,
+      };
+    }),
   );
 
   constructor() {

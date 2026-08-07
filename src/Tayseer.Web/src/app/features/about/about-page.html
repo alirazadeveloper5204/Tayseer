@@ -26,7 +26,7 @@
         />
         <img
           class="spotlight-hero__shot spotlight-hero__shot--side"
-          src="/images/gallery-workspace.jpg"
+          src="/images/gallery-meeting.jpg"
           alt=""
           width="900"
           height="675"
@@ -105,12 +105,12 @@
           class="about-hero__slider"
           mode="fade"
           [loop]="true"
-          [itemCount]="sliderImages.length"
+          [itemCount]="sliderImages().length"
           [label]="whoTitle()"
           [showNav]="false"
           [showProgress]="false"
         >
-          @for (slide of sliderImages; track slide.src; let first = $first) {
+          @for (slide of sliderImages(); track slide.src; let first = $first) {
             <div class="site-carousel__slide">
               <img
                 [src]="slide.src"
@@ -228,7 +228,7 @@
     </div>
     <div class="about-values">
       @for (value of c.values; track label(value.title); let i = $index) {
-        <article class="about-values__card fintech-card border-dot-card">
+        <article class="about-values__card fintech-card">
           <div class="about-values__head">
             <span class="about-count" aria-hidden="true">
               @switch (i) {

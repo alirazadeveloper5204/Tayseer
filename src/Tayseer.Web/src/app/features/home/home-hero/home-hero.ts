@@ -88,7 +88,7 @@ export class HomeHero {
       api.set(trust, { autoAlpha: 0, y: 12 });
     }
 
-    // ~1.1s total — text → visual → proof → trust (design direction).
+
     tl.to(
       text,
       { autoAlpha: 1, y: 0, duration: 0.5, stagger: 0.14, ease: MOTION.ease.out },

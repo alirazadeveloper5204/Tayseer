@@ -27,7 +27,7 @@ export class AdminNotificationsService implements OnDestroy {
     });
   }
 
-  /** Unlock audio after the admin interacts with the panel. */
+
   unlockSound(): void {
     this.sound.unlock();
   }

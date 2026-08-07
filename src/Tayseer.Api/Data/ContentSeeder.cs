@@ -24,7 +24,7 @@ public static class ContentSeeder
             await db.SaveChangesAsync(ct);
         }
 
-        // Expand thin Phase-0 bodies when still short.
+
         await ExpandBodiesAsync(db, ct);
     }
 

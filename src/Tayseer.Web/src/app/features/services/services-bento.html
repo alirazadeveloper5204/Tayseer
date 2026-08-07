@@ -30,9 +30,7 @@
       </div>
     } @else if (error()) {
       <div class="glass-card p-fluid-md text-fluid-sm text-ink-soft dark:text-white/70">
-        Services API is offline. Start
-        <code class="rounded bg-black/5 px-1 dark:bg-white/10">Tayseer.Api</code>
-        on port 5095, then refresh.
+        {{ copy().common.servicesUnavailable }}
       </div>
     } @else {
       <app-site-carousel

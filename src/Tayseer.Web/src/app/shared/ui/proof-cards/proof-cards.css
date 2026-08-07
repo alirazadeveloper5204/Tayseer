@@ -16,7 +16,7 @@
   color: #0b1220;
   pointer-events: auto;
   cursor: default;
-  /* Half inside stage / half in the reserved end gutter */
+
   inset-inline-end: 0;
   transform: translateY(var(--proof-shift));
   transition:
@@ -97,7 +97,7 @@
   height: 0.95rem;
 }
 
-/* Vertical stack on the image end edge — clears blinking nodes */
+
 .proof-card--1 {
   top: 7%;
 }

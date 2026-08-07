@@ -25,7 +25,7 @@ export class ServiceCard {
 
   readonly link = computed(() => {
     const service = this.service();
-    // Prefer slug-based routing so special modules (software / managed) resolve correctly.
+
     return solutionPath(this.lang(), service.slug);
   });
 

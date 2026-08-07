@@ -19,6 +19,10 @@ export class ManagedPage {
   readonly lead = computed(() => t(this.c.lead, this.lang()));
   readonly slaTitle = computed(() => t(this.c.slaTitle, this.lang()));
   readonly badgesTitle = computed(() => t(this.c.badgesTitle, this.lang()));
+  readonly heroMetaSoc = computed(() => t(this.c.heroMetaSoc, this.lang()));
+  readonly heroMetaSla = computed(() => t(this.c.heroMetaSla, this.lang()));
+  readonly heroMetaCompliance = computed(() => t(this.c.heroMetaCompliance, this.lang()));
+  readonly heroBadgeKicker = computed(() => t(this.c.heroBadgeKicker, this.lang()));
 
   label(item: { en: string; ar: string }): string {
     return t(item, this.lang());

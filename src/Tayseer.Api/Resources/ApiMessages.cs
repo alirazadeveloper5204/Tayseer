@@ -3,7 +3,7 @@ using System.Resources;
 
 namespace Tayseer.Api.Resources;
 
-/// <summary>Strongly-typed access to EN/AR .resx strings (Messages.resx / Messages.ar.resx).</summary>
+
 public static class ApiMessages
 {
     private static readonly ResourceManager Manager =

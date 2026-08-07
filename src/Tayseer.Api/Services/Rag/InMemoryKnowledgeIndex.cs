@@ -2,7 +2,7 @@ using System.Collections.Immutable;
 
 namespace Tayseer.Api.Services.Rag;
 
-/// <summary>Process-local vector store for CMS knowledge chunks.</summary>
+
 public sealed class InMemoryKnowledgeIndex
 {
     private readonly object _gate = new();

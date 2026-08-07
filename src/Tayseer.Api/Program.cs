@@ -135,6 +135,7 @@ app.MapAuthEndpoints();
 app.MapAdminContentEndpoints();
 app.MapChatEndpoints();
 app.MapAgentChatEndpoints();
+app.MapContactEndpoints();
 app.MapHub<AgentChatHub>("/hubs/agent-chat", options =>
 {
     options.Transports = HttpTransportType.WebSockets | HttpTransportType.LongPolling;
@@ -146,8 +147,8 @@ using (var scope = app.Services.CreateScope())
     await db.Database.EnsureCreatedAsync();
     try
     {
-        // EnsureCreated does not alter an existing LocalDB schema — probe new tables.
         _ = await db.AgentConversations.AsNoTracking().AnyAsync();
+        _ = await db.ContactInquiries.AsNoTracking().AnyAsync();
         await ContentSeeder.EnsureSeedAsync(db);
         await AuthSeeder.EnsureSeedAsync(
             db,

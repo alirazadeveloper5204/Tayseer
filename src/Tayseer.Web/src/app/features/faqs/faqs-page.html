@@ -63,6 +63,7 @@
           class="faq-tab"
           role="tab"
           [class.is-active]="activeCategory() === 'all'"
+          [attr.aria-selected]="activeCategory() === 'all'"
           (click)="setCategory('all')"
         >
           {{ allLabel() }}
@@ -73,6 +74,7 @@
             class="faq-tab"
             role="tab"
             [class.is-active]="activeCategory() === category.id"
+            [attr.aria-selected]="activeCategory() === category.id"
             (click)="setCategory(category.id)"
           >
             {{ category.title }}

@@ -1,14 +1,44 @@
-<section class="page-hero site-band">
+<section class="spotlight-hero site-band" aria-labelledby="managed-hero-title">
   <div class="page-hero__glow" aria-hidden="true"></div>
-  <div class="site-container relative z-10">
-    <div class="page-hero__panel">
+  <div class="spotlight-hero__grid site-container relative z-10">
+    <div>
       <p class="type-eyebrow">{{ eyebrow() }}</p>
-      <h1 class="type-title mt-fluid-sm page-ink">{{ title() }}</h1>
-      <p class="mt-fluid-md text-fluid-base leading-relaxed page-muted">{{ lead() }}</p>
-      <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand mt-fluid-lg inline-flex">
-        {{ label(common.talkToUs) }}
-      </a>
+      <h1 id="managed-hero-title" class="spotlight-hero__title page-ink">{{ title() }}</h1>
+      <p class="spotlight-hero__lead page-muted">{{ lead() }}</p>
+      <div class="spotlight-hero__actions">
+        <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand">{{ label(common.talkToUs) }}</a>
+      </div>
+      <ul class="spotlight-hero__meta">
+        <li>{{ heroMetaSoc() }}</li>
+        <li>{{ heroMetaSla() }}</li>
+        <li>{{ heroMetaCompliance() }}</li>
+      </ul>
     </div>
+    <aside aria-hidden="true">
+      <div class="spotlight-hero__media">
+        <img
+          class="spotlight-hero__shot spotlight-hero__shot--main"
+          src="/images/hero-managed-main.jpg"
+          [alt]="title()"
+          width="1536"
+          height="1024"
+          decoding="async"
+          fetchpriority="high"
+        />
+        <img
+          class="spotlight-hero__shot spotlight-hero__shot--side"
+          src="/images/gallery-analytics.jpg"
+          alt=""
+          width="900"
+          height="675"
+          decoding="async"
+        />
+        <div class="spotlight-hero__badge">
+          <span>{{ heroBadgeKicker() }}</span>
+          <strong>{{ heroMetaSoc() }}</strong>
+        </div>
+      </div>
+    </aside>
   </div>
 </section>
 
@@ -18,10 +48,7 @@
     <div class="mt-fluid-lg fluid-grid-sm">
       @for (metric of c.metrics; track label(metric.label)) {
         <article class="fintech-card p-fluid-md">
-          <div class="mb-3 flex items-center gap-2">
-            <span class="status-dot" aria-hidden="true"></span>
-            <span class="text-fluid-xs uppercase tracking-wider page-muted">{{ label(metric.label) }}</span>
-          </div>
+          <p class="mb-3 text-fluid-xs uppercase tracking-wider page-muted">{{ label(metric.label) }}</p>
           <p class="financial-number font-display text-fluid-3xl font-bold page-accent-green">{{ metric.value }}</p>
         </article>
       }
@@ -30,10 +57,7 @@
     <div class="fintech-card mt-fluid-xl p-fluid-md">
       <ul class="space-y-3">
         @for (feed of c.feeds; track label(feed)) {
-          <li class="flex items-start gap-3 text-fluid-sm page-muted">
-            <span class="status-dot mt-1.5 shrink-0" aria-hidden="true"></span>
-            <span>{{ label(feed) }}</span>
-          </li>
+          <li class="text-fluid-sm page-muted">{{ label(feed) }}</li>
         }
       </ul>
     </div>
@@ -45,7 +69,7 @@
     <h2 class="type-section page-ink">{{ badgesTitle() }}</h2>
     <div class="mt-fluid-lg fluid-grid-sm">
       @for (badge of c.badges; track label(badge)) {
-        <article class="fintech-card px-fluid-md py-fluid-lg text-center">
+        <article class="fintech-card border-dot-card border-dot-card--hover-only px-fluid-md py-fluid-lg text-center">
           <p class="font-display text-fluid-base font-semibold page-accent">{{ label(badge) }}</p>
         </article>
       }

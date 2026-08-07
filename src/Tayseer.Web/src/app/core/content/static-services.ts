@@ -24,7 +24,7 @@ type StaticService = {
   features: readonly StaticFeature[];
 };
 
-/** Bilingual seed matching API `SeedServices` + `ServiceFeatureSeed`. */
+
 const STATIC_SERVICES: readonly StaticService[] = [
   {
     slug: 'core-banking',
@@ -171,7 +171,7 @@ export function solutionPath(lang: string, slug: string): string {
   return `/${lang}/solutions/${slug}`;
 }
 
-/** Resolve static service list for the active locale (sortOrder ascending). */
+
 export function staticServicesForLang(lang: string): ServiceListItemDto[] {
   const isAr = lang === 'ar';
   return [...STATIC_SERVICES]

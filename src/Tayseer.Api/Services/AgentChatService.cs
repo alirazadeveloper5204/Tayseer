@@ -206,8 +206,7 @@ public sealed class AgentChatService(
         var now = DateTimeOffset.UtcNow;
         var displayName = string.IsNullOrWhiteSpace(adminName) ? admin.DisplayName : adminName;
 
-        // Bypass change-tracker relationship fix-up (AssignedAdminUser + Messages) which
-        // was causing DbUpdateConcurrencyException on SaveChanges for some LocalDB states.
+
         var updated = await db.AgentConversations
             .Where(c => c.Id == id && c.Status != AgentConversationStatus.Closed)
             .ExecuteUpdateAsync(setters => setters

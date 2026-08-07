@@ -1,17 +1,47 @@
-<section class="page-hero site-band">
+<section class="spotlight-hero site-band" aria-labelledby="case-studies-hero-title">
   <div class="page-hero__glow" aria-hidden="true"></div>
-  <div class="site-container relative z-10">
-    <div class="page-hero__panel">
+  <div class="spotlight-hero__grid site-container relative z-10">
+    <div>
       <p class="type-eyebrow">{{ eyebrow() }}</p>
-      <h1 class="type-title mt-fluid-sm page-ink">{{ title() }}</h1>
-      <p class="mt-fluid-md text-fluid-base leading-relaxed page-muted">{{ lead() }}</p>
+      <h1 id="case-studies-hero-title" class="spotlight-hero__title page-ink">{{ title() }}</h1>
+      <p class="spotlight-hero__lead page-muted">{{ lead() }}</p>
+      <ul class="spotlight-hero__meta">
+        <li>{{ heroMetaBanking() }}</li>
+        <li>{{ heroMetaFintech() }}</li>
+        <li>{{ heroMetaManaged() }}</li>
+      </ul>
     </div>
+    <aside aria-hidden="true">
+      <div class="spotlight-hero__media">
+        <img
+          class="spotlight-hero__shot spotlight-hero__shot--main"
+          src="/images/service-core-banking.jpg"
+          [alt]="title()"
+          width="1536"
+          height="1024"
+          decoding="async"
+          fetchpriority="high"
+        />
+        <img
+          class="spotlight-hero__shot spotlight-hero__shot--side"
+          src="/images/hero-banking-side.jpg"
+          alt=""
+          width="900"
+          height="675"
+          decoding="async"
+        />
+        <div class="spotlight-hero__badge">
+          <span>{{ heroBadgeKicker() }}</span>
+          <strong>{{ heroMetaBanking() }}</strong>
+        </div>
+      </div>
+    </aside>
   </div>
 </section>
 
 <section class="page-module site-band">
   <div class="site-container py-fluid-2xl">
-    <div class="flex flex-wrap gap-2" role="tablist" aria-label="Sector filter">
+    <div class="flex flex-wrap gap-2" role="tablist" [attr.aria-label]="copy().a11y.sectorFilter">
       @for (f of c.filters; track f.id) {
         <button
           type="button"

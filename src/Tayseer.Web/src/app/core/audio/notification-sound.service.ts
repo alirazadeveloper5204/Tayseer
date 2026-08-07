@@ -1,17 +1,14 @@
 import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
-/**
- * Short synthesized ping — no audio asset required.
- * Browsers may mute until the user interacts with the page once.
- */
+
 @Injectable({ providedIn: 'root' })
 export class NotificationSoundService {
   private readonly platformId = inject(PLATFORM_ID);
   private ctx: AudioContext | null = null;
   private unlocked = false;
 
-  /** Call from a click/keydown so later autoplay is allowed. */
+
   unlock(): void {
     if (!isPlatformBrowser(this.platformId)) {
       return;
@@ -47,7 +44,6 @@ export class NotificationSoundService {
         play();
       }
     } catch {
-      // Ignore autoplay / audio failures.
     }
   }
 

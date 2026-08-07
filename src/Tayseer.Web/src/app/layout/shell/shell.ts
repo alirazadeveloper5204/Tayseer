@@ -39,7 +39,7 @@ export class Shell implements OnInit {
 
   private lastY = 0;
   private ticking = false;
-  /** Ignore scroll toggles while the top-bar height transition runs. */
+
   private lockUntil = 0;
 
   constructor() {
@@ -85,9 +85,9 @@ export class Shell implements OnInit {
     const delta = y - this.lastY;
     this.lastY = y;
 
-    // Height changes on the sticky chrome shrink scrollHeight; at the page
-    // bottom the browser clamps scrollY and that fake delta flips the bar
-    // in a loop. Freeze chrome state near the bottom and during the CSS transition.
+
+
+
     if (now < this.lockUntil) {
       return;
     }
