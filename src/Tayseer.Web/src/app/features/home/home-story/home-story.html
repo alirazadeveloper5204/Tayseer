@@ -75,6 +75,7 @@
 
     <app-site-carousel
       class="clients-slider"
+      mode="fade"
       [loop]="true"
       [itemCount]="testimonials().length"
       [visibleCount]="1"
@@ -82,7 +83,7 @@
       [previousLabel]="copy().common.previous"
       [nextLabel]="copy().common.next"
     >
-      @for (t of loopedTestimonials(); track $index + '-' + t.id) {
+      @for (t of testimonials(); track t.id) {
         <div class="site-carousel__slide">
           <div class="clients-slider__stage">
             <article class="clients-slider__card">

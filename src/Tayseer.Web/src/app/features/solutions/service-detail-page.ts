@@ -67,25 +67,4 @@ export class ServiceDetailPage {
       ? [{ title: this.service()?.title ?? '', description: fallback, sortOrder: 0 }]
       : [];
   });
-
-  readonly featureRows = computed(() => {
-    const service = this.service();
-    if (!service?.features.length) {
-      return [];
-    }
-    const images = [
-      serviceImage(service.slug),
-      '/images/gallery-workspace.jpg',
-      '/images/gallery-meeting.jpg',
-      '/images/gallery-analytics.jpg',
-      '/images/gallery-mobile.jpg',
-      '/images/thumb-dubai.jpg',
-    ];
-    return service.features.map((feature, index) => ({
-      title: feature.title,
-      body: feature.description,
-      image: images[index % images.length],
-      flip: index % 2 === 1,
-    }));
-  });
 }
