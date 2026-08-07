@@ -5,7 +5,6 @@ import {
   signal,
   ViewEncapsulation,
   afterNextRender,
-  ElementRef,
   viewChild,
   DestroyRef,
   NgZone,
@@ -47,9 +46,9 @@ export class HomeStory {
   readonly copy = inject(UiCopyService).copy;
   readonly isAr = computed(() => this.locale.lang() === 'ar');
 
-  private readonly whyChoosePanel = viewChild<ElementRef<HTMLElement>>('whyChoosePanel');
-  private readonly mantraSection = viewChild<ElementRef<HTMLElement>>('mantraSection');
-  private readonly pioneerSection = viewChild<ElementRef<HTMLElement>>('pioneerSection');
+  private readonly whyChoosePanel = viewChild<HTMLElement>('whyChoosePanel');
+  private readonly mantraSection = viewChild<HTMLElement>('mantraSection');
+  private readonly pioneerSection = viewChild<HTMLElement>('pioneerSection');
 
   readonly kpiDisplays = signal(
     HOME_KPI_STATS.map((s) => formatKpi(0, s.decimals, s.prefix, s.suffix)),
@@ -77,12 +76,6 @@ export class HomeStory {
       };
     }),
   );
-
-  /** Duplicated for seamless rail loop (matches services bento). */
-  readonly loopedTestimonials = computed(() => {
-    const items = this.testimonials();
-    return items.length ? [...items, ...items] : [];
-  });
 
   readonly whyFeatures = computed(() =>
     HOME_WHY_FEATURES.map((item, i) => ({
@@ -124,8 +117,8 @@ export class HomeStory {
       }
 
       this.watchWhyChooseCounters();
-      this.watchSectionReveal(this.mantraSection()?.nativeElement);
-      this.watchSectionReveal(this.pioneerSection()?.nativeElement);
+      this.watchSectionReveal(this.mantraSection());
+      this.watchSectionReveal(this.pioneerSection());
 
       this.destroyRef.onDestroy(() => {
         this.killCounters();
@@ -134,7 +127,7 @@ export class HomeStory {
   }
 
   private watchWhyChooseCounters(): void {
-    const panel = this.whyChoosePanel()?.nativeElement;
+    const panel = this.whyChoosePanel();
     if (!panel) {
       return;
     }
@@ -202,7 +195,7 @@ export class HomeStory {
     });
   }
 
-  private watchSectionReveal(section?: HTMLElement): void {
+  private watchSectionReveal(section?: HTMLElement | null): void {
     if (!section) {
       return;
     }
@@ -210,16 +203,32 @@ export class HomeStory {
       section.classList.add('is-revealed');
       return;
     }
+
+    const reveal = () => {
+      section.classList.add('is-revealed');
+    };
+
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry?.isIntersecting) {
-          section.classList.add('is-revealed');
+          reveal();
           io.disconnect();
         }
       },
-      { threshold: 0.2 },
+      { threshold: 0.12, rootMargin: '0px 0px -8% 0px' },
     );
     io.observe(section);
+
+    // Safety: if already on screen (or observer misses), still show content
+    requestAnimationFrame(() => {
+      const rect = section.getBoundingClientRect();
+      const vh = window.innerHeight || 0;
+      if (rect.top < vh * 0.92 && rect.bottom > vh * 0.08) {
+        reveal();
+        io.disconnect();
+      }
+    });
+
     this.destroyRef.onDestroy(() => io.disconnect());
   }
 

@@ -79,7 +79,7 @@
               }
             </span>
           </div>
-          <article class="journey__card fintech-card">
+          <article class="journey__card fintech-card border-dot-card">
             <span class="journey__year financial-number">{{ item.year }}</span>
             <h3>{{ label(item.title) }}</h3>
             <p>{{ label(item.text) }}</p>
@@ -127,7 +127,7 @@
     </div>
     <div class="about-creds">
       @for (cred of c.creds; track label(cred)) {
-        <article class="about-creds__item fintech-card">{{ label(cred) }}</article>
+        <article class="about-creds__item fintech-card border-dot-card">{{ label(cred) }}</article>
       }
     </div>
   </div>
@@ -228,7 +228,7 @@
     </div>
     <div class="about-values">
       @for (value of c.values; track label(value.title); let i = $index) {
-        <article class="about-values__card fintech-card">
+        <article class="about-values__card fintech-card border-dot-card">
           <div class="about-values__head">
             <span class="about-count" aria-hidden="true">
               @switch (i) {
@@ -308,7 +308,7 @@
     </div>
     <div class="about-quotes">
       @for (item of testimonials(); track item.name) {
-        <article class="about-quotes__card fintech-card">
+        <article class="about-quotes__card fintech-card border-dot-card">
           <p class="about-quotes__text">“{{ item.quote }}”</p>
           <div class="about-quotes__author">
             <span class="about-quotes__avatar" aria-hidden="true">{{ item.initial }}</span>

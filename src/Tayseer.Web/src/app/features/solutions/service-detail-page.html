@@ -62,23 +62,11 @@
         <div class="feature-head">
           <h2 class="type-section page-ink">{{ featuresTitle() }}</h2>
         </div>
-        <div class="zigzag">
-          @for (row of featureRows(); track row.title) {
-            <article class="zigzag__row" [class.zigzag__row--flip]="row.flip">
-              <div class="zigzag__media">
-                <img
-                  [src]="row.image"
-                  [alt]="row.title"
-                  width="960"
-                  height="600"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-              <div class="zigzag__copy">
-                <h3>{{ row.title }}</h3>
-                <p>{{ row.body }}</p>
-              </div>
+        <div class="mt-fluid-lg grid gap-fluid-sm sm:grid-cols-2 lg:grid-cols-3">
+          @for (feature of s.features; track feature.title) {
+            <article class="fintech-card border-dot-card p-fluid-md">
+              <h3 class="font-display text-fluid-base font-semibold page-ink">{{ feature.title }}</h3>
+              <p class="mt-2 text-fluid-sm leading-relaxed page-muted">{{ feature.description }}</p>
             </article>
           }
         </div>

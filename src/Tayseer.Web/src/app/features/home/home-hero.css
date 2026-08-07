@@ -5,7 +5,7 @@
   justify-content: center;
   min-height: calc(100svh - var(--site-chrome-offset-expanded));
   padding-block: clamp(2rem, 1.4rem + 3vw, 4.5rem) clamp(1.5rem, 1rem + 2vw, 2.75rem);
-  overflow: hidden;
+  overflow: visible;
 }
 
 .home-hero .page-hero__glow {
@@ -125,15 +125,18 @@ html.dark .home-hero__segments {
 
 .home-hero__visual {
   position: relative;
-  padding-block: 0.85rem;
-  padding-inline: 0.35rem 0.85rem;
+  /* Reserve end gutter so cards sit half in / half out of the stage */
+  padding-inline-end: clamp(5.75rem, 10vw, 7.25rem);
+  overflow: visible;
 }
 
 .home-hero__stage {
   position: relative;
+  z-index: 1;
   overflow: hidden;
   min-height: 18rem;
   height: clamp(16rem, 38vw, 26rem);
+  width: 100%;
   padding: 0;
   box-shadow: 0 8px 24px rgba(13, 90, 140, 0.06);
 }
@@ -142,14 +145,125 @@ html.dark .home-hero__stage {
   box-shadow: none;
 }
 
-.home-hero__stage:hover {
-  transform: none;
+/* No hover motion on the hero image frame */
+.home-hero__stage.fintech-card,
+.home-hero__stage.fintech-card:hover {
+  transform: none !important;
+  will-change: auto;
+  border-color: rgba(13, 90, 140, 0.14);
+  box-shadow: 0 8px 24px rgba(13, 90, 140, 0.06);
 }
 
+html.dark .home-hero__stage.fintech-card,
+html.dark .home-hero__stage.fintech-card:hover {
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: none;
+}
+
+/* Keep graphic / pulses clear of the right card rail */
 .home-hero__graphic {
   display: block;
   width: 100%;
   height: 100%;
+  /* Nudge artwork slightly toward start so right nodes stay clear of cards */
+  transform: translateX(-2%);
+  transform-origin: center center;
+}
+
+html[dir='rtl'] .home-hero__graphic {
+  transform: scaleX(-1) translateX(-2%);
+}
+
+/* Blinking dots live inside the SVG nodes — always aligned, even on hover/scale */
+.home-hero__graphic .hh-pulse {
+  fill: #62a945;
+  filter: drop-shadow(0 0 4px rgba(98, 169, 69, 0.85));
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: hh-pulse-blink 2.4s ease-in-out infinite;
+}
+
+html.dark .home-hero__graphic .hh-pulse {
+  fill: #00f2fe;
+  filter: drop-shadow(0 0 5px rgba(0, 242, 254, 0.95));
+  animation-name: hh-pulse-blink-dark;
+}
+
+.home-hero__graphic .hh-pulse--hub {
+  animation-delay: 0s;
+}
+
+.home-hero__graphic .hh-pulse--d1 {
+  animation-delay: 0.3s;
+}
+
+.home-hero__graphic .hh-pulse--d2 {
+  animation-delay: 0.6s;
+}
+
+.home-hero__graphic .hh-pulse--d3 {
+  animation-delay: 0.9s;
+}
+
+.home-hero__graphic .hh-pulse--d4 {
+  animation-delay: 1.2s;
+}
+
+.home-hero__graphic .hh-pulse--d5 {
+  animation-delay: 1.5s;
+}
+
+@keyframes hh-pulse-blink {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.75);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+@keyframes hh-pulse-blink-dark {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(0.75);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-hero__graphic .hh-pulse {
+    animation: none;
+    opacity: 0.9;
+    transform: none;
+  }
+}
+
+@media (max-width: 959px) {
+  .home-hero__visual {
+    padding-inline-end: 0;
+  }
+
+  .home-hero__stage {
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .home-hero__graphic {
+    height: clamp(14rem, 52vw, 20rem);
+    transform: none;
+  }
+
+  html[dir='rtl'] .home-hero__graphic {
+    transform: scaleX(-1);
+  }
 }
 
 .home-hero__graphic .hh-ring {
@@ -186,10 +300,6 @@ html.dark .home-hero__stage {
 .home-hero__graphic .hh-node--hub {
   fill: color-mix(in srgb, #0d5a8e 12%, #f7f9fc);
   stroke-width: 2;
-}
-
-.home-hero__graphic .hh-node-core {
-  fill: #0d5a8e;
 }
 
 .home-hero__graphic .hh-node--accent {
@@ -248,10 +358,6 @@ html.dark .home-hero__graphic .hh-node--hub {
   fill: color-mix(in srgb, #0d5a8e 35%, #0a0a0a);
 }
 
-html.dark .home-hero__graphic .hh-node-core {
-  fill: #62a845;
-}
-
 html.dark .home-hero__graphic .hh-node--accent {
   stroke: #62a845;
   fill: color-mix(in srgb, #62a845 22%, #0a0a0a);
@@ -282,19 +388,14 @@ html.dark .home-hero__graphic .hh-panel-line--accent {
 }
 
 html[dir='rtl'] .home-hero__graphic {
-  transform: scaleX(-1);
+  transform: scaleX(-1) translateX(-2%);
 }
 
-.home-hero--revealed .proof-card {
-  animation: home-hero-float 5.5s ease-in-out infinite;
-}
-
-.home-hero--revealed .proof-card--2 {
-  animation: home-hero-float-center 5.5s ease-in-out 0.8s infinite;
-}
-
+/* Static overlays — no floating motion so cards stay fitted in-frame */
+.home-hero--revealed .proof-card,
+.home-hero--revealed .proof-card--2,
 .home-hero--revealed .proof-card--3 {
-  animation-delay: 1.4s;
+  animation: none;
 }
 
 .home-hero__trust {
@@ -344,16 +445,6 @@ html.dark .home-hero__trust {
   }
 }
 
-@keyframes home-hero-float-center {
-  0%,
-  100% {
-    transform: translate(-50%, -50%);
-  }
-  50% {
-    transform: translate(-50%, calc(-50% - 6px));
-  }
-}
-
 @media (max-width: 959px) {
   .home-hero {
     min-height: 0;
@@ -381,12 +472,7 @@ html.dark .home-hero__trust {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .home-hero--revealed .proof-card,
-  .home-hero--revealed .proof-card--2 {
+  .home-hero--revealed .proof-card {
     animation: none;
-  }
-
-  .home-hero--revealed .proof-card--2 {
-    transform: translate(-50%, -50%);
   }
 }

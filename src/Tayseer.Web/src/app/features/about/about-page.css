@@ -93,6 +93,7 @@ html:not(.dark) .about-hero__slider {
   font-size: 0.875rem;
   font-weight: 600;
   color: #0d5a8c;
+  overflow: visible;
 }
 
 html.dark .about-creds__item {
@@ -172,6 +173,7 @@ html.dark .journey::before {
   width: 100%;
   padding: 1.05rem 1.15rem 1.2rem;
   text-align: end;
+  overflow: visible;
 }
 
 .journey__item--alt .journey__card {
@@ -269,6 +271,18 @@ html.dark .journey__card p {
 
 .about-vm__card {
   padding: 1.35rem 1.35rem 1.5rem;
+  overflow: visible;
+}
+
+.about-vm__card.fintech-card:hover {
+  transform: none;
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: none;
+}
+
+html:not(.dark) .about-vm__card.fintech-card:hover {
+  border-color: rgba(13, 90, 140, 0.14);
+  box-shadow: 0 8px 24px rgba(13, 90, 140, 0.06);
 }
 
 .about-vm__head {
@@ -405,6 +419,7 @@ html.dark .about-approach p span {
   gap: 0.7rem;
   padding: 1.25rem 1.2rem 1.4rem;
   min-height: 100%;
+  overflow: visible;
 }
 
 .about-values__head {
@@ -454,6 +469,7 @@ html.dark .about-values__card p {
   flex-direction: column;
   gap: 1.1rem;
   padding: 1.25rem 1.2rem 1.35rem;
+  overflow: visible;
 }
 
 .about-quotes__text {

@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, ViewEncapsulation } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LocaleService } from '../../core/i18n/locale.service';
 import { PAGE_COMMON, SOFTWARE_PAGE, t, type PageLocale } from '../../core/content/page-content';
@@ -7,6 +7,8 @@ import { PAGE_COMMON, SOFTWARE_PAGE, t, type PageLocale } from '../../core/conte
   selector: 'app-software-page',
   imports: [RouterLink],
   templateUrl: './software-page.html',
+  styleUrl: './software-page.css',
+  encapsulation: ViewEncapsulation.None,
 })
 export class SoftwarePage {
   private readonly locale = inject(LocaleService);
