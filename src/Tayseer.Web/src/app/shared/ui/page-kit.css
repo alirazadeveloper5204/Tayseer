@@ -531,17 +531,17 @@ html.dark .spotlight-hero__meta li {
 }
 
 .spotlight-hero__media {
+  --spotlight-hang: clamp(1.75rem, 3.8vw, 2.65rem);
   position: relative;
   isolation: isolate;
-  min-height: clamp(17rem, 44vw, 24rem);
-  padding-bottom: 1.35rem;
+  padding-bottom: var(--spotlight-hang);
   overflow: visible;
 }
 
 .spotlight-hero__shot {
   display: block;
   object-fit: cover;
-  border-radius: 1.35rem;
+  border-radius: 1.2rem;
   box-shadow:
     0 22px 48px rgba(13, 90, 140, 0.16),
     0 0 0 1px rgba(13, 90, 140, 0.12);
@@ -563,11 +563,12 @@ html.dark .spotlight-hero__shot {
 .spotlight-hero__shot--side {
   position: absolute;
   inset-inline-end: 0;
-  bottom: 0;
+  bottom: var(--spotlight-hang);
   z-index: 2;
-  width: min(52%, 15.5rem);
+  width: 46%;
   aspect-ratio: 5 / 4;
   border: 3px solid #f7f9fc;
+  transform: translateY(28%);
 }
 
 html.dark .spotlight-hero__shot--side {
@@ -575,8 +576,7 @@ html.dark .spotlight-hero__shot--side {
 }
 
 .value-split__collage {
-  min-height: clamp(14rem, 36vw, 20rem);
-  padding-bottom: 0.75rem;
+  --spotlight-hang: clamp(1.25rem, 3vw, 2rem);
 }
 
 .value-split__collage .spotlight-hero__shot--main {
@@ -584,20 +584,21 @@ html.dark .spotlight-hero__shot--side {
 }
 
 .value-split__collage .spotlight-hero__shot--side {
-  width: min(48%, 13rem);
+  width: 48%;
 }
 
 .spotlight-hero__badge {
   position: absolute;
-  inset-inline-start: 0.65rem;
-  bottom: 0.35rem;
+  inset-inline-start: 0.85rem;
+  bottom: var(--spotlight-hang);
   z-index: 3;
-  max-width: 14.5rem;
-  border-radius: 1rem;
-  padding: 0.8rem 0.95rem;
+  max-width: 14rem;
+  border-radius: 0.95rem;
+  padding: 0.75rem 0.9rem;
   background: linear-gradient(135deg, #0d5a8c 0%, #1a7bb0 55%, #62a945 100%);
   color: #ffffff;
   box-shadow: 0 14px 30px rgba(13, 90, 140, 0.22);
+  transform: translateY(50%);
 }
 
 html.dark .spotlight-hero__badge {

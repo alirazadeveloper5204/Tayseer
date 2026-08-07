@@ -94,7 +94,7 @@
         <h2 class="type-section mt-fluid-sm page-ink">{{ splitTitle() }}</h2>
         <p class="mt-fluid-sm text-fluid-base page-muted">{{ splitLead() }}</p>
         <div class="value-split__checks">
-          @for (item of c.splitItems; track label(item.title)) {
+          @for (item of c.splitItems; track $index) {
             <div class="value-check">
               <span class="value-check__mark" aria-hidden="true">
                 <svg viewBox="0 0 24 24">

@@ -12,7 +12,7 @@
 <section class="page-module site-band">
   <div class="site-container py-fluid-2xl max-w-3xl">
     <div class="space-y-fluid-lg">
-      @for (section of sections(); track label(section.heading)) {
+      @for (section of sections(); track $index) {
         <article>
           <h2 class="font-display text-fluid-xl font-semibold page-ink">{{ label(section.heading) }}</h2>
           <p class="mt-fluid-sm text-fluid-base leading-relaxed page-muted">{{ label(section.body) }}</p>

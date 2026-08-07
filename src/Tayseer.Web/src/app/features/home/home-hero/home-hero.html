@@ -17,8 +17,8 @@
       </div>
 
       <ul class="home-hero__segments" [attr.aria-label]="copy().a11y.audience">
-        @for (segment of segments(); track segment) {
-          <li>{{ segment }}</li>
+        @for (segment of segments(); track segment.id) {
+          <li>{{ segment.text }}</li>
         }
       </ul>
     </div>
@@ -60,8 +60,8 @@
   </div>
 
   <ul class="site-container home-hero__trust" [attr.aria-label]="copy().home.statsTitle">
-    @for (item of trustItems(); track item) {
-      <li>{{ item }}</li>
+    @for (item of trustItems(); track item.id) {
+      <li>{{ item.text }}</li>
     }
   </ul>
 </section>

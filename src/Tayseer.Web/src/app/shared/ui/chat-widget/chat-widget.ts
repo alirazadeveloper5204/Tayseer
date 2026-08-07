@@ -533,7 +533,7 @@ export class ChatWidget implements OnDestroy {
         const detail = 'detail' in body ? (body as ChatErrorDto).detail : undefined;
         return detail ? `${body.error} ${detail}` : body.error;
       }
-      if (err.status === 0) {
+      if (err.status === 0 || err.status === 503 || err.status === 504) {
         return this.copy().offline;
       }
     }

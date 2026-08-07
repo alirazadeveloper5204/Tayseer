@@ -1,5 +1,6 @@
 import {
   ApplicationConfig,
+  ErrorHandler,
   provideBrowserGlobalErrorListeners,
   provideAppInitializer,
   inject,
@@ -13,9 +14,11 @@ import { ThemeService } from './core/theme/theme.service';
 import { LocaleService } from './core/i18n/locale.service';
 import { NavigationLoaderService } from './core/navigation/navigation-loader.service';
 import { authInterceptor } from './core/auth/auth.interceptor';
+import { AppErrorHandler } from './core/errors/app-error.handler';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    { provide: ErrorHandler, useClass: AppErrorHandler },
     provideBrowserGlobalErrorListeners(),
     provideRouter(
       routes,
@@ -27,7 +30,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
     provideClientHydration(
       withEventReplay(),
-
       withHttpTransferCacheOptions({
         includeRequestsWithAuthHeaders: false,
       }),
@@ -35,7 +37,6 @@ export const appConfig: ApplicationConfig = {
     provideAppInitializer(() => {
       inject(ThemeService).init();
       inject(LocaleService).init();
-
       inject(NavigationLoaderService);
     }),
   ],

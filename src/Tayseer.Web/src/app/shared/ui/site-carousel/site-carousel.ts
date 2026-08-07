@@ -78,6 +78,7 @@ export class SiteCarousel {
 
   private animating = false;
   private lastMeasuredStep = 0;
+  private resizeRaf = 0;
 
   private navDir: 1 | -1 = 1;
 
@@ -350,32 +351,38 @@ export class SiteCarousel {
     viewport?.addEventListener('click', onClickCapture, true);
 
     const resize = new ResizeObserver(() => {
-      this.zone.run(() => {
-        this.syncModeAttr();
-        const prevStep = this.lastMeasuredStep;
-        const prevVisible = Number(this.host.nativeElement.getAttribute('data-visible') || '0');
-        this.syncVisibleCount();
-        const nextVisible = this.currentVisibleCount();
-        this.measure();
-        const stepChanged = Math.abs(this.slideStep() - prevStep) > 1;
-        const visibleChanged = prevVisible !== nextVisible;
+      if (this.resizeRaf) {
+        return;
+      }
+      this.resizeRaf = requestAnimationFrame(() => {
+        this.resizeRaf = 0;
+        this.zone.run(() => {
+          this.syncModeAttr();
+          const prevStep = this.lastMeasuredStep;
+          const prevVisible = Number(this.host.nativeElement.getAttribute('data-visible') || '0');
+          this.syncVisibleCount();
+          const nextVisible = this.currentVisibleCount();
+          this.measure();
+          const stepChanged = Math.abs(this.slideStep() - prevStep) > 1;
+          const visibleChanged = prevVisible !== nextVisible;
 
-        if (this.animating && !visibleChanged && !stepChanged) {
-          return;
-        }
-
-        if (this.isFade()) {
-          if (!this.animating) {
-            this.playFade(this.index(), this.index(), false);
+          if (this.animating && !visibleChanged && !stepChanged) {
+            return;
           }
-          return;
-        }
-        if (visibleChanged) {
-          this.goTo(this.activeDot(), false);
-        } else {
-          this.moveTrack(this.xForIndex(this.index()), false);
-          this.updateSlideStates();
-        }
+
+          if (this.isFade()) {
+            if (!this.animating) {
+              this.playFade(this.index(), this.index(), false);
+            }
+            return;
+          }
+          if (visibleChanged) {
+            this.goTo(this.activeDot(), false);
+          } else {
+            this.moveTrack(this.xForIndex(this.index()), false);
+            this.updateSlideStates();
+          }
+        });
       });
     });
     if (viewport) {
@@ -406,6 +413,10 @@ export class SiteCarousel {
       viewport?.removeEventListener('click', onClickCapture, true);
       resize.disconnect();
       mutation.disconnect();
+      if (this.resizeRaf) {
+        cancelAnimationFrame(this.resizeRaf);
+        this.resizeRaf = 0;
+      }
       this.clearTimer();
       this.clearJump();
       this.clearAnimTimer();

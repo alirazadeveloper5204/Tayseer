@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, viewChild } from '@angular/core';
+import { Component, computed, ElementRef, inject, input, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { solutionPath } from '../../../core/content/static-services';
 import { serviceImage } from '../../../core/media/site-images';
@@ -21,11 +21,10 @@ export class ServiceCard {
   readonly lang = input.required<string>();
   readonly ctaLabel = input('Read More');
 
-  private readonly coverImg = viewChild<HTMLImageElement>('coverImg');
+  private readonly coverImg = viewChild('coverImg', { read: ElementRef<HTMLImageElement> });
 
   readonly link = computed(() => {
     const service = this.service();
-
     return solutionPath(this.lang(), service.slug);
   });
 
@@ -36,14 +35,14 @@ export class ServiceCard {
   readonly coverImage = computed(() => serviceImage(this.service().slug));
 
   onCoverEnter(): void {
-    const img = this.coverImg();
+    const img = this.coverImg()?.nativeElement;
     if (img) {
       this.motion.zoomIn(img, 1.05);
     }
   }
 
   onCoverLeave(): void {
-    const img = this.coverImg();
+    const img = this.coverImg()?.nativeElement;
     if (img) {
       this.motion.zoomOut(img);
     }

@@ -96,7 +96,7 @@
       [id]="'software-panel-' + activeTab()"
       [attr.aria-labelledby]="'software-tab-' + activeTab()"
     >
-      @for (item of activeItems(); track label(item)) {
+      @for (item of activeItems(); track $index) {
         <article class="fintech-card border-dot-card tech-stack-card p-fluid-md text-center">
           <p class="font-display text-fluid-base font-semibold page-accent">{{ label(item) }}</p>
         </article>

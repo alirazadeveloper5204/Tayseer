@@ -31,12 +31,20 @@ export class HomeHero {
 
   readonly segments = computed(() => {
     const isAr = this.locale.lang() === 'ar';
-    return HOME_HERO_SEGMENTS.map((item) => (isAr ? item.ar : item.en));
+    return HOME_HERO_SEGMENTS.map((item, id) => ({
+      id,
+      text: isAr ? item.ar : item.en,
+    }));
   });
 
   readonly trustItems = computed(() => {
     const trust = this.copy().trust;
-    return [trust.solutions, trust.cities, this.copy().home.trustSecurity, trust.since];
+    return [
+      { id: 'solutions', text: trust.solutions },
+      { id: 'cities', text: trust.cities },
+      { id: 'security', text: this.copy().home.trustSecurity },
+      { id: 'since', text: trust.since },
+    ] as const;
   });
 
   constructor() {
