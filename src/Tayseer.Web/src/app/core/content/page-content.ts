@@ -18,6 +18,11 @@ export const PAGE_COMMON = {
   nextStep: { en: 'Continue', ar: 'متابعة' },
   prevStep: { en: 'Back', ar: 'رجوع' },
   submit: { en: 'Submit Inquiry', ar: 'إرسال الاستفسار' },
+  submitting: { en: 'Sending…', ar: 'جاري الإرسال…' },
+  submitFailed: {
+    en: 'We could not send your inquiry. Please try again or email info@tayseer.me.',
+    ar: 'تعذر إرسال استفسارك. يرجى المحاولة مرة أخرى أو مراسلة info@tayseer.me.',
+  },
   submittedTitle: { en: 'Inquiry received', ar: 'تم استلام الاستفسار' },
   submitted: {
     en: 'Thank you — our enterprise team will contact you shortly.',
@@ -26,7 +31,13 @@ export const PAGE_COMMON = {
   backToList: { en: 'Back to case studies', ar: 'العودة إلى دراسات الحالة' },
   backHome: { en: 'Back to home', ar: 'العودة للرئيسية' },
   submitAnother: { en: 'Submit another inquiry', ar: 'إرسال استفسار آخر' },
+  servicesUnavailable: {
+    en: 'Services are temporarily unavailable. Please try again shortly.',
+    ar: 'الخدمات غير متاحة مؤقتاً. يرجى المحاولة مرة أخرى قريباً.',
+  },
   notFound: { en: 'Case study not found', ar: 'دراسة الحالة غير موجودة' },
+  solutionNotFound: { en: 'Solution not found', ar: 'الحل غير موجود' },
+  breadcrumb: { en: 'Breadcrumb', ar: 'مسار التنقل' },
   problem: { en: 'Problem', ar: 'التحدي' },
   solution: { en: 'Solution Architecture', ar: 'بنية الحل' },
   metrics: { en: 'Key Performance Metrics', ar: 'مؤشرات الأداء الرئيسية' },
@@ -334,6 +345,10 @@ export const SOFTWARE_PAGE = {
     en: 'Legacy modernization, cloud-native microservices, and mobile banking frameworks built for Gulf regulators.',
     ar: 'تحديث الأنظمة القديمة والخدمات السحابية الأصلية وأطر الخدمات المصرفية عبر الجوال وفق متطلبات المنطقة.',
   },
+  heroMetaLegacy: { en: 'Legacy modernization', ar: 'تحديث الأنظمة القديمة' },
+  heroMetaCloud: { en: 'Cloud-native services', ar: 'خدمات سحابية أصلية' },
+  heroMetaMobile: { en: 'Mobile banking apps', ar: 'تطبيقات مصرفية للجوال' },
+  heroBadgeKicker: { en: 'Engineering', ar: 'الهندسة' },
   tracks: [
     {
       id: 'legacy',
@@ -412,6 +427,10 @@ export const MANAGED_PAGE = {
     en: 'Always-on SOC monitoring, SLA-backed uptime, and compliance operations for regulated enterprises.',
     ar: 'مراقبة SOC مستمرة وتوافر مضمون باتفاقيات مستوى الخدمة وعمليات امتثال للمؤسسات المنظمة.',
   },
+  heroMetaSoc: { en: '24/7 SOC monitoring', ar: 'مراقبة SOC على مدار الساعة' },
+  heroMetaSla: { en: 'SLA-backed uptime', ar: 'توافر مضمون باتفاقية الخدمة' },
+  heroMetaCompliance: { en: 'Compliance operations', ar: 'عمليات الامتثال' },
+  heroBadgeKicker: { en: 'Managed ops', ar: 'تشغيل مُدار' },
   slaTitle: { en: 'Live Status Simulation', ar: 'محاكاة الحالة المباشرة' },
   metrics: [
     { label: { en: 'Platform Uptime', ar: 'وقت التشغيل' }, value: '99.999%', tone: 'up' },
@@ -642,6 +661,10 @@ export const CASE_STUDIES_PAGE = {
     en: 'Outcomes from banking, fintech, and managed IT programs across the Gulf.',
     ar: 'نتائج من برامج مصرفية وتقنية مالية وتقنية معلومات مدارة عبر الخليج.',
   },
+  heroMetaBanking: { en: 'Core & channels', ar: 'النواة والقنوات' },
+  heroMetaFintech: { en: 'Wallets & payments', ar: 'المحافظ والمدفوعات' },
+  heroMetaManaged: { en: 'Managed operations', ar: 'تشغيل مُدار' },
+  heroBadgeKicker: { en: 'Proven delivery', ar: 'تسليم مثبت' },
   filters: [
     { id: 'all', label: { en: 'All', ar: 'الكل' } },
     { id: 'banking', label: { en: 'Banking', ar: 'الخدمات المصرفية' } },
@@ -750,10 +773,10 @@ export const CONTACT_PAGE = {
     budget: { en: 'Timeline', ar: 'الجدول الزمني' },
   },
   interests: [
-    { en: 'Core Banking', ar: 'الأنظمة المصرفية' },
-    { en: 'Software Development', ar: 'تطوير البرمجيات' },
-    { en: 'Managed Services', ar: 'الخدمات المدارة' },
-    { en: 'Open Banking', ar: 'الخدمات المصرفية المفتوحة' },
+    { id: 'core-banking', en: 'Core Banking', ar: 'الأنظمة المصرفية' },
+    { id: 'software-development', en: 'Software Development', ar: 'تطوير البرمجيات' },
+    { id: 'managed-services', en: 'Managed Services', ar: 'الخدمات المدارة' },
+    { id: 'open-banking', en: 'Open Banking', ar: 'الخدمات المصرفية المفتوحة' },
   ],
   officesTitle: { en: 'Office Locations', ar: 'مواقع المكاتب' },
   offices: [
@@ -993,3 +1016,83 @@ export const CAREERS_PAGE = {
   ctaMail: { en: 'Email your CV', ar: 'أرسل سيرتك بالبريد' },
   ctaContact: { en: 'Use the contact form', ar: 'استخدم نموذج التواصل' },
 } as const;
+
+export const LEGAL_PAGES = {
+  privacy: {
+    title: { en: 'Privacy Policy', ar: 'سياسة الخصوصية' },
+    updated: { en: 'Last updated: August 2026', ar: 'آخر تحديث: أغسطس 2026' },
+    lead: {
+      en: 'This policy explains how Tayseer Innovations collects, uses, and protects information when you use our website and related services.',
+      ar: 'توضح هذه السياسة كيف تجمع تيسير إنوفيشنز المعلومات وتستخدمها وتحميها عند استخدام موقعنا وخدماتنا ذات الصلة.',
+    },
+    sections: [
+      {
+        heading: { en: 'Information we collect', ar: 'المعلومات التي نجمعها' },
+        body: {
+          en: 'We may collect contact details you submit through forms (such as name, email, company, and message), basic usage data for site performance, and conversation details when you use Fahim or agent chat.',
+          ar: 'قد نجمع بيانات التواصل التي ترسلها عبر النماذج (مثل الاسم والبريد والشركة والرسالة)، وبيانات استخدام أساسية لأداء الموقع، وتفاصيل المحادثة عند استخدام فهيم أو دردشة الوكلاء.',
+        },
+      },
+      {
+        heading: { en: 'How we use information', ar: 'كيف نستخدم المعلومات' },
+        body: {
+          en: 'We use your information to respond to inquiries, deliver and improve our services, operate admin and support workflows, and meet legal or regulatory obligations.',
+          ar: 'نستخدم معلوماتك للرد على الاستفسارات وتقديم خدماتنا وتحسينها وتشغيل عمليات الإدارة والدعم والوفاء بالالتزامات القانونية والتنظيمية.',
+        },
+      },
+      {
+        heading: { en: 'Sharing', ar: 'المشاركة' },
+        body: {
+          en: 'We do not sell personal information. We may share data with trusted processors who help us host, secure, or operate the site, and only as needed to provide our services or comply with law.',
+          ar: 'لا نبيع المعلومات الشخصية. قد نشارك البيانات مع معالجين موثوقين يساعدوننا في الاستضافة أو التأمين أو تشغيل الموقع، وفقط بالقدر اللازم لتقديم خدماتنا أو الامتثال للقانون.',
+        },
+      },
+      {
+        heading: { en: 'Contact', ar: 'التواصل' },
+        body: {
+          en: 'For privacy questions, email info@tayseer.me or contact our Riyadh or Dubai offices listed on the Contact page.',
+          ar: 'لأسئلة الخصوصية راسل info@tayseer.me أو تواصل مع مكاتبنا في الرياض أو دبي المدرجة في صفحة التواصل.',
+        },
+      },
+    ],
+  },
+  terms: {
+    title: { en: 'Terms & Conditions', ar: 'الشروط والأحكام' },
+    updated: { en: 'Last updated: August 2026', ar: 'آخر تحديث: أغسطس 2026' },
+    lead: {
+      en: 'These terms govern your use of the Tayseer Innovations website and related online materials.',
+      ar: 'تحكم هذه الشروط استخدامك لموقع تيسير إنوفيشنز والمواد الإلكترونية ذات الصلة.',
+    },
+    sections: [
+      {
+        heading: { en: 'Website use', ar: 'استخدام الموقع' },
+        body: {
+          en: 'Content on this site is provided for general information about our products and services. It does not create a binding commercial engagement unless confirmed in a signed agreement.',
+          ar: 'يُقدَّم محتوى هذا الموقع لمعلومات عامة عن منتجاتنا وخدماتنا. ولا يُنشئ التزاماً تجارياً ملزماً ما لم يُؤكَّد في اتفاقية موقعة.',
+        },
+      },
+      {
+        heading: { en: 'Accuracy', ar: 'الدقة' },
+        body: {
+          en: 'We aim to keep information current, but features, availability, and descriptions may change. Always confirm programme details with our team before relying on them.',
+          ar: 'نسعى لإبقاء المعلومات محدثة، لكن الميزات والتوافر والأوصاف قد تتغير. أكّد دائماً تفاصيل البرامج مع فريقنا قبل الاعتماد عليها.',
+        },
+      },
+      {
+        heading: { en: 'Acceptable use', ar: 'الاستخدام المقبول' },
+        body: {
+          en: 'You agree not to misuse the site, attempt unauthorized access, abuse chat or contact channels, or use the site in ways that violate applicable law.',
+          ar: 'توافق على عدم إساءة استخدام الموقع أو محاولة الوصول غير المصرح به أو إساءة استخدام قنوات الدردشة أو التواصل أو استخدام الموقع بطرق تخالف القانون المعمول به.',
+        },
+      },
+      {
+        heading: { en: 'Contact', ar: 'التواصل' },
+        body: {
+          en: 'Questions about these terms can be sent to info@tayseer.me.',
+          ar: 'يمكن إرسال الأسئلة حول هذه الشروط إلى info@tayseer.me.',
+        },
+      },
+    ],
+  },
+} as const;
+

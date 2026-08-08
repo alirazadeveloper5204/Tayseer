@@ -28,7 +28,7 @@
         />
         <img
           class="spotlight-hero__shot spotlight-hero__shot--side"
-          src="/images/service-banking-systems.jpg"
+          src="/images/hero-banking-side.jpg"
           alt=""
           width="900"
           height="675"
@@ -94,7 +94,7 @@
         <h2 class="type-section mt-fluid-sm page-ink">{{ splitTitle() }}</h2>
         <p class="mt-fluid-sm text-fluid-base page-muted">{{ splitLead() }}</p>
         <div class="value-split__checks">
-          @for (item of c.splitItems; track label(item.title)) {
+          @for (item of c.splitItems; track $index) {
             <div class="value-check">
               <span class="value-check__mark" aria-hidden="true">
                 <svg viewBox="0 0 24 24">
@@ -131,7 +131,7 @@
       <p class="text-fluid-base page-muted">{{ elevateLead() }}</p>
       <div class="elevate-cta__actions">
         <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand">{{ label(common.requestDemo) }}</a>
-        <a [routerLink]="'/' + lang() + '/contact'" class="page-ghost-btn">{{ label(common.talkToUs) }}</a>
+        <a [routerLink]="'/' + lang() + '/solutions'" class="page-ghost-btn">{{ label(common.learnMore) }}</a>
       </div>
     </div>
   </div>

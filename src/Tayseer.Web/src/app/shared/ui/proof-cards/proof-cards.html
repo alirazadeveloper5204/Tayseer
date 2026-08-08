@@ -1,4 +1,4 @@
-@for (card of cards(); track card.title; let i = $index) {
+@for (card of cards(); track card.icon; let i = $index) {
   <article
     class="fintech-card proof-card"
     [class.proof-card--1]="i === 0"
@@ -34,7 +34,7 @@
 }
 
 <ul class="proof-card__mobile">
-  @for (card of cards(); track card.title) {
+  @for (card of cards(); track card.icon) {
     <li>{{ card.title }}</li>
   }
 </ul>

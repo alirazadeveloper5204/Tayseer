@@ -1,10 +1,12 @@
 <a
   [routerLink]="link()"
   class="service-card group glass-card relative flex h-full flex-col overflow-hidden p-0 no-underline outline-none focus-visible:ring-2 focus-visible:ring-brand-green/60"
-  (pointerenter)="onCoverEnter()"
-  (pointerleave)="onCoverLeave()"
 >
-  <div class="service-card__media">
+  <div
+    class="service-card__media"
+    (pointerenter)="onCoverEnter()"
+    (pointerleave)="onCoverLeave()"
+  >
     <img
       #coverImg
       class="service-card__image will-change-transform"

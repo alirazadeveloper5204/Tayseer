@@ -45,7 +45,7 @@ export class SiteCarousel {
   readonly loop = input(false);
   readonly itemCount = input(0);
   readonly visibleCount = input<number | null>(null);
-  /** Type A multi-card rail · Type B full-bleed crossfade. */
+
   readonly mode = input<SiteCarouselMode>('rail');
   readonly showNav = input(true);
   readonly showProgress = input(true);
@@ -68,15 +68,18 @@ export class SiteCarousel {
   private fadeClearTimer: ReturnType<typeof setTimeout> | null = null;
   private animTimer: ReturnType<typeof setTimeout> | null = null;
   private paused = false;
+  private timerStartedAt = 0;
+  private remainingMs = 0;
   private pointerStartX = 0;
   private dragOriginX = 0;
   private suppressClick = false;
   private pointerArmed = false;
   private pointerId: number | null = null;
-  /** Blocks resize snaps while a slide animation is in flight. */
+
   private animating = false;
   private lastMeasuredStep = 0;
-  /** 1 = next, -1 = prev — drives Type B drift direction. */
+  private resizeRaf = 0;
+
   private navDir: 1 | -1 = 1;
 
   constructor() {
@@ -177,7 +180,12 @@ export class SiteCarousel {
       }
       this.index.set(next);
       this.playFade(from, next, animate);
-      this.restartProgress();
+      if (!this.paused) {
+        this.startTimer(false);
+      } else {
+        this.remainingMs = this.intervalMs();
+        this.progressRunning.set(false);
+      }
       return;
     }
 
@@ -186,7 +194,12 @@ export class SiteCarousel {
     const next = Math.min(Math.max(i, 0), Math.max(0, max));
     this.index.set(next);
     this.moveTrack(this.xForIndex(next), animate);
-    this.restartProgress();
+    if (!this.paused) {
+      this.startTimer(false);
+    } else {
+      this.remainingMs = this.intervalMs();
+      this.progressRunning.set(false);
+    }
   }
 
   goToDot(dot: number): void {
@@ -195,18 +208,26 @@ export class SiteCarousel {
   }
 
   pause(): void {
+    if (this.paused) {
+      return;
+    }
     this.paused = true;
     this.pausedUi.set(true);
+    if (this.timerStartedAt > 0) {
+      const elapsed = performance.now() - this.timerStartedAt;
+      const budget = this.remainingMs > 0 ? this.remainingMs : this.intervalMs();
+      this.remainingMs = Math.max(50, budget - elapsed);
+    }
     this.clearTimer();
   }
 
   resume(): void {
-    if (this.dragging()) {
+    if (this.dragging() || !this.paused) {
       return;
     }
     this.paused = false;
     this.pausedUi.set(false);
-    this.startTimer();
+    this.startTimer(true);
   }
 
   onKey(event: KeyboardEvent): void {
@@ -253,7 +274,6 @@ export class SiteCarousel {
       try {
         (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
       } catch {
-        /* ignore */
       }
     }
 
@@ -276,7 +296,7 @@ export class SiteCarousel {
 
     if (wasDragging) {
       this.suppressClick = true;
-      // Let is-dragging clear before animating so CSS transition can run.
+
       requestAnimationFrame(() => {
         if (Math.abs(delta) >= 48) {
           const rtl = this.isRtl();
@@ -304,7 +324,7 @@ export class SiteCarousel {
     this.refreshDots();
     this.measure();
 
-    // One-time: strip any leftover GSAP inline transforms on the track.
+
     const trackEl = this.trackEl();
     const api = this.motion.gsap;
     if (trackEl && api) {
@@ -331,32 +351,38 @@ export class SiteCarousel {
     viewport?.addEventListener('click', onClickCapture, true);
 
     const resize = new ResizeObserver(() => {
-      this.zone.run(() => {
-        this.syncModeAttr();
-        const prevStep = this.lastMeasuredStep;
-        const prevVisible = Number(this.host.nativeElement.getAttribute('data-visible') || '0');
-        this.syncVisibleCount();
-        const nextVisible = this.currentVisibleCount();
-        this.measure();
-        const stepChanged = Math.abs(this.slideStep() - prevStep) > 1;
-        const visibleChanged = prevVisible !== nextVisible;
+      if (this.resizeRaf) {
+        return;
+      }
+      this.resizeRaf = requestAnimationFrame(() => {
+        this.resizeRaf = 0;
+        this.zone.run(() => {
+          this.syncModeAttr();
+          const prevStep = this.lastMeasuredStep;
+          const prevVisible = Number(this.host.nativeElement.getAttribute('data-visible') || '0');
+          this.syncVisibleCount();
+          const nextVisible = this.currentVisibleCount();
+          this.measure();
+          const stepChanged = Math.abs(this.slideStep() - prevStep) > 1;
+          const visibleChanged = prevVisible !== nextVisible;
 
-        if (this.animating && !visibleChanged && !stepChanged) {
-          return;
-        }
-
-        if (this.isFade()) {
-          if (!this.animating) {
-            this.playFade(this.index(), this.index(), false);
+          if (this.animating && !visibleChanged && !stepChanged) {
+            return;
           }
-          return;
-        }
-        if (visibleChanged) {
-          this.goTo(this.activeDot(), false);
-        } else {
-          this.moveTrack(this.xForIndex(this.index()), false);
-          this.updateSlideStates();
-        }
+
+          if (this.isFade()) {
+            if (!this.animating) {
+              this.playFade(this.index(), this.index(), false);
+            }
+            return;
+          }
+          if (visibleChanged) {
+            this.goTo(this.activeDot(), false);
+          } else {
+            this.moveTrack(this.xForIndex(this.index()), false);
+            this.updateSlideStates();
+          }
+        });
       });
     });
     if (viewport) {
@@ -387,6 +413,10 @@ export class SiteCarousel {
       viewport?.removeEventListener('click', onClickCapture, true);
       resize.disconnect();
       mutation.disconnect();
+      if (this.resizeRaf) {
+        cancelAnimationFrame(this.resizeRaf);
+        this.resizeRaf = 0;
+      }
       this.clearTimer();
       this.clearJump();
       this.clearAnimTimer();
@@ -436,9 +466,8 @@ export class SiteCarousel {
     track.style.setProperty('--site-track-x', `${Math.round(x * 100) / 100}px`);
   }
 
-  /**
-   * Type B: crossfade + horizontal drift via CSS classes.
-   */
+
+
   private playFade(from: number, to: number, animate: boolean): void {
     const slides = this.slides();
     if (!slides.length) {
@@ -657,23 +686,31 @@ export class SiteCarousel {
     return this.locale.lang() === 'ar';
   }
 
-  private startTimer(): void {
+  private startTimer(resume = false): void {
     this.clearTimer();
     if (!isPlatformBrowser(this.platformId) || this.paused) {
-      this.progressRunning.set(false);
       return;
     }
-    this.restartProgress();
+
+    if (!resume) {
+      this.remainingMs = this.intervalMs();
+      this.restartProgress();
+    } else if (this.showProgress() && !this.progressRunning()) {
+      this.progressRunning.set(true);
+    }
+
+    const wait = Math.max(50, resume ? this.remainingMs || this.intervalMs() : this.intervalMs());
+    this.remainingMs = wait;
+    this.timerStartedAt = performance.now();
+
     this.timer = setTimeout(() => {
       if (this.paused || document.hidden) {
-        this.startTimer();
         return;
       }
       this.zone.run(() => {
         this.next();
-        this.startTimer();
       });
-    }, this.intervalMs());
+    }, wait);
   }
 
   private clearTimer(): void {

@@ -2,7 +2,7 @@ using Tayseer.Api.Domain;
 
 namespace Tayseer.Api.Data;
 
-/// <summary>Feature blocks scraped from tayseer.me product pages.</summary>
+
 public static class ServiceFeatureSeed
 {
     private static readonly DateTimeOffset Now = new(2026, 7, 31, 0, 0, 0, TimeSpan.Zero);
@@ -16,7 +16,7 @@ public static class ServiceFeatureSeed
 
     public static ServiceFeature[] All { get; } =
     [
-        // Core Banking
+
         F(CoreId, 1, "a01", "Payments", "المدفوعات",
             "Cards, mobile wallets, and app-based payments with secure, efficient processing.",
             "بطاقات ومحافظ جوال ومدفوعات عبر التطبيقات بمعالجة آمنة وفعّالة."),
@@ -42,7 +42,7 @@ public static class ServiceFeatureSeed
             "Treasury and funds operations that keep liquidity and settlements under control.",
             "عمليات الخزينة والأموال للتحكم في السيولة والتسويات."),
 
-        // Fahim AI
+
         F(FahimId, 1, "b01", "Goal-Oriented Execution", "تنفيذ موجّه بالأهداف",
             "Interprets instructions intelligently, then executes end-to-end operations with accuracy and speed.",
             "يفسّر التعليمات بذكاء ثم ينفّذ العمليات من البداية إلى النهاية بدقة وسرعة."),
@@ -59,7 +59,7 @@ public static class ServiceFeatureSeed
             "Connects to existing business modules without major disruption.",
             "يتصل بالوحدات الحالية دون تعطيل كبير."),
 
-        // MBuke
+
         F(MbukeId, 1, "c01", "Unified Platform", "منصة موحّدة",
             "Onboarding, payments, transfers, and analytics in one white-label stack.",
             "التسجيل والمدفوعات والتحويلات والتحليلات في منصة واحدة بعلامتك."),
@@ -76,7 +76,7 @@ public static class ServiceFeatureSeed
             "Transaction monitoring, agent management, compliance, and reporting tools.",
             "مراقبة المعاملات وإدارة الوكلاء والامتثال وأدوات التقارير."),
 
-        // Software Management
+
         F(SoftwareId, 1, "d01", "Version Control Systems", "أنظمة التحكم بالإصدارات",
             "Central repositories, change history, and collaborative coding with Git-class tooling.",
             "مستودعات مركزية وسجل تغييرات وتعاون برمجي بأدوات من فئة Git."),
@@ -93,7 +93,7 @@ public static class ServiceFeatureSeed
             "Automated build, test, and release pipelines for FinTech teams.",
             "خطوط بناء واختبار وإصدار مؤتمتة لفرق التقنية المالية."),
 
-        // Managed Services
+
         F(ManagedId, 1, "e01", "Managed T24 Temenos", "إدارة T24 Temenos",
             "Administration, performance optimization, and ongoing T24 maintenance.",
             "إدارة وتحسين الأداء والصيانة المستمرة لنظام T24."),
@@ -110,7 +110,7 @@ public static class ServiceFeatureSeed
             "Cloud and infrastructure operations that keep platforms reliable and efficient.",
             "عمليات سحابية وبنية تحتية تبقي المنصات موثوقة وفعّالة."),
 
-        // Banking Systems (GRG)
+
         F(BankingId, 1, "f01", "ATMs & Cash Recyclers", "أجهزة الصراف وإعادة تدوير النقد",
             "24/7 cash access with withdrawals, deposits, bill pay, and recycling.",
             "وصول نقدي على مدار الساعة مع السحب والإيداع ودفع الفواتير وإعادة التدوير."),
@@ -138,7 +138,7 @@ public static class ServiceFeatureSeed
         string descAr) =>
         new()
         {
-            // Last GUID segment must be exactly 12 hex digits (e.g. a01 → 000000000a01).
+
             Id = Guid.Parse($"33333333-3333-3333-3333-{idSuffix.PadLeft(12, '0')}"),
             ServiceOfferingId = serviceId,
             SortOrder = order,

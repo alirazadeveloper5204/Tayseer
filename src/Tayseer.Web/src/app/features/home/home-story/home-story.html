@@ -1,16 +1,21 @@
-<!-- Why Choose Tayseer -->
-<section id="why-choose" class="why-choose site-band">
+
+<section id="why-choose" #whyChooseSection class="why-choose site-band">
   <div class="site-container py-fluid-2xl">
     <h2 class="type-section text-center text-brand-blue dark:text-white">
       {{ copy().home.whyChooseTitle }}
     </h2>
     <p class="why-choose__subtitle">{{ copy().home.whyChooseSubtitle }}</p>
 
-    <div #whyChoosePanel class="why-choose__panel">
+    <div class="why-choose__panel">
       <div class="why-choose__kpis" [attr.aria-label]="copy().home.statsTitle">
         @for (stat of kpiStats(); track stat.id; let last = $last) {
           <div class="why-choose__kpi" [class.why-choose__kpi--last]="last">
-            <p class="why-choose__kpi-value financial-number">{{ stat.display }}</p>
+            <p
+              class="why-choose__kpi-value financial-number"
+              [class.is-counting]="kpiCounting()"
+            >
+              {{ stat.display }}
+            </p>
             <p class="why-choose__kpi-label">{{ stat.label }}</p>
           </div>
         }
@@ -65,7 +70,7 @@
   </div>
 </section>
 
-<!-- Testimonials -->
+
 <section id="clients" class="clients-band home-story__testimonials site-band">
   <div class="site-container py-fluid-2xl">
     <p class="clients-slider__eyebrow">{{ copy().home.testimonialsEyebrow }}</p>
@@ -124,7 +129,7 @@
   </div>
 </section>
 
-<!-- Success mantra -->
+
 <section id="mantra" class="site-band home-mantra" #mantraSection>
   <div class="site-container py-fluid-2xl">
     <header class="home-mantra__head">
@@ -166,7 +171,7 @@
   </div>
 </section>
 
-<!-- Deployment -->
+
 <section id="pioneer" class="site-band home-pioneer" #pioneerSection>
   <div class="site-container py-fluid-2xl home-pioneer__layout">
     <div class="home-pioneer__copy">

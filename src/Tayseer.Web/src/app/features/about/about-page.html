@@ -26,7 +26,7 @@
         />
         <img
           class="spotlight-hero__shot spotlight-hero__shot--side"
-          src="/images/gallery-workspace.jpg"
+          src="/images/gallery-meeting.jpg"
           alt=""
           width="900"
           height="675"
@@ -105,12 +105,12 @@
           class="about-hero__slider"
           mode="fade"
           [loop]="true"
-          [itemCount]="sliderImages.length"
+          [itemCount]="sliderImages().length"
           [label]="whoTitle()"
           [showNav]="false"
           [showProgress]="false"
         >
-          @for (slide of sliderImages; track slide.src; let first = $first) {
+          @for (slide of sliderImages(); track slide.src; let first = $first) {
             <div class="site-carousel__slide">
               <img
                 [src]="slide.src"
@@ -126,7 +126,7 @@
       </div>
     </div>
     <div class="about-creds">
-      @for (cred of c.creds; track label(cred)) {
+      @for (cred of c.creds; track $index) {
         <article class="about-creds__item fintech-card border-dot-card">{{ label(cred) }}</article>
       }
     </div>
@@ -175,7 +175,7 @@
           <h3>{{ approachTitle() }}</h3>
         </div>
         <ul class="about-approach">
-          @for (step of c.approach; track label(step.title); let i = $index) {
+          @for (step of c.approach; track $index; let i = $index) {
             <li>
               <span class="about-step-icon" aria-hidden="true">
                 @switch (i) {
@@ -227,8 +227,8 @@
       <p class="text-fluid-base page-muted">{{ valuesLead() }}</p>
     </div>
     <div class="about-values">
-      @for (value of c.values; track label(value.title); let i = $index) {
-        <article class="about-values__card fintech-card border-dot-card">
+      @for (value of c.values; track $index; let i = $index) {
+        <article class="about-values__card fintech-card">
           <div class="about-values__head">
             <span class="about-count" aria-hidden="true">
               @switch (i) {

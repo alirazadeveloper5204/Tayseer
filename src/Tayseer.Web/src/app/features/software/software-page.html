@@ -1,14 +1,44 @@
-<section class="page-hero site-band">
+<section class="spotlight-hero site-band" aria-labelledby="software-hero-title">
   <div class="page-hero__glow" aria-hidden="true"></div>
-  <div class="site-container relative z-10">
-    <div class="page-hero__panel">
+  <div class="spotlight-hero__grid site-container relative z-10">
+    <div>
       <p class="type-eyebrow">{{ eyebrow() }}</p>
-      <h1 class="type-title mt-fluid-sm page-ink">{{ title() }}</h1>
-      <p class="mt-fluid-md text-fluid-base leading-relaxed page-muted">{{ lead() }}</p>
-      <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand mt-fluid-lg inline-flex">
-        {{ label(common.requestDemo) }}
-      </a>
+      <h1 id="software-hero-title" class="spotlight-hero__title page-ink">{{ title() }}</h1>
+      <p class="spotlight-hero__lead page-muted">{{ lead() }}</p>
+      <div class="spotlight-hero__actions">
+        <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand">{{ label(common.requestDemo) }}</a>
+      </div>
+      <ul class="spotlight-hero__meta">
+        <li>{{ heroMetaLegacy() }}</li>
+        <li>{{ heroMetaCloud() }}</li>
+        <li>{{ heroMetaMobile() }}</li>
+      </ul>
     </div>
+    <aside aria-hidden="true">
+      <div class="spotlight-hero__media">
+        <img
+          class="spotlight-hero__shot spotlight-hero__shot--main"
+          src="/images/service-software.jpg"
+          [alt]="title()"
+          width="1536"
+          height="1024"
+          decoding="async"
+          fetchpriority="high"
+        />
+        <img
+          class="spotlight-hero__shot spotlight-hero__shot--side"
+          src="/images/hero-software-side.jpg"
+          alt=""
+          width="900"
+          height="675"
+          decoding="async"
+        />
+        <div class="spotlight-hero__badge">
+          <span>{{ heroBadgeKicker() }}</span>
+          <strong>{{ heroMetaCloud() }}</strong>
+        </div>
+      </div>
+    </aside>
   </div>
 </section>
 
@@ -42,23 +72,31 @@
 
 <section class="page-module site-band">
   <div class="site-container py-fluid-2xl">
-    <h2 class="type-section page-ink">{{ tabsTitle() }}</h2>
-    <div class="mt-fluid-md flex flex-wrap gap-2" role="tablist">
+    <h2 class="type-section page-ink" id="software-stack-title">{{ tabsTitle() }}</h2>
+    <div class="mt-fluid-md flex flex-wrap gap-2" role="tablist" aria-labelledby="software-stack-title">
       @for (tab of c.tabs; track tab.id) {
         <button
           type="button"
           class="tab-pill"
           role="tab"
-          [class.is-active]="activeTab() === tab.id"
+          [id]="'software-tab-' + tab.id"
+          [attr.aria-controls]="'software-panel-' + tab.id"
           [attr.aria-selected]="activeTab() === tab.id"
+          [attr.tabindex]="activeTab() === tab.id ? 0 : -1"
           (click)="setTab(tab.id)"
+          (keydown)="onTabKeydown($event, tab.id)"
         >
           {{ label(tab.label) }}
         </button>
       }
     </div>
-    <div class="mt-fluid-lg grid gap-fluid-sm sm:grid-cols-2 lg:grid-cols-4">
-      @for (item of activeItems(); track label(item)) {
+    <div
+      class="mt-fluid-lg grid gap-fluid-sm sm:grid-cols-2 lg:grid-cols-4"
+      role="tabpanel"
+      [id]="'software-panel-' + activeTab()"
+      [attr.aria-labelledby]="'software-tab-' + activeTab()"
+    >
+      @for (item of activeItems(); track $index) {
         <article class="fintech-card border-dot-card tech-stack-card p-fluid-md text-center">
           <p class="font-display text-fluid-base font-semibold page-accent">{{ label(item) }}</p>
         </article>

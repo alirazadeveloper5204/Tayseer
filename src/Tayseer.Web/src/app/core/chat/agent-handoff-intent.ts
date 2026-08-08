@@ -1,4 +1,4 @@
-/** Detects short intents to speak with a human agent (EN + AR). */
+
 export function isAgentHandoffIntent(text: string): boolean {
   const trimmed = text.trim();
   if (!trimmed) {

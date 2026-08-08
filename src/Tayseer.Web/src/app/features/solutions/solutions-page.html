@@ -28,7 +28,7 @@
         />
         <img
           class="spotlight-hero__shot spotlight-hero__shot--side"
-          src="/images/service-fahim-ai.jpg"
+          src="/images/hero-ai-side.jpg"
           alt=""
           width="900"
           height="675"
@@ -105,18 +105,28 @@
       </div>
     } @else if (error()) {
       <p class="mt-fluid-lg text-center text-fluid-sm page-muted">
-        {{ isAr() ? 'تعذر تحميل الحلول حالياً.' : 'Solutions are temporarily unavailable.' }}
+        {{ copy().common.servicesUnavailable }}
       </p>
     } @else {
       <div class="zigzag">
         @for (row of catalogRows(); track row.slug) {
           <article class="zigzag__row" [class.zigzag__row--flip]="row.flip">
-            <div class="zigzag__media">
+            <div class="zigzag__media zigzag__media--collage">
               <img
+                class="zigzag__media-main"
                 [src]="row.image"
                 [alt]="row.title"
                 width="960"
                 height="600"
+                loading="lazy"
+                decoding="async"
+              />
+              <img
+                class="zigzag__media-side"
+                [src]="row.side"
+                alt=""
+                width="640"
+                height="512"
                 loading="lazy"
                 decoding="async"
               />
@@ -141,7 +151,7 @@
         <h2 class="type-section mt-fluid-sm page-ink">{{ splitTitle() }}</h2>
         <p class="mt-fluid-sm text-fluid-base page-muted">{{ splitLead() }}</p>
         <div class="value-split__checks">
-          @for (item of c.splitItems; track label(item.title)) {
+          @for (item of c.splitItems; track $index) {
             <div class="value-check">
               <span class="value-check__mark" aria-hidden="true">
                 <svg viewBox="0 0 24 24">

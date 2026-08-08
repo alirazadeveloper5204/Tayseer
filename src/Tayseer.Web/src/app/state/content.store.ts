@@ -15,14 +15,6 @@ export class ContentStore {
   readonly error = signal<string | null>(null);
   private loadedForLang: string | null = null;
 
-  ensureLoaded(): void {
-    const lang = this.locale.lang();
-    if (this.loadedForLang === lang) {
-      return;
-    }
-    this.loadServices();
-  }
-
   loadServices(): void {
     const lang = this.locale.lang();
 
@@ -52,7 +44,7 @@ export class ContentStore {
     });
   }
 
-  /** Force refresh after locale change. */
+
   reloadForLocale(): void {
     this.loadedForLang = null;
     this.loadServices();

@@ -2,6 +2,7 @@ import { Component, DestroyRef, ElementRef, effect, inject, viewChild } from '@a
 import gsap from 'gsap';
 import { NavigationLoaderService } from '../../../core/navigation/navigation-loader.service';
 import { GsapService } from '../../../core/motion/gsap.service';
+import { UiCopyService } from '../../../core/i18n/ui-copy.service';
 
 @Component({
   selector: 'app-page-loader',
@@ -10,6 +11,7 @@ import { GsapService } from '../../../core/motion/gsap.service';
 })
 export class PageLoader {
   readonly loader = inject(NavigationLoaderService);
+  readonly copy = inject(UiCopyService).copy;
   private readonly motion = inject(GsapService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly panel = viewChild<ElementRef<HTMLElement>>('loaderPanel');

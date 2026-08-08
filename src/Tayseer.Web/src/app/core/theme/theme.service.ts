@@ -16,8 +16,18 @@ export class ThemeService {
   readonly isDark = computed(() => this.mode() === 'dark');
 
   init(): void {
+
+
+    if (!isPlatformBrowser(this.platformId)) {
+      this.applyTheme('dark');
+      this.ready = true;
+      return;
+    }
+
+    const root = this.document.documentElement;
+    const fromDom: ThemeMode = root.classList.contains('dark') ? 'dark' : 'light';
     const stored = this.readStored();
-    this.applyTheme(stored ?? 'dark');
+    this.applyTheme(stored ?? fromDom);
     this.ready = true;
   }
 
@@ -30,14 +40,14 @@ export class ThemeService {
       return;
     }
 
-    // Skip cover on first boot — boot splash already handles that.
+
     if (!this.ready || !isPlatformBrowser(this.platformId)) {
       this.applyTheme(theme);
       return;
     }
 
     this.navigationLoader.runCovered(() => {
-      // Suppress color transitions while the class flips under the cover.
+
       this.document.documentElement.classList.add('theme-switching');
       this.applyTheme(theme);
     });

@@ -3,7 +3,7 @@ using Tayseer.Api.Resources;
 
 namespace Tayseer.Api.Services;
 
-/// <summary>Detects when a visitor is asking to speak with a human agent (not Fahim AI).</summary>
+
 public static class AgentHandoffIntent
 {
     private static readonly Regex Whitespace = new(@"\s+", RegexOptions.Compiled);

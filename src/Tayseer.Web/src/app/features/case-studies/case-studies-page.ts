@@ -1,6 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LocaleService } from '../../core/i18n/locale.service';
+import { UiCopyService } from '../../core/i18n/ui-copy.service';
 import {
   CASE_STUDIES_PAGE,
   PAGE_COMMON,
@@ -15,6 +16,7 @@ import {
 })
 export class CaseStudiesPage {
   private readonly locale = inject(LocaleService);
+  readonly copy = inject(UiCopyService).copy;
   readonly lang = computed(() => this.locale.lang() as PageLocale);
   readonly c = CASE_STUDIES_PAGE;
   readonly common = PAGE_COMMON;
@@ -23,6 +25,10 @@ export class CaseStudiesPage {
   readonly title = computed(() => t(this.c.title, this.lang()));
   readonly eyebrow = computed(() => t(this.c.eyebrow, this.lang()));
   readonly lead = computed(() => t(this.c.lead, this.lang()));
+  readonly heroMetaBanking = computed(() => t(this.c.heroMetaBanking, this.lang()));
+  readonly heroMetaFintech = computed(() => t(this.c.heroMetaFintech, this.lang()));
+  readonly heroMetaManaged = computed(() => t(this.c.heroMetaManaged, this.lang()));
+  readonly heroBadgeKicker = computed(() => t(this.c.heroBadgeKicker, this.lang()));
 
   readonly filtered = computed(() => {
     const f = this.filter();

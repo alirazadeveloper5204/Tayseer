@@ -12,7 +12,7 @@
   color: inherit;
 }
 
-/* Sit above the sticky mobile CTA (hidden from sm and up) */
+
 @media (max-width: 639px) {
   .chat-widget:not(.chat-widget--free) {
     bottom: calc(var(--site-mobile-cta-height) + 0.75rem);

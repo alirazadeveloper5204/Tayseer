@@ -5,7 +5,7 @@
   --site-slider-ease-soft: cubic-bezier(0.25, 1, 0.5, 1);
   --site-neighbor-opacity: 0.72;
   --site-neighbor-scale: 0.985;
-  /* SSR / pre-JS fallback — JS data-visible overrides these */
+
   --slide-count: 1;
   --slide-gap: 0.85rem;
   --slide-peek: 0px;
@@ -31,7 +31,7 @@
   }
 }
 
-/* Runtime visible count from SiteCarousel (wins over media fallbacks) */
+
 app-site-carousel[data-visible='1'] .site-carousel {
   --slide-count: 1;
   --slide-peek: 0px;
@@ -65,7 +65,7 @@ app-site-carousel {
   min-width: 0;
 }
 
-/* Keep projected links clickable inside the rail */
+
 .site-carousel__track a {
   cursor: pointer;
   pointer-events: auto;
@@ -266,7 +266,7 @@ html.dark .site-carousel__dot.is-active {
   outline-offset: 2px;
 }
 
-/* ——— Type B: full-bleed crossfade ——— */
+
 app-site-carousel[data-mode='fade'] .site-carousel__viewport {
   cursor: grab;
 }
@@ -324,7 +324,7 @@ app-site-carousel[data-mode='fade'] .site-carousel__track > *.is-neighbor {
   transform: translate3d(var(--fade-x, 0px), 0, 0);
 }
 
-/* About overlay dots layout helper */
+
 app-site-carousel.about-hero__slider .site-carousel__controls {
   position: absolute;
   inset-inline: 0;

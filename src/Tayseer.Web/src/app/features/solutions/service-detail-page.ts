@@ -5,8 +5,8 @@ import { catchError, combineLatest, map, of, startWith, switchMap } from 'rxjs';
 import { ContentApiService } from '../../core/api/content-api.service';
 import { LocaleService } from '../../core/i18n/locale.service';
 import { UiCopyService } from '../../core/i18n/ui-copy.service';
-import { SOLUTIONS_PAGE, t, type PageLocale } from '../../core/content/page-content';
-import { serviceImage } from '../../core/media/site-images';
+import { SOLUTIONS_PAGE, PAGE_COMMON, t, type PageLocale } from '../../core/content/page-content';
+import { serviceImage, serviceHeroCollage } from '../../core/media/site-images';
 import { ServiceDto } from '../../models/service.model';
 
 @Component({
@@ -20,9 +20,14 @@ export class ServiceDetailPage {
   private readonly locale = inject(LocaleService);
   readonly copy = inject(UiCopyService).copy;
   readonly c = SOLUTIONS_PAGE;
+  readonly common = PAGE_COMMON;
 
   readonly lang = computed(() => this.locale.lang() as PageLocale);
   readonly isAr = computed(() => this.locale.lang() === 'ar');
+
+  label(item: { en: string; ar: string }): string {
+    return t(item, this.lang());
+  }
 
   private readonly load = toSignal(
     combineLatest([
@@ -50,6 +55,12 @@ export class ServiceDetailPage {
   readonly coverImage = computed(() => {
     const slug = this.service()?.slug;
     return slug ? serviceImage(slug) : null;
+  });
+
+  readonly heroCollage = computed(() => {
+    const fromService = this.service()?.slug ?? '';
+    const fromRoute = this.route.snapshot.paramMap.get('slug') ?? '';
+    return serviceHeroCollage(fromService || fromRoute);
   });
 
   readonly featuresTitle = computed(() => t(this.c.detailFeaturesTitle, this.lang()));

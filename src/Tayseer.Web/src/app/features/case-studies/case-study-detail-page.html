@@ -1,18 +1,47 @@
 @if (item(); as study) {
-  <section class="page-hero site-band">
+  <section class="spotlight-hero site-band" aria-labelledby="case-study-hero-title">
     <div class="page-hero__glow" aria-hidden="true"></div>
-    <div class="site-container relative z-10">
-      <div class="page-hero__panel">
+    <div class="spotlight-hero__grid site-container relative z-10">
+      <div>
         <p class="type-eyebrow">{{ sectorLabel(study.sector) }}</p>
-        <h1 class="type-title mt-fluid-sm page-ink">{{ label(study.title) }}</h1>
-        <p class="mt-fluid-md text-fluid-base leading-relaxed page-muted">{{ label(study.summary) }}</p>
-        <a
-          [routerLink]="'/' + lang() + '/case-studies'"
-          class="mt-fluid-lg inline-flex text-fluid-sm font-semibold page-accent hover:text-brand-green"
-        >
-          ← {{ label(common.backToList) }}
-        </a>
+        <h1 id="case-study-hero-title" class="spotlight-hero__title page-ink">{{ label(study.title) }}</h1>
+        <p class="spotlight-hero__lead page-muted">{{ label(study.summary) }}</p>
+        <div class="spotlight-hero__actions">
+          <a
+            [routerLink]="'/' + lang() + '/case-studies'"
+            class="page-ghost-btn"
+          >
+            <span class="inline-block rtl:rotate-180" aria-hidden="true">←</span>
+            {{ label(common.backToList) }}
+          </a>
+          <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand">{{ label(common.requestDemo) }}</a>
+        </div>
       </div>
+      <aside aria-hidden="true">
+        <div class="spotlight-hero__media">
+          <img
+            class="spotlight-hero__shot spotlight-hero__shot--main"
+            [src]="study.img"
+            [alt]="label(study.title)"
+            width="1536"
+            height="1024"
+            decoding="async"
+            fetchpriority="high"
+          />
+          <img
+            class="spotlight-hero__shot spotlight-hero__shot--side"
+            [src]="sideImage()"
+            alt=""
+            width="900"
+            height="675"
+            decoding="async"
+          />
+          <div class="spotlight-hero__badge">
+            <span>{{ sectorLabel(study.sector) }}</span>
+            <strong>{{ label(study.title) }}</strong>
+          </div>
+        </div>
+      </aside>
     </div>
   </section>
 
@@ -25,7 +54,7 @@
           [alt]="label(study.title)"
           width="960"
           height="720"
-          loading="eager"
+          loading="lazy"
           decoding="async"
         />
       </div>
@@ -46,7 +75,7 @@
     <div class="site-container py-fluid-2xl">
       <h2 class="type-section page-ink">{{ label(common.metrics) }}</h2>
       <div class="mt-fluid-lg grid gap-fluid-md sm:grid-cols-3">
-        @for (metric of study.metrics; track label(metric.label)) {
+        @for (metric of study.metrics; track $index) {
           <article class="fintech-card p-fluid-md text-center">
             <p class="financial-number font-display text-fluid-3xl font-bold page-accent-green">{{ metric.value }}</p>
             <p class="mt-2 text-fluid-sm page-muted">{{ label(metric.label) }}</p>

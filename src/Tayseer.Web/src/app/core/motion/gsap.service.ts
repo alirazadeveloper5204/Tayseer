@@ -1,33 +1,21 @@
 import { Injectable, PLATFORM_ID, inject, DestroyRef } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import gsap from 'gsap';
+import { CSSPlugin } from 'gsap/CSSPlugin';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { MOTION } from './motion-tokens';
 
-/**
- * Browser-only GSAP access for the Tayseer portal.
- * Safe with Angular SSR — methods no-op on the server.
- *
- * @example
- * private readonly motion = inject(GsapService);
- * private readonly destroyRef = inject(DestroyRef);
- *
- * afterNextRender(() => {
- *   const tl = this.motion.timeline(this.destroyRef);
- *   tl?.from('.card', { y: 24, autoAlpha: 0, stagger: 0.08 });
- * });
- */
+gsap.registerPlugin(CSSPlugin);
+
 @Injectable({ providedIn: 'root' })
 export class GsapService {
   private readonly platformId = inject(PLATFORM_ID);
   private registered = false;
 
-  /** True only in the browser (GSAP DOM APIs available). */
   get isBrowser(): boolean {
     return isPlatformBrowser(this.platformId);
   }
 
-  /** Core GSAP instance (null during SSR). */
   get gsap(): typeof gsap | null {
     if (!this.isBrowser) {
       return null;
@@ -36,7 +24,6 @@ export class GsapService {
     return gsap;
   }
 
-  /** ScrollTrigger plugin (null during SSR). */
   get ScrollTrigger(): typeof ScrollTrigger | null {
     if (!this.isBrowser) {
       return null;
@@ -45,11 +32,7 @@ export class GsapService {
     return ScrollTrigger;
   }
 
-  /** Create a timeline; pass the component DestroyRef to auto-kill on destroy. */
-  timeline(
-    destroyRef?: DestroyRef,
-    vars?: gsap.TimelineVars,
-  ): gsap.core.Timeline | null {
+  timeline(destroyRef?: DestroyRef, vars?: gsap.TimelineVars): gsap.core.Timeline | null {
     const api = this.gsap;
     if (!api) {
       return null;
@@ -59,57 +42,13 @@ export class GsapService {
     return tl;
   }
 
-  /** Named ease map — design direction tokens. */
-  readonly easings = MOTION.ease;
-
-  /** Fade + slight rise — common portal entrance (scroll reveal default). */
-  fadeUp(
-    targets: gsap.TweenTarget,
-    vars?: gsap.TweenVars,
-  ): gsap.core.Tween | null {
-    const api = this.gsap;
-    if (!api) {
-      return null;
-    }
-    return api.fromTo(
-      targets,
-      { autoAlpha: 0, y: 28 },
-      {
-        autoAlpha: 1,
-        y: 0,
-        duration: MOTION.duration.scroll,
-        ease: MOTION.ease.out,
-        ...vars,
-      },
-    );
-  }
-
-  /** Stagger children into view (cards, thumbs, etc.). Max ~6 items recommended. */
-  staggerIn(
-    targets: gsap.TweenTarget,
-    vars?: gsap.TweenVars,
-  ): gsap.core.Tween | null {
-    const api = this.gsap;
-    if (!api) {
-      return null;
-    }
-    return api.from(targets, {
-      autoAlpha: 0,
-      y: 32,
-      duration: MOTION.duration.scroll,
-      stagger: 0.1,
-      ease: MOTION.ease.out,
-      ...vars,
-    });
-  }
-
-  /** Smooth image zoom-in (use inside overflow:hidden frames only). */
   zoomIn(target: gsap.TweenTarget, scale = 1.08): gsap.core.Tween | null {
     const api = this.gsap;
-    if (!api || !target || !this.canHoverZoom()) {
+    const el = this.resolveElement(target);
+    if (!api || !el || !this.canHoverZoom()) {
       return null;
     }
-    return api.to(target, {
+    return api.to(el, {
       scale,
       duration: MOTION.duration.slider,
       ease: MOTION.ease.out,
@@ -118,13 +57,13 @@ export class GsapService {
     });
   }
 
-  /** Smooth image zoom-out back to rest. */
   zoomOut(target: gsap.TweenTarget): gsap.core.Tween | null {
     const api = this.gsap;
-    if (!api || !target) {
+    const el = this.resolveElement(target);
+    if (!api || !el) {
       return null;
     }
-    return api.to(target, {
+    return api.to(el, {
       scale: 1,
       duration: 0.55,
       ease: MOTION.ease.out,
@@ -133,7 +72,6 @@ export class GsapService {
     });
   }
 
-  /** True when the user prefers reduced motion (also true during SSR). */
   prefersReducedMotion(): boolean {
     if (!this.isBrowser) {
       return true;
@@ -141,7 +79,6 @@ export class GsapService {
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
 
-  /** Skip zoom on touch / reduced-motion devices. */
   canHoverZoom(): boolean {
     if (!this.isBrowser) {
       return false;
@@ -150,65 +87,28 @@ export class GsapService {
     return fine && !this.prefersReducedMotion();
   }
 
-  /** Animate a number from 0 → end (scroll-friendly). Formats into `target` text. */
-  countUp(
-    target: HTMLElement,
-    end: number,
-    options?: {
-      duration?: number;
-      decimals?: number;
-      prefix?: string;
-      suffix?: string;
-      scrollTrigger?: ScrollTrigger.Vars;
-    },
-  ): gsap.core.Tween | null {
-    const api = this.gsap;
-    if (!api || !target) {
+  private resolveElement(target: gsap.TweenTarget): Element | null {
+    if (!target) {
       return null;
     }
-
-    const decimals = options?.decimals ?? 0;
-    const prefix = options?.prefix ?? '';
-    const suffix = options?.suffix ?? '';
-    const format = (n: number) => {
-      const body =
-        decimals > 0 ? n.toFixed(decimals) : String(Math.round(n));
-      return `${prefix}${body}${suffix}`;
-    };
-
-    if (this.prefersReducedMotion()) {
-      target.textContent = format(end);
-      return null;
+    if (target instanceof Element) {
+      return target;
     }
-
-    const state = { val: 0 };
-    target.textContent = format(0);
-
-    return api.to(state, {
-      val: end,
-      duration: options?.duration ?? 2.2,
-      ease: MOTION.ease.out,
-      overwrite: 'auto',
-      scrollTrigger: options?.scrollTrigger,
-      onUpdate: () => {
-        target.textContent = format(state.val);
-      },
-    });
-  }
-
-  /** Kill all active ScrollTriggers (e.g. on locale/route change). */
-  killScrollTriggers(): void {
-    if (!this.isBrowser) {
-      return;
+    if (typeof HTMLElement !== 'undefined' && target instanceof HTMLElement) {
+      return target;
     }
-    ScrollTrigger.getAll().forEach((t: ScrollTrigger) => t.kill());
+    if (typeof target === 'object' && target !== null && 'nativeElement' in target) {
+      const native = (target as { nativeElement: unknown }).nativeElement;
+      return native instanceof Element ? native : null;
+    }
+    return null;
   }
 
   private ensurePlugins(): void {
     if (this.registered || !this.isBrowser) {
       return;
     }
-    gsap.registerPlugin(ScrollTrigger);
+    gsap.registerPlugin(CSSPlugin, ScrollTrigger);
     this.registered = true;
   }
 }

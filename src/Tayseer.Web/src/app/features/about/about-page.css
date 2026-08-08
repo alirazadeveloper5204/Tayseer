@@ -359,11 +359,63 @@ html.dark .about-vm__card > p {
   margin: 1.15rem 0 0;
   padding: 0;
   list-style: none;
+  position: relative;
 }
 
 @media (min-width: 700px) {
   .about-approach {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 2.75rem;
+    row-gap: 1.35rem;
+  }
+
+  .about-approach::before {
+    content: '';
+    position: absolute;
+    top: 0.4rem;
+    bottom: 0.4rem;
+    left: 50%;
+    width: 1px;
+    transform: translateX(-50%);
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(13, 90, 140, 0.14) 14%,
+      rgba(98, 169, 69, 0.42) 50%,
+      rgba(13, 90, 140, 0.14) 86%,
+      transparent 100%
+    );
+  }
+
+  .about-approach::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0.35rem;
+    height: 0.35rem;
+    border-radius: 999px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    background: #62a945;
+    box-shadow: 0 0 0 3px rgba(98, 169, 69, 0.12);
+  }
+
+  html.dark .about-approach::before {
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(255, 255, 255, 0.08) 14%,
+      rgba(98, 169, 69, 0.45) 50%,
+      rgba(255, 255, 255, 0.08) 86%,
+      transparent 100%
+    );
+  }
+
+  html.dark .about-approach::after {
+    background: #62a945;
+    box-shadow: 0 0 0 3px rgba(98, 169, 69, 0.18);
   }
 }
 
@@ -420,6 +472,24 @@ html.dark .about-approach p span {
   padding: 1.25rem 1.2rem 1.4rem;
   min-height: 100%;
   overflow: visible;
+
+  transition: none;
+  will-change: auto;
+}
+
+.about-values .about-values__card.fintech-card:hover,
+html.dark .about-values .about-values__card.fintech-card:hover {
+  transform: none;
+}
+
+html:not(.dark) .about-values .about-values__card.fintech-card:hover {
+  border-color: rgba(13, 90, 140, 0.14);
+  box-shadow: 0 8px 24px rgba(13, 90, 140, 0.06);
+}
+
+html.dark .about-values .about-values__card.fintech-card:hover {
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: none;
 }
 
 .about-values__head {

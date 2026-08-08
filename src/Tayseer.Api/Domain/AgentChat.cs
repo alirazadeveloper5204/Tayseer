@@ -20,7 +20,7 @@ public class AgentConversation
 {
     public Guid Id { get; set; }
 
-    /// <summary>Secret token used by the website visitor to post/read messages.</summary>
+
     [MaxLength(64)]
     public required string VisitorKey { get; set; }
 

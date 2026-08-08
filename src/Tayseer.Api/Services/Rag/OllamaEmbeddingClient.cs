@@ -27,7 +27,7 @@ public sealed class OllamaEmbeddingClient(
             throw new ArgumentException("Text to embed must not be empty.", nameof(text));
         }
 
-        // Prefer modern /api/embed, fall back to legacy /api/embeddings.
+
         var modern = await TryModernEmbedAsync(cleaned, ct);
         if (modern is { Length: > 0 })
         {

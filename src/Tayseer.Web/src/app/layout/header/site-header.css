@@ -96,10 +96,7 @@
   transform: rotate(180deg);
 }
 
-/*
- * Dropdown shell: transparent top padding bridges the trigger → panel gap
- * so the pointer never "falls out" of the hover area (Bootstrap-style fade).
- */
+
 .site-nav__submenu.dropdown-menu {
   --bs-dropdown-min-width: min(18rem, 85vw);
   position: absolute;
@@ -294,7 +291,7 @@
   display: none;
 }
 
-/* Tablet + phone: hamburger drawer (nav was crushing/hiding in the flex row). */
+
 @media (max-width: 1023px) {
   .site-header__menu-btn {
     display: inline-flex;

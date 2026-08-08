@@ -21,11 +21,11 @@ export class NavigationLoaderService {
   readonly active = signal(true);
   readonly visible = signal(false);
   readonly leaving = signal(false);
-  /** True once the overlay has fully faded in (safe to swap routes underneath). */
+
   readonly covered = signal(false);
-  /** Locked at show() so theme toggles don't flash the overlay background. */
+
   readonly surface = signal<'light' | 'dark'>('dark');
-  /** Bumps on each show so the chevron draw remounts / restarts. */
+
   readonly generation = signal(0);
 
   private showStartedAt = Date.now();
@@ -37,15 +37,13 @@ export class NavigationLoaderService {
   private navigationDepth = 0;
   private booted = false;
   private firstNavigation = true;
-  /** First child activation should not wait for a cover animation. */
+
   private skipCoverWait = true;
-  /**
-   * True when the current navigation (or theme cover) owns the page loader.
-   * Route transitions only enable this when the destination is Home.
-   */
+
+
   private loaderSession = false;
 
-  /** Must match `.page-loader` enter transition. */
+
   private readonly enterMs = 320;
   private readonly minVisibleMs = 1100;
   private readonly bootMinVisibleMs = 1000;
@@ -73,12 +71,12 @@ export class NavigationLoaderService {
           this.navigationDepth++;
           if (this.firstNavigation) {
             this.firstNavigation = false;
-            // Initial boot keeps the boot/home loader; later navigations are gated.
+
             this.loaderSession = this.isHomeDestination(event.url);
             return;
           }
 
-          // Only show the branded page loader when navigating to Home.
+
           if (this.isHomeDestination(event.url)) {
             this.loaderSession = true;
             this.show();
@@ -108,10 +106,8 @@ export class NavigationLoaderService {
     }
   }
 
-  /**
-   * Blocks route activation until the overlay has faded in over the current page.
-   * No-ops when this navigation does not use the page loader (non-home routes).
-   */
+
+
   waitUntilCovered(): Promise<boolean> {
     if (!isPlatformBrowser(this.platformId) || this.skipCoverWait || !this.loaderSession) {
       this.skipCoverWait = false;
@@ -159,7 +155,7 @@ export class NavigationLoaderService {
     run();
   }
 
-  /** Home destinations: `/en`, `/ar` (optional trailing slash / query / hash). */
+
   private isHomeDestination(url: string): boolean {
     const path = url.split('?')[0].split('#')[0].replace(/\/+$/, '') || '/';
     return /^\/?(en|ar)$/i.test(path);
@@ -171,18 +167,18 @@ export class NavigationLoaderService {
     this.covered.set(false);
     this.showStartedAt = Date.now();
     this.generation.update((g) => g + 1);
-    // Drop focus before content becomes inert (theme toggle / nav stay focused otherwise).
+
     this.blurActiveElement();
     this.active.set(true);
 
-    // Freeze overlay colors to the pre-transition theme (avoids dark↔light flash).
+
     const isDark = this.document.documentElement.classList.contains('dark');
     this.surface.set(isDark ? 'dark' : 'light');
 
-    // Jump to top under the cover so the next page never opens mid-scroll.
+
     this.scrollToTopInstant();
 
-    // Mount at opacity 0, then fade in over the current page.
+
     this.visible.set(false);
     this.coverPromise = new Promise<boolean>((resolve) => {
       this.resolveCover = resolve;
@@ -222,7 +218,7 @@ export class NavigationLoaderService {
   }
 
   private beginLeave(): void {
-    // Reveal the new page under the fading overlay for a soft exit.
+
     this.covered.set(false);
     this.leaving.set(true);
     this.visible.set(false);

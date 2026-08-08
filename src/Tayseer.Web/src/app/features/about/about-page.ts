@@ -28,15 +28,39 @@ export class AboutPage {
   readonly c = ABOUT_PAGE;
   readonly common = PAGE_COMMON;
 
-  readonly sliderImages = [
-    { src: ABOUT_COLLAGE.main, alt: 'Tayseer team collaboration' },
-    { src: ABOUT_COLLAGE.thumbs[0], alt: 'Tayseer leadership' },
-    { src: ABOUT_COLLAGE.thumbs[1], alt: 'Tayseer technology workshop' },
-    { src: ABOUT_COLLAGE.thumbs[2], alt: 'Tayseer delivery team' },
-    { src: SITE_IMAGES.galleryWorkspace, alt: 'Tayseer workspace' },
-    { src: SITE_IMAGES.galleryMeeting, alt: 'Tayseer client meeting' },
-    { src: '/images/about-partnership.jpg', alt: 'Tayseer partnership' },
-  ] as const;
+  readonly sliderImages = computed(() => {
+    const lang = this.lang();
+    const alts =
+      lang === 'ar'
+        ? [
+            'تعاون فريق تيسير',
+            'قيادة تيسير',
+            'ورشة تقنية في تيسير',
+            'فريق التسليم في تيسير',
+            'مساحة عمل تيسير',
+            'اجتماع عملاء تيسير',
+            'شراكة تيسير',
+          ]
+        : [
+            'Tayseer team collaboration',
+            'Tayseer leadership',
+            'Tayseer technology workshop',
+            'Tayseer delivery team',
+            'Tayseer workspace',
+            'Tayseer client meeting',
+            'Tayseer partnership',
+          ];
+    const srcs = [
+      ABOUT_COLLAGE.main,
+      ABOUT_COLLAGE.thumbs[0],
+      ABOUT_COLLAGE.thumbs[1],
+      ABOUT_COLLAGE.thumbs[2],
+      SITE_IMAGES.galleryWorkspace,
+      SITE_IMAGES.galleryMeeting,
+      '/images/about-partnership.jpg',
+    ];
+    return srcs.map((src, i) => ({ src, alt: alts[i] }));
+  });
 
   readonly title = computed(() => t(this.c.title, this.lang()));
   readonly eyebrow = computed(() => t(this.c.eyebrow, this.lang()));

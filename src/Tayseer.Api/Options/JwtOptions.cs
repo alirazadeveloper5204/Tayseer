@@ -8,7 +8,7 @@ public sealed class JwtOptions
 
     public string Audience { get; set; } = "Tayseer.Admin";
 
-    /// <summary>Symmetric signing key (min 32 chars). Prefer User Secrets / env in production.</summary>
+
     public string SigningKey { get; set; } = "";
 
     public int ExpiryMinutes { get; set; } = 480;

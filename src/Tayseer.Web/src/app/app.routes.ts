@@ -4,45 +4,55 @@ import { pageTransitionGuard } from './core/navigation/page-transition.guard';
 import { authGuard, guestGuard } from './core/auth/auth.guard';
 import { Shell } from './layout/shell/shell';
 import { HomePage } from './features/home/home-page';
-import { SolutionsPage } from './features/solutions/solutions-page';
-import { ServiceDetailPage } from './features/solutions/service-detail-page';
-import { ServicesPage } from './features/services/services-page';
-import { SoftwarePage } from './features/software/software-page';
-import { ManagedPage } from './features/managed/managed-page';
-import { AboutPage } from './features/about/about-page';
-import { CaseStudiesPage } from './features/case-studies/case-studies-page';
-import { CaseStudyDetailPage } from './features/case-studies/case-study-detail-page';
-import { ContactPage } from './features/contact/contact-page';
-import { FaqsPage } from './features/faqs/faqs-page';
-import { CareersPage } from './features/careers/careers-page';
-import { PlaceholderPage } from './shared/ui/placeholder-page/placeholder-page';
-import { AdminShell } from './features/admin/admin-shell/admin-shell';
-import { AdminLogin } from './features/admin/admin-login/admin-login';
-import { AdminDashboard } from './features/admin/admin-dashboard/admin-dashboard';
-import { AdminServicesPage } from './features/admin/admin-services/admin-services';
-import { AdminServiceEditPage } from './features/admin/admin-service-edit/admin-service-edit';
-import { AdminOfficesPage } from './features/admin/admin-offices/admin-offices';
-import { AdminKnowledgePage } from './features/admin/admin-knowledge/admin-knowledge';
-import { AdminInboxPage } from './features/admin/admin-inbox/admin-inbox';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'en' },
   {
     path: 'admin/login',
     canActivate: [guestGuard],
-    component: AdminLogin,
+    loadComponent: () =>
+      import('./features/admin/admin-login/admin-login').then((m) => m.AdminLogin),
   },
   {
     path: 'admin',
     canActivate: [authGuard],
-    component: AdminShell,
+    loadComponent: () =>
+      import('./features/admin/admin-shell/admin-shell').then((m) => m.AdminShell),
     children: [
-      { path: '', component: AdminDashboard },
-      { path: 'inbox', component: AdminInboxPage },
-      { path: 'services', component: AdminServicesPage },
-      { path: 'services/:id', component: AdminServiceEditPage },
-      { path: 'offices', component: AdminOfficesPage },
-      { path: 'knowledge', component: AdminKnowledgePage },
+      {
+        path: '',
+        loadComponent: () =>
+          import('./features/admin/admin-dashboard/admin-dashboard').then((m) => m.AdminDashboard),
+      },
+      {
+        path: 'inbox',
+        loadComponent: () =>
+          import('./features/admin/admin-inbox/admin-inbox').then((m) => m.AdminInboxPage),
+      },
+      {
+        path: 'services',
+        loadComponent: () =>
+          import('./features/admin/admin-services/admin-services').then((m) => m.AdminServicesPage),
+      },
+      {
+        path: 'services/:id',
+        loadComponent: () =>
+          import('./features/admin/admin-service-edit/admin-service-edit').then(
+            (m) => m.AdminServiceEditPage,
+          ),
+      },
+      {
+        path: 'offices',
+        loadComponent: () =>
+          import('./features/admin/admin-offices/admin-offices').then((m) => m.AdminOfficesPage),
+      },
+      {
+        path: 'knowledge',
+        loadComponent: () =>
+          import('./features/admin/admin-knowledge/admin-knowledge').then(
+            (m) => m.AdminKnowledgePage,
+          ),
+      },
     ],
   },
   {
@@ -52,38 +62,88 @@ export const routes: Routes = [
     component: Shell,
     children: [
       { path: '', component: HomePage },
-      { path: 'services', component: ServicesPage },
-      { path: 'software-development', component: SoftwarePage },
-      { path: 'managed-services', component: ManagedPage },
+      {
+        path: 'services',
+        loadComponent: () =>
+          import('./features/services/services-page').then((m) => m.ServicesPage),
+      },
+      {
+        path: 'software-development',
+        loadComponent: () =>
+          import('./features/software/software-page').then((m) => m.SoftwarePage),
+      },
+      {
+        path: 'managed-services',
+        loadComponent: () =>
+          import('./features/managed/managed-page').then((m) => m.ManagedPage),
+      },
       {
         path: 'solutions',
         children: [
-          { path: '', component: SolutionsPage },
-          { path: ':slug', component: ServiceDetailPage },
+          {
+            path: '',
+            loadComponent: () =>
+              import('./features/solutions/solutions-page').then((m) => m.SolutionsPage),
+          },
+          {
+            path: ':slug',
+            loadComponent: () =>
+              import('./features/solutions/service-detail-page').then((m) => m.ServiceDetailPage),
+          },
         ],
       },
-      { path: 'about', component: AboutPage },
+      {
+        path: 'about',
+        loadComponent: () => import('./features/about/about-page').then((m) => m.AboutPage),
+      },
       {
         path: 'case-studies',
         children: [
-          { path: '', component: CaseStudiesPage },
-          { path: ':slug', component: CaseStudyDetailPage },
+          {
+            path: '',
+            loadComponent: () =>
+              import('./features/case-studies/case-studies-page').then((m) => m.CaseStudiesPage),
+          },
+          {
+            path: ':slug',
+            loadComponent: () =>
+              import('./features/case-studies/case-study-detail-page').then(
+                (m) => m.CaseStudyDetailPage,
+              ),
+          },
         ],
       },
-      { path: 'contact', component: ContactPage },
-      { path: 'connect', component: ContactPage },
-      { path: 'faqs', component: FaqsPage },
+      {
+        path: 'contact',
+        loadComponent: () =>
+          import('./features/contact/contact-page').then((m) => m.ContactPage),
+      },
+      {
+        path: 'connect',
+        loadComponent: () =>
+          import('./features/contact/contact-page').then((m) => m.ContactPage),
+      },
+      {
+        path: 'faqs',
+        loadComponent: () => import('./features/faqs/faqs-page').then((m) => m.FaqsPage),
+      },
       { path: 'blog', redirectTo: 'faqs', pathMatch: 'full' },
-      { path: 'careers', component: CareersPage },
+      {
+        path: 'careers',
+        loadComponent: () =>
+          import('./features/careers/careers-page').then((m) => m.CareersPage),
+      },
       {
         path: 'legal/privacy',
-        component: PlaceholderPage,
-        data: { titleEn: 'Privacy Policy', titleAr: 'سياسة الخصوصية' },
+        loadComponent: () =>
+          import('./features/legal/legal-page').then((m) => m.LegalPage),
+        data: { doc: 'privacy' },
       },
       {
         path: 'legal/terms',
-        component: PlaceholderPage,
-        data: { titleEn: 'Terms & Conditions', titleAr: 'الشروط والأحكام' },
+        loadComponent: () =>
+          import('./features/legal/legal-page').then((m) => m.LegalPage),
+        data: { doc: 'terms' },
       },
     ],
   },

@@ -28,6 +28,13 @@ export class CaseStudyDetailPage {
 
   readonly item = computed(() => CASE_STUDIES_PAGE.items.find((c) => c.slug === this.slug()) ?? null);
 
+  readonly sideImage = computed(() => {
+    const sector = this.item()?.sector;
+    if (sector === 'fintech') return '/images/hero-mbuke-main.jpg';
+    if (sector === 'managed') return '/images/hero-managed-main.jpg';
+    return '/images/hero-banking-side.jpg';
+  });
+
   label(item: { en: string; ar: string }): string {
     return t(item, this.lang());
   }

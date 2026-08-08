@@ -1,4 +1,4 @@
-/* Services section — equal grid, clear hierarchy */
+
 .services-bento__header {
   display: flex;
   flex-direction: column;
@@ -74,7 +74,7 @@
   transform: rotate(180deg) translateX(4px);
 }
 
-/* Card polish scoped to this section */
+
 .services-bento .service-card-host {
   height: 100%;
 }
@@ -111,7 +111,7 @@
   -webkit-line-clamp: 3;
 }
 
-/* Full readable copy when only one card is in view */
+
 @media (max-width: 699px) {
   .services-bento .site-carousel {
     --slide-peek: 1.25rem;
