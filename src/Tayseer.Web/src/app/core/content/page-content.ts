@@ -871,8 +871,15 @@ export const FAQ_PAGE = {
         {
           q: { en: 'What solutions does Tayseer offer?', ar: 'ما الحلول التي تقدمها تيسير؟' },
           a: {
-            en: 'Tayseer offers six solutions: Core Banking, Fahim AI, MBuke, Software Management Systems, Managed Services, and Banking Systems.',
-            ar: 'تقدم تيسير ستة حلول: الخدمات المصرفية الأساسية، فهيم للذكاء الاصطناعي، إم بوكي، أنظمة إدارة البرمجيات، الخدمات المُدارة، والأنظمة المصرفية.',
+            en: 'Tayseer offers six solutions: Core Banking, Fahim AI, MBuke, Software Management Systems, Managed Services, and GRG Banking.',
+            ar: 'تقدم تيسير ستة حلول: الخدمات المصرفية الأساسية، فهيم للذكاء الاصطناعي، إم بوكي، أنظمة إدارة البرمجيات، الخدمات المُدارة، وحلول GRG Banking.',
+          },
+        },
+        {
+          q: { en: 'What is GRG Banking at Tayseer?', ar: 'ما هي حلول GRG Banking لدى تيسير؟' },
+          a: {
+            en: 'Tayseer is the official UAE partner for GRGBanking. We deliver and support ATMs, Smart Teller Machines (STMs), cash sorting, self-service banking hardware, and monitoring tools that help banks resolve deposit and device issues faster.',
+            ar: 'تيسير هي الشريك الرسمي لـ GRGBanking في الإمارات. نوفر وندعم أجهزة الصراف الآلي وآلات الصراف الذكية وفرز النقد وأجهزة الخدمة الذاتية المصرفية، إضافة إلى أدوات مراقبة تساعد البنوك على حل مشكلات الإيداع والأجهزة بسرعة أكبر.',
           },
         },
         {

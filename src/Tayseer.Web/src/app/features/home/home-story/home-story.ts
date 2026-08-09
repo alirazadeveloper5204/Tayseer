@@ -8,53 +8,84 @@ import {
   viewChild,
   DestroyRef,
   ElementRef,
-  NgZone,
   PLATFORM_ID,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { LocaleService } from '../../../core/i18n/locale.service';
 import { UiCopyService } from '../../../core/i18n/ui-copy.service';
 import {
   HOME_DEPLOY,
+  HOME_JOURNEY,
   HOME_KPI_STATS,
   HOME_MANTRA,
+  HOME_PARTNERS,
   HOME_TESTIMONIALS,
   HOME_WHY_FEATURES,
 } from '../../../core/i18n/ui-copy';
 import { CLIENT_GALLERIES } from '../../../core/media/site-images';
 import { GsapService } from '../../../core/motion/gsap.service';
+import { ThemeService } from '../../../core/theme/theme.service';
 import { SiteCarousel } from '../../../shared/ui/site-carousel/site-carousel';
+import { RouterLink } from '@angular/router';
 
 function formatKpi(value: number, decimals: number, prefix: string, suffix: string): string {
   const body = decimals > 0 ? value.toFixed(decimals) : String(Math.round(value));
   return `${prefix}${body}${suffix}`;
 }
 
+const KPI_ZEROS = HOME_KPI_STATS.map((s) => formatKpi(0, s.decimals, s.prefix, s.suffix));
+const KPI_FINALS = HOME_KPI_STATS.map((s) => formatKpi(s.value, s.decimals, s.prefix, s.suffix));
+
 @Component({
   selector: 'app-home-story',
-  imports: [SiteCarousel],
+  imports: [SiteCarousel, RouterLink],
   templateUrl: './home-story.html',
   styleUrl: './home-story.css',
   encapsulation: ViewEncapsulation.None,
 })
 export class HomeStory {
   private readonly locale = inject(LocaleService);
+  private readonly theme = inject(ThemeService);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly document = inject(DOCUMENT);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly zone = inject(NgZone);
+  private readonly cdr = inject(ChangeDetectorRef);
   private readonly motion = inject(GsapService);
   readonly copy = inject(UiCopyService).copy;
   readonly isAr = computed(() => this.locale.lang() === 'ar');
+  readonly lang = computed(() => this.locale.lang());
+  readonly isDark = this.theme.isDark;
 
-  private readonly whyChooseSection = viewChild('whyChooseSection', { read: ElementRef });
+  private readonly whyChooseKpis = viewChild('whyChooseKpis', { read: ElementRef });
+  private readonly partnersSection = viewChild('partnersSection', { read: ElementRef });
+  private readonly journeySection = viewChild('journeySection', { read: ElementRef });
   private readonly mantraSection = viewChild('mantraSection', { read: ElementRef });
   private readonly pioneerSection = viewChild('pioneerSection', { read: ElementRef });
 
-  readonly kpiDisplays = signal(
-    HOME_KPI_STATS.map((s) => formatKpi(0, s.decimals, s.prefix, s.suffix)),
-  );
+  /** Client animates from 0 → final when the KPI strip enters the viewport. */
+  readonly kpiDisplays = signal<string[]>([...KPI_ZEROS]);
   readonly kpiCounting = signal(false);
+
+  readonly featuredPartner = computed(() => {
+    const partner = HOME_PARTNERS.find((p) => p.featured) ?? HOME_PARTNERS[0];
+    return {
+      id: partner.id,
+      name: partner.name,
+      logo: this.isDark() ? partner.logoDark : partner.logo,
+      tone: partner.tone as 'dark' | 'light',
+      badge: this.isAr() ? partner.badgeAr : partner.badgeEn,
+      href: partner.solutionSlug ? `/${this.lang()}/solutions/${partner.solutionSlug}` : null,
+    };
+  });
+
+  readonly partnerGrid = computed(() =>
+    HOME_PARTNERS.filter((p) => !p.featured).map((p) => ({
+      id: p.id,
+      name: p.name,
+      logo: this.isDark() ? p.logoDark : p.logo,
+    })),
+  );
 
   readonly kpiStats = computed(() => {
     const displays = this.kpiDisplays();
@@ -90,6 +121,94 @@ export class HomeStory {
 
   private static readonly mantraIcons = ['team', 'transparency', 'quality'] as const;
 
+  readonly journeyIndex = signal(0);
+  private journeyTimer: ReturnType<typeof setInterval> | null = null;
+  private journeyPaused = false;
+  private journeyPointerInside = false;
+  private journeyFocusInside = false;
+
+  readonly journey = computed(() =>
+    HOME_JOURNEY.map((step, i) => ({
+      id: i,
+      step: String(i + 1).padStart(2, '0'),
+      title: this.isAr() ? step.titleAr : step.titleEn,
+      body: this.isAr() ? step.bodyAr : step.bodyEn,
+      outcome: this.isAr() ? step.outcomeAr : step.outcomeEn,
+    })),
+  );
+
+  readonly activeJourney = computed(() => {
+    const steps = this.journey();
+    return steps[this.journeyIndex()] ?? steps[0];
+  });
+
+  selectJourney(index: number): void {
+    if (index < 0 || index >= HOME_JOURNEY.length) {
+      return;
+    }
+    this.journeyIndex.set(index);
+    this.cdr.detectChanges();
+    this.restartJourneyTimer();
+  }
+
+  onJourneyPointerEnter(): void {
+    this.journeyPointerInside = true;
+    this.pauseJourney();
+  }
+
+  onJourneyPointerLeave(event: MouseEvent): void {
+    this.journeyPointerInside = false;
+    this.scheduleTryResumeJourney(event.currentTarget as HTMLElement | null);
+  }
+
+  onJourneyFocusIn(): void {
+    this.journeyFocusInside = true;
+    this.pauseJourney();
+  }
+
+  onJourneyFocusOut(event: FocusEvent): void {
+    const stage = event.currentTarget as HTMLElement | null;
+    const next = event.relatedTarget as Node | null;
+    if (stage && next && stage.contains(next)) {
+      this.journeyFocusInside = true;
+      return;
+    }
+    this.scheduleTryResumeJourney(stage);
+  }
+
+  private scheduleTryResumeJourney(stage: HTMLElement | null): void {
+    queueMicrotask(() => this.tryResumeJourney(stage));
+  }
+
+  private isJourneyFocusInside(stage: HTMLElement | null): boolean {
+    if (!stage) {
+      return false;
+    }
+    if (typeof stage.matches === 'function' && stage.matches(':focus-within')) {
+      return true;
+    }
+    const active = this.document.activeElement;
+    return !!active && stage.contains(active);
+  }
+
+  private tryResumeJourney(stage: HTMLElement | null): void {
+    this.journeyFocusInside = this.isJourneyFocusInside(stage);
+    if (this.journeyPointerInside || this.journeyFocusInside) {
+      return;
+    }
+    this.resumeJourney();
+  }
+
+  private pauseJourney(): void {
+    this.journeyPaused = true;
+    this.clearJourneyTimer();
+  }
+
+  private resumeJourney(): void {
+    this.journeyPaused = false;
+    this.restartJourneyTimer();
+  }
+
   readonly mantra = computed(() =>
     HomeStory.mantraIcons.map((icon, i) => {
       const m = HOME_MANTRA[i];
@@ -110,9 +229,11 @@ export class HomeStory {
     })),
   );
 
-  private counterTweens: { kill(): void }[] = [];
   private rafIds: number[] = [];
+  private counterRunId = 0;
   private whyVisible = false;
+  private counterObserver: IntersectionObserver | null = null;
+  private scrollCheckBound: (() => void) | null = null;
 
   constructor() {
     afterNextRender(() => {
@@ -120,173 +241,292 @@ export class HomeStory {
         return;
       }
 
-      this.watchWhyChooseCounters();
+      this.bootstrapWhyChooseCounters();
+      this.watchJourneySection();
+      this.watchSectionReveal(
+        this.resolveEl(this.partnersSection()) ?? this.document.getElementById('partners'),
+      );
       this.watchSectionReveal(this.resolveEl(this.mantraSection()));
       this.watchSectionReveal(this.resolveEl(this.pioneerSection()));
 
       this.destroyRef.onDestroy(() => {
+        this.counterRunId += 1;
         this.killCounters();
+        this.counterObserver?.disconnect();
+        this.counterObserver = null;
+        this.teardownScrollCheck();
+        this.clearJourneyTimer();
       });
     });
+  }
+
+  private watchJourneySection(): void {
+    const section =
+      this.resolveEl(this.journeySection()) ?? this.document.getElementById('journey');
+    if (!section) {
+      return;
+    }
+
+    if (this.motion.prefersReducedMotion()) {
+      section.classList.add('is-revealed');
+      return;
+    }
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          section.classList.add('is-revealed');
+          this.restartJourneyTimer();
+          return;
+        }
+        this.clearJourneyTimer();
+      },
+      { threshold: 0.2, rootMargin: '0px 0px -8% 0px' },
+    );
+    io.observe(section);
+    this.destroyRef.onDestroy(() => {
+      io.disconnect();
+      this.clearJourneyTimer();
+    });
+  }
+
+  private restartJourneyTimer(): void {
+    this.clearJourneyTimer();
+    if (!isPlatformBrowser(this.platformId) || this.journeyPaused || this.motion.prefersReducedMotion()) {
+      return;
+    }
+    this.journeyTimer = setInterval(() => {
+      const next = (this.journeyIndex() + 1) % HOME_JOURNEY.length;
+      this.journeyIndex.set(next);
+      this.cdr.detectChanges();
+    }, 5200);
+  }
+
+  private clearJourneyTimer(): void {
+    if (this.journeyTimer) {
+      clearInterval(this.journeyTimer);
+      this.journeyTimer = null;
+    }
   }
 
   private resolveEl(ref?: ElementRef<HTMLElement> | null): HTMLElement | null {
     return ref?.nativeElement ?? null;
   }
 
-  private watchWhyChooseCounters(): void {
-    const section =
-      this.resolveEl(this.whyChooseSection()) ??
-      this.document.getElementById('why-choose');
-    if (!section) {
+  private kpiRoot(): HTMLElement | null {
+    return (
+      this.resolveEl(this.whyChooseKpis()) ??
+      this.document.getElementById('whyChooseKpis') ??
+      this.document.querySelector<HTMLElement>('#why-choose .why-choose__kpis')
+    );
+  }
+
+  /** Paint via signals + direct DOM so values stay visible even if CD is delayed. */
+  private paintKpis(values: readonly string[], counting: boolean): void {
+    this.kpiDisplays.set([...values]);
+    this.kpiCounting.set(counting);
+
+    const root = this.kpiRoot();
+    if (root) {
+      const nodes = root.querySelectorAll<HTMLElement>('.why-choose__kpi-value');
+      nodes.forEach((node, i) => {
+        const next = values[i];
+        if (next != null) {
+          node.textContent = next;
+        }
+        node.classList.toggle('is-counting', counting);
+      });
+    }
+
+    try {
+      this.cdr.markForCheck();
+      this.cdr.detectChanges();
+    } catch {
+      /* view may be detached during teardown */
+    }
+  }
+
+  private bootstrapWhyChooseCounters(): void {
+    const win = this.document.defaultView;
+    if (!win) {
+      this.paintKpis(KPI_FINALS, false);
       return;
     }
 
-    const sync = (inView: boolean) => {
-      if (inView) {
-        if (!this.whyVisible) {
-          this.whyVisible = true;
-          this.playWhyCounters();
+    let tries = 0;
+    const maxTries = 100;
+
+    const attempt = () => {
+      const target = this.kpiRoot();
+      if (!target || !target.isConnected) {
+        tries += 1;
+        if (tries >= maxTries) {
+          this.paintKpis(KPI_FINALS, false);
+          return;
         }
+        win.setTimeout(attempt, 40);
         return;
       }
-      if (this.whyVisible) {
-        this.whyVisible = false;
-        this.resetWhyCounters();
-      }
+
+      this.observeWhyChooseCounters(target);
+      this.bindScrollFallback(target);
+      this.syncWhyChooseVisibility(target);
     };
 
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        sync(!!entry?.isIntersecting);
-      },
-      { threshold: 0.25, rootMargin: '0px 0px -12% 0px' },
-    );
-
-    io.observe(section);
-    this.destroyRef.onDestroy(() => io.disconnect());
-
-    requestAnimationFrame(() => {
-      const rect = section.getBoundingClientRect();
-      const vh = window.innerHeight || 0;
-      if (rect.top < vh * 0.75 && rect.bottom > vh * 0.2) {
-        sync(true);
-      }
-    });
+    win.requestAnimationFrame(() => attempt());
   }
 
-  private resetWhyCounters(): void {
-    this.killCounters();
-    this.zone.run(() => {
-      this.kpiCounting.set(false);
-      this.kpiDisplays.set(HOME_KPI_STATS.map((s) => formatKpi(0, s.decimals, s.prefix, s.suffix)));
-    });
+  private isKpiStripInView(target: HTMLElement): boolean {
+    const win = this.document.defaultView;
+    if (!win) {
+      return false;
+    }
+    const rect = target.getBoundingClientRect();
+    const vh = win.innerHeight || 0;
+    if (vh <= 0 || rect.height <= 0) {
+      return false;
+    }
+    // Trigger when any meaningful part of the KPI strip is on screen.
+    return rect.top < vh * 0.92 && rect.bottom > vh * 0.08;
+  }
+
+  private syncWhyChooseVisibility(target: HTMLElement): void {
+    const visible = this.isKpiStripInView(target);
+    if (visible) {
+      if (!this.whyVisible) {
+        this.whyVisible = true;
+        this.playWhyCounters();
+        return;
+      }
+      // Recover from a stuck "0" state while the strip is on screen.
+      const stuckAtZero =
+        !this.kpiCounting() && this.kpiDisplays()[0] === KPI_ZEROS[0] && this.rafIds.length === 0;
+      if (stuckAtZero) {
+        this.playWhyCounters();
+      }
+      return;
+    }
+    if (this.whyVisible) {
+      this.whyVisible = false;
+      this.resetWhyCounters();
+    }
+  }
+
+  private observeWhyChooseCounters(target: HTMLElement): void {
+    this.counterObserver?.disconnect();
+    this.counterObserver = new IntersectionObserver(
+      (entries) => {
+        const entry = entries.find((e) => e.target === target) ?? entries[0];
+        if (!entry) {
+          return;
+        }
+
+        // Any intersection is enough — do not require a high ratio (that was
+        // resetting the animation while the tall parent section was only partly visible).
+        if (entry.isIntersecting) {
+          if (!this.whyVisible) {
+            this.whyVisible = true;
+            this.playWhyCounters();
+          }
+          return;
+        }
+
+        if (this.whyVisible) {
+          this.whyVisible = false;
+          this.resetWhyCounters();
+        }
+      },
+      {
+        threshold: [0, 0.05, 0.15, 0.3, 0.5, 1],
+        rootMargin: '0px 0px 0px 0px',
+      },
+    );
+    this.counterObserver.observe(target);
+  }
+
+  private bindScrollFallback(target: HTMLElement): void {
+    const win = this.document.defaultView;
+    if (!win) {
+      return;
+    }
+
+    this.teardownScrollCheck();
+    this.scrollCheckBound = () => this.syncWhyChooseVisibility(target);
+    win.addEventListener('scroll', this.scrollCheckBound, { passive: true });
+    win.addEventListener('resize', this.scrollCheckBound);
+    // Catch late layout / hydration shifts.
+    win.setTimeout(this.scrollCheckBound, 120);
+    win.setTimeout(this.scrollCheckBound, 400);
+  }
+
+  private teardownScrollCheck(): void {
+    const win = this.document.defaultView;
+    if (win && this.scrollCheckBound) {
+      win.removeEventListener('scroll', this.scrollCheckBound);
+      win.removeEventListener('resize', this.scrollCheckBound);
+    }
+    this.scrollCheckBound = null;
   }
 
   private playWhyCounters(): void {
     this.killCounters();
-    this.zone.run(() => {
-      this.kpiCounting.set(true);
-      this.kpiDisplays.set(HOME_KPI_STATS.map((s) => formatKpi(0, s.decimals, s.prefix, s.suffix)));
-    });
+    const runId = ++this.counterRunId;
+
+    this.paintKpis(KPI_ZEROS, true);
 
     if (this.motion.prefersReducedMotion()) {
-      this.zone.run(() => {
-        this.kpiDisplays.set(
-          HOME_KPI_STATS.map((s) => formatKpi(s.value, s.decimals, s.prefix, s.suffix)),
-        );
-        this.kpiCounting.set(false);
-      });
+      this.paintKpis(KPI_FINALS, false);
       return;
     }
 
-    const api = this.motion.gsap;
-    if (api) {
-      this.playWithGsap(api);
-      return;
-    }
-    this.playWithRaf();
-  }
+    const durationMs = 1400;
+    const staggerMs = 90;
+    const startedAt = performance.now();
+    const win = this.document.defaultView;
 
-  private playWithGsap(api: NonNullable<GsapService['gsap']>): void {
-    let finished = 0;
-    HOME_KPI_STATS.forEach((meta, i) => {
-      const state = { val: 0 };
-      const tween = api.to(state, {
-        val: meta.value,
-        duration: 1.85,
-        delay: i * 0.12,
-        ease: 'power2.out',
-        overwrite: 'auto',
-        onUpdate: () => {
-          this.zone.run(() => {
-            this.kpiDisplays.update((list) => {
-              const next = list.slice();
-              next[i] = formatKpi(state.val, meta.decimals, meta.prefix, meta.suffix);
-              return next;
-            });
-          });
-        },
-        onComplete: () => {
-          finished += 1;
-          this.zone.run(() => {
-            this.kpiDisplays.update((list) => {
-              const next = list.slice();
-              next[i] = formatKpi(meta.value, meta.decimals, meta.prefix, meta.suffix);
-              return next;
-            });
-            if (finished >= HOME_KPI_STATS.length) {
-              this.kpiCounting.set(false);
-            }
-          });
-        },
+    const finish = () => {
+      if (runId !== this.counterRunId) {
+        return;
+      }
+      this.killCounters();
+      this.paintKpis(KPI_FINALS, false);
+    };
+
+    // Safety net — never leave the UI stuck on zeros.
+    const safetyId = win?.setTimeout(finish, durationMs + staggerMs * HOME_KPI_STATS.length + 600);
+
+    const tick = (now: number) => {
+      if (runId !== this.counterRunId) {
+        return;
+      }
+
+      const displays = HOME_KPI_STATS.map((meta, i) => {
+        const local = Math.min(1, Math.max(0, (now - startedAt - i * staggerMs) / durationMs));
+        const eased = 1 - Math.pow(1 - local, 3);
+        return formatKpi(meta.value * eased, meta.decimals, meta.prefix, meta.suffix);
       });
-      this.counterTweens.push(tween);
-    });
+
+      this.paintKpis(displays, true);
+
+      const done = now - startedAt >= durationMs + staggerMs * (HOME_KPI_STATS.length - 1);
+      if (!done) {
+        this.rafIds.push(requestAnimationFrame(tick));
+        return;
+      }
+
+      if (safetyId != null) {
+        win?.clearTimeout(safetyId);
+      }
+      finish();
+    };
+
+    this.rafIds.push(requestAnimationFrame(tick));
   }
 
-  private playWithRaf(): void {
-    const durationMs = 1850;
-    let finished = 0;
-
-    HOME_KPI_STATS.forEach((meta, i) => {
-      const delayMs = i * 120;
-      const startAt = performance.now() + delayMs;
-
-      const tick = (now: number) => {
-        if (now < startAt) {
-          this.rafIds.push(requestAnimationFrame(tick));
-          return;
-        }
-        const t = Math.min(1, (now - startAt) / durationMs);
-        const eased = 1 - Math.pow(1 - t, 3);
-        const val = meta.value * eased;
-        this.zone.run(() => {
-          this.kpiDisplays.update((list) => {
-            const next = list.slice();
-            next[i] = formatKpi(val, meta.decimals, meta.prefix, meta.suffix);
-            return next;
-          });
-        });
-        if (t < 1) {
-          this.rafIds.push(requestAnimationFrame(tick));
-          return;
-        }
-        finished += 1;
-        this.zone.run(() => {
-          this.kpiDisplays.update((list) => {
-            const next = list.slice();
-            next[i] = formatKpi(meta.value, meta.decimals, meta.prefix, meta.suffix);
-            return next;
-          });
-          if (finished >= HOME_KPI_STATS.length) {
-            this.kpiCounting.set(false);
-          }
-        });
-      };
-
-      this.rafIds.push(requestAnimationFrame(tick));
-    });
+  private resetWhyCounters(): void {
+    this.counterRunId += 1;
+    this.killCounters();
+    this.paintKpis(KPI_ZEROS, false);
   }
 
   private watchSectionReveal(section?: HTMLElement | null): void {
@@ -326,8 +566,6 @@ export class HomeStory {
   }
 
   private killCounters(): void {
-    this.counterTweens.forEach((tween) => tween.kill());
-    this.counterTweens = [];
     this.rafIds.forEach((id) => cancelAnimationFrame(id));
     this.rafIds = [];
   }

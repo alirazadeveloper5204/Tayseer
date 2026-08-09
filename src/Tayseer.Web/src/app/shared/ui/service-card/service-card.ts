@@ -30,6 +30,12 @@ export class ServiceCard {
 
   readonly isGreen = computed(() => this.service().accent === 'green');
 
+  readonly isGrg = computed(() => this.service().slug === 'banking-systems');
+
+  readonly partnerLabel = computed(() =>
+    this.lang() === 'ar' ? 'الشريك الرسمي · الإمارات' : 'UAE partner',
+  );
+
   readonly iconKey = computed(() => this.service().iconKey ?? 'default');
 
   readonly coverImage = computed(() => serviceImage(this.service().slug));

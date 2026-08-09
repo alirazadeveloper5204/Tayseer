@@ -81,7 +81,6 @@
               [routerLink]="'/' + lang() + '/solutions'"
               routerLinkActive="router-link-active"
               class="site-nav__link"
-              [class.nav-scroll-active]="scrollActive() === 'solutions'"
               (click)="closeMenu()"
             >
               {{ copy().nav.solutions }}
@@ -161,11 +160,11 @@
       <div class="site-chrome-toggles" dir="ltr">
         <button
           type="button"
-          class="site-chrome-btn"
+          class="site-chrome-btn site-chrome-btn--lang"
           (click)="switchLocale()"
           [attr.aria-label]="lang() === 'en' ? copy().a11y.switchToArabic : copy().a11y.switchToEnglish"
         >
-          <span class="site-chrome-btn__label">{{ lang() === 'en' ? 'AR' : 'EN' }}</span>
+          <span class="site-chrome-btn__label">{{ lang() === 'en' ? 'العربية' : 'EN' }}</span>
         </button>
 
         <button

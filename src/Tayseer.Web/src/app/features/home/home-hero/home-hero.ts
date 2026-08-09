@@ -40,7 +40,7 @@ export class HomeHero {
   readonly trustItems = computed(() => {
     const trust = this.copy().trust;
     return [
-      { id: 'solutions', text: trust.solutions },
+      { id: 'grg', text: this.copy().home.heroVisualKicker },
       { id: 'cities', text: trust.cities },
       { id: 'security', text: this.copy().home.trustSecurity },
       { id: 'since', text: trust.since },

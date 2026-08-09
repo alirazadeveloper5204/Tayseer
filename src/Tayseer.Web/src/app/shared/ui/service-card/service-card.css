@@ -98,3 +98,44 @@ html.dark .service-card__cta::after {
 [dir='rtl'] .service-card:focus-visible .service-card__cta-arrow {
   transform: translateX(-2px);
 }
+
+.service-card--grg {
+  border-color: color-mix(in srgb, #0d5a8c 28%, transparent);
+  box-shadow:
+    inset 0 3px 0 0 #62a945,
+    0 1px 2px rgba(13, 90, 140, 0.06);
+}
+
+html.dark .service-card--grg {
+  border-color: color-mix(in srgb, #00f2fe 22%, transparent);
+  box-shadow:
+    inset 0 3px 0 0 #62a945,
+    0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.service-card__partner {
+  position: absolute;
+  z-index: 2;
+  inset-block-start: 0.75rem;
+  inset-inline-end: 0.75rem;
+  padding: 0.28rem 0.55rem;
+  border-radius: 0.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: color-mix(in srgb, #0d5a8c 78%, transparent);
+  backdrop-filter: blur(6px);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+  line-height: 1.2;
+  pointer-events: none;
+}
+
+html[dir='rtl'] .service-card__partner {
+  letter-spacing: 0;
+  text-transform: none;
+  font-family: 'IBM Plex Sans Arabic', system-ui, sans-serif;
+  font-size: 0.68rem;
+}

@@ -40,9 +40,6 @@ export class SiteHeader {
 
   readonly lang = computed(() => this.locale.lang());
 
-
-  readonly scrollActive = signal<'home' | 'solutions' | 'clients' | null>(null);
-
   readonly serviceLinks = computed(() => {
     const isAr = this.locale.lang() === 'ar';
     const lang = this.locale.lang();
@@ -171,79 +168,6 @@ export class SiteHeader {
         this.clearCloseTimer();
         this.unlockBodyScroll();
       });
-
-      const getActiveForHome = (): boolean => {
-        const url = this.router.url.split('?')[0].split('#')[0];
-        const lang = this.locale.lang();
-        const home = `/${lang}`;
-        return url === home || url === `${home}/`;
-      };
-
-      let enabled = getActiveForHome();
-
-      const syncEnabled = () => {
-        enabled = getActiveForHome();
-        if (!enabled) {
-          this.scrollActive.set(null);
-        }
-      };
-
-      syncEnabled();
-      const sub = this.router.events.subscribe(() => syncEnabled());
-      this.destroyRef.onDestroy(() => sub.unsubscribe());
-
-      const sectionIds: Array<'home' | 'solutions' | 'clients'> = [
-        'home',
-        'solutions',
-        'clients',
-      ];
-      const sections = sectionIds
-        .map((id) => document.getElementById(id))
-        .filter((el): el is HTMLElement => !!el);
-
-      if (sections.length === 0) {
-        return;
-      }
-
-      const ratios = new Map<string, number>();
-
-      const observer = new IntersectionObserver(
-        (entries) => {
-          if (!enabled) {
-            return;
-          }
-
-          let bestId: (typeof sectionIds)[number] | null = null;
-          let bestRatio = 0;
-
-          for (const entry of entries) {
-            const id = (entry.target as HTMLElement).id;
-            ratios.set(id, entry.intersectionRatio);
-          }
-
-          for (const id of sectionIds) {
-            const r = ratios.get(id) ?? 0;
-            if (r > bestRatio) {
-              bestRatio = r;
-              bestId = id;
-            }
-          }
-
-          if (bestId && bestRatio > 0.15) {
-            this.scrollActive.set(bestId);
-          }
-        },
-        {
-          threshold: [0, 0.15, 0.3, 0.5, 0.75],
-          rootMargin: '-15% 0px -65% 0px',
-        }
-      );
-
-      for (const el of sections) {
-        observer.observe(el);
-      }
-
-      this.destroyRef.onDestroy(() => observer.disconnect());
     });
   }
 }

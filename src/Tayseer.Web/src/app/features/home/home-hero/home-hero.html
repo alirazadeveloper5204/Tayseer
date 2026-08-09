@@ -11,8 +11,11 @@
         <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand home-hero__cta-item">
           {{ copy().common.talkToTeam }}
         </a>
-        <a [routerLink]="'/' + lang() + '/solutions'" class="page-ghost-btn home-hero__cta-item">
-          {{ copy().common.exploreSolutions }}
+        <a
+          [routerLink]="'/' + lang() + '/solutions/banking-systems'"
+          class="page-ghost-btn home-hero__cta-item"
+        >
+          {{ copy().home.exploreGrg }}
         </a>
       </div>
 
@@ -48,11 +51,24 @@
 
           <path class="hh-brand" d="M78 292V78h214" />
           <path class="hh-brand hh-brand--inner" d="M96 292V104h178" />
-          <rect class="hh-panel" x="286" y="214" width="122" height="78" rx="12" />
-          <path class="hh-panel-line" d="M304 238h86M304 254h64M304 270h48" />
-          <rect class="hh-panel hh-panel--accent" x="72" y="58" width="88" height="52" rx="10" />
-          <path class="hh-panel-line hh-panel-line--accent" d="M88 78h56M88 92h36" />
+
+          <rect class="hh-panel hh-atm" x="302" y="198" width="108" height="118" rx="14" />
+          <rect class="hh-panel hh-atm-screen" x="318" y="214" width="76" height="42" rx="8" />
+          <path class="hh-panel-line" d="M328 270h56" />
+          <circle class="hh-node hh-atm-key" cx="334" cy="288" r="3.2" />
+          <circle class="hh-node hh-atm-key" cx="348" cy="288" r="3.2" />
+          <circle class="hh-node hh-atm-key" cx="362" cy="288" r="3.2" />
+          <circle class="hh-node hh-node--accent hh-atm-key" cx="376" cy="288" r="3.2" />
+
+          <rect class="hh-panel hh-panel--accent" x="72" y="52" width="92" height="58" rx="11" />
+          <rect class="hh-panel hh-stm-screen" x="84" y="62" width="68" height="28" rx="6" />
+          <path class="hh-panel-line hh-panel-line--accent" d="M88 102h40" />
         </svg>
+
+        <p class="home-hero__stage-caption">
+          <span class="home-hero__stage-caption-kicker">{{ copy().home.heroVisualKicker }}</span>
+          <span class="home-hero__stage-caption-label">{{ copy().home.heroVisualLabel }}</span>
+        </p>
       </div>
 
       <app-proof-cards />

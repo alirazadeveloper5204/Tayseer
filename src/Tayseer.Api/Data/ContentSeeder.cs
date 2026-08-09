@@ -62,8 +62,8 @@ public static class ContentSeeder
                     "Let Tayseer run complex systems with managed T24 Temenos, big data, security, ATM/STM, and IaaS/SaaS operations — so you stay focused on your core business.",
                     "دع تيسير تدير أنظمتك المعقدة عبر خدمات T24 Temenos والبيانات الضخمة والأمن وأجهزة الصراف وSTM وعمليات IaaS/SaaS — لتركّز على جوهر أعمالك."),
                 "banking-systems" => (
-                    "Partner with Tayseer for GRG Banking systems — ATMs, cash recyclers, smart teller machines, cash sorting, and self-service solutions built for reliability and advanced functionality.",
-                    "شارك تيسير لأنظمة GRG Banking — أجهزة الصراف وإعادة تدوير النقد وأجهزة الصراف الذكية وفرز النقد وحلول الخدمة الذاتية الموثوقة والمتقدمة."),
+                    "As the official UAE partner for GRGBanking, Tayseer delivers ATMs, cash recyclers, Smart Teller Machines (STMs), cash sorting, self-service hardware, and monitoring tools that help banks resolve deposit and device issues faster.",
+                    "بصفتنا الشريك الرسمي لـ GRGBanking في الإمارات، نوفر أجهزة الصراف وإعادة تدوير النقد وآلات الصراف الذكية وفرز النقد وأجهزة الخدمة الذاتية وأدوات مراقبة تساعد البنوك على حل مشكلات الإيداع والأجهزة بسرعة أكبر."),
                 _ => (s.BodyEn, s.BodyAr),
             };
 

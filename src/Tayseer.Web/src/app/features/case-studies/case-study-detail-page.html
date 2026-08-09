@@ -74,7 +74,7 @@
   <section class="page-module site-band">
     <div class="site-container py-fluid-2xl">
       <h2 class="type-section page-ink">{{ label(common.metrics) }}</h2>
-      <div class="mt-fluid-lg grid gap-fluid-md sm:grid-cols-3">
+      <div class="feature-card-grid">
         @for (metric of study.metrics; track $index) {
           <article class="fintech-card p-fluid-md text-center">
             <p class="financial-number font-display text-fluid-3xl font-bold page-accent-green">{{ metric.value }}</p>
