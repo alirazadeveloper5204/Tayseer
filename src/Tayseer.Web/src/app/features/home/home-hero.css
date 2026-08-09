@@ -36,7 +36,7 @@
 
 .home-hero__title {
   margin: 0;
-  max-width: 11em;
+  max-width: 14em;
   font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
   font-size: clamp(2.15rem, 1.4rem + 3vw, 3.75rem);
   font-weight: 700;
@@ -141,82 +141,9 @@ html.dark .home-hero__segments {
   box-shadow: 0 8px 24px rgba(13, 90, 140, 0.06);
 }
 
-.home-hero__stage-caption {
-  position: absolute;
-  inset-inline: 0.9rem;
-  bottom: 0.85rem;
-  z-index: 2;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.35rem 0.65rem;
-  margin: 0;
-  padding: 0.55rem 0.75rem;
-  border-radius: 0.75rem;
-  border: 1px solid rgba(13, 90, 140, 0.12);
-  background: color-mix(in srgb, #f7f9fc 88%, transparent);
-  backdrop-filter: blur(8px);
-  pointer-events: none;
-}
-
-html.dark .home-hero__stage-caption {
-  border-color: rgba(255, 255, 255, 0.12);
-  background: color-mix(in srgb, #0f172a 82%, transparent);
-}
-
-.home-hero__stage-caption-kicker {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #0d5a8c;
-}
-
-html.dark .home-hero__stage-caption-kicker {
-  color: #00f2fe;
-}
-
-.home-hero__stage-caption-label {
-  font-size: 0.78rem;
-  font-weight: 550;
-  color: #5b6b7c;
-}
-
-html.dark .home-hero__stage-caption-label {
-  color: rgba(232, 238, 245, 0.72);
-}
-
-.home-hero__graphic .hh-atm {
-  opacity: 0.95;
-}
-
-.home-hero__graphic .hh-atm-screen {
-  fill: color-mix(in srgb, #0d5a8e 12%, #f7f9fc);
-  stroke: #0d5a8e;
-  stroke-width: 1.5;
-}
-
-.home-hero__graphic .hh-stm-screen {
-  fill: color-mix(in srgb, #62a845 14%, #f7f9fc);
-  stroke: #62a845;
-  stroke-width: 1.4;
-}
-
-html.dark .home-hero__graphic .hh-atm-screen {
-  fill: color-mix(in srgb, #0d5a8e 40%, #0a0a0a);
-  stroke: #4a9fd0;
-}
-
-html.dark .home-hero__graphic .hh-stm-screen {
-  fill: color-mix(in srgb, #62a845 28%, #0a0a0a);
-  stroke: #62a845;
-}
-
 html.dark .home-hero__stage {
   box-shadow: none;
 }
-
 
 .home-hero__stage.fintech-card,
 .home-hero__stage.fintech-card:hover {
@@ -232,12 +159,10 @@ html.dark .home-hero__stage.fintech-card:hover {
   box-shadow: none;
 }
 
-
 .home-hero__graphic {
   display: block;
   width: 100%;
   height: 100%;
-
   transform: translateX(-2%);
   transform-origin: center center;
 }
@@ -245,7 +170,6 @@ html.dark .home-hero__stage.fintech-card:hover {
 html[dir='rtl'] .home-hero__graphic {
   transform: scaleX(-1) translateX(-2%);
 }
-
 
 .home-hero__graphic .hh-pulse {
   fill: #62a945;
@@ -314,37 +238,6 @@ html.dark .home-hero__graphic .hh-pulse {
     animation: none;
     opacity: 0.9;
     transform: none;
-  }
-}
-
-@media (max-width: 959px) {
-  .home-hero__visual {
-    padding-inline-end: 0;
-  }
-
-  .home-hero__stage {
-    height: auto;
-    min-height: 0;
-    overflow: visible;
-  }
-
-  .home-hero__stage-caption {
-    inset-inline: 0.65rem;
-    bottom: 0.6rem;
-    padding: 0.45rem 0.6rem;
-  }
-
-  .home-hero__stage-caption-label {
-    font-size: 0.72rem;
-  }
-
-  .home-hero__graphic {
-    height: clamp(14rem, 52vw, 20rem);
-    transform: none;
-  }
-
-  html[dir='rtl'] .home-hero__graphic {
-    transform: scaleX(-1);
   }
 }
 
@@ -420,6 +313,18 @@ html.dark .home-hero__graphic .hh-pulse {
   opacity: 0.55;
 }
 
+.home-hero__graphic .hh-atm-screen {
+  fill: color-mix(in srgb, #0d5a8e 12%, #f7f9fc);
+  stroke: #0d5a8e;
+  stroke-width: 1.5;
+}
+
+.home-hero__graphic .hh-stm-screen {
+  fill: color-mix(in srgb, #62a845 14%, #f7f9fc);
+  stroke: #62a845;
+  stroke-width: 1.4;
+}
+
 html.dark .home-hero__graphic .hh-ring {
   stroke: #4a9fd0;
   opacity: 0.28;
@@ -469,10 +374,92 @@ html.dark .home-hero__graphic .hh-panel-line--accent {
   stroke: #8bc34a;
 }
 
-html[dir='rtl'] .home-hero__graphic {
-  transform: scaleX(-1) translateX(-2%);
+html.dark .home-hero__graphic .hh-atm-screen {
+  fill: color-mix(in srgb, #0d5a8e 40%, #0a0a0a);
+  stroke: #4a9fd0;
 }
 
+html.dark .home-hero__graphic .hh-stm-screen {
+  fill: color-mix(in srgb, #62a845 28%, #0a0a0a);
+  stroke: #62a845;
+}
+
+.home-hero__stage-caption {
+  position: absolute;
+  inset-inline: 0.9rem;
+  bottom: 0.85rem;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.65rem;
+  margin: 0;
+  padding: 0.55rem 0.75rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(13, 90, 140, 0.12);
+  background: color-mix(in srgb, #f7f9fc 88%, transparent);
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+}
+
+html.dark .home-hero__stage-caption {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: color-mix(in srgb, #0f172a 82%, transparent);
+}
+
+.home-hero__stage-caption-kicker {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #0d5a8c;
+}
+
+html.dark .home-hero__stage-caption-kicker {
+  color: #00f2fe;
+}
+
+.home-hero__stage-caption-label {
+  font-size: 0.78rem;
+  font-weight: 550;
+  color: #5b6b7c;
+}
+
+html.dark .home-hero__stage-caption-label {
+  color: rgba(232, 238, 245, 0.72);
+}
+
+@media (max-width: 959px) {
+  .home-hero__visual {
+    padding-inline-end: 0;
+  }
+
+  .home-hero__stage {
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .home-hero__graphic {
+    height: clamp(14rem, 52vw, 20rem);
+    transform: none;
+  }
+
+  html[dir='rtl'] .home-hero__graphic {
+    transform: scaleX(-1);
+  }
+
+  .home-hero__stage-caption {
+    inset-inline: 0.65rem;
+    bottom: 0.6rem;
+    padding: 0.45rem 0.6rem;
+  }
+
+  .home-hero__stage-caption-label {
+    font-size: 0.72rem;
+  }
+}
 
 .home-hero--revealed .proof-card,
 .home-hero--revealed .proof-card--2,

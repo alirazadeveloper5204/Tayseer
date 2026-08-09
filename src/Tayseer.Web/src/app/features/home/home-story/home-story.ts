@@ -19,12 +19,14 @@ import {
   HOME_JOURNEY,
   HOME_KPI_STATS,
   HOME_MANTRA,
+  HOME_PARTNERS,
   HOME_TESTIMONIALS,
   HOME_WHY_FEATURES,
 } from '../../../core/i18n/ui-copy';
 import { CLIENT_GALLERIES } from '../../../core/media/site-images';
 import { GsapService } from '../../../core/motion/gsap.service';
 import { SiteCarousel } from '../../../shared/ui/site-carousel/site-carousel';
+import { RouterLink } from '@angular/router';
 
 function formatKpi(value: number, decimals: number, prefix: string, suffix: string): string {
   const body = decimals > 0 ? value.toFixed(decimals) : String(Math.round(value));
@@ -33,7 +35,7 @@ function formatKpi(value: number, decimals: number, prefix: string, suffix: stri
 
 @Component({
   selector: 'app-home-story',
-  imports: [SiteCarousel],
+  imports: [SiteCarousel, RouterLink],
   templateUrl: './home-story.html',
   styleUrl: './home-story.css',
   encapsulation: ViewEncapsulation.None,
@@ -47,6 +49,7 @@ export class HomeStory {
   private readonly motion = inject(GsapService);
   readonly copy = inject(UiCopyService).copy;
   readonly isAr = computed(() => this.locale.lang() === 'ar');
+  readonly lang = computed(() => this.locale.lang());
 
   private readonly whyChooseSection = viewChild('whyChooseSection', { read: ElementRef });
   private readonly journeySection = viewChild('journeySection', { read: ElementRef });
@@ -57,6 +60,26 @@ export class HomeStory {
     HOME_KPI_STATS.map((s) => formatKpi(0, s.decimals, s.prefix, s.suffix)),
   );
   readonly kpiCounting = signal(false);
+
+  readonly featuredPartner = computed(() => {
+    const partner = HOME_PARTNERS.find((p) => p.featured) ?? HOME_PARTNERS[0];
+    return {
+      id: partner.id,
+      name: partner.name,
+      logo: partner.logo,
+      tone: partner.tone as 'dark' | 'light',
+      badge: this.isAr() ? partner.badgeAr : partner.badgeEn,
+      href: partner.solutionSlug ? `/${this.lang()}/solutions/${partner.solutionSlug}` : null,
+    };
+  });
+
+  readonly partnerGrid = computed(() =>
+    HOME_PARTNERS.filter((p) => !p.featured).map((p) => ({
+      id: p.id,
+      name: p.name,
+      logo: p.logo,
+    })),
+  );
 
   readonly kpiStats = computed(() => {
     const displays = this.kpiDisplays();

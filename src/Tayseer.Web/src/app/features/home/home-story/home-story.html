@@ -1,4 +1,67 @@
 
+<section id="partners" class="home-partners site-band" aria-labelledby="home-partners-title">
+  <div class="home-partners__glow" aria-hidden="true"></div>
+  <div class="site-container py-fluid-2xl">
+    <header class="home-partners__intro">
+      <p class="home-partners__eyebrow">
+        <span class="home-partners__eyebrow-mark" aria-hidden="true"></span>
+        {{ copy().home.partnersEyebrow }}
+      </p>
+      <h2 id="home-partners-title" class="home-partners__title">
+        {{ copy().home.partnersTitle }}
+      </h2>
+      <p class="home-partners__lead">{{ copy().home.partnersLead }}</p>
+    </header>
+
+    <article class="home-partners__featured">
+      <div class="home-partners__logo-stage">
+        <img
+          class="home-partners__logo home-partners__logo--featured"
+          [src]="featuredPartner().logo"
+          [alt]="featuredPartner().name"
+          width="720"
+          height="405"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+      <div class="home-partners__featured-copy">
+        @if (featuredPartner().badge) {
+          <p class="home-partners__badge">{{ featuredPartner().badge }}</p>
+        }
+        <h3 class="home-partners__featured-name">{{ featuredPartner().name }}</h3>
+        <p class="home-partners__featured-note">{{ copy().home.partnersFeaturedNote }}</p>
+        @if (featuredPartner().href; as href) {
+          <a [routerLink]="href" class="home-partners__cta">
+            {{ copy().home.partnersFeaturedCta }}
+            <span aria-hidden="true">→</span>
+          </a>
+        }
+      </div>
+    </article>
+
+    <div class="home-partners__rail">
+      <p class="home-partners__rail-label">{{ copy().home.partnersAllLabel }}</p>
+      <ul class="home-partners__grid" [attr.aria-label]="copy().home.partnersAllLabel">
+        @for (partner of partnerGrid(); track partner.id) {
+          <li class="home-partners__tile">
+            <img
+              class="home-partners__logo"
+              [src]="partner.logo"
+              [alt]="partner.name"
+              width="480"
+              height="270"
+              loading="lazy"
+              decoding="async"
+            />
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+
 <section id="why-choose" #whyChooseSection class="why-choose site-band">
   <div class="site-container py-fluid-2xl">
     <h2 class="type-section text-center text-brand-blue dark:text-white">
@@ -99,8 +162,8 @@
                   class="clients-slider__avatar"
                   [src]="t.avatar"
                   [alt]="t.name"
-                  width="56"
-                  height="56"
+                  width="72"
+                  height="72"
                   loading="lazy"
                   decoding="async"
                 />
@@ -227,17 +290,19 @@
 
         <div class="home-journey__panel" [attr.aria-live]="'polite'">
           <p class="home-journey__panel-index" aria-hidden="true">{{ activeJourney().step }}</p>
-          <div class="home-journey__panel-copy">
-            <p class="home-journey__panel-kicker">{{ activeJourney().outcome }}</p>
-            <h3 class="home-journey__panel-title">{{ activeJourney().title }}</h3>
-            <p class="home-journey__panel-body">{{ activeJourney().body }}</p>
-            <div class="home-journey__panel-progress" aria-hidden="true">
-              <span
-                class="home-journey__panel-bar"
-                [style.width.%]="((journeyIndex() + 1) / journey().length) * 100"
-              ></span>
+          @for (step of [activeJourney()]; track step.id) {
+            <div class="home-journey__panel-copy">
+              <p class="home-journey__panel-kicker">{{ step.outcome }}</p>
+              <h3 class="home-journey__panel-title">{{ step.title }}</h3>
+              <p class="home-journey__panel-body">{{ step.body }}</p>
+              <div class="home-journey__panel-progress" aria-hidden="true">
+                <span
+                  class="home-journey__panel-bar"
+                  [style.width.%]="((step.id + 1) / journey().length) * 100"
+                ></span>
+              </div>
             </div>
-          </div>
+          }
         </div>
       </div>
     </div>

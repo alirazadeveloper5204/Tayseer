@@ -1,6 +1,7 @@
 <a
   [routerLink]="link()"
   class="service-card group glass-card relative flex h-full flex-col overflow-hidden p-0 no-underline outline-none focus-visible:ring-2 focus-visible:ring-brand-green/60"
+  [class.service-card--grg]="isGrg()"
 >
   <div
     class="service-card__media"
@@ -25,6 +26,10 @@
       class="absolute inset-x-0 top-0 h-14 bg-gradient-to-b from-brand-blue/30 to-transparent"
       aria-hidden="true"
     ></div>
+
+    @if (isGrg()) {
+      <span class="service-card__partner">{{ partnerLabel() }}</span>
+    }
 
     <div
       class="service-card__icon absolute bottom-3 start-3 inline-flex h-10 w-10 items-center justify-center rounded-lg border bg-white text-brand-blue shadow-md dark:bg-surface-dark-elevated"
