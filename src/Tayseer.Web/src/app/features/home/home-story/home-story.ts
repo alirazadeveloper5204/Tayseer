@@ -57,15 +57,14 @@ export class HomeStory {
   readonly lang = computed(() => this.locale.lang());
   readonly isDark = this.theme.isDark;
 
-  private readonly whyChooseSection = viewChild('whyChooseSection', { read: ElementRef });
   private readonly whyChooseKpis = viewChild('whyChooseKpis', { read: ElementRef });
   private readonly partnersSection = viewChild('partnersSection', { read: ElementRef });
   private readonly journeySection = viewChild('journeySection', { read: ElementRef });
   private readonly mantraSection = viewChild('mantraSection', { read: ElementRef });
   private readonly pioneerSection = viewChild('pioneerSection', { read: ElementRef });
 
-  /** Start at finals so SSR / failed observers never leave the UI stuck on 0. */
-  readonly kpiDisplays = signal<string[]>([...KPI_FINALS]);
+  /** Client animates from 0 → final when the KPI strip enters the viewport. */
+  readonly kpiDisplays = signal<string[]>([...KPI_ZEROS]);
   readonly kpiCounting = signal(false);
 
   readonly featuredPartner = computed(() => {
@@ -234,7 +233,7 @@ export class HomeStory {
   private counterRunId = 0;
   private whyVisible = false;
   private counterObserver: IntersectionObserver | null = null;
-  private counterSafetyId: number | null = null;
+  private scrollCheckBound: (() => void) | null = null;
 
   constructor() {
     afterNextRender(() => {
@@ -244,16 +243,18 @@ export class HomeStory {
 
       this.bootstrapWhyChooseCounters();
       this.watchJourneySection();
-      this.watchSectionReveal(this.resolveEl(this.partnersSection()));
+      this.watchSectionReveal(
+        this.resolveEl(this.partnersSection()) ?? this.document.getElementById('partners'),
+      );
       this.watchSectionReveal(this.resolveEl(this.mantraSection()));
       this.watchSectionReveal(this.resolveEl(this.pioneerSection()));
 
       this.destroyRef.onDestroy(() => {
         this.counterRunId += 1;
-        this.clearCounterSafety();
         this.killCounters();
         this.counterObserver?.disconnect();
         this.counterObserver = null;
+        this.teardownScrollCheck();
         this.clearJourneyTimer();
       });
     });
@@ -320,28 +321,29 @@ export class HomeStory {
     );
   }
 
+  /** Paint via signals + direct DOM so values stay visible even if CD is delayed. */
   private paintKpis(values: readonly string[], counting: boolean): void {
     this.kpiDisplays.set([...values]);
     this.kpiCounting.set(counting);
 
     const root = this.kpiRoot();
-    if (!root) {
-      try {
-        this.cdr.detectChanges();
-      } catch {
-        /* view may be detached during teardown */
-      }
-      return;
+    if (root) {
+      const nodes = root.querySelectorAll<HTMLElement>('.why-choose__kpi-value');
+      nodes.forEach((node, i) => {
+        const next = values[i];
+        if (next != null) {
+          node.textContent = next;
+        }
+        node.classList.toggle('is-counting', counting);
+      });
     }
 
-    const nodes = root.querySelectorAll<HTMLElement>('.why-choose__kpi-value');
-    nodes.forEach((node, i) => {
-      const next = values[i];
-      if (next != null) {
-        node.textContent = next;
-      }
-      node.classList.toggle('is-counting', counting);
-    });
+    try {
+      this.cdr.markForCheck();
+      this.cdr.detectChanges();
+    } catch {
+      /* view may be detached during teardown */
+    }
   }
 
   private bootstrapWhyChooseCounters(): void {
@@ -352,7 +354,7 @@ export class HomeStory {
     }
 
     let tries = 0;
-    const maxTries = 80;
+    const maxTries = 100;
 
     const attempt = () => {
       const target = this.kpiRoot();
@@ -362,15 +364,52 @@ export class HomeStory {
           this.paintKpis(KPI_FINALS, false);
           return;
         }
-        win.setTimeout(attempt, 50);
+        win.setTimeout(attempt, 40);
         return;
       }
 
       this.observeWhyChooseCounters(target);
+      this.bindScrollFallback(target);
+      this.syncWhyChooseVisibility(target);
     };
 
-    // Wait one frame so hydrated DOM + viewChild are settled.
     win.requestAnimationFrame(() => attempt());
+  }
+
+  private isKpiStripInView(target: HTMLElement): boolean {
+    const win = this.document.defaultView;
+    if (!win) {
+      return false;
+    }
+    const rect = target.getBoundingClientRect();
+    const vh = win.innerHeight || 0;
+    if (vh <= 0 || rect.height <= 0) {
+      return false;
+    }
+    // Trigger when any meaningful part of the KPI strip is on screen.
+    return rect.top < vh * 0.92 && rect.bottom > vh * 0.08;
+  }
+
+  private syncWhyChooseVisibility(target: HTMLElement): void {
+    const visible = this.isKpiStripInView(target);
+    if (visible) {
+      if (!this.whyVisible) {
+        this.whyVisible = true;
+        this.playWhyCounters();
+        return;
+      }
+      // Recover from a stuck "0" state while the strip is on screen.
+      const stuckAtZero =
+        !this.kpiCounting() && this.kpiDisplays()[0] === KPI_ZEROS[0] && this.rafIds.length === 0;
+      if (stuckAtZero) {
+        this.playWhyCounters();
+      }
+      return;
+    }
+    if (this.whyVisible) {
+      this.whyVisible = false;
+      this.resetWhyCounters();
+    }
   }
 
   private observeWhyChooseCounters(target: HTMLElement): void {
@@ -382,6 +421,8 @@ export class HomeStory {
           return;
         }
 
+        // Any intersection is enough — do not require a high ratio (that was
+        // resetting the animation while the tall parent section was only partly visible).
         if (entry.isIntersecting) {
           if (!this.whyVisible) {
             this.whyVisible = true;
@@ -396,25 +437,38 @@ export class HomeStory {
         }
       },
       {
-        // KPI strip is short — 20% of it is easy to hit when it enters the viewport.
-        threshold: [0, 0.2, 0.4, 0.6, 1],
+        threshold: [0, 0.05, 0.15, 0.3, 0.5, 1],
+        rootMargin: '0px 0px 0px 0px',
       },
     );
     this.counterObserver.observe(target);
+  }
 
-    const rect = target.getBoundingClientRect();
-    const vh = this.document.defaultView?.innerHeight ?? 0;
-    const alreadyInView = vh > 0 && rect.top < vh && rect.bottom > 0 && rect.height > 0;
-    if (alreadyInView) {
-      this.whyVisible = true;
-      this.playWhyCounters();
-    } else {
-      this.resetWhyCounters();
+  private bindScrollFallback(target: HTMLElement): void {
+    const win = this.document.defaultView;
+    if (!win) {
+      return;
     }
+
+    this.teardownScrollCheck();
+    this.scrollCheckBound = () => this.syncWhyChooseVisibility(target);
+    win.addEventListener('scroll', this.scrollCheckBound, { passive: true });
+    win.addEventListener('resize', this.scrollCheckBound);
+    // Catch late layout / hydration shifts.
+    win.setTimeout(this.scrollCheckBound, 120);
+    win.setTimeout(this.scrollCheckBound, 400);
+  }
+
+  private teardownScrollCheck(): void {
+    const win = this.document.defaultView;
+    if (win && this.scrollCheckBound) {
+      win.removeEventListener('scroll', this.scrollCheckBound);
+      win.removeEventListener('resize', this.scrollCheckBound);
+    }
+    this.scrollCheckBound = null;
   }
 
   private playWhyCounters(): void {
-    this.clearCounterSafety();
     this.killCounters();
     const runId = ++this.counterRunId;
 
@@ -425,8 +479,8 @@ export class HomeStory {
       return;
     }
 
-    const durationMs = 1500;
-    const staggerMs = 80;
+    const durationMs = 1400;
+    const staggerMs = 90;
     const startedAt = performance.now();
     const win = this.document.defaultView;
 
@@ -434,13 +488,12 @@ export class HomeStory {
       if (runId !== this.counterRunId) {
         return;
       }
-      this.clearCounterSafety();
       this.killCounters();
       this.paintKpis(KPI_FINALS, false);
     };
 
-    this.counterSafetyId =
-      win?.setTimeout(finish, durationMs + staggerMs * HOME_KPI_STATS.length + 500) ?? null;
+    // Safety net — never leave the UI stuck on zeros.
+    const safetyId = win?.setTimeout(finish, durationMs + staggerMs * HOME_KPI_STATS.length + 600);
 
     const tick = (now: number) => {
       if (runId !== this.counterRunId) {
@@ -453,7 +506,6 @@ export class HomeStory {
         return formatKpi(meta.value * eased, meta.decimals, meta.prefix, meta.suffix);
       });
 
-      // Direct DOM paint — reliable in zoneless Angular (signals alone may not re-render from rAF).
       this.paintKpis(displays, true);
 
       const done = now - startedAt >= durationMs + staggerMs * (HOME_KPI_STATS.length - 1);
@@ -462,6 +514,9 @@ export class HomeStory {
         return;
       }
 
+      if (safetyId != null) {
+        win?.clearTimeout(safetyId);
+      }
       finish();
     };
 
@@ -469,17 +524,9 @@ export class HomeStory {
   }
 
   private resetWhyCounters(): void {
-    this.clearCounterSafety();
     this.counterRunId += 1;
     this.killCounters();
     this.paintKpis(KPI_ZEROS, false);
-  }
-
-  private clearCounterSafety(): void {
-    if (this.counterSafetyId != null) {
-      this.document.defaultView?.clearTimeout(this.counterSafetyId);
-      this.counterSafetyId = null;
-    }
   }
 
   private watchSectionReveal(section?: HTMLElement | null): void {

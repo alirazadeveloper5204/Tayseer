@@ -3,6 +3,7 @@ import {
   ErrorHandler,
   provideBrowserGlobalErrorListeners,
   provideAppInitializer,
+  provideZonelessChangeDetection,
   inject,
 } from '@angular/core';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
@@ -18,6 +19,7 @@ import { AppErrorHandler } from './core/errors/app-error.handler';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideZonelessChangeDetection(),
     { provide: ErrorHandler, useClass: AppErrorHandler },
     provideBrowserGlobalErrorListeners(),
     provideRouter(

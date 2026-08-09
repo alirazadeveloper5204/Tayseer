@@ -87,9 +87,8 @@
             <p
               class="why-choose__kpi-value financial-number"
               [class.is-counting]="kpiCounting()"
-            >
-              {{ stat.display }}
-            </p>
+              [textContent]="stat.display"
+            ></p>
             <p class="why-choose__kpi-label">{{ stat.label }}</p>
           </div>
         }
