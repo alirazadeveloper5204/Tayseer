@@ -142,21 +142,60 @@ const STATIC_SERVICES: readonly StaticService[] = [
     iconKey: 'banking-systems',
     accent: 'blue',
     sortOrder: 6,
-    titleEn: 'Banking Systems',
-    titleAr: 'الأنظمة المصرفية',
-    shortDescriptionEn: 'Experience Next-Gen Banking with GRG Banking',
-    shortDescriptionAr: 'تجربة مصرفية من الجيل التالي مع GRG Banking',
-    bodyEn: 'GRG ATMs, smart teller machines, cash sorting, and self-service solutions.',
-    bodyAr: 'أجهزة صراف GRG وأجهزة الصراف الذكية وفرز النقد وحلول الخدمة الذاتية.',
+    titleEn: 'GRG Banking',
+    titleAr: 'حلول GRG Banking',
+    shortDescriptionEn:
+      'Official UAE partner for GRGBanking — ATMs, smart teller machines, and self-service hardware for banks across the region.',
+    shortDescriptionAr:
+      'الشريك الرسمي لـ GRGBanking في الإمارات — أجهزة صراف وآلات صراف ذكية وأجهزة خدمة ذاتية للبنوك في المنطقة.',
+    bodyEn:
+      'As the official UAE partner for GRGBanking, Tayseer delivers and supports state-of-the-art ATMs, Smart Teller Machines (STMs), cash sorting, and self-service banking hardware. Banks get reliable branch and lobby channels, plus proprietary monitoring and investigation tools that help identify deposit and hardware issues faster — cutting typical resolution timelines from days to hours so customer trust stays intact.',
+    bodyAr:
+      'بصفتنا الشريك الرسمي لـ GRGBanking في الإمارات، نوفر وندعم أحدث أجهزة الصراف الآلي وآلات الصراف الذكية (STM) وفرز النقد وأجهزة الخدمة الذاتية المصرفية. يحصل البنك على قنوات موثوقة للفروع والصالات، إضافة إلى أدوات مراقبة وتحقيق مدمجة تساعد على اكتشاف مشكلات الإيداع والأجهزة بشكل أسرع — لتقليص زمن المعالجة المعتاد من أيام إلى ساعات والحفاظ على ثقة العملاء.',
     ctaLabelEn: 'Learn More',
     ctaLabelAr: 'اعرف المزيد',
     ctaUrl: '/solutions/banking-systems',
     features: [
-      { titleEn: 'ATMs & Cash Recyclers', titleAr: 'أجهزة الصراف وإعادة تدوير النقد', descEn: '24/7 cash access with withdrawals, deposits, bill pay, and recycling.', descAr: 'وصول نقدي على مدار الساعة مع السحب والإيداع ودفع الفواتير وإعادة التدوير.' },
-      { titleEn: 'Smart Teller Machines', titleAr: 'أجهزة الصراف الذكية', descEn: 'Human-assisted automation that cuts branch wait times.', descAr: 'أتمتة بمساعدة بشرية تقلل أوقات الانتظار في الفروع.' },
-      { titleEn: 'Cash Sorting Machines', titleAr: 'آلات فرز النقد', descEn: 'Accurate counting, sorting, and verification of notes and coins.', descAr: 'عدّ وفرز وتحقق دقيق للأوراق النقدية والعملات.' },
-      { titleEn: 'Self-Service Solutions', titleAr: 'حلول الخدمة الذاتية', descEn: 'Kiosks for account management, applications, and more beyond ATMs.', descAr: 'أكشاك لإدارة الحسابات والطلبات وأكثر خارج أجهزة الصراف.' },
-      { titleEn: 'Banknote Handling', titleAr: 'معالجة الأوراق النقدية', descEn: 'Advanced note processing technology for reliable branch cash ops.', descAr: 'تقنيات متقدمة لمعالجة الأوراق النقدية لعمليات نقد موثوقة في الفروع.' },
+      {
+        titleEn: 'ATMs & Cash Recyclers',
+        titleAr: 'أجهزة الصراف وإعادة تدوير النقد',
+        descEn:
+          'GRG ATMs and recyclers for 24/7 withdrawals, deposits, bill pay, and cash recycling built for high-availability networks.',
+        descAr:
+          'أجهزة صراف وإعادة تدوير GRG للسحب والإيداع ودفع الفواتير وإعادة تدوير النقد على مدار الساعة بشبكات عالية التوافر.',
+      },
+      {
+        titleEn: 'Smart Teller Machines (STMs)',
+        titleAr: 'آلات الصراف الذكية (STM)',
+        descEn:
+          'Human-assisted self-service that shortens branch queues while keeping assisted banking journeys intact.',
+        descAr:
+          'خدمة ذاتية بمساعدة بشرية تختصر طوابير الفروع مع الإبقاء على رحلات مصرفية مدعومة.',
+      },
+      {
+        titleEn: 'Cash Sorting & Banknote Handling',
+        titleAr: 'فرز النقد ومعالجة الأوراق',
+        descEn:
+          'Accurate counting, sorting, and verification technology for reliable cash-ops in branches and cash centres.',
+        descAr:
+          'تقنيات دقيقة للعد والفرز والتحقق لضمان عمليات نقد موثوقة في الفروع ومراكز النقد.',
+      },
+      {
+        titleEn: 'Self-Service Banking Hardware',
+        titleAr: 'أجهزة الخدمة الذاتية المصرفية',
+        descEn:
+          'Lobby and branch kiosks that extend beyond ATMs — account services, applications, and seamless customer journeys.',
+        descAr:
+          'أكشاك للفروع والصالات تتجاوز أجهزة الصراف — خدمات الحسابات والطلبات ورحلات عملاء سلسة.',
+      },
+      {
+        titleEn: 'Monitoring & Investigation',
+        titleAr: 'المراقبة والتحقيق',
+        descEn:
+          'In-built monitoring and investigation modules that surface deposit and hardware issues faster, with same-day insight and shorter resolution cycles.',
+        descAr:
+          'وحدات مراقبة وتحقيق مدمجة تكشف مشكلات الإيداع والأجهزة بسرعة أكبر، مع رؤى في اليوم نفسه ودورات معالجة أقصر.',
+      },
     ],
   },
 ];

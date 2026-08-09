@@ -56,6 +56,11 @@ export interface UiCopy {
     statsTitle: string;
     whyChooseTitle: string;
     whyChooseSubtitle: string;
+    heroVisualKicker: string;
+    heroVisualLabel: string;
+    journeyEyebrow: string;
+    journeyTitle: string;
+    journeyLead: string;
     testimonialsEyebrow: string;
     testimonialsTitle: string;
     testimonialsCardTitle: string;
@@ -165,7 +170,7 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
       eyebrow: 'Financial Technology Solutions',
       headline: 'Banking technology you can trust',
       subhead:
-        'Core banking, AI, mobile, and managed operations for banks and enterprises across Saudi Arabia and the UAE.',
+        'Core banking, AI, mobile, managed operations — and GRG Banking self-service hardware as the official UAE partner for banks across the region.',
       servicesEyebrow: 'What We Build',
       servicesTitle: 'All Your Business Needs, Covered',
       servicesSubtitle:
@@ -177,6 +182,12 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
       statsTitle: 'Tayseer By Numbers',
       whyChooseTitle: 'Why Choose Tayseer?',
       whyChooseSubtitle: 'Empower your business with innovation and reliability.',
+      heroVisualKicker: 'GRG Banking',
+      heroVisualLabel: 'Official UAE partner · ATMs & STMs',
+      journeyEyebrow: 'Delivery path',
+      journeyTitle: 'How a Tayseer engagement progresses',
+      journeyLead:
+        'One accountable path from discovery to ongoing operations — select a stage to see what happens and what you get.',
       testimonialsEyebrow: 'Testimonials',
       testimonialsTitle: 'What People Say About Us',
       testimonialsCardTitle: 'Work with us',
@@ -192,7 +203,7 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
       iso: 'ISO 27001 Certified',
       regions: 'Saudi Arabia · UAE',
       since: 'Est. 2016',
-      focus: 'Core Banking · AI · Mobile',
+      focus: 'Core Banking · AI · GRG Banking',
       solutions: '6 Solutions',
       cities: 'Riyadh & Dubai',
     },
@@ -288,7 +299,7 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
       eyebrow: 'حلول التقنية المالية',
       headline: 'تقنية مصرفية يمكن الوثوق بها',
       subhead:
-        'أنظمة مصرفية أساسية وذكاء اصطناعي وجوال وعمليات مُدارة للبنوك والمؤسسات في السعودية والإمارات.',
+        'أنظمة مصرفية أساسية وذكاء اصطناعي وجوال وعمليات مُدارة — مع أجهزة GRG Banking للخدمة الذاتية كشريك رسمي في الإمارات للبنوك في المنطقة.',
       servicesEyebrow: 'ما نقدمه',
       servicesTitle: 'نغطي جميع احتياجات أعمالك',
       servicesSubtitle:
@@ -300,6 +311,12 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
       statsTitle: 'تيسير بالأرقام',
       whyChooseTitle: 'لماذا تيسير؟',
       whyChooseSubtitle: 'مكّن أعمالك بالابتكار والموثوقية.',
+      heroVisualKicker: 'GRG Banking',
+      heroVisualLabel: 'الشريك الرسمي في الإمارات · أجهزة صراف وSTM',
+      journeyEyebrow: 'مسار التسليم',
+      journeyTitle: 'كيف تتقدّم شراكتك مع تيسير',
+      journeyLead:
+        'مسار واحد واضح من الاكتشاف إلى التشغيل المستمر — اختر مرحلة لترى ماذا يحدث وما الذي تحصل عليه.',
       testimonialsEyebrow: 'آراء العملاء',
       testimonialsTitle: 'ماذا يقول عملاؤنا عنا',
       testimonialsCardTitle: 'اعمل معنا',
@@ -315,7 +332,7 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
       iso: 'معتمد ISO 27001',
       regions: 'السعودية · الإمارات',
       since: 'تأسست 2016',
-      focus: 'الخدمات المصرفية · الذكاء الاصطناعي · الجوال',
+      focus: 'الخدمات المصرفية · الذكاء الاصطناعي · GRG Banking',
       solutions: '6 حلول',
       cities: 'الرياض ودبي',
     },
@@ -486,6 +503,59 @@ export const HOME_WHY_FEATURES = [
   },
 ] as const;
 
+export const HOME_JOURNEY = [
+  {
+    titleEn: 'Discover',
+    titleAr: 'اكتشاف',
+    outcomeEn: 'Shared brief & priorities',
+    outcomeAr: 'موجز وأولويات مشتركة',
+    bodyEn:
+      'Workshops with your stakeholders to capture goals, regulatory constraints, systems in scope, and what success must look like before any build starts.',
+    bodyAr:
+      'ورش عمل مع أصحاب المصلحة لديكم لتحديد الأهداف والقيود التنظيمية والأنظمة ضمن النطاق، وما يعنيه النجاح قبل بدء أي بناء.',
+  },
+  {
+    titleEn: 'Design',
+    titleAr: 'تصميم',
+    outcomeEn: 'Architecture & delivery plan',
+    outcomeAr: 'بنية وخطة تسليم',
+    bodyEn:
+      'We translate the brief into a solution blueprint — architecture, controls, integrations, risks, and a staged plan your teams can approve with confidence.',
+    bodyAr:
+      'نحوّل الموجز إلى مخطط حل — البنية والضوابط والتكاملات والمخاطر وخطة مرحلية يمكن لفرقكم اعتمادها بثقة.',
+  },
+  {
+    titleEn: 'Build',
+    titleAr: 'بناء',
+    outcomeEn: 'Working product increments',
+    outcomeAr: 'زيادات منتج جاهزة',
+    bodyEn:
+      'Implementation and integration move in transparent checkpoints. You see progress early, validate quality continuously, and avoid late surprises.',
+    bodyAr:
+      'يمضي التنفيذ والتكامل عبر نقاط متابعة شفافة. ترون التقدّم مبكراً وتتحققون من الجودة باستمرار وتتجنبون المفاجآت المتأخرة.',
+  },
+  {
+    titleEn: 'Launch',
+    titleAr: 'إطلاق',
+    outcomeEn: 'Controlled go-live',
+    outcomeAr: 'إطلاق مضبوط',
+    bodyEn:
+      'Rehearsed cutover, readiness checks, and training so go-live is calm, measurable, and owned jointly by Tayseer and your operations teams.',
+    bodyAr:
+      'قطع مُختبر وفحوصات جاهزية وتدريب ليكون الإطلاق هادئاً وقابلاً للقياس ومملوكاً بشكل مشترك بين تيسير وفرق التشغيل لديكم.',
+  },
+  {
+    titleEn: 'Grow',
+    titleAr: 'نمو',
+    outcomeEn: 'Operate & improve',
+    outcomeAr: 'تشغيل وتحسين',
+    bodyEn:
+      'After go-live we stay accountable — monitoring, support, optimisation, and roadmap iteration so the platform keeps matching how your bank evolves.',
+    bodyAr:
+      'بعد الإطلاق نبقى مسؤولين — مراقبة ودعم وتحسين وتطوير خارطة الطريق حتى تبقى المنصة مواكبة لتطور مصرفكم.',
+  },
+] as const;
+
 export const HOME_MANTRA = [
   {
     titleEn: 'Dedicated One Project, One Team',
@@ -522,11 +592,11 @@ export const HOME_HERO_PROOF = [
     detailAr: 'إدارة أمن المعلومات',
   },
   {
-    icon: 'suite',
-    titleEn: 'Six solutions',
-    titleAr: 'ستة حلول',
-    detailEn: 'Core, AI, mobile, managed ops',
-    detailAr: 'الأساسية والذكاء الاصطناعي والجوال والعمليات',
+    icon: 'grg',
+    titleEn: 'GRG Banking partner',
+    titleAr: 'شريك GRG Banking',
+    detailEn: 'Official UAE ATM & STM partner',
+    detailAr: 'الشريك الرسمي لأجهزة الصراف وSTM في الإمارات',
   },
   {
     icon: 'deploy',
@@ -563,7 +633,7 @@ export const SOLUTION_LINKS = [
     titleAr: 'أنظمة إدارة البرمجيات',
   },
   { slug: 'managed-services', titleEn: 'Managed Services', titleAr: 'الخدمات المُدارة' },
-  { slug: 'banking-systems', titleEn: 'Banking Systems', titleAr: 'الأنظمة المصرفية' },
+  { slug: 'banking-systems', titleEn: 'GRG Banking', titleAr: 'حلول GRG Banking' },
 ] as const;
 
 

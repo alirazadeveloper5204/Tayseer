@@ -59,8 +59,8 @@ export const SERVICE_HERO_COLLAGES: Record<string, HeroCollage> = {
   'banking-systems': {
     main: '/images/service-banking-systems.jpg',
     side: '/images/hero-banking-side.jpg',
-    badgeKicker: { en: 'Channels', ar: 'القنوات' },
-    badgeLabel: { en: 'Branch & ATM systems', ar: 'أنظمة الفروع وأجهزة الصراف' },
+    badgeKicker: { en: 'GRG Banking', ar: 'GRG Banking' },
+    badgeLabel: { en: 'Official UAE partner', ar: 'الشريك الرسمي في الإمارات' },
   },
 };
 

@@ -18,7 +18,7 @@ public sealed class CmsKnowledgeBuilder(AppDbContext db)
             Content: """
                 Tayseer Innovations is a FinTech company founded in 2016, operating in Saudi Arabia and the UAE.
                 Focus areas: core banking, AI (Fahim AI), mobile banking (MBuke), software management systems,
-                managed services, and banking hardware systems (including GRG).
+                managed services, and GRG Banking hardware (official UAE partner for GRGBanking — ATMs, STMs, self-service).
                 Contact email: info@tayseer.me. Website: tayseer.me.
                 ISO 27001 certified. Regions: Saudi Arabia and UAE.
                 """));
@@ -32,7 +32,7 @@ public sealed class CmsKnowledgeBuilder(AppDbContext db)
             Content: """
                 تيسير للابتكارات شركة تقنية مالية تأسست عام 2016 وتعمل في السعودية والإمارات.
                 مجالات التركيز: الخدمات المصرفية الأساسية، الذكاء الاصطناعي (فهيم)، الخدمات المصرفية عبر الجوال (إم بوكي)،
-                أنظمة إدارة البرمجيات، الخدمات المُدارة، والأنظمة المصرفية والأجهزة (بما فيها GRG).
+                أنظمة إدارة البرمجيات، الخدمات المُدارة، وحلول GRG Banking (الشريك الرسمي لـ GRGBanking في الإمارات — أجهزة صراف وSTM وخدمة ذاتية).
                 البريد: info@tayseer.me — الموقع: tayseer.me.
                 معتمدة ISO 27001. المناطق: السعودية والإمارات.
                 """));

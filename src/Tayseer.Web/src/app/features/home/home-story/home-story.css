@@ -179,7 +179,280 @@ html.dark .why-choose__card-body {
   color: rgba(255, 255, 255, 0.68);
 }
 
+/* —— Delivery path (interactive stages) —— */
+.home-journey__layout {
+  display: grid;
+  gap: clamp(1.75rem, 3vw, 2.75rem);
+}
 
+@media (min-width: 1024px) {
+  .home-journey__layout {
+    grid-template-columns: minmax(16rem, 0.9fr) minmax(0, 1.35fr);
+    align-items: start;
+    gap: clamp(2rem, 4vw, 3.5rem);
+  }
+}
+
+.home-journey__intro {
+  max-width: 28rem;
+}
+
+.home-journey__eyebrow {
+  margin: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #8b97a8;
+}
+
+html.dark .home-journey__eyebrow {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.home-journey__intro .type-section {
+  margin-top: clamp(0.65rem, 1.2vw, 0.9rem);
+  text-wrap: balance;
+}
+
+.home-journey__lead {
+  margin: clamp(0.85rem, 1.5vw, 1.1rem) 0 0;
+  font-size: clamp(0.95rem, 0.9rem + 0.25vw, 1.05rem);
+  line-height: 1.65;
+  color: #475569;
+}
+
+html.dark .home-journey__lead {
+  color: rgba(232, 238, 245, 0.72);
+}
+
+.home-journey__stage {
+  display: grid;
+  gap: 1.25rem;
+  opacity: 0;
+  transform: translateY(1.1rem);
+  transition:
+    opacity 560ms cubic-bezier(0.45, 0, 0.2, 1),
+    transform 560ms cubic-bezier(0.45, 0, 0.2, 1);
+  animation: home-section-reveal-fallback 0.45s ease 2.4s forwards;
+}
+
+.home-journey.is-revealed .home-journey__stage {
+  opacity: 1;
+  transform: none;
+  animation: none;
+}
+
+.home-journey__nav {
+  display: flex;
+  gap: 0.45rem;
+  overflow-x: auto;
+  padding-bottom: 0.15rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.home-journey__nav::-webkit-scrollbar {
+  display: none;
+}
+
+@media (min-width: 720px) {
+  .home-journey__nav {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    overflow: visible;
+  }
+}
+
+.home-journey__nav-item {
+  appearance: none;
+  flex: 0 0 auto;
+  min-width: 7.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0.85rem 0.95rem;
+  border: 0;
+  border-block-end: 2px solid rgba(13, 90, 140, 0.12);
+  border-radius: 0;
+  background: transparent;
+  color: #64748b;
+  text-align: start;
+  cursor: pointer;
+  transition:
+    color 220ms ease,
+    border-color 220ms ease,
+    background 220ms ease;
+}
+
+html.dark .home-journey__nav-item {
+  border-block-end-color: rgba(255, 255, 255, 0.12);
+  color: rgba(232, 238, 245, 0.55);
+}
+
+.home-journey__nav-item:hover {
+  color: #0d5a8c;
+  background: rgba(13, 90, 140, 0.04);
+}
+
+html.dark .home-journey__nav-item:hover {
+  color: #e8eef5;
+  background: rgba(0, 242, 254, 0.05);
+}
+
+.home-journey__nav-item.is-done {
+  color: #0d5a8c;
+}
+
+html.dark .home-journey__nav-item.is-done {
+  color: rgba(232, 238, 245, 0.78);
+}
+
+.home-journey__nav-item.is-active {
+  color: #0d5a8c;
+  border-block-end-color: #62a945;
+  background: rgba(98, 169, 69, 0.06);
+}
+
+html.dark .home-journey__nav-item.is-active {
+  color: #fff;
+  border-block-end-color: #00f2fe;
+  background: rgba(0, 242, 254, 0.06);
+}
+
+.home-journey__nav-item:focus-visible {
+  outline: 2px solid #62a945;
+  outline-offset: 2px;
+}
+
+.home-journey__nav-index {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: inherit;
+  opacity: 0.7;
+}
+
+.home-journey__nav-label {
+  font-size: 0.92rem;
+  font-weight: 650;
+  line-height: 1.25;
+}
+
+.home-journey__panel {
+  position: relative;
+  display: grid;
+  gap: 1rem;
+  min-height: 14.5rem;
+  padding: clamp(1.35rem, 2.5vw, 2rem);
+  overflow: hidden;
+  border: 1px solid rgba(13, 90, 140, 0.12);
+  border-radius: 1.25rem;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(238, 245, 250, 0.9)),
+    radial-gradient(700px 280px at 100% 0%, rgba(98, 169, 69, 0.1), transparent 55%);
+}
+
+html.dark .home-journey__panel {
+  border-color: rgba(255, 255, 255, 0.1);
+  background:
+    linear-gradient(145deg, rgba(15, 23, 42, 0.92), rgba(11, 28, 48, 0.88)),
+    radial-gradient(700px 280px at 100% 0%, rgba(0, 242, 254, 0.08), transparent 55%);
+}
+
+.home-journey__panel-index {
+  margin: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: clamp(3.5rem, 2.4rem + 4vw, 5.5rem);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  color: rgba(13, 90, 140, 0.1);
+  user-select: none;
+}
+
+html.dark .home-journey__panel-index {
+  color: rgba(0, 242, 254, 0.12);
+}
+
+.home-journey__panel-copy {
+  margin-top: -1.75rem;
+}
+
+.home-journey__panel-kicker {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #62a945;
+}
+
+html.dark .home-journey__panel-kicker {
+  color: #00f2fe;
+}
+
+.home-journey__panel-title {
+  margin: 0.45rem 0 0;
+  font-family: var(--font-display, inherit);
+  font-size: clamp(1.45rem, 1.2rem + 1vw, 1.9rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #0b3d5c;
+}
+
+html.dark .home-journey__panel-title {
+  color: #fff;
+}
+
+.home-journey__panel-body {
+  margin: 0.75rem 0 0;
+  max-width: 38rem;
+  font-size: clamp(0.95rem, 0.9rem + 0.2vw, 1.05rem);
+  line-height: 1.7;
+  color: #5b6b7c;
+}
+
+html.dark .home-journey__panel-body {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.home-journey__panel-progress {
+  margin-top: 1.35rem;
+  height: 2px;
+  width: min(100%, 18rem);
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(13, 90, 140, 0.12);
+}
+
+html.dark .home-journey__panel-progress {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.home-journey__panel-bar {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #0d5a8c, #62a945);
+  transition: width 450ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html.dark .home-journey__panel-bar {
+  background: linear-gradient(90deg, #00f2fe, #62a945);
+}
+
+html[dir='rtl'] .home-journey__panel-bar {
+  background: linear-gradient(270deg, #0d5a8c, #62a945);
+}
+
+html.dark[dir='rtl'] .home-journey__panel-bar {
+  background: linear-gradient(270deg, #00f2fe, #62a945);
+}
 
 .clients-slider__eyebrow {
   margin: 0;

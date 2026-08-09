@@ -697,6 +697,44 @@ html.dark .product-hero__media {
   margin-top: 0.65rem;
 }
 
+/* Center incomplete last rows (e.g. 5 cards in a 3-col layout). */
+.feature-card-grid {
+  --feature-card-gap: clamp(0.75rem, 0.6rem + 0.6vw, 1rem);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--feature-card-gap);
+  margin-top: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+.feature-card-grid > * {
+  flex: 1 1 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+@media (min-width: 640px) {
+  .feature-card-grid > * {
+    flex: 0 1 calc((100% - var(--feature-card-gap)) / 2);
+    max-width: calc((100% - var(--feature-card-gap)) / 2);
+  }
+}
+
+@media (min-width: 1024px) {
+  .feature-card-grid > * {
+    flex: 0 1 calc((100% - (2 * var(--feature-card-gap))) / 3);
+    max-width: calc((100% - (2 * var(--feature-card-gap))) / 3);
+  }
+}
+
+@media (min-width: 1024px) {
+  .feature-card-grid--cols-4 > * {
+    flex: 0 1 calc((100% - (3 * var(--feature-card-gap))) / 4);
+    max-width: calc((100% - (3 * var(--feature-card-gap))) / 4);
+  }
+}
+
 .zigzag {
   display: grid;
   gap: clamp(2.4rem, 5vw, 4.75rem);
@@ -877,9 +915,10 @@ html.dark .zigzag__copy p {
 
 .world-grid,
 .world-path {
-  display: grid;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: clamp(0.85rem, 1.5vw, 1.15rem);
-  grid-template-columns: 1fr;
   margin-top: clamp(1.5rem, 3vw, 2.25rem);
 }
 
@@ -887,23 +926,35 @@ html.dark .zigzag__copy p {
   display: block;
   min-width: 0;
   height: 100%;
+  flex: 1 1 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 @media (min-width: 640px) {
-  .world-grid,
-  .world-path {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 1100px) {
-  .world-grid {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+  .world-grid app-world-card {
+    flex: 0 1 calc((100% - clamp(0.85rem, 1.5vw, 1.15rem)) / 2);
+    max-width: calc((100% - clamp(0.85rem, 1.5vw, 1.15rem)) / 2);
   }
 
   .world-path {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+@media (min-width: 1100px) {
+  .world-grid app-world-card {
+    flex: 0 1 calc((100% - (4 * clamp(0.85rem, 1.5vw, 1.15rem))) / 5);
+    max-width: calc((100% - (4 * clamp(0.85rem, 1.5vw, 1.15rem))) / 5);
+  }
+
+  .world-path {
+    display: flex;
+    flex-wrap: nowrap;
     align-items: stretch;
+    justify-content: center;
     gap: 0.45rem;
   }
 }

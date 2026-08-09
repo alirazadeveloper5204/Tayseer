@@ -16,6 +16,7 @@ import { LocaleService } from '../../../core/i18n/locale.service';
 import { UiCopyService } from '../../../core/i18n/ui-copy.service';
 import {
   HOME_DEPLOY,
+  HOME_JOURNEY,
   HOME_KPI_STATS,
   HOME_MANTRA,
   HOME_TESTIMONIALS,
@@ -48,6 +49,7 @@ export class HomeStory {
   readonly isAr = computed(() => this.locale.lang() === 'ar');
 
   private readonly whyChooseSection = viewChild('whyChooseSection', { read: ElementRef });
+  private readonly journeySection = viewChild('journeySection', { read: ElementRef });
   private readonly mantraSection = viewChild('mantraSection', { read: ElementRef });
   private readonly pioneerSection = viewChild('pioneerSection', { read: ElementRef });
 
@@ -90,6 +92,43 @@ export class HomeStory {
 
   private static readonly mantraIcons = ['team', 'transparency', 'quality'] as const;
 
+  readonly journeyIndex = signal(0);
+  private journeyTimer: ReturnType<typeof setInterval> | null = null;
+  private journeyPaused = false;
+
+  readonly journey = computed(() =>
+    HOME_JOURNEY.map((step, i) => ({
+      id: i,
+      step: String(i + 1).padStart(2, '0'),
+      title: this.isAr() ? step.titleAr : step.titleEn,
+      body: this.isAr() ? step.bodyAr : step.bodyEn,
+      outcome: this.isAr() ? step.outcomeAr : step.outcomeEn,
+    })),
+  );
+
+  readonly activeJourney = computed(() => {
+    const steps = this.journey();
+    return steps[this.journeyIndex()] ?? steps[0];
+  });
+
+  selectJourney(index: number): void {
+    if (index < 0 || index >= HOME_JOURNEY.length) {
+      return;
+    }
+    this.journeyIndex.set(index);
+    this.restartJourneyTimer();
+  }
+
+  pauseJourney(): void {
+    this.journeyPaused = true;
+    this.clearJourneyTimer();
+  }
+
+  resumeJourney(): void {
+    this.journeyPaused = false;
+    this.restartJourneyTimer();
+  }
+
   readonly mantra = computed(() =>
     HomeStory.mantraIcons.map((icon, i) => {
       const m = HOME_MANTRA[i];
@@ -121,13 +160,65 @@ export class HomeStory {
       }
 
       this.watchWhyChooseCounters();
+      this.watchJourneySection();
       this.watchSectionReveal(this.resolveEl(this.mantraSection()));
       this.watchSectionReveal(this.resolveEl(this.pioneerSection()));
 
       this.destroyRef.onDestroy(() => {
         this.killCounters();
+        this.clearJourneyTimer();
       });
     });
+  }
+
+  private watchJourneySection(): void {
+    const section =
+      this.resolveEl(this.journeySection()) ?? this.document.getElementById('journey');
+    if (!section) {
+      return;
+    }
+
+    if (this.motion.prefersReducedMotion()) {
+      section.classList.add('is-revealed');
+      return;
+    }
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          section.classList.add('is-revealed');
+          this.restartJourneyTimer();
+          return;
+        }
+        this.clearJourneyTimer();
+      },
+      { threshold: 0.2, rootMargin: '0px 0px -8% 0px' },
+    );
+    io.observe(section);
+    this.destroyRef.onDestroy(() => {
+      io.disconnect();
+      this.clearJourneyTimer();
+    });
+  }
+
+  private restartJourneyTimer(): void {
+    this.clearJourneyTimer();
+    if (!isPlatformBrowser(this.platformId) || this.journeyPaused || this.motion.prefersReducedMotion()) {
+      return;
+    }
+    this.journeyTimer = setInterval(() => {
+      this.zone.run(() => {
+        const next = (this.journeyIndex() + 1) % HOME_JOURNEY.length;
+        this.journeyIndex.set(next);
+      });
+    }, 5200);
+  }
+
+  private clearJourneyTimer(): void {
+    if (this.journeyTimer) {
+      clearInterval(this.journeyTimer);
+      this.journeyTimer = null;
+    }
   }
 
   private resolveEl(ref?: ElementRef<HTMLElement> | null): HTMLElement | null {

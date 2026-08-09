@@ -191,3 +191,55 @@
     </div>
   </div>
 </section>
+
+
+<section id="journey" class="site-band home-journey" #journeySection>
+  <div class="site-container py-fluid-2xl">
+    <div class="home-journey__layout">
+      <header class="home-journey__intro">
+        <p class="home-journey__eyebrow">{{ copy().home.journeyEyebrow }}</p>
+        <h2 class="type-section text-brand-blue dark:text-white">{{ copy().home.journeyTitle }}</h2>
+        <p class="home-journey__lead">{{ copy().home.journeyLead }}</p>
+      </header>
+
+      <div
+        class="home-journey__stage"
+        (mouseenter)="pauseJourney()"
+        (mouseleave)="resumeJourney()"
+        (focusin)="pauseJourney()"
+        (focusout)="resumeJourney()"
+      >
+        <nav class="home-journey__nav" [attr.aria-label]="copy().home.journeyTitle">
+          @for (step of journey(); track step.id) {
+            <button
+              type="button"
+              class="home-journey__nav-item"
+              [class.is-active]="journeyIndex() === step.id"
+              [class.is-done]="journeyIndex() > step.id"
+              [attr.aria-current]="journeyIndex() === step.id ? 'step' : null"
+              (click)="selectJourney(step.id)"
+            >
+              <span class="home-journey__nav-index" aria-hidden="true">{{ step.step }}</span>
+              <span class="home-journey__nav-label">{{ step.title }}</span>
+            </button>
+          }
+        </nav>
+
+        <div class="home-journey__panel" [attr.aria-live]="'polite'">
+          <p class="home-journey__panel-index" aria-hidden="true">{{ activeJourney().step }}</p>
+          <div class="home-journey__panel-copy">
+            <p class="home-journey__panel-kicker">{{ activeJourney().outcome }}</p>
+            <h3 class="home-journey__panel-title">{{ activeJourney().title }}</h3>
+            <p class="home-journey__panel-body">{{ activeJourney().body }}</p>
+            <div class="home-journey__panel-progress" aria-hidden="true">
+              <span
+                class="home-journey__panel-bar"
+                [style.width.%]="((journeyIndex() + 1) / journey().length) * 100"
+              ></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
