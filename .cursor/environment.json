@@ -1,0 +1,22 @@
+{
+  "name": "Tayseer (Angular SSR + .NET 10 API + SQL Server)",
+  "user": "ubuntu",
+  "install": "bash .cursor/install.sh",
+  "start": "bash .cursor/start.sh",
+  "terminals": [
+    {
+      "name": "API",
+      "command": "source \"$HOME/.tayseer-db.env\" && cd src/Tayseer.Api && dotnet run",
+      "description": ".NET 10 minimal API on http://localhost:5095 (Swagger at /swagger)."
+    },
+    {
+      "name": "Web",
+      "command": "cd src/Tayseer.Web && npm start",
+      "description": "Angular 21 SSR dev server on http://localhost:4200 (proxies /api and /hubs to the API)."
+    }
+  ],
+  "ports": [
+    { "name": "web", "port": 4200 },
+    { "name": "api", "port": 5095 }
+  ]
+}
