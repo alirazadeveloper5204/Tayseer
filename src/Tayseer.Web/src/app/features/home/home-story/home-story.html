@@ -204,10 +204,10 @@
 
       <div
         class="home-journey__stage"
-        (mouseenter)="pauseJourney()"
-        (mouseleave)="resumeJourney()"
-        (focusin)="pauseJourney()"
-        (focusout)="resumeJourney()"
+        (mouseenter)="onJourneyPointerEnter()"
+        (mouseleave)="onJourneyPointerLeave($event)"
+        (focusin)="onJourneyFocusIn()"
+        (focusout)="onJourneyFocusOut($event)"
       >
         <nav class="home-journey__nav" [attr.aria-label]="copy().home.journeyTitle">
           @for (step of journey(); track step.id) {

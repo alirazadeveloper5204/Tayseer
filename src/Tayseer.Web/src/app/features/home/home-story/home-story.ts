@@ -95,6 +95,7 @@ export class HomeStory {
   readonly journeyIndex = signal(0);
   private journeyTimer: ReturnType<typeof setInterval> | null = null;
   private journeyPaused = false;
+  private journeyPointerInside = false;
 
   readonly journey = computed(() =>
     HOME_JOURNEY.map((step, i) => ({
@@ -119,12 +120,47 @@ export class HomeStory {
     this.restartJourneyTimer();
   }
 
-  pauseJourney(): void {
+  onJourneyPointerEnter(): void {
+    this.journeyPointerInside = true;
+    this.pauseJourney();
+  }
+
+  onJourneyPointerLeave(event: MouseEvent): void {
+    this.journeyPointerInside = false;
+    this.tryResumeJourney(event.currentTarget as HTMLElement | null);
+  }
+
+  onJourneyFocusIn(): void {
+    this.pauseJourney();
+  }
+
+  onJourneyFocusOut(event: FocusEvent): void {
+    const stage = event.currentTarget as HTMLElement | null;
+    const next = event.relatedTarget as Node | null;
+    // Tabbing between step buttons bubbles focusout; stay paused while focus remains inside.
+    if (stage && next && stage.contains(next)) {
+      return;
+    }
+    this.tryResumeJourney(stage);
+  }
+
+  private tryResumeJourney(stage: HTMLElement | null): void {
+    if (this.journeyPointerInside) {
+      return;
+    }
+    const active = this.document.activeElement;
+    if (stage && active && stage.contains(active)) {
+      return;
+    }
+    this.resumeJourney();
+  }
+
+  private pauseJourney(): void {
     this.journeyPaused = true;
     this.clearJourneyTimer();
   }
 
-  resumeJourney(): void {
+  private resumeJourney(): void {
     this.journeyPaused = false;
     this.restartJourneyTimer();
   }
