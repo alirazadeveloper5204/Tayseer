@@ -119,6 +119,7 @@ export class HomeStory {
   private journeyTimer: ReturnType<typeof setInterval> | null = null;
   private journeyPaused = false;
   private journeyPointerInside = false;
+  private journeyFocusInside = false;
 
   readonly journey = computed(() =>
     HOME_JOURNEY.map((step, i) => ({
@@ -150,29 +151,42 @@ export class HomeStory {
 
   onJourneyPointerLeave(event: MouseEvent): void {
     this.journeyPointerInside = false;
-    this.tryResumeJourney(event.currentTarget as HTMLElement | null);
+    this.scheduleTryResumeJourney(event.currentTarget as HTMLElement | null);
   }
 
   onJourneyFocusIn(): void {
+    this.journeyFocusInside = true;
     this.pauseJourney();
   }
 
   onJourneyFocusOut(event: FocusEvent): void {
     const stage = event.currentTarget as HTMLElement | null;
     const next = event.relatedTarget as Node | null;
-    // Tabbing between step buttons bubbles focusout; stay paused while focus remains inside.
     if (stage && next && stage.contains(next)) {
+      this.journeyFocusInside = true;
       return;
     }
-    this.tryResumeJourney(stage);
+    this.scheduleTryResumeJourney(stage);
+  }
+
+  private scheduleTryResumeJourney(stage: HTMLElement | null): void {
+    queueMicrotask(() => this.tryResumeJourney(stage));
+  }
+
+  private isJourneyFocusInside(stage: HTMLElement | null): boolean {
+    if (!stage) {
+      return false;
+    }
+    if (typeof stage.matches === 'function' && stage.matches(':focus-within')) {
+      return true;
+    }
+    const active = this.document.activeElement;
+    return !!active && stage.contains(active);
   }
 
   private tryResumeJourney(stage: HTMLElement | null): void {
-    if (this.journeyPointerInside) {
-      return;
-    }
-    const active = this.document.activeElement;
-    if (stage && active && stage.contains(active)) {
+    this.journeyFocusInside = this.isJourneyFocusInside(stage);
+    if (this.journeyPointerInside || this.journeyFocusInside) {
       return;
     }
     this.resumeJourney();
