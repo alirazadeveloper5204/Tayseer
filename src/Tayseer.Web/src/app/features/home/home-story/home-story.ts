@@ -8,8 +8,8 @@ import {
   viewChild,
   DestroyRef,
   ElementRef,
-  NgZone,
   PLATFORM_ID,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { LocaleService } from '../../../core/i18n/locale.service';
@@ -25,6 +25,7 @@ import {
 } from '../../../core/i18n/ui-copy';
 import { CLIENT_GALLERIES } from '../../../core/media/site-images';
 import { GsapService } from '../../../core/motion/gsap.service';
+import { ThemeService } from '../../../core/theme/theme.service';
 import { SiteCarousel } from '../../../shared/ui/site-carousel/site-carousel';
 import { RouterLink } from '@angular/router';
 
@@ -32,6 +33,9 @@ function formatKpi(value: number, decimals: number, prefix: string, suffix: stri
   const body = decimals > 0 ? value.toFixed(decimals) : String(Math.round(value));
   return `${prefix}${body}${suffix}`;
 }
+
+const KPI_ZEROS = HOME_KPI_STATS.map((s) => formatKpi(0, s.decimals, s.prefix, s.suffix));
+const KPI_FINALS = HOME_KPI_STATS.map((s) => formatKpi(s.value, s.decimals, s.prefix, s.suffix));
 
 @Component({
   selector: 'app-home-story',
@@ -42,23 +46,26 @@ function formatKpi(value: number, decimals: number, prefix: string, suffix: stri
 })
 export class HomeStory {
   private readonly locale = inject(LocaleService);
+  private readonly theme = inject(ThemeService);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly document = inject(DOCUMENT);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly zone = inject(NgZone);
+  private readonly cdr = inject(ChangeDetectorRef);
   private readonly motion = inject(GsapService);
   readonly copy = inject(UiCopyService).copy;
   readonly isAr = computed(() => this.locale.lang() === 'ar');
   readonly lang = computed(() => this.locale.lang());
+  readonly isDark = this.theme.isDark;
 
   private readonly whyChooseSection = viewChild('whyChooseSection', { read: ElementRef });
+  private readonly whyChooseKpis = viewChild('whyChooseKpis', { read: ElementRef });
+  private readonly partnersSection = viewChild('partnersSection', { read: ElementRef });
   private readonly journeySection = viewChild('journeySection', { read: ElementRef });
   private readonly mantraSection = viewChild('mantraSection', { read: ElementRef });
   private readonly pioneerSection = viewChild('pioneerSection', { read: ElementRef });
 
-  readonly kpiDisplays = signal(
-    HOME_KPI_STATS.map((s) => formatKpi(0, s.decimals, s.prefix, s.suffix)),
-  );
+  /** Start at finals so SSR / failed observers never leave the UI stuck on 0. */
+  readonly kpiDisplays = signal<string[]>([...KPI_FINALS]);
   readonly kpiCounting = signal(false);
 
   readonly featuredPartner = computed(() => {
@@ -66,7 +73,7 @@ export class HomeStory {
     return {
       id: partner.id,
       name: partner.name,
-      logo: partner.logo,
+      logo: this.isDark() ? partner.logoDark : partner.logo,
       tone: partner.tone as 'dark' | 'light',
       badge: this.isAr() ? partner.badgeAr : partner.badgeEn,
       href: partner.solutionSlug ? `/${this.lang()}/solutions/${partner.solutionSlug}` : null,
@@ -77,7 +84,7 @@ export class HomeStory {
     HOME_PARTNERS.filter((p) => !p.featured).map((p) => ({
       id: p.id,
       name: p.name,
-      logo: p.logo,
+      logo: this.isDark() ? p.logoDark : p.logo,
     })),
   );
 
@@ -141,6 +148,7 @@ export class HomeStory {
       return;
     }
     this.journeyIndex.set(index);
+    this.cdr.detectChanges();
     this.restartJourneyTimer();
   }
 
@@ -222,9 +230,11 @@ export class HomeStory {
     })),
   );
 
-  private counterTweens: { kill(): void }[] = [];
   private rafIds: number[] = [];
+  private counterRunId = 0;
   private whyVisible = false;
+  private counterObserver: IntersectionObserver | null = null;
+  private counterSafetyId: number | null = null;
 
   constructor() {
     afterNextRender(() => {
@@ -232,13 +242,18 @@ export class HomeStory {
         return;
       }
 
-      this.watchWhyChooseCounters();
+      this.bootstrapWhyChooseCounters();
       this.watchJourneySection();
+      this.watchSectionReveal(this.resolveEl(this.partnersSection()));
       this.watchSectionReveal(this.resolveEl(this.mantraSection()));
       this.watchSectionReveal(this.resolveEl(this.pioneerSection()));
 
       this.destroyRef.onDestroy(() => {
+        this.counterRunId += 1;
+        this.clearCounterSafety();
         this.killCounters();
+        this.counterObserver?.disconnect();
+        this.counterObserver = null;
         this.clearJourneyTimer();
       });
     });
@@ -280,10 +295,9 @@ export class HomeStory {
       return;
     }
     this.journeyTimer = setInterval(() => {
-      this.zone.run(() => {
-        const next = (this.journeyIndex() + 1) % HOME_JOURNEY.length;
-        this.journeyIndex.set(next);
-      });
+      const next = (this.journeyIndex() + 1) % HOME_JOURNEY.length;
+      this.journeyIndex.set(next);
+      this.cdr.detectChanges();
     }, 5200);
   }
 
@@ -298,159 +312,174 @@ export class HomeStory {
     return ref?.nativeElement ?? null;
   }
 
-  private watchWhyChooseCounters(): void {
-    const section =
-      this.resolveEl(this.whyChooseSection()) ??
-      this.document.getElementById('why-choose');
-    if (!section) {
+  private kpiRoot(): HTMLElement | null {
+    return (
+      this.resolveEl(this.whyChooseKpis()) ??
+      this.document.getElementById('whyChooseKpis') ??
+      this.document.querySelector<HTMLElement>('#why-choose .why-choose__kpis')
+    );
+  }
+
+  private paintKpis(values: readonly string[], counting: boolean): void {
+    this.kpiDisplays.set([...values]);
+    this.kpiCounting.set(counting);
+
+    const root = this.kpiRoot();
+    if (!root) {
+      try {
+        this.cdr.detectChanges();
+      } catch {
+        /* view may be detached during teardown */
+      }
       return;
     }
 
-    const sync = (inView: boolean) => {
-      if (inView) {
-        if (!this.whyVisible) {
-          this.whyVisible = true;
-          this.playWhyCounters();
-        }
-        return;
+    const nodes = root.querySelectorAll<HTMLElement>('.why-choose__kpi-value');
+    nodes.forEach((node, i) => {
+      const next = values[i];
+      if (next != null) {
+        node.textContent = next;
       }
-      if (this.whyVisible) {
-        this.whyVisible = false;
-        this.resetWhyCounters();
-      }
-    };
-
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        sync(!!entry?.isIntersecting);
-      },
-      { threshold: 0.25, rootMargin: '0px 0px -12% 0px' },
-    );
-
-    io.observe(section);
-    this.destroyRef.onDestroy(() => io.disconnect());
-
-    requestAnimationFrame(() => {
-      const rect = section.getBoundingClientRect();
-      const vh = window.innerHeight || 0;
-      if (rect.top < vh * 0.75 && rect.bottom > vh * 0.2) {
-        sync(true);
-      }
+      node.classList.toggle('is-counting', counting);
     });
   }
 
-  private resetWhyCounters(): void {
-    this.killCounters();
-    this.zone.run(() => {
-      this.kpiCounting.set(false);
-      this.kpiDisplays.set(HOME_KPI_STATS.map((s) => formatKpi(0, s.decimals, s.prefix, s.suffix)));
-    });
+  private bootstrapWhyChooseCounters(): void {
+    const win = this.document.defaultView;
+    if (!win) {
+      this.paintKpis(KPI_FINALS, false);
+      return;
+    }
+
+    let tries = 0;
+    const maxTries = 80;
+
+    const attempt = () => {
+      const target = this.kpiRoot();
+      if (!target || !target.isConnected) {
+        tries += 1;
+        if (tries >= maxTries) {
+          this.paintKpis(KPI_FINALS, false);
+          return;
+        }
+        win.setTimeout(attempt, 50);
+        return;
+      }
+
+      this.observeWhyChooseCounters(target);
+    };
+
+    // Wait one frame so hydrated DOM + viewChild are settled.
+    win.requestAnimationFrame(() => attempt());
+  }
+
+  private observeWhyChooseCounters(target: HTMLElement): void {
+    this.counterObserver?.disconnect();
+    this.counterObserver = new IntersectionObserver(
+      (entries) => {
+        const entry = entries.find((e) => e.target === target) ?? entries[0];
+        if (!entry) {
+          return;
+        }
+
+        if (entry.isIntersecting) {
+          if (!this.whyVisible) {
+            this.whyVisible = true;
+            this.playWhyCounters();
+          }
+          return;
+        }
+
+        if (this.whyVisible) {
+          this.whyVisible = false;
+          this.resetWhyCounters();
+        }
+      },
+      {
+        // KPI strip is short — 20% of it is easy to hit when it enters the viewport.
+        threshold: [0, 0.2, 0.4, 0.6, 1],
+      },
+    );
+    this.counterObserver.observe(target);
+
+    const rect = target.getBoundingClientRect();
+    const vh = this.document.defaultView?.innerHeight ?? 0;
+    const alreadyInView = vh > 0 && rect.top < vh && rect.bottom > 0 && rect.height > 0;
+    if (alreadyInView) {
+      this.whyVisible = true;
+      this.playWhyCounters();
+    } else {
+      this.resetWhyCounters();
+    }
   }
 
   private playWhyCounters(): void {
+    this.clearCounterSafety();
     this.killCounters();
-    this.zone.run(() => {
-      this.kpiCounting.set(true);
-      this.kpiDisplays.set(HOME_KPI_STATS.map((s) => formatKpi(0, s.decimals, s.prefix, s.suffix)));
-    });
+    const runId = ++this.counterRunId;
+
+    this.paintKpis(KPI_ZEROS, true);
 
     if (this.motion.prefersReducedMotion()) {
-      this.zone.run(() => {
-        this.kpiDisplays.set(
-          HOME_KPI_STATS.map((s) => formatKpi(s.value, s.decimals, s.prefix, s.suffix)),
-        );
-        this.kpiCounting.set(false);
-      });
+      this.paintKpis(KPI_FINALS, false);
       return;
     }
 
-    const api = this.motion.gsap;
-    if (api) {
-      this.playWithGsap(api);
-      return;
-    }
-    this.playWithRaf();
-  }
+    const durationMs = 1500;
+    const staggerMs = 80;
+    const startedAt = performance.now();
+    const win = this.document.defaultView;
 
-  private playWithGsap(api: NonNullable<GsapService['gsap']>): void {
-    let finished = 0;
-    HOME_KPI_STATS.forEach((meta, i) => {
-      const state = { val: 0 };
-      const tween = api.to(state, {
-        val: meta.value,
-        duration: 1.85,
-        delay: i * 0.12,
-        ease: 'power2.out',
-        overwrite: 'auto',
-        onUpdate: () => {
-          this.zone.run(() => {
-            this.kpiDisplays.update((list) => {
-              const next = list.slice();
-              next[i] = formatKpi(state.val, meta.decimals, meta.prefix, meta.suffix);
-              return next;
-            });
-          });
-        },
-        onComplete: () => {
-          finished += 1;
-          this.zone.run(() => {
-            this.kpiDisplays.update((list) => {
-              const next = list.slice();
-              next[i] = formatKpi(meta.value, meta.decimals, meta.prefix, meta.suffix);
-              return next;
-            });
-            if (finished >= HOME_KPI_STATS.length) {
-              this.kpiCounting.set(false);
-            }
-          });
-        },
+    const finish = () => {
+      if (runId !== this.counterRunId) {
+        return;
+      }
+      this.clearCounterSafety();
+      this.killCounters();
+      this.paintKpis(KPI_FINALS, false);
+    };
+
+    this.counterSafetyId =
+      win?.setTimeout(finish, durationMs + staggerMs * HOME_KPI_STATS.length + 500) ?? null;
+
+    const tick = (now: number) => {
+      if (runId !== this.counterRunId) {
+        return;
+      }
+
+      const displays = HOME_KPI_STATS.map((meta, i) => {
+        const local = Math.min(1, Math.max(0, (now - startedAt - i * staggerMs) / durationMs));
+        const eased = 1 - Math.pow(1 - local, 3);
+        return formatKpi(meta.value * eased, meta.decimals, meta.prefix, meta.suffix);
       });
-      this.counterTweens.push(tween);
-    });
+
+      // Direct DOM paint — reliable in zoneless Angular (signals alone may not re-render from rAF).
+      this.paintKpis(displays, true);
+
+      const done = now - startedAt >= durationMs + staggerMs * (HOME_KPI_STATS.length - 1);
+      if (!done) {
+        this.rafIds.push(requestAnimationFrame(tick));
+        return;
+      }
+
+      finish();
+    };
+
+    this.rafIds.push(requestAnimationFrame(tick));
   }
 
-  private playWithRaf(): void {
-    const durationMs = 1850;
-    let finished = 0;
+  private resetWhyCounters(): void {
+    this.clearCounterSafety();
+    this.counterRunId += 1;
+    this.killCounters();
+    this.paintKpis(KPI_ZEROS, false);
+  }
 
-    HOME_KPI_STATS.forEach((meta, i) => {
-      const delayMs = i * 120;
-      const startAt = performance.now() + delayMs;
-
-      const tick = (now: number) => {
-        if (now < startAt) {
-          this.rafIds.push(requestAnimationFrame(tick));
-          return;
-        }
-        const t = Math.min(1, (now - startAt) / durationMs);
-        const eased = 1 - Math.pow(1 - t, 3);
-        const val = meta.value * eased;
-        this.zone.run(() => {
-          this.kpiDisplays.update((list) => {
-            const next = list.slice();
-            next[i] = formatKpi(val, meta.decimals, meta.prefix, meta.suffix);
-            return next;
-          });
-        });
-        if (t < 1) {
-          this.rafIds.push(requestAnimationFrame(tick));
-          return;
-        }
-        finished += 1;
-        this.zone.run(() => {
-          this.kpiDisplays.update((list) => {
-            const next = list.slice();
-            next[i] = formatKpi(meta.value, meta.decimals, meta.prefix, meta.suffix);
-            return next;
-          });
-          if (finished >= HOME_KPI_STATS.length) {
-            this.kpiCounting.set(false);
-          }
-        });
-      };
-
-      this.rafIds.push(requestAnimationFrame(tick));
-    });
+  private clearCounterSafety(): void {
+    if (this.counterSafetyId != null) {
+      this.document.defaultView?.clearTimeout(this.counterSafetyId);
+      this.counterSafetyId = null;
+    }
   }
 
   private watchSectionReveal(section?: HTMLElement | null): void {
@@ -490,8 +519,6 @@ export class HomeStory {
   }
 
   private killCounters(): void {
-    this.counterTweens.forEach((tween) => tween.kill());
-    this.counterTweens = [];
     this.rafIds.forEach((id) => cancelAnimationFrame(id));
     this.rafIds = [];
   }

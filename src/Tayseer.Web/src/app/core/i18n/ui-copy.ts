@@ -612,7 +612,8 @@ export const HOME_PARTNERS = [
   {
     id: 'grg-banking',
     name: 'GRG Banking',
-    logo: '/images/partners/grg-banking-hq.png',
+    logo: '/images/partners/grg-banking-hq.png?v=4',
+    logoDark: '/images/partners/grg-banking-hq-dark.png?v=4',
     tone: 'light',
     featured: true,
     badgeEn: 'Official UAE partner',
@@ -622,7 +623,8 @@ export const HOME_PARTNERS = [
   {
     id: 'ultimate-solutions',
     name: 'Ultimate Solutions',
-    logo: '/images/partners/ultimate-solutions-hq.png',
+    logo: '/images/partners/ultimate-solutions-hq.png?v=4',
+    logoDark: '/images/partners/ultimate-solutions-hq-dark.png?v=4',
     tone: 'light',
     featured: false,
     badgeEn: null,
@@ -632,7 +634,8 @@ export const HOME_PARTNERS = [
   {
     id: 'odyssey-solutions',
     name: 'Odyssey Solutions',
-    logo: '/images/partners/odyssey-solutions-hq.png',
+    logo: '/images/partners/odyssey-solutions-hq.png?v=4',
+    logoDark: '/images/partners/odyssey-solutions-hq-dark.png?v=4',
     tone: 'light',
     featured: false,
     badgeEn: null,
@@ -642,7 +645,8 @@ export const HOME_PARTNERS = [
   {
     id: 'intertech',
     name: 'intertech',
-    logo: '/images/partners/intertech-hq.png',
+    logo: '/images/partners/intertech-hq.png?v=4',
+    logoDark: '/images/partners/intertech-hq-dark.png?v=4',
     tone: 'light',
     featured: false,
     badgeEn: null,
@@ -652,7 +656,8 @@ export const HOME_PARTNERS = [
   {
     id: 'dzd-tech',
     name: 'DZD TECH',
-    logo: '/images/partners/dzd-tech-hq.png',
+    logo: '/images/partners/dzd-tech-hq.png?v=4',
+    logoDark: '/images/partners/dzd-tech-hq-dark.png?v=4',
     tone: 'light',
     featured: false,
     badgeEn: null,

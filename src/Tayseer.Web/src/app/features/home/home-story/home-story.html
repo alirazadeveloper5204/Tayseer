@@ -1,5 +1,10 @@
 
-<section id="partners" class="home-partners site-band" aria-labelledby="home-partners-title">
+<section
+  id="partners"
+  class="home-partners site-band"
+  #partnersSection
+  aria-labelledby="home-partners-title"
+>
   <div class="home-partners__glow" aria-hidden="true"></div>
   <div class="site-container py-fluid-2xl">
     <header class="home-partners__intro">
@@ -20,8 +25,8 @@
           [src]="featuredPartner().logo"
           [alt]="featuredPartner().name"
           width="720"
-          height="405"
-          loading="lazy"
+          height="240"
+          loading="eager"
           decoding="async"
         />
       </div>
@@ -43,14 +48,15 @@
     <div class="home-partners__rail">
       <p class="home-partners__rail-label">{{ copy().home.partnersAllLabel }}</p>
       <ul class="home-partners__grid" [attr.aria-label]="copy().home.partnersAllLabel">
-        @for (partner of partnerGrid(); track partner.id) {
-          <li class="home-partners__tile">
+        @for (partner of partnerGrid(); track partner.id; let i = $index) {
+          <li class="home-partners__tile" [style.--i]="i">
+            <span class="home-partners__tile-shine" aria-hidden="true"></span>
             <img
               class="home-partners__logo"
               [src]="partner.logo"
               [alt]="partner.name"
               width="480"
-              height="270"
+              height="160"
               loading="lazy"
               decoding="async"
             />
@@ -70,7 +76,12 @@
     <p class="why-choose__subtitle">{{ copy().home.whyChooseSubtitle }}</p>
 
     <div class="why-choose__panel">
-      <div class="why-choose__kpis" [attr.aria-label]="copy().home.statsTitle">
+      <div
+        id="whyChooseKpis"
+        #whyChooseKpis
+        class="why-choose__kpis"
+        [attr.aria-label]="copy().home.statsTitle"
+      >
         @for (stat of kpiStats(); track stat.id; let last = $last) {
           <div class="why-choose__kpi" [class.why-choose__kpi--last]="last">
             <p
@@ -261,7 +272,9 @@
     <div class="home-journey__layout">
       <header class="home-journey__intro">
         <p class="home-journey__eyebrow">{{ copy().home.journeyEyebrow }}</p>
-        <h2 class="type-section text-brand-blue dark:text-white">{{ copy().home.journeyTitle }}</h2>
+        <h2 id="home-journey-title" class="home-journey__title">
+          {{ copy().home.journeyTitle }}
+        </h2>
         <p class="home-journey__lead">{{ copy().home.journeyLead }}</p>
       </header>
 
@@ -288,10 +301,10 @@
           }
         </nav>
 
-        <div class="home-journey__panel" [attr.aria-live]="'polite'">
-          <p class="home-journey__panel-index" aria-hidden="true">{{ activeJourney().step }}</p>
+        <article class="home-journey__panel" [attr.aria-live]="'polite'">
           @for (step of [activeJourney()]; track step.id) {
             <div class="home-journey__panel-copy">
+              <p class="home-journey__panel-index" aria-hidden="true">{{ step.step }}</p>
               <p class="home-journey__panel-kicker">{{ step.outcome }}</p>
               <h3 class="home-journey__panel-title">{{ step.title }}</h3>
               <p class="home-journey__panel-body">{{ step.body }}</p>
@@ -303,7 +316,7 @@
               </div>
             </div>
           }
-        </div>
+        </article>
       </div>
     </div>
   </div>
