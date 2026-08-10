@@ -1,5 +1,7 @@
 using System.Text;
+using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -10,6 +12,7 @@ using Tayseer.Api.Domain;
 using Tayseer.Api.Endpoints;
 using Tayseer.Api.Hubs;
 using Tayseer.Api.Options;
+using Tayseer.Api.Security;
 using Tayseer.Api.Services;
 using Tayseer.Api.Services.Rag;
 
@@ -31,7 +34,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     if (databaseProvider == "Npgsql")
     {
-        options.UseNpgsql(NormalizePostgresConnectionString(connectionString));
+        options.UseNpgsql(NormalizePostgresConnectionString(connectionString, builder.Configuration));
     }
     else
     {
@@ -69,19 +72,78 @@ builder.Services
         {
             OnMessageReceived = context =>
             {
-                var accessToken = context.Request.Query["access_token"];
-                var path = context.HttpContext.Request.Path;
-                if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs/agent-chat"))
+                // Prefer HttpOnly cookie (browser admin session).
+                if (context.Request.Cookies.TryGetValue(AuthCookie.Name, out var cookieToken)
+                    && !string.IsNullOrWhiteSpace(cookieToken))
                 {
-                    context.Token = accessToken;
+                    context.Token = cookieToken;
+                    return Task.CompletedTask;
                 }
 
+                // Optional Authorization: Bearer for non-browser clients / tooling.
                 return Task.CompletedTask;
             },
         };
     });
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(AuthPolicies.AdminOnly, policy => policy.RequireRole("Admin"));
+});
+
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    // Render / reverse proxies — trust X-Forwarded-* from the edge.
+    options.KnownIPNetworks.Clear();
+    options.KnownProxies.Clear();
+});
+
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.OnRejected = async (context, token) =>
+    {
+        context.HttpContext.Response.ContentType = "application/json";
+        await context.HttpContext.Response.WriteAsJsonAsync(
+            new ChatErrorDto("Too many requests. Try again later."),
+            token);
+    };
+
+    static string ClientKey(HttpContext httpContext) =>
+        httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+
+    options.AddPolicy(RateLimitPolicies.Auth, httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            ClientKey(httpContext),
+            _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 5,
+                Window = TimeSpan.FromMinutes(1),
+                QueueLimit = 0,
+            }));
+
+    options.AddPolicy(RateLimitPolicies.Contact, httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            ClientKey(httpContext),
+            _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 10,
+                Window = TimeSpan.FromMinutes(1),
+                QueueLimit = 0,
+            }));
+
+    options.AddPolicy(RateLimitPolicies.Chat, httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            ClientKey(httpContext),
+            _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 30,
+                Window = TimeSpan.FromMinutes(1),
+                QueueLimit = 0,
+            }));
+});
+
 builder.Services.AddSignalR();
 builder.Services.AddScoped<IPasswordHasher<AdminUser>, PasswordHasher<AdminUser>>();
 builder.Services.AddScoped<AuthService>();
@@ -137,6 +199,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseForwardedHeaders();
+app.UseSecurityHeaders();
 app.UseCors("AngularApp");
 
 // Render terminates TLS at the proxy; the container receives HTTP.
@@ -153,6 +217,7 @@ if (!app.Environment.IsDevelopment()
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseRateLimiter();
 
 app.MapGet("/health", () =>
         Results.Ok(new HealthDto("Healthy", "Tayseer.Api", DateTimeOffset.UtcNow)))
@@ -175,18 +240,21 @@ app.MapHub<AgentChatHub>("/hubs/agent-chat", options =>
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    await db.Database.EnsureCreatedAsync();
+    await DatabaseBootstrap.InitializeAsync(
+        db,
+        databaseProvider,
+        app.Environment.IsDevelopment(),
+        app.Logger);
+
     try
     {
-        _ = await db.AgentConversations.AsNoTracking().AnyAsync();
-        _ = await db.ContactInquiries.AsNoTracking().AnyAsync();
         await ContentSeeder.EnsureSeedAsync(db);
         await AuthSeeder.EnsureSeedAsync(
             db,
             scope.ServiceProvider.GetRequiredService<Microsoft.Extensions.Options.IOptions<AdminSeedOptions>>(),
             scope.ServiceProvider.GetRequiredService<IPasswordHasher<AdminUser>>());
     }
-    catch (Exception ex) when (app.Environment.IsDevelopment())
+    catch (Exception ex) when (app.Environment.IsDevelopment() && databaseProvider != "Npgsql")
     {
         app.Logger.LogWarning(ex, "Recreating local CMS database for schema update");
         await db.Database.EnsureDeletedAsync();
@@ -240,7 +308,7 @@ static bool LooksLikePostgres(string connectionString) =>
     || (connectionString.Contains("Host=", StringComparison.OrdinalIgnoreCase)
         && !connectionString.Contains("Server=", StringComparison.OrdinalIgnoreCase));
 
-static string NormalizePostgresConnectionString(string connectionString)
+static string NormalizePostgresConnectionString(string connectionString, IConfiguration configuration)
 {
     if (string.IsNullOrWhiteSpace(connectionString))
     {
@@ -248,6 +316,19 @@ static string NormalizePostgresConnectionString(string connectionString)
             "Postgres connection string is missing. Set ConnectionStrings__DefaultConnection " +
             "(Render: Internal Database URL from the Postgres service).");
     }
+
+    var sslMode = configuration["Database:SslMode"];
+    if (string.IsNullOrWhiteSpace(sslMode))
+    {
+        sslMode = "Require";
+    }
+
+    // Default true keeps Render/Neon working without shipping their CA bundle.
+    // Set Database__TrustServerCertificate=false when you mount a verifying CA.
+    var trustServerCertificate = !string.Equals(
+        configuration["Database:TrustServerCertificate"],
+        "false",
+        StringComparison.OrdinalIgnoreCase);
 
     // Npgsql's ConnectionStringBuilder rejects URI form (postgres:// / postgresql://).
     // Convert Render/Neon URLs to keyword format and require SSL.
@@ -267,9 +348,30 @@ static string NormalizePostgresConnectionString(string connectionString)
             $"Database={database}",
             $"Username={username}",
             $"Password={password}",
-            "SSL Mode=Require",
-            "Trust Server Certificate=true");
+            $"SSL Mode={sslMode}",
+            $"Trust Server Certificate={trustServerCertificate}");
     }
 
-    return connectionString;
+    // Keyword form: only add SSL defaults when not already specified.
+    var builder = new Npgsql.NpgsqlConnectionStringBuilder(connectionString);
+    if (builder.SslMode is Npgsql.SslMode.Disable or Npgsql.SslMode.Prefer)
+    {
+        if (Enum.TryParse<Npgsql.SslMode>(sslMode.Replace(" ", ""), ignoreCase: true, out var parsed))
+        {
+            builder.SslMode = parsed;
+        }
+        else
+        {
+            builder.SslMode = Npgsql.SslMode.Require;
+        }
+    }
+
+    var normalized = builder.ConnectionString;
+    if (!normalized.Contains("Trust Server Certificate", StringComparison.OrdinalIgnoreCase)
+        && !normalized.Contains("TrustServerCertificate", StringComparison.OrdinalIgnoreCase))
+    {
+        normalized = normalized.TrimEnd(';') + $";Trust Server Certificate={trustServerCertificate}";
+    }
+
+    return normalized;
 }

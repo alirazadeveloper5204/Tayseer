@@ -4,7 +4,8 @@ public record LoginRequestDto(string Email, string Password);
 
 public record AuthUserDto(Guid Id, string Email, string DisplayName);
 
-public record LoginResponseDto(string AccessToken, DateTimeOffset ExpiresAt, AuthUserDto User);
+/// <summary>Login API body — JWT is delivered via HttpOnly cookie, not this payload.</summary>
+public record LoginResponseDto(DateTimeOffset ExpiresAt, AuthUserDto User);
 
 public record AdminServiceListItemDto(
     Guid Id,

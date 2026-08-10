@@ -13,6 +13,21 @@ const browserDistFolder = join(import.meta.dirname, '../browser');
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 
+const isProd = process.env['NODE_ENV'] === 'production';
+
+/** Browser security headers for HTML/assets (API responses set their own via .NET). */
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  res.setHeader('X-Permitted-Cross-Domain-Policies', 'none');
+  if (isProd) {
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  }
+  next();
+});
+
 /** Upstream API for same-origin browser requests (/api, /hubs, /health). */
 const apiUpstream = (
   process.env['API_PROXY_TARGET'] ||
@@ -26,6 +41,7 @@ const apiProxy = apiUpstream
       target: apiUpstream,
       changeOrigin: true,
       ws: true,
+      xfwd: true,
       pathFilter: ['/api', '/hubs', '/health'],
     })
   : null;

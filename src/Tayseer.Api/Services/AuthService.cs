@@ -19,7 +19,7 @@ public sealed class AuthService(
 {
     private readonly JwtOptions _jwt = jwtOptions.Value;
 
-    public async Task<LoginResponseDto?> LoginAsync(LoginRequestDto request, CancellationToken ct)
+    public async Task<AuthLoginResult?> LoginAsync(LoginRequestDto request, CancellationToken ct)
     {
         var email = request.Email?.Trim().ToLowerInvariant() ?? "";
         if (email.Length == 0 || string.IsNullOrWhiteSpace(request.Password))
@@ -50,7 +50,7 @@ public sealed class AuthService(
         var expiresAt = DateTimeOffset.UtcNow.AddMinutes(Math.Clamp(_jwt.ExpiryMinutes, 15, 24 * 60));
         var token = CreateToken(user, expiresAt);
 
-        return new LoginResponseDto(
+        return new AuthLoginResult(
             token,
             expiresAt,
             new AuthUserDto(user.Id, user.Email, user.DisplayName));
@@ -97,3 +97,5 @@ public sealed class AuthService(
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }
+
+public sealed record AuthLoginResult(string AccessToken, DateTimeOffset ExpiresAt, AuthUserDto User);

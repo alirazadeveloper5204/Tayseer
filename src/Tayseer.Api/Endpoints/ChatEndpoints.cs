@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Options;
 using Tayseer.Api.Contracts;
 using Tayseer.Api.Options;
+using Tayseer.Api.Security;
 using Tayseer.Api.Services;
 using Tayseer.Api.Services.Rag;
 
@@ -62,6 +63,7 @@ public static class ChatEndpoints
                     statusCode: StatusCodes.Status500InternalServerError);
             }
         })
+        .RequireRateLimiting(RateLimitPolicies.Chat)
         .WithName("Chat")
         .Produces<ChatResponseDto>(StatusCodes.Status200OK)
         .Produces<ChatErrorDto>(StatusCodes.Status400BadRequest)
@@ -108,7 +110,7 @@ public static class ChatEndpoints
                     statusCode: StatusCodes.Status500InternalServerError);
             }
         })
-        .RequireAuthorization()
+        .RequireAuthorization(AuthPolicies.AdminOnly)
         .WithName("ChatKnowledgeReindex");
 
         return group;

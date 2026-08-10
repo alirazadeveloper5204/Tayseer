@@ -9,8 +9,8 @@ export interface LoginRequest {
   password: string;
 }
 
+/** JWT is in an HttpOnly cookie — not returned in the JSON body. */
 export interface LoginResponse {
-  accessToken: string;
   expiresAt: string;
   user: AuthUser;
 }

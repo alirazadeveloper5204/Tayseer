@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using Tayseer.Api.Contracts;
 using Tayseer.Api.Data;
 using Tayseer.Api.Domain;
+using Tayseer.Api.Security;
 
 namespace Tayseer.Api.Endpoints;
 
@@ -71,6 +72,7 @@ public static class ContactEndpoints
                 $"/api/v1/contact/{entity.Id}",
                 new ContactInquiryResponseDto(entity.Id, entity.CreatedAt));
         })
+        .RequireRateLimiting(RateLimitPolicies.Contact)
         .WithName("SubmitContactInquiry");
 
         return group;

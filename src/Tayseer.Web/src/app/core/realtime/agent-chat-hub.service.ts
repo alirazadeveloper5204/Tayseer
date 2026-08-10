@@ -15,12 +15,10 @@ import {
   AgentMessage,
   AgentNotificationPayload,
 } from '../../models/agent-chat.model';
-import { AuthService } from '../auth/auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class AgentChatHubService {
   private readonly platformId = inject(PLATFORM_ID);
-  private readonly auth = inject(AuthService);
 
   private connection: HubConnection | null = null;
   private connectPromise: Promise<void> | null = null;
@@ -49,14 +47,15 @@ export class AgentChatHubService {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
-    await this.ensureConnected('admin', () => this.auth.token());
+    // Cookie is sent automatically (same-origin / withCredentials).
+    await this.ensureConnected('admin');
   }
 
   async connectAsVisitor(): Promise<void> {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
-    await this.ensureConnected('visitor', () => null);
+    await this.ensureConnected('visitor');
   }
 
   async joinConversation(conversationId: string): Promise<void> {
@@ -82,10 +81,7 @@ export class AgentChatHubService {
     }
   }
 
-  private async ensureConnected(
-    mode: 'admin' | 'visitor',
-    accessTokenFactory: () => string | null,
-  ): Promise<void> {
+  private async ensureConnected(mode: 'admin' | 'visitor'): Promise<void> {
     if (this.connection && this.mode === mode) {
       if (this.connection.state === HubConnectionState.Connected) {
         return;
@@ -102,19 +98,11 @@ export class AgentChatHubService {
 
     if (!this.connection) {
       this.mode = mode;
-      const builder = new HubConnectionBuilder()
+      this.connection = new HubConnectionBuilder()
+        .withUrl(this.hubUrl, { withCredentials: true })
         .withAutomaticReconnect()
-        .configureLogging(LogLevel.Warning);
-
-      if (mode === 'admin') {
-        this.connection = builder
-          .withUrl(this.hubUrl, {
-            accessTokenFactory: () => accessTokenFactory() ?? '',
-          })
-          .build();
-      } else {
-        this.connection = builder.withUrl(this.hubUrl).build();
-      }
+        .configureLogging(LogLevel.Warning)
+        .build();
 
       this.connection.on('ConversationCreated', (payload: AgentConversationSummary) => {
         this.conversationCreatedSubject.next(payload);

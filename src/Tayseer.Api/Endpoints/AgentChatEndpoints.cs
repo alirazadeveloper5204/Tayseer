@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Tayseer.Api.Contracts;
+using Tayseer.Api.Security;
 using Tayseer.Api.Services;
 
 namespace Tayseer.Api.Endpoints;
@@ -26,6 +27,7 @@ public static class AgentChatEndpoints
             }
         })
         .AllowAnonymous()
+        .RequireRateLimiting(RateLimitPolicies.Chat)
         .WithName("StartAgentChat");
 
         publicGroup.MapGet("/conversations/{id:guid}", async (
@@ -43,6 +45,7 @@ public static class AgentChatEndpoints
             return detail is null ? Results.NotFound() : Results.Ok(detail);
         })
         .AllowAnonymous()
+        .RequireRateLimiting(RateLimitPolicies.Chat)
         .WithName("GetVisitorAgentChat");
 
         publicGroup.MapPost("/conversations/{id:guid}/messages", async (
@@ -71,11 +74,12 @@ public static class AgentChatEndpoints
             }
         })
         .AllowAnonymous()
+        .RequireRateLimiting(RateLimitPolicies.Chat)
         .WithName("PostVisitorAgentMessage");
 
         var adminGroup = app.MapGroup("/api/v1/admin/agent-chat")
             .WithTags("AdminAgentChat")
-            .RequireAuthorization();
+            .RequireAuthorization(AuthPolicies.AdminOnly);
 
         adminGroup.MapGet("/conversations", async (
             string? status,

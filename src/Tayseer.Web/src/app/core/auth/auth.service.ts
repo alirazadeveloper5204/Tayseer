@@ -2,12 +2,13 @@ import { Injectable, PLATFORM_ID, computed, inject, signal } from '@angular/core
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable, catchError, map, of, tap } from 'rxjs';
+import { Observable, catchError, map, of, shareReplay, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { AuthUser, LoginRequest, LoginResponse } from '../../models/admin.model';
 
-const TOKEN_KEY = 'tayseer-admin-token';
-const USER_KEY = 'tayseer-admin-user';
+/** Legacy keys — cleared so old JWTs are not left in localStorage. */
+const LEGACY_TOKEN_KEY = 'tayseer-admin-token';
+const LEGACY_USER_KEY = 'tayseer-admin-user';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -15,12 +16,12 @@ export class AuthService {
   private readonly router = inject(Router);
   private readonly platformId = inject(PLATFORM_ID);
 
-  private readonly tokenSignal = signal<string | null>(this.readToken());
-  private readonly userSignal = signal<AuthUser | null>(this.readUser());
+  private readonly userSignal = signal<AuthUser | null>(null);
+  private readonly sessionResolved = signal(false);
+  private sessionCheck$: Observable<boolean> | null = null;
 
-  readonly token = this.tokenSignal.asReadonly();
   readonly user = this.userSignal.asReadonly();
-  readonly isAuthenticated = computed(() => !!this.tokenSignal());
+  readonly isAuthenticated = computed(() => !!this.userSignal());
 
   private get baseUrl(): string {
     return isPlatformBrowser(this.platformId)
@@ -28,71 +29,82 @@ export class AuthService {
       : environment.ssrApiBaseUrl;
   }
 
+  private get httpOpts() {
+    return { withCredentials: true as const };
+  }
+
   login(request: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.baseUrl}/api/v1/auth/login`, request).pipe(
-      tap((res) => this.persist(res)),
-    );
+    return this.http
+      .post<LoginResponse>(`${this.baseUrl}/api/v1/auth/login`, request, this.httpOpts)
+      .pipe(
+        tap((res) => {
+          this.clearLegacyStorage();
+          this.userSignal.set(res.user);
+          this.sessionResolved.set(true);
+          this.sessionCheck$ = null;
+        }),
+      );
   }
 
   logout(navigate = true): void {
-    this.tokenSignal.set(null);
-    this.userSignal.set(null);
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.removeItem(TOKEN_KEY);
-      localStorage.removeItem(USER_KEY);
-    }
-    if (navigate) {
-      void this.router.navigateByUrl('/admin/login');
-    }
-  }
+    const finish = () => {
+      this.userSignal.set(null);
+      this.sessionResolved.set(true);
+      this.sessionCheck$ = null;
+      this.clearLegacyStorage();
+      if (navigate) {
+        void this.router.navigateByUrl('/admin/login');
+      }
+    };
 
-  refreshMe(): Observable<AuthUser | null> {
-    if (!this.tokenSignal()) {
-      return of(null);
-    }
-    return this.http.get<AuthUser>(`${this.baseUrl}/api/v1/auth/me`).pipe(
-      tap((user) => {
-        this.userSignal.set(user);
-        if (isPlatformBrowser(this.platformId)) {
-          localStorage.setItem(USER_KEY, JSON.stringify(user));
-        }
-      }),
-      catchError(() => {
-        this.logout(false);
-        return of(null);
-      }),
-      map((user) => user),
-    );
-  }
-
-  private persist(res: LoginResponse): void {
-    this.tokenSignal.set(res.accessToken);
-    this.userSignal.set(res.user);
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem(TOKEN_KEY, res.accessToken);
-      localStorage.setItem(USER_KEY, JSON.stringify(res.user));
-    }
-  }
-
-  private readToken(): string | null {
     if (!isPlatformBrowser(this.platformId)) {
-      return null;
+      finish();
+      return;
     }
-    return localStorage.getItem(TOKEN_KEY);
+
+    this.http.post(`${this.baseUrl}/api/v1/auth/logout`, {}, this.httpOpts).subscribe({
+      next: () => finish(),
+      error: () => finish(),
+    });
   }
 
-  private readUser(): AuthUser | null {
+  /** Resolves admin session from the HttpOnly cookie (call from route guards). */
+  ensureSession(): Observable<boolean> {
     if (!isPlatformBrowser(this.platformId)) {
-      return null;
+      return of(false);
     }
-    const raw = localStorage.getItem(USER_KEY);
-    if (!raw) {
-      return null;
+
+    if (this.sessionResolved()) {
+      return of(!!this.userSignal());
     }
-    try {
-      return JSON.parse(raw) as AuthUser;
-    } catch {
-      return null;
+
+    if (!this.sessionCheck$) {
+      this.sessionCheck$ = this.http
+        .get<AuthUser>(`${this.baseUrl}/api/v1/auth/me`, this.httpOpts)
+        .pipe(
+          tap((user) => {
+            this.userSignal.set(user);
+            this.sessionResolved.set(true);
+          }),
+          map(() => true),
+          catchError(() => {
+            this.userSignal.set(null);
+            this.sessionResolved.set(true);
+            this.clearLegacyStorage();
+            return of(false);
+          }),
+          shareReplay(1),
+        );
     }
+
+    return this.sessionCheck$;
+  }
+
+  private clearLegacyStorage(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    localStorage.removeItem(LEGACY_TOKEN_KEY);
+    localStorage.removeItem(LEGACY_USER_KEY);
   }
 }

@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Tayseer.Api.Contracts;
 using Tayseer.Api.Data;
 using Tayseer.Api.Domain;
+using Tayseer.Api.Security;
 
 namespace Tayseer.Api.Endpoints;
 
@@ -11,7 +12,7 @@ public static class AdminContentEndpoints
     {
         var group = app.MapGroup("/api/v1/admin")
             .WithTags("Admin")
-            .RequireAuthorization();
+            .RequireAuthorization(AuthPolicies.AdminOnly);
 
         MapServices(group);
         MapOffices(group);

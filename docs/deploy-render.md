@@ -199,6 +199,61 @@ docker build -f src/Tayseer.Web/Dockerfile \
 docker run --rm -p 4000:4000 tayseer-web
 ```
 
+## Security (Sprint 1)
+
+| Control | Where | Notes |
+|---------|--------|------|
+| Rate limiting | API | Login **5/min**, contact **10/min**, chat/agent-chat **30/min** per client IP → `429` |
+| Admin role | API | CMS / admin agent-chat / `/auth/me` / knowledge reindex require role `Admin` |
+| Security headers | API + Web | `HSTS` (non-localhost), `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy` |
+| Client IP | API + Web proxy | `UseForwardedHeaders` + proxy `xfwd` so limits see the real visitor IP behind Render |
+
+## Security (Sprint 2)
+
+| Control | Where | Notes |
+|---------|--------|------|
+| HttpOnly JWT cookie | API + Web | Login sets `tayseer_auth` (`HttpOnly`, `Secure` on HTTPS/Render, `SameSite=Lax`). Token is **not** in `localStorage` or the login JSON body. CSRF mitigated via `SameSite=Lax` + same-origin `/api` proxy. |
+| Session restore | Web | Admin route guards call `GET /api/v1/auth/me` with cookies. |
+| Logout | API | `POST /api/v1/auth/logout` clears the cookie. |
+| SignalR | Web | Hub connects with `withCredentials` (no `access_token` query string). |
+
+Local/dev: keep using the Angular proxy (`apiBaseUrl: ''`) so the cookie is host-scoped to `localhost:4200`.
+
+## Security (Sprint 3)
+
+| Control | Where | Notes |
+|---------|--------|------|
+| EF migrations (Postgres) | API | Production uses `Migrate` via `Data/Migrations`. Existing EnsureCreated DBs are **baselined** (history rows only — no DROP). Local SQL Server still uses `EnsureCreated`. |
+| SSL in transit | API | `Database:SslMode` (default `Require`) + `Database:TrustServerCertificate` (default `true` for Render compatibility). |
+| Least-privilege DB user | Ops | Optional: run `docs/sql/postgres-app-role.sql`, then point `ConnectionStrings__DefaultConnection` at `tayseer_app`. Use the owner account only for schema migrations. |
+
+### Adding a schema change later
+
+```bash
+cd src/Tayseer.Api
+dotnet ef migrations add YourChangeName --output-dir Data/Migrations
+```
+
+Redeploy the API so `Migrate` runs. If the app uses `tayseer_app`, temporarily switch to the owner connection for that deploy (or run migrations from a privileged job).
+
+### Tighten SSL further (optional)
+
+When you can trust the provider CA:
+
+```text
+Database__SslMode=VerifyFull
+Database__TrustServerCertificate=false
+```
+
+If the API fails to connect, keep the Sprint 3 defaults (`Require` + trust certificate).
+
+### Least-privilege checklist
+
+1. Deploy Sprint 3 once with the current (owner) connection so migrations/baseline succeed.
+2. Edit and run `docs/sql/postgres-app-role.sql` in the Render/Neon SQL console.
+3. Update `ConnectionStrings__DefaultConnection` to use `tayseer_app` + its password.
+4. Redeploy and confirm `/health/ready` is healthy.
+
 ## Third-party / CDN
 
 - **Fonts** are self-hosted via `@fontsource/*` (bundled with the web app). There is no Google Fonts CDN link in `index.html`.
