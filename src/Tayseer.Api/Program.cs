@@ -22,8 +22,19 @@ builder.Services.AddSwaggerGen();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? "Server=(localdb)\\mssqllocaldb;Database=TayseerCms;Trusted_Connection=True;TrustServerCertificate=True";
 
+var databaseProvider = ResolveDatabaseProvider(builder.Configuration, connectionString);
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(connectionString));
+{
+    if (databaseProvider == "Npgsql")
+    {
+        options.UseNpgsql(NormalizePostgresConnectionString(connectionString));
+    }
+    else
+    {
+        options.UseSqlServer(connectionString);
+    }
+});
 
 builder.Services.Configure<OllamaOptions>(builder.Configuration.GetSection(OllamaOptions.SectionName));
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(JwtOptions.SectionName));
@@ -87,14 +98,14 @@ builder.Services.AddSingleton<InMemoryKnowledgeIndex>();
 builder.Services.AddScoped<CmsKnowledgeBuilder>();
 builder.Services.AddScoped<KnowledgeIndexService>();
 
+var corsOrigins = builder.Configuration.GetSection("Cors:AngularOrigins").Get<string[]>()
+    ?? ["http://localhost:4200", "https://localhost:4200", "http://127.0.0.1:4200"];
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AngularDev", policy =>
+    options.AddPolicy("AngularApp", policy =>
     {
-        policy.WithOrigins(
-                "http://localhost:4200",
-                "https://localhost:4200",
-                "http://127.0.0.1:4200")
+        policy.WithOrigins(corsOrigins)
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
@@ -113,7 +124,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("AngularDev");
+app.UseCors("AngularApp");
 
 if (!app.Environment.IsDevelopment())
 {
@@ -187,3 +198,35 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.Run();
+
+static string ResolveDatabaseProvider(IConfiguration configuration, string connectionString)
+{
+    var configured = configuration["Database:Provider"];
+    if (!string.IsNullOrWhiteSpace(configured))
+    {
+        return configured.Equals("Npgsql", StringComparison.OrdinalIgnoreCase)
+            || configured.Equals("Postgres", StringComparison.OrdinalIgnoreCase)
+            || configured.Equals("PostgreSQL", StringComparison.OrdinalIgnoreCase)
+            ? "Npgsql"
+            : "SqlServer";
+    }
+
+    return LooksLikePostgres(connectionString) ? "Npgsql" : "SqlServer";
+}
+
+static bool LooksLikePostgres(string connectionString) =>
+    connectionString.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase)
+    || connectionString.StartsWith("postgresql://", StringComparison.OrdinalIgnoreCase)
+    || (connectionString.Contains("Host=", StringComparison.OrdinalIgnoreCase)
+        && !connectionString.Contains("Server=", StringComparison.OrdinalIgnoreCase));
+
+static string NormalizePostgresConnectionString(string connectionString)
+{
+    // Render / Neon URI form works with Npgsql once the scheme is postgresql://
+    if (connectionString.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase))
+    {
+        return "postgresql://" + connectionString["postgres://".Length..];
+    }
+
+    return connectionString;
+}

@@ -1,0 +1,42 @@
+# Build from repo root:
+#   docker build -f src/Tayseer.Web/Dockerfile --build-arg API_BASE_URL=https://YOUR-API.onrender.com -t tayseer-web .
+FROM node:22-bookworm AS build
+WORKDIR /app
+
+ARG API_BASE_URL=https://tayseer-api.onrender.com
+ARG SSR_API_BASE_URL=
+
+COPY src/Tayseer.Web/package.json src/Tayseer.Web/package-lock.json ./
+RUN npm ci
+
+COPY src/Tayseer.Web/ ./
+
+ENV API_BASE_URL=${API_BASE_URL}
+ENV SSR_API_BASE_URL=${SSR_API_BASE_URL}
+
+RUN node <<'EOF'
+const fs = require('fs');
+const api = process.env.API_BASE_URL;
+const ssr = process.env.SSR_API_BASE_URL || api;
+const content = `export const environment = {
+  production: true,
+  apiBaseUrl: '${api}',
+  ssrApiBaseUrl: '${ssr}',
+  useStaticContent: false,
+};
+`;
+fs.writeFileSync('src/environments/environment.production.ts', content);
+console.log('Wrote production environment:\n' + content);
+EOF
+
+RUN npm run build
+
+FROM node:22-bookworm-slim AS final
+WORKDIR /app
+ENV NODE_ENV=production
+ENV PORT=4000
+EXPOSE 4000
+
+COPY --from=build /app/dist/Tayseer.Web ./dist/Tayseer.Web
+
+CMD ["node", "dist/Tayseer.Web/server/server.mjs"]

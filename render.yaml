@@ -1,0 +1,62 @@
+# Render Blueprint — free tier demo stack
+# https://render.com/docs/blueprint-spec
+#
+# Notes:
+# - Free web services sleep after ~15 min idle (cold start on next request).
+# - Free Render Postgres expires after 30 days; use Neon free for longer-lived DB.
+# - After first deploy, set Cors__AngularOrigins__0 to your web service URL.
+
+services:
+  - type: web
+    name: tayseer-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./src/Tayseer.Api/Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: Database__Provider
+        value: Npgsql
+      - key: ConnectionStrings__DefaultConnection
+        fromDatabase:
+          name: tayseer-db
+          property: connectionString
+      - key: Cors__AngularOrigins__0
+        sync: false
+      - key: Jwt__SigningKey
+        generateValue: true
+      - key: Jwt__Issuer
+        value: Tayseer.Api
+      - key: Jwt__Audience
+        value: Tayseer.Admin
+      - key: AdminSeed__Email
+        value: admin@tayseer.me
+      - key: AdminSeed__DisplayName
+        value: Tayseer Admin
+      - key: AdminSeed__Password
+        sync: false
+      - key: Ollama__RagEnabled
+        value: "false"
+
+  - type: web
+    name: tayseer-web
+    runtime: docker
+    plan: free
+    dockerfilePath: ./src/Tayseer.Web/Dockerfile
+    dockerContext: .
+    envVars:
+      - key: NODE_ENV
+        value: production
+    dockerBuildArgs:
+      # Set this to your API public URL after the first API deploy (or use the default name).
+      API_BASE_URL: https://tayseer-api.onrender.com
+      # Optional: private network URL for SSR fetches (same region).
+      # SSR_API_BASE_URL: http://tayseer-api:10000
+
+databases:
+  - name: tayseer-db
+    plan: free
+    databaseName: tayseer
+    user: tayseer

@@ -1,0 +1,13 @@
+.git
+.vs
+**/.vs
+**/bin
+**/obj
+**/node_modules
+**/dist
+**/.angular
+**/TestResults
+**/*.user
+**/appsettings.*.local.json
+.cursor
+agent-transcripts
