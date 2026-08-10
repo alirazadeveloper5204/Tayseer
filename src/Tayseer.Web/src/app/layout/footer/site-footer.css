@@ -1,0 +1,14 @@
+.site-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--brand-blue-900);
+  color: var(--ink-inverse);
+}
+
+html.dark .site-footer {
+  background: var(--surface-dark);
+}
+
+.site-footer__bar {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.2);
+}

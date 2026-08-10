@@ -9,6 +9,7 @@ import { solutionPath } from '../../core/content/static-services';
   selector: 'app-site-footer',
   imports: [RouterLink],
   templateUrl: './site-footer.html',
+  styleUrl: './site-footer.css',
 })
 export class SiteFooter {
   private readonly locale = inject(LocaleService);
