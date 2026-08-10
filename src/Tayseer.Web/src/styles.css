@@ -232,28 +232,25 @@
   }
 
   .glass-card {
-    @apply rounded-2xl border backdrop-blur-md;
-    background: rgba(255, 255, 255, 0.9);
+    @apply rounded-2xl border;
+    background: rgba(255, 255, 255, 0.96);
     border-color: rgba(13, 90, 140, 0.12);
     box-shadow: var(--elev-2);
     transition:
       transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
       box-shadow 0.35s ease,
       border-color 0.35s ease;
-    will-change: transform, box-shadow, border-color;
     transform: translateZ(0);
   }
 
   html.dark .glass-card {
-    background: rgba(15, 23, 42, 0.75);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background: rgba(15, 23, 42, 0.92);
     border: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: var(--elev-2);
   }
 
   .glass-card:hover {
-    transform: translateY(-6px) scale(1.015);
+    transform: translateY(-4px);
     border-color: rgba(13, 90, 140, 0.35);
     box-shadow: var(--elev-3);
   }
@@ -269,7 +266,6 @@
       transform 140ms cubic-bezier(0.16, 1, 0.3, 1),
       box-shadow 260ms cubic-bezier(0.16, 1, 0.3, 1),
       filter 260ms ease;
-    will-change: transform;
     transform: translateZ(0);
   }
 
@@ -319,14 +315,14 @@
 
 
   .site-chrome {
-    background: rgba(3, 7, 18, 0.72);
-    backdrop-filter: blur(20px) saturate(1.15);
-    -webkit-backdrop-filter: blur(20px) saturate(1.15);
+    background: rgba(3, 7, 18, 0.88);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     box-shadow: var(--elev-chrome);
   }
 
   html:not(.dark) .site-chrome {
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.94);
     box-shadow: var(--elev-chrome);
   }
 
@@ -336,16 +332,14 @@
   .site-band {
     position: relative;
     isolation: isolate;
-    background: rgba(3, 7, 18, 0.58) !important;
-    backdrop-filter: blur(20px) saturate(1.05);
-    -webkit-backdrop-filter: blur(20px) saturate(1.05);
+    background: #0b1220 !important;
     border-block: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   html:not(.dark) .services-bento,
   html:not(.dark) .clients-band,
   html:not(.dark) .site-band {
-    background: rgba(255, 255, 255, 0.78) !important;
+    background: #f7f9fc !important;
     border-block-color: rgba(9, 90, 141, 0.12);
   }
 
@@ -376,20 +370,18 @@
   @media (hover: hover) and (pointer: fine) {
     html.dark .services-bento img,
     html.dark .clients-band img:not(.clients-slider__photo):not(.clients-slider__avatar) {
-      opacity: 0.85;
-      filter: grayscale(20%) brightness(0.95);
+      opacity: 0.9;
+      filter: grayscale(12%) brightness(0.97);
       transition:
-        transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-        opacity 0.6s ease,
-        filter 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-      will-change: transform, opacity, filter;
-      transform: translateZ(0);
+        transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 0.45s ease,
+        filter 0.45s ease;
     }
 
 
     html.dark .services-bento a:hover .service-card__media img {
       opacity: 1;
-      filter: grayscale(0%) brightness(1.1);
+      filter: grayscale(0%) brightness(1.08);
     }
   }
 }

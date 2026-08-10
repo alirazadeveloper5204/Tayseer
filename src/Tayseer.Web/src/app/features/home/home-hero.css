@@ -173,16 +173,22 @@ html[dir='rtl'] .home-hero__graphic {
 
 .home-hero__graphic .hh-pulse {
   fill: #62a945;
-  filter: drop-shadow(0 0 4px rgba(98, 169, 69, 0.85));
   transform-box: fill-box;
   transform-origin: center;
-  animation: hh-pulse-blink 2.4s ease-in-out infinite;
+  animation: hh-pulse-blink 2.8s ease-in-out infinite;
 }
 
 html.dark .home-hero__graphic .hh-pulse {
   fill: #00f2fe;
-  filter: drop-shadow(0 0 5px rgba(0, 242, 254, 0.95));
   animation-name: hh-pulse-blink-dark;
+}
+
+/* Keep only the hub + two pulses animating to cut paint cost. */
+.home-hero__graphic .hh-pulse--d2,
+.home-hero__graphic .hh-pulse--d3,
+.home-hero__graphic .hh-pulse--d4 {
+  animation: none;
+  opacity: 0.55;
 }
 
 .home-hero__graphic .hh-pulse--hub {
@@ -190,53 +196,41 @@ html.dark .home-hero__graphic .hh-pulse {
 }
 
 .home-hero__graphic .hh-pulse--d1 {
-  animation-delay: 0.3s;
-}
-
-.home-hero__graphic .hh-pulse--d2 {
-  animation-delay: 0.6s;
-}
-
-.home-hero__graphic .hh-pulse--d3 {
-  animation-delay: 0.9s;
-}
-
-.home-hero__graphic .hh-pulse--d4 {
-  animation-delay: 1.2s;
+  animation-delay: 0.45s;
 }
 
 .home-hero__graphic .hh-pulse--d5 {
-  animation-delay: 1.5s;
+  animation-delay: 0.9s;
 }
 
 @keyframes hh-pulse-blink {
   0%,
   100% {
-    opacity: 0.35;
-    transform: scale(0.75);
+    opacity: 0.4;
+    transform: scale(0.85);
   }
   50% {
     opacity: 1;
-    transform: scale(1.15);
+    transform: scale(1.1);
   }
 }
 
 @keyframes hh-pulse-blink-dark {
   0%,
   100% {
-    opacity: 0.4;
-    transform: scale(0.75);
+    opacity: 0.45;
+    transform: scale(0.85);
   }
   50% {
     opacity: 1;
-    transform: scale(1.2);
+    transform: scale(1.12);
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion: reduce), (max-width: 959px) {
   .home-hero__graphic .hh-pulse {
-    animation: none;
-    opacity: 0.9;
+    animation: none !important;
+    opacity: 0.85;
     transform: none;
   }
 }
@@ -397,8 +391,7 @@ html.dark .home-hero__graphic .hh-stm-screen {
   padding: 0.55rem 0.75rem;
   border-radius: 0.75rem;
   border: 1px solid rgba(13, 90, 140, 0.12);
-  background: color-mix(in srgb, #f7f9fc 88%, transparent);
-  backdrop-filter: blur(8px);
+  background: color-mix(in srgb, #f7f9fc 94%, transparent);
   pointer-events: none;
 }
 

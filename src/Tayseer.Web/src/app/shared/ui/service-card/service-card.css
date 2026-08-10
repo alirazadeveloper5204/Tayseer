@@ -34,8 +34,7 @@
   object-fit: cover;
   object-position: center;
   filter: saturate(1.06) contrast(1.05);
-
-  will-change: transform;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .service-card__cta {

@@ -82,9 +82,7 @@
 .services-bento .service-card {
   height: 100%;
   border-color: rgba(13, 90, 140, 0.14);
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: #ffffff;
   box-shadow: var(--elev-2);
   transition:
     transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
@@ -133,9 +131,7 @@
 
 :host-context(html.dark) .services-bento .service-card {
   border-color: rgba(255, 255, 255, 0.12);
-  background: rgba(15, 23, 42, 0.72);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(15, 23, 42, 0.96);
   box-shadow: var(--elev-2);
 }
 

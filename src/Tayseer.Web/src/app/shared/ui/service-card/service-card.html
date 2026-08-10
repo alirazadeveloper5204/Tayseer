@@ -10,11 +10,12 @@
   >
     <img
       #coverImg
-      class="service-card__image will-change-transform"
+      class="service-card__image"
       [src]="coverImage()"
       [alt]="service().title"
-      width="900"
-      height="600"
+      width="640"
+      height="427"
+      sizes="(max-width: 640px) 85vw, (max-width: 1024px) 45vw, 320px"
       loading="lazy"
       decoding="async"
     />

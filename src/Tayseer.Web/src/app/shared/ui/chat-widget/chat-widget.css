@@ -84,6 +84,17 @@
   animation: chat-fab-float 2.8s ease-in-out infinite;
 }
 
+@media (prefers-reduced-motion: reduce), (max-width: 639px) {
+  .chat-fab__core {
+    animation: none;
+  }
+
+  .chat-fab__ring {
+    animation: none !important;
+    opacity: 0;
+  }
+}
+
 html.dark .chat-fab__core {
   box-shadow:
     0 14px 34px rgba(0, 242, 254, 0.22),

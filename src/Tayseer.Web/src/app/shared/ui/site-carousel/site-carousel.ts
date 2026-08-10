@@ -68,6 +68,7 @@ export class SiteCarousel {
   private fadeClearTimer: ReturnType<typeof setTimeout> | null = null;
   private animTimer: ReturnType<typeof setTimeout> | null = null;
   private paused = false;
+  private offscreen = false;
   private timerStartedAt = 0;
   private remainingMs = 0;
   private pointerStartX = 0;
@@ -222,7 +223,7 @@ export class SiteCarousel {
   }
 
   resume(): void {
-    if (this.dragging() || !this.paused) {
+    if (this.dragging() || this.offscreen || !this.paused) {
       return;
     }
     this.paused = false;
@@ -339,6 +340,37 @@ export class SiteCarousel {
     }
     this.startTimer();
 
+    const hostEl = this.host.nativeElement;
+    const visibility = new IntersectionObserver(
+      ([entry]) => {
+        const inView = !!entry?.isIntersecting && (entry.intersectionRatio ?? 0) > 0.08;
+        this.offscreen = !inView;
+        this.zone.run(() => {
+          if (!inView) {
+            this.pause();
+            return;
+          }
+          const hovering = hostEl.matches(':hover') || !!hostEl.querySelector(':focus-within');
+          if (!hovering && !document.hidden) {
+            this.resume();
+          }
+        });
+      },
+      { root: null, threshold: [0, 0.08, 0.2] },
+    );
+    visibility.observe(hostEl);
+
+    const onDocVisibility = () => {
+      if (document.hidden) {
+        this.pause();
+        return;
+      }
+      if (!this.offscreen && !hostEl.matches(':hover')) {
+        this.resume();
+      }
+    };
+    document.addEventListener('visibilitychange', onDocVisibility);
+
     const viewport = this.viewport()?.nativeElement;
     const onClickCapture = (event: Event) => {
       if (!this.suppressClick) {
@@ -411,6 +443,8 @@ export class SiteCarousel {
 
     this.destroyRef.onDestroy(() => {
       viewport?.removeEventListener('click', onClickCapture, true);
+      document.removeEventListener('visibilitychange', onDocVisibility);
+      visibility.disconnect();
       resize.disconnect();
       mutation.disconnect();
       if (this.resizeRaf) {

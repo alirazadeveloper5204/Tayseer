@@ -33,8 +33,8 @@ html.dark .home-partners {
   inset-inline: 10%;
   top: -8rem;
   height: 16rem;
-  background: radial-gradient(closest-side, rgba(98, 169, 69, 0.22), transparent 72%);
-  filter: blur(8px);
+  background: radial-gradient(closest-side, rgba(98, 169, 69, 0.16), transparent 72%);
+  opacity: 0.9;
 }
 
 html.dark .home-partners__glow {
@@ -57,9 +57,7 @@ html.dark .home-partners__glow {
   padding: 0.55rem 1rem;
   border-radius: 999px;
   border: 1px solid rgba(13, 90, 140, 0.22);
-  background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.9);
   box-shadow: var(--elev-1);
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-size: clamp(0.82rem, 0.76rem + 0.25vw, 0.95rem);
@@ -82,7 +80,12 @@ html.dark .home-partners__eyebrow {
   border-radius: 999px;
   background: linear-gradient(135deg, #62a945, #0d5a8c);
   box-shadow: 0 0 0 4px rgba(98, 169, 69, 0.18);
-  animation: home-partners-pulse 2.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: no-preference) and (min-width: 960px) {
+  .home-partners__eyebrow-mark {
+    animation: home-partners-pulse 2.8s ease-in-out infinite;
+  }
 }
 
 html.dark .home-partners__eyebrow-mark {
