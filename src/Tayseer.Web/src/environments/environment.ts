@@ -3,4 +3,6 @@ export const environment = {
   apiBaseUrl: '',
   ssrApiBaseUrl: 'http://localhost:5095',
   useStaticContent: true,
+  siteUrl: 'http://localhost:4200',
+  defaultOgImage: '/brand/logo-light.svg',
 };

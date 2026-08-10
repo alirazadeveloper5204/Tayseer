@@ -1,13 +1,15 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, effect, inject } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { catchError, combineLatest, map, of, startWith, switchMap } from 'rxjs';
 import { ContentApiService } from '../../core/api/content-api.service';
 import { LocaleService } from '../../core/i18n/locale.service';
 import { UiCopyService } from '../../core/i18n/ui-copy.service';
+import { SeoService } from '../../core/seo/seo.service';
 import { SOLUTIONS_PAGE, PAGE_COMMON, t, type PageLocale } from '../../core/content/page-content';
 import { serviceImage, serviceHeroCollage } from '../../core/media/site-images';
 import { ServiceDto } from '../../models/service.model';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-service-detail-page',
@@ -18,12 +20,49 @@ export class ServiceDetailPage {
   private readonly route = inject(ActivatedRoute);
   private readonly api = inject(ContentApiService);
   private readonly locale = inject(LocaleService);
+  private readonly seo = inject(SeoService);
   readonly copy = inject(UiCopyService).copy;
   readonly c = SOLUTIONS_PAGE;
   readonly common = PAGE_COMMON;
 
   readonly lang = computed(() => this.locale.lang() as PageLocale);
   readonly isAr = computed(() => this.locale.lang() === 'ar');
+
+  constructor() {
+    effect(() => {
+      const s = this.service();
+      const lang = this.lang();
+      if (!s) {
+        return;
+      }
+      const siteUrl = environment.siteUrl.replace(/\/$/, '');
+      const title =
+        lang === 'ar'
+          ? `${s.title} | تيسير للابتكارات`
+          : `${s.title} | Tayseer Innovations FinTech Solutions`;
+      const description =
+        s.shortDescription?.trim() ||
+        (lang === 'ar'
+          ? `تعرّف على حل ${s.title} من تيسير للابتكارات للبنوك وشركات التقنية المالية في الخليج.`
+          : `Discover ${s.title} from Tayseer Innovations — banking and FinTech capabilities for institutions across the GCC.`);
+      this.seo.apply({
+        lang,
+        urlPath: `/${lang}/solutions/${s.slug}`,
+        title,
+        description,
+        imagePath: serviceImage(s.slug) ?? environment.defaultOgImage,
+        keywords: `${s.title}, Tayseer, FinTech, banking, ${s.slug}`,
+        jsonLd: {
+          '@type': 'Service',
+          name: s.title,
+          description,
+          url: `${siteUrl}/${lang}/solutions/${s.slug}`,
+          provider: { '@id': `${siteUrl}/#organization` },
+          areaServed: ['SA', 'AE'],
+        },
+      });
+    });
+  }
 
   label(item: { en: string; ar: string }): string {
     return t(item, this.lang());

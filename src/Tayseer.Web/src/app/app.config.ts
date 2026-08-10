@@ -16,6 +16,7 @@ import { LocaleService } from './core/i18n/locale.service';
 import { NavigationLoaderService } from './core/navigation/navigation-loader.service';
 import { authInterceptor } from './core/auth/auth.interceptor';
 import { AppErrorHandler } from './core/errors/app-error.handler';
+import { SeoService } from './core/seo/seo.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -40,6 +41,7 @@ export const appConfig: ApplicationConfig = {
       inject(ThemeService).init();
       inject(LocaleService).init();
       inject(NavigationLoaderService);
+      inject(SeoService).init();
     }),
   ],
 };

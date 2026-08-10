@@ -1,14 +1,16 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, effect, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
 import { LocaleService } from '../../core/i18n/locale.service';
+import { SeoService } from '../../core/seo/seo.service';
 import {
   CASE_STUDIES_PAGE,
   PAGE_COMMON,
   t,
   type PageLocale,
 } from '../../core/content/page-content';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-case-study-detail-page',
@@ -18,6 +20,7 @@ import {
 export class CaseStudyDetailPage {
   private readonly locale = inject(LocaleService);
   private readonly route = inject(ActivatedRoute);
+  private readonly seo = inject(SeoService);
   readonly lang = computed(() => this.locale.lang() as PageLocale);
   readonly common = PAGE_COMMON;
   readonly filters = CASE_STUDIES_PAGE.filters;
@@ -27,6 +30,38 @@ export class CaseStudyDetailPage {
   });
 
   readonly item = computed(() => CASE_STUDIES_PAGE.items.find((c) => c.slug === this.slug()) ?? null);
+
+  constructor() {
+    effect(() => {
+      const item = this.item();
+      const lang = this.lang();
+      if (!item) {
+        return;
+      }
+      const titleText = t(item.title, lang);
+      const summary = t(item.summary, lang);
+      const siteUrl = environment.siteUrl.replace(/\/$/, '');
+      this.seo.apply({
+        lang,
+        urlPath: `/${lang}/case-studies/${item.slug}`,
+        title:
+          lang === 'ar'
+            ? `${titleText} | دراسة حالة | تيسير للابتكارات`
+            : `${titleText} | Case Study | Tayseer Innovations`,
+        description: summary,
+        ogType: 'article',
+        imagePath: this.sideImage(),
+        jsonLd: {
+          '@type': 'Article',
+          headline: titleText,
+          description: summary,
+          url: `${siteUrl}/${lang}/case-studies/${item.slug}`,
+          author: { '@id': `${siteUrl}/#organization` },
+          publisher: { '@id': `${siteUrl}/#organization` },
+        },
+      });
+    });
+  }
 
   readonly sideImage = computed(() => {
     const sector = this.item()?.sector;

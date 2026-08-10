@@ -127,6 +127,7 @@ Assets live in `assets/brand/` and `src/Tayseer.Web/public/brand/`.
 - [CMS content model](docs/cms-content-model.md)
 - [Redirect map](docs/redirect-map.md)
 - [Deploy on Render (free)](docs/deploy-render.md)
+- [On-page SEO](docs/seo.md)
 
 ## Next
 

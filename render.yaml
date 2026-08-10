@@ -58,6 +58,9 @@ services:
       # Use the exact public hostname from the API service (may include a random suffix).
       - key: API_BASE_URL
         value: https://tayseer-api-mp4f.onrender.com
+      # Canonical site origin for SEO (sitemap, Open Graph, JSON-LD).
+      - key: SITE_URL
+        value: https://tayseer-web.onrender.com
       # Optional: private-network URL for SSR server-side fetches (same region).
       # Leave unset to reuse API_BASE_URL. Example: http://tayseer-api:10000
       - key: SSR_API_BASE_URL
