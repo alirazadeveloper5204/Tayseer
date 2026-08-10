@@ -20,7 +20,7 @@
 
 .services-bento__title {
   margin: 0.65rem 0 0;
-  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-size: clamp(1.85rem, 1.3rem + 2vw, 2.85rem);
   font-weight: 700;
   line-height: 1.15;

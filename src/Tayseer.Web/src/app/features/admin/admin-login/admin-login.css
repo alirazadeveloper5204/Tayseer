@@ -6,7 +6,7 @@
   background:
     radial-gradient(circle at top left, rgb(98 168 69 / 18%), transparent 42%),
     linear-gradient(160deg, #f7f9fc, #e8f3f9);
-  font-family: 'Kumbh Sans', system-ui, sans-serif;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   color: #1a2332;
 }
 
@@ -32,7 +32,7 @@
 
 .admin-login__card h1 {
   margin: 0;
-  font-family: 'Space Grotesk', 'Kumbh Sans', system-ui, sans-serif;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   color: #095a8d;
 }
 

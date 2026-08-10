@@ -1,5 +1,17 @@
 @import "tailwindcss";
 @config "../tailwind.config.js";
+
+/* Self-hosted fonts (no Google Fonts CDN) */
+@import "@fontsource/plus-jakarta-sans/400.css";
+@import "@fontsource/plus-jakarta-sans/500.css";
+@import "@fontsource/plus-jakarta-sans/600.css";
+@import "@fontsource/plus-jakarta-sans/700.css";
+@import "@fontsource/ibm-plex-sans-arabic/400.css";
+@import "@fontsource/ibm-plex-sans-arabic/500.css";
+@import "@fontsource/ibm-plex-sans-arabic/600.css";
+@import "@fontsource/ibm-plex-sans-arabic/700.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+
 @import "./app/features/home/home-hero.css";
 @import "./app/shared/ui/page-kit.css";
 

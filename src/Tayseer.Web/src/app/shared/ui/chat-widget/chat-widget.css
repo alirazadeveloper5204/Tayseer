@@ -330,7 +330,7 @@ html.dark .chat-panel__mark {
 
 .chat-panel__title {
   margin: 0.25rem 0 0;
-  font-family: 'Space Grotesk', 'Kumbh Sans', system-ui, sans-serif;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-size: clamp(1.125rem, 1.05rem + 0.4vw, 1.25rem);
   font-weight: 600;
   letter-spacing: -0.02em;
@@ -342,7 +342,7 @@ html.dark .chat-panel__title {
 }
 
 html[dir='rtl'] .chat-panel__title {
-  font-family: 'IBM Plex Sans Arabic', 'Kumbh Sans', system-ui, sans-serif;
+  font-family: 'IBM Plex Sans Arabic', 'Plus Jakarta Sans', system-ui, sans-serif;
 }
 
 .chat-panel__icon-btn {
@@ -640,7 +640,7 @@ html.dark .chat-panel__composer textarea::placeholder {
   padding: 0.65rem 0.9rem;
   background: #62a845;
   color: #ffffff;
-  font-family: 'Space Grotesk', 'Kumbh Sans', system-ui, sans-serif;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-size: clamp(0.875rem, 0.82rem + 0.25vw, 0.9375rem);
   font-weight: 600;
   cursor: pointer;
@@ -648,7 +648,7 @@ html.dark .chat-panel__composer textarea::placeholder {
 }
 
 html[dir='rtl'] .chat-panel__send {
-  font-family: 'IBM Plex Sans Arabic', 'Kumbh Sans', system-ui, sans-serif;
+  font-family: 'IBM Plex Sans Arabic', 'Plus Jakarta Sans', system-ui, sans-serif;
 }
 
 .chat-panel__send:hover:not(:disabled) {

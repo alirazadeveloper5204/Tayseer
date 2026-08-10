@@ -33,28 +33,38 @@ Render’s Internal/External Database URL looks like `postgresql://user:pass@hos
 
 ## Web service env vars (API URL)
 
-The Angular production build **bakes** API URLs into the client/SSR bundles. On Render, configure them as **service environment variables** — not Blueprint `dockerBuildArgs` (that field is invalid and will fail validation).
+The browser uses **same-origin** `/api`, `/hubs`, and `/health`. The Node SSR server reverse-proxies those to your API, so DevTools Network shows `tayseer-web…/api/…` instead of the API hostname. This is obscurity only — payloads are still visible.
 
 | Env var | Required | Used for |
 |---------|----------|----------|
-| `API_BASE_URL` | Yes | Browser → public API (your real hostname, e.g. `https://tayseer-api-mp4f.onrender.com`) |
-| `SSR_API_BASE_URL` | No | Node SSR → API. Prefer private network when both services are in the same region |
+| `API_BASE_URL` | Yes | Proxy upstream (+ baked `ssrApiBaseUrl` if `SSR_API_BASE_URL` unset) |
+| `SSR_API_BASE_URL` | No | Preferred upstream for SSR fetches & proxy (private network when possible) |
+| `API_PROXY_TARGET` | No | Override proxy target only (defaults to `SSR_API_BASE_URL` \|\| `API_BASE_URL`) |
+| `SITE_URL` | Yes | Canonical site origin for SEO |
 
 Render public hostnames can include a **random suffix** (e.g. `tayseer-api-mp4f`). Always copy the URL from the Render dashboard — `https://tayseer-api.onrender.com` may 404 even if the service is healthy under the suffixed name.
 
-Private network SSR still uses the **service name**, not the public host:
+Private network (same region) example:
 
 ```text
 SSR_API_BASE_URL=http://tayseer-api:10000
 ```
 
+- Host = service name (`tayseer-api`)
+- Port = the port the API container listens on (Render usually sets `PORT=10000` for Docker web services)
+- Browsers hit the web origin only; Node forwards to this upstream
+- If unset, both SSR and the proxy fall back to public `API_BASE_URL`
+
 **How Render builds the image**
 
-1. You set `API_BASE_URL` / `SSR_API_BASE_URL` on the `tayseer-web` service.
+1. You set `API_BASE_URL` / `SSR_API_BASE_URL` / `SITE_URL` on the `tayseer-web` service.
 2. Render forwards those env vars into `docker build` as matching **build ARGs**.
-3. `src/Tayseer.Web/Dockerfile` writes them into `environment.production.ts`, then runs `npm run build`.
+3. `src/Tayseer.Web/Dockerfile` writes `apiBaseUrl: ''` and `ssrApiBaseUrl` into `environment.production.ts`, then runs `npm run build`.
+4. At **runtime**, the same env vars configure the Express `/api` proxy in `server.ts`.
 
-After changing either URL, trigger a **Manual Deploy** (Clear build cache if the URL looks stale) so the Angular bundle is rebuilt.
+After changing `SSR_API_BASE_URL` / `SITE_URL`, trigger a **Manual Deploy** (clear build cache if SSR URL looks stale) so the Angular SSR bundle is rebuilt. Changing only the runtime proxy target via `API_PROXY_TARGET` does not require a rebuild.
+
+Do **not** put secrets in these URL vars.
 
 **SSR private networking (recommended after first deploy)**
 
@@ -64,12 +74,7 @@ When `tayseer-web` and `tayseer-api` are in the same Render region:
 SSR_API_BASE_URL=http://tayseer-api:10000
 ```
 
-- Host = service name (`tayseer-api`)
-- Port = the port the API container listens on (Render usually sets `PORT=10000` for Docker web services)
-- Browsers still use the public `API_BASE_URL` (HTTPS)
-- If unset, the Dockerfile falls back to `API_BASE_URL` for SSR
-
-Do **not** put secrets in these URL vars — they end up in the client bundle for `API_BASE_URL`.
+Rebuild the web image after setting it.
 
 ## Limits to expect
 
@@ -111,7 +116,7 @@ After both services have public URLs:
 - API ready: `https://<api>.onrender.com/health/ready`
 - Site: `https://<web>.onrender.com/en`
 - Admin: `https://<web>.onrender.com/admin/login` with `AdminSeed__Email` / `AdminSeed__Password`
-- Browser network tab: API calls go to `API_BASE_URL` (not localhost)
+- Browser network tab: API calls go to same-origin `/api/...` (proxied to the API)
 
 ## 5. Longer-lived free Postgres (optional)
 
@@ -194,6 +199,12 @@ docker build -f src/Tayseer.Web/Dockerfile \
 docker run --rm -p 4000:4000 tayseer-web
 ```
 
+## Third-party / CDN
+
+- **Fonts** are self-hosted via `@fontsource/*` (bundled with the web app). There is no Google Fonts CDN link in `index.html`.
+- **API calls** from the browser use same-origin `/api` (and `/hubs`, `/health`); the Node SSR server proxies to `API_BASE_URL` / `SSR_API_BASE_URL`. This hides the API hostname from casual inspection only — request bodies remain visible in DevTools.
+- **Google Maps embeds** on the Contact page still load `maps.google.com` iframes. To drop that origin later: replace the iframe with a static map image + “Open in Maps” link, or use a self-hosted tile provider (OpenStreetMap / MapLibre).
+
 ## Troubleshooting
 
 ### Browser CORS error + API `404` / `x-render-routing: no-server`
@@ -217,4 +228,4 @@ Set `Cors__AngularOrigins__0` exactly to the web origin (no trailing slash), e.g
 - Change `AdminSeed__Password` and `Jwt__SigningKey`
 - Do not commit real production secrets
 - Prefer Render secret env vars (`sync: false` in the blueprint)
-- Treat `API_BASE_URL` as public configuration (it ships in the browser bundle)
+- Treat `API_BASE_URL` as non-secret config (used by the server proxy; not needed in browser JS)

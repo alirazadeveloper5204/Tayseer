@@ -190,7 +190,7 @@ html.dark .journey::before {
 .journey__year {
   display: block;
   margin-bottom: 0.45rem;
-  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.55rem);
   font-weight: 800;
   line-height: 1;
@@ -628,7 +628,7 @@ html.dark .about-quotes__role {
 
 .team-card__name {
   margin: 0;
-  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-size: 1.05rem;
   font-weight: 700;
   color: #0d5a8c;

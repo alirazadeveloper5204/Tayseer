@@ -57,9 +57,9 @@ module.exports = {
         },
       },
       fontFamily: {
-        display: ['"Plus Jakarta Sans"', '"Inter"', 'system-ui', 'sans-serif'],
-        sans: ['"Plus Jakarta Sans"', '"Inter"', 'system-ui', 'sans-serif'],
-        arabic: ['"IBM Plex Sans Arabic"', '"Kumbh Sans"', 'system-ui', 'sans-serif'],
+        display: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+        sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+        arabic: ['"IBM Plex Sans Arabic"', '"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
         mono: ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
       },
       /* Fluid type scale (viewport-clamped) */

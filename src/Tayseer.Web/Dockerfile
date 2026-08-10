@@ -6,9 +6,9 @@
 #     --build-arg SSR_API_BASE_URL=https://YOUR-API.onrender.com \
 #     -t tayseer-web .
 #
-# Render: set service env vars API_BASE_URL / SSR_API_BASE_URL / SITE_URL instead.
-# Render maps those env vars to Docker build ARGs automatically
-# (dockerBuildArgs is not a valid Blueprint field).
+# Browser uses same-origin /api (empty apiBaseUrl). Node SSR proxies /api,/hubs,/health
+# to API_BASE_URL (or API_PROXY_TARGET / SSR_API_BASE_URL at runtime).
+# Render: set service env vars API_BASE_URL / SSR_API_BASE_URL / SITE_URL.
 FROM node:22-bookworm AS build
 WORKDIR /app
 
@@ -32,7 +32,7 @@ const ssr = process.env.SSR_API_BASE_URL || api;
 const site = (process.env.SITE_URL || 'https://tayseer-web.onrender.com').replace(/\/$/, '');
 const content = `export const environment = {
   production: true,
-  apiBaseUrl: '${api}',
+  apiBaseUrl: '',
   ssrApiBaseUrl: '${ssr}',
   useStaticContent: false,
   siteUrl: '${site}',

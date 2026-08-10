@@ -448,7 +448,7 @@ html.dark .tab-pill.is-active {
 .spotlight-hero__title {
   margin: 0.55rem 0 0;
   max-width: 16ch;
-  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-size: clamp(2.15rem, 1.35rem + 3vw, 3.55rem);
   font-weight: 700;
   line-height: 1.12;
@@ -841,7 +841,7 @@ html.dark .zigzag__media-side {
 
 .zigzag__copy h3 {
   margin: 0;
-  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-size: clamp(1.35rem, 1.1rem + 0.9vw, 1.9rem);
   font-weight: 700;
   line-height: 1.25;
@@ -994,7 +994,7 @@ html.dark .world-card__icon {
 
 .world-card h3 {
   margin: 0;
-  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-size: 1rem;
   font-weight: 700;
   color: #0d5a8c;

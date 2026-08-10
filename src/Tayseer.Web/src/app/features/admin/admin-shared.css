@@ -12,7 +12,7 @@
 
 .admin-page__header h2 {
   margin: 0.2rem 0 0;
-  font-family: 'Space Grotesk', 'Kumbh Sans', system-ui, sans-serif;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   color: #095a8d;
   font-size: 1.6rem;
 }
@@ -54,7 +54,7 @@
 }
 
 .admin-stat strong {
-  font-family: 'Space Grotesk', 'Kumbh Sans', system-ui, sans-serif;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-size: 1.8rem;
   color: #095a8d;
 }
@@ -281,7 +281,7 @@
 .admin-chat__thread-header h3 {
   margin: 0;
   color: #095a8d;
-  font-family: 'Space Grotesk', 'Kumbh Sans', system-ui, sans-serif;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
 }
 
 .admin-chat__thread-header p {

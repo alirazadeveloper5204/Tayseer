@@ -4,7 +4,7 @@
   min-height: 100vh;
   background: #f7f9fc;
   color: #1a2332;
-  font-family: 'Kumbh Sans', system-ui, sans-serif;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
 }
 
 .admin-shell__nav {
@@ -18,7 +18,7 @@
 
 .admin-shell__brand h1 {
   margin: 0.2rem 0 0;
-  font-family: 'Space Grotesk', 'Kumbh Sans', system-ui, sans-serif;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-size: 1.2rem;
 }
 
