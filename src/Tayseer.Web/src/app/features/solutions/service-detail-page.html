@@ -11,7 +11,7 @@
       <h1 class="type-title mt-fluid-sm page-ink">
         {{ label(common.solutionNotFound) }}
       </h1>
-      <a [routerLink]="'/' + lang() + '/solutions'" class="btn-brand mt-fluid-lg inline-flex">
+      <a [routerLink]="'/' + lang() + '/services'" class="btn-brand mt-fluid-lg inline-flex">
         {{ copy().common.viewAllServices }}
       </a>
     </div>
@@ -44,7 +44,7 @@
           <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand">
             {{ s.ctaLabel || copy().common.requestDemo }}
           </a>
-          <a [routerLink]="'/' + lang() + '/solutions'" class="page-ghost-btn">
+          <a [routerLink]="'/' + lang() + '/services'" class="page-ghost-btn">
             {{ copy().common.viewAllServices }}
           </a>
         </div>
@@ -162,7 +162,7 @@
           <a [routerLink]="'/' + lang() + '/contact'" class="btn-brand">{{
             s.ctaLabel || copy().common.requestDemo
           }}</a>
-          <a [routerLink]="'/' + lang() + '/solutions'" class="page-ghost-btn">{{
+          <a [routerLink]="'/' + lang() + '/services'" class="page-ghost-btn">{{
             copy().common.viewAllServices
           }}</a>
         </div>
