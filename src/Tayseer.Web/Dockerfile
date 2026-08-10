@@ -1,5 +1,14 @@
-# Build from repo root:
-#   docker build -f src/Tayseer.Web/Dockerfile --build-arg API_BASE_URL=https://YOUR-API.onrender.com -t tayseer-web .
+# Build from repo root.
+#
+# Local (explicit ARG):
+#   docker build -f src/Tayseer.Web/Dockerfile \
+#     --build-arg API_BASE_URL=https://YOUR-API.onrender.com \
+#     --build-arg SSR_API_BASE_URL=https://YOUR-API.onrender.com \
+#     -t tayseer-web .
+#
+# Render: set service env vars API_BASE_URL / SSR_API_BASE_URL instead.
+# Render maps those env vars to Docker build ARGs automatically
+# (dockerBuildArgs is not a valid Blueprint field).
 FROM node:22-bookworm AS build
 WORKDIR /app
 

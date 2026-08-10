@@ -5,6 +5,8 @@
 # - Free web services sleep after ~15 min idle (cold start on next request).
 # - Free Render Postgres expires after 30 days; use Neon free for longer-lived DB.
 # - After first deploy, set Cors__AngularOrigins__0 to your web service URL.
+# - Docker: do NOT use dockerBuildArgs (unsupported). Set env vars instead —
+#   Render maps service env vars to Docker build ARGs automatically.
 
 services:
   - type: web
@@ -49,12 +51,14 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      # Also available as a Docker build ARG (Render maps env vars → build args).
+      # Public API URL baked into the Angular browser bundle at image build time.
+      # Render forwards this env var to Docker as ARG API_BASE_URL.
       - key: API_BASE_URL
         value: https://tayseer-api.onrender.com
-      # Optional SSR private URL after deploy (same region): http://tayseer-api:10000
-      # - key: SSR_API_BASE_URL
-      #   value: http://tayseer-api:10000
+      # Optional: private-network URL for SSR server-side fetches (same region).
+      # Leave unset to reuse API_BASE_URL. Example: http://tayseer-api:10000
+      - key: SSR_API_BASE_URL
+        sync: false
 
 databases:
   - name: tayseer-db
