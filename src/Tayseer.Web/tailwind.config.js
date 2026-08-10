@@ -6,7 +6,7 @@ module.exports = {
     extend: {
       colors: {
         brand: {
-          /* Logo navy — primary text / chrome in light theme */
+          /* Logo navy — values mirror CSS tokens in styles.css :root */
           blue: {
             DEFAULT: '#0D5A8C',
             50: '#E8F3F9',
@@ -43,7 +43,7 @@ module.exports = {
           },
         },
         surface: {
-          dark: '#030712' /* Rich Obsidian */,
+          dark: '#030712' /* Rich Obsidian — CSS: --surface-dark */,
           'dark-elevated': '#0F172A',
           'dark-muted': '#111827',
           light: '#F7F9FC',

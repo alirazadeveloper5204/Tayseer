@@ -5,9 +5,9 @@
   padding: 1.25rem;
   background:
     radial-gradient(circle at top left, rgb(98 168 69 / 18%), transparent 42%),
-    linear-gradient(160deg, #f7f9fc, #e8f3f9);
+    linear-gradient(160deg, var(--surface-light), #e8f3f9);
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-  color: #1a2332;
+  color: var(--surface-dark-elevated);
 }
 
 .admin-login__card {
@@ -27,18 +27,18 @@
   font-size: 0.72rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #62a845;
+  color: var(--brand-green);
 }
 
 .admin-login__card h1 {
   margin: 0;
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-  color: #095a8d;
+  color: var(--brand-blue);
 }
 
 .admin-login__lead {
   margin: 0 0 0.4rem;
-  color: #5b6478;
+  color: var(--ink-soft);
   font-size: 0.92rem;
 }
 
@@ -61,7 +61,7 @@
   border: 0;
   border-radius: 0.65rem;
   padding: 0.75rem 1rem;
-  background: #095a8d;
+  background: var(--brand-blue);
   color: #fff;
   font: inherit;
   font-weight: 700;

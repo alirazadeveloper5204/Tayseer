@@ -42,7 +42,7 @@
   font-weight: 700;
   line-height: 1.12;
   letter-spacing: -0.03em;
-  color: #042941;
+  color: var(--brand-blue-900);
 }
 
 html.dark .home-hero__title {
@@ -62,7 +62,7 @@ html[dir='rtl'] .home-hero__title {
   font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
   line-height: 1.65;
   font-weight: 500;
-  color: #475569;
+  color: var(--ink-soft);
 }
 
 html.dark .home-hero__lead {
@@ -87,17 +87,17 @@ html[dir='rtl'] .home-hero__lead {
 html.dark .home-hero__cta .page-ghost-btn {
   background: rgba(15, 23, 42, 0.55);
   border-color: rgba(255, 255, 255, 0.28);
-  color: #e8eef5;
+  color: var(--ink-inverse);
 }
 
 html.dark .home-hero__cta .page-ghost-btn:hover {
-  border-color: #62a945;
+  border-color: var(--brand-green);
   color: #ffffff;
   background: rgba(98, 169, 69, 0.18);
 }
 
 .home-hero__cta-item:focus-visible {
-  outline: 2px solid #62a945;
+  outline: 2px solid var(--brand-green);
   outline-offset: 3px;
 }
 
@@ -108,7 +108,7 @@ html.dark .home-hero__cta .page-ghost-btn:hover {
   margin: 1.15rem 0 0;
   padding: 0;
   list-style: none;
-  color: #094266;
+  color: var(--brand-blue-700);
   font-size: 0.8125rem;
   font-weight: 600;
 }
@@ -116,7 +116,7 @@ html.dark .home-hero__cta .page-ghost-btn:hover {
 .home-hero__segments li:not(:last-child)::after {
   content: '·';
   margin-inline: 0.55rem;
-  color: #62a945;
+  color: var(--brand-green);
 }
 
 html.dark .home-hero__segments {
@@ -172,14 +172,14 @@ html[dir='rtl'] .home-hero__graphic {
 }
 
 .home-hero__graphic .hh-pulse {
-  fill: #62a945;
+  fill: var(--brand-green);
   transform-box: fill-box;
   transform-origin: center;
   animation: hh-pulse-blink 2.8s ease-in-out infinite;
 }
 
 html.dark .home-hero__graphic .hh-pulse {
-  fill: #00f2fe;
+  fill: var(--brand-cyan);
   animation-name: hh-pulse-blink-dark;
 }
 
@@ -236,7 +236,7 @@ html.dark .home-hero__graphic .hh-pulse {
 }
 
 .home-hero__graphic .hh-ring {
-  stroke: #0d5a8e;
+  stroke: var(--brand-blue);
   stroke-width: 1.25;
   opacity: 0.18;
 }
@@ -248,7 +248,7 @@ html.dark .home-hero__graphic .hh-pulse {
 
 .home-hero__graphic .hh-line,
 .home-hero__graphic .hh-panel-line {
-  stroke: #0d5a8e;
+  stroke: var(--brand-blue);
   stroke-width: 1.75;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -261,23 +261,23 @@ html.dark .home-hero__graphic .hh-pulse {
 }
 
 .home-hero__graphic .hh-node {
-  fill: color-mix(in srgb, #f7f9fc 70%, transparent);
-  stroke: #0d5a8e;
+  fill: color-mix(in srgb, var(--surface-light) 70%, transparent);
+  stroke: var(--brand-blue);
   stroke-width: 1.75;
 }
 
 .home-hero__graphic .hh-node--hub {
-  fill: color-mix(in srgb, #0d5a8e 12%, #f7f9fc);
+  fill: color-mix(in srgb, var(--brand-blue) 12%, var(--surface-light));
   stroke-width: 2;
 }
 
 .home-hero__graphic .hh-node--accent {
-  stroke: #62a845;
-  fill: color-mix(in srgb, #62a845 12%, #f7f9fc);
+  stroke: var(--brand-green);
+  fill: color-mix(in srgb, var(--brand-green) 12%, var(--surface-light));
 }
 
 .home-hero__graphic .hh-brand {
-  stroke: #0d5a8e;
+  stroke: var(--brand-blue);
   stroke-width: 3.5;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -285,21 +285,21 @@ html.dark .home-hero__graphic .hh-pulse {
 }
 
 .home-hero__graphic .hh-brand--inner {
-  stroke: #62a845;
+  stroke: var(--brand-green);
   stroke-width: 3;
   opacity: 0.8;
 }
 
 .home-hero__graphic .hh-panel {
-  fill: color-mix(in srgb, #0d5a8e 7%, #f7f9fc);
-  stroke: #0d5a8e;
+  fill: color-mix(in srgb, var(--brand-blue) 7%, var(--surface-light));
+  stroke: var(--brand-blue);
   stroke-width: 1.75;
   stroke-linejoin: round;
 }
 
 .home-hero__graphic .hh-panel--accent {
-  fill: color-mix(in srgb, #62a845 10%, #f7f9fc);
-  stroke: #62a845;
+  fill: color-mix(in srgb, var(--brand-green) 10%, var(--surface-light));
+  stroke: var(--brand-green);
 }
 
 .home-hero__graphic .hh-panel-line--accent {
@@ -308,14 +308,14 @@ html.dark .home-hero__graphic .hh-pulse {
 }
 
 .home-hero__graphic .hh-atm-screen {
-  fill: color-mix(in srgb, #0d5a8e 12%, #f7f9fc);
-  stroke: #0d5a8e;
+  fill: color-mix(in srgb, var(--brand-blue) 12%, var(--surface-light));
+  stroke: var(--brand-blue);
   stroke-width: 1.5;
 }
 
 .home-hero__graphic .hh-stm-screen {
-  fill: color-mix(in srgb, #62a845 14%, #f7f9fc);
-  stroke: #62a845;
+  fill: color-mix(in srgb, var(--brand-green) 14%, var(--surface-light));
+  stroke: var(--brand-green);
   stroke-width: 1.4;
 }
 
@@ -331,17 +331,17 @@ html.dark .home-hero__graphic .hh-panel-line {
 }
 
 html.dark .home-hero__graphic .hh-node {
-  fill: color-mix(in srgb, #0a0a0a 55%, transparent);
+  fill: color-mix(in srgb, var(--surface-dark) 55%, transparent);
   stroke: #4a9fd0;
 }
 
 html.dark .home-hero__graphic .hh-node--hub {
-  fill: color-mix(in srgb, #0d5a8e 35%, #0a0a0a);
+  fill: color-mix(in srgb, var(--brand-blue) 35%, var(--surface-dark));
 }
 
 html.dark .home-hero__graphic .hh-node--accent {
-  stroke: #62a845;
-  fill: color-mix(in srgb, #62a845 22%, #0a0a0a);
+  stroke: var(--brand-green);
+  fill: color-mix(in srgb, var(--brand-green) 22%, var(--surface-dark));
 }
 
 html.dark .home-hero__graphic .hh-brand {
@@ -350,18 +350,18 @@ html.dark .home-hero__graphic .hh-brand {
 }
 
 html.dark .home-hero__graphic .hh-brand--inner {
-  stroke: #62a845;
+  stroke: var(--brand-green);
   opacity: 0.85;
 }
 
 html.dark .home-hero__graphic .hh-panel {
-  fill: color-mix(in srgb, #0d5a8e 22%, #0a0a0a);
+  fill: color-mix(in srgb, var(--brand-blue) 22%, var(--surface-dark));
   stroke: #4a9fd0;
 }
 
 html.dark .home-hero__graphic .hh-panel--accent {
-  fill: color-mix(in srgb, #62a845 18%, #0a0a0a);
-  stroke: #62a845;
+  fill: color-mix(in srgb, var(--brand-green) 18%, var(--surface-dark));
+  stroke: var(--brand-green);
 }
 
 html.dark .home-hero__graphic .hh-panel-line--accent {
@@ -369,13 +369,13 @@ html.dark .home-hero__graphic .hh-panel-line--accent {
 }
 
 html.dark .home-hero__graphic .hh-atm-screen {
-  fill: color-mix(in srgb, #0d5a8e 40%, #0a0a0a);
+  fill: color-mix(in srgb, var(--brand-blue) 40%, var(--surface-dark));
   stroke: #4a9fd0;
 }
 
 html.dark .home-hero__graphic .hh-stm-screen {
-  fill: color-mix(in srgb, #62a845 28%, #0a0a0a);
-  stroke: #62a845;
+  fill: color-mix(in srgb, var(--brand-green) 28%, var(--surface-dark));
+  stroke: var(--brand-green);
 }
 
 .home-hero__stage-caption {
@@ -391,32 +391,32 @@ html.dark .home-hero__graphic .hh-stm-screen {
   padding: 0.55rem 0.75rem;
   border-radius: 0.75rem;
   border: 1px solid rgba(13, 90, 140, 0.12);
-  background: color-mix(in srgb, #f7f9fc 94%, transparent);
+  background: color-mix(in srgb, var(--surface-light) 94%, transparent);
   pointer-events: none;
 }
 
 html.dark .home-hero__stage-caption {
   border-color: rgba(255, 255, 255, 0.12);
-  background: color-mix(in srgb, #0f172a 82%, transparent);
+  background: color-mix(in srgb, var(--surface-dark-elevated) 82%, transparent);
 }
 
 .home-hero__stage-caption-kicker {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
   font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #0d5a8c;
+  color: var(--brand-blue);
 }
 
 html.dark .home-hero__stage-caption-kicker {
-  color: #00f2fe;
+  color: var(--brand-cyan);
 }
 
 .home-hero__stage-caption-label {
   font-size: 0.78rem;
   font-weight: 550;
-  color: #5b6b7c;
+  color: var(--ink-soft);
 }
 
 html.dark .home-hero__stage-caption-label {
@@ -473,7 +473,7 @@ html.dark .home-hero__stage-caption-label {
   list-style: none;
   font-size: 0.8125rem;
   font-weight: 700;
-  color: #094266;
+  color: var(--brand-blue-700);
 }
 
 .home-hero__trust li {
@@ -489,7 +489,7 @@ html.dark .home-hero__stage-caption-label {
   height: 0.28rem;
   margin-inline: 0.85rem;
   border-radius: 999px;
-  background: #62a945;
+  background: var(--brand-green);
   flex-shrink: 0;
 }
 

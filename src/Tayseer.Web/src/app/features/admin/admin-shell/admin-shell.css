@@ -2,8 +2,8 @@
   display: grid;
   grid-template-columns: 16.5rem 1fr;
   min-height: 100vh;
-  background: #f7f9fc;
-  color: #1a2332;
+  background: var(--surface-light);
+  color: var(--surface-dark-elevated);
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
 }
 
@@ -12,7 +12,7 @@
   flex-direction: column;
   gap: 1.25rem;
   padding: 1.25rem 1rem;
-  background: #095a8d;
+  background: var(--brand-blue);
   color: #fff;
 }
 
@@ -28,7 +28,7 @@
   font-size: 0.7rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #62a845;
+  color: var(--brand-green);
 }
 
 .admin-shell__nav nav {
@@ -94,7 +94,7 @@
   margin-inline-start: 0.35rem;
   padding: 0 0.35rem;
   border-radius: 999px;
-  background: #62a845;
+  background: var(--brand-green);
   color: #fff;
   font-size: 0.72rem;
   font-weight: 700;
@@ -127,12 +127,12 @@
 
 .admin-shell__toast-item strong {
   display: block;
-  color: #095a8d;
+  color: var(--brand-blue);
   margin-bottom: 0.2rem;
 }
 
 .admin-shell__toast-item span {
-  color: #5b6478;
+  color: var(--ink-soft);
   font-size: 0.85rem;
 }
 

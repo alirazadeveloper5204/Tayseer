@@ -65,7 +65,7 @@ html[dir='rtl'] .contact-hero__title {
   border-radius: 999px;
   border: 1px solid rgba(13, 90, 140, 0.18);
   background: rgba(255, 255, 255, 0.88);
-  color: #0d5a8c;
+  color: var(--brand-blue);
   padding: 0.42rem 0.8rem;
   font-size: 0.78rem;
   font-weight: 700;
@@ -75,7 +75,7 @@ html[dir='rtl'] .contact-hero__title {
 html.dark .contact-hero__meta li {
   border-color: rgba(0, 242, 254, 0.22);
   background: rgba(15, 23, 42, 0.78);
-  color: #e8eef5;
+  color: var(--ink-inverse);
 }
 
 .contact-hero__media {
@@ -109,11 +109,11 @@ html.dark .contact-hero__shot {
   bottom: 0;
   width: 46%;
   aspect-ratio: 5 / 4;
-  border: 3px solid #f7f9fc;
+  border: 3px solid var(--surface-light);
 }
 
 html.dark .contact-hero__shot--side {
-  border-color: #030712;
+  border-color: var(--surface-dark);
 }
 
 .contact-hero__badge {
@@ -123,13 +123,13 @@ html.dark .contact-hero__shot--side {
   max-width: 14rem;
   border-radius: 0.95rem;
   padding: 0.75rem 0.9rem;
-  background: linear-gradient(135deg, #0d5a8c 0%, #1a7bb0 55%, #62a945 100%);
+  background: linear-gradient(135deg, var(--brand-blue) 0%, var(--brand-blue-mid) 55%, var(--brand-green) 100%);
   color: #ffffff;
   box-shadow: 0 14px 30px rgba(13, 90, 140, 0.22);
 }
 
 html.dark .contact-hero__badge {
-  background: linear-gradient(135deg, #0f172a 0%, #0d5a8c 62%, #0b4f7a 100%);
+  background: linear-gradient(135deg, var(--surface-dark-elevated) 0%, var(--brand-blue) 62%, var(--brand-blue-600) 100%);
   box-shadow: 0 14px 30px rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(0, 242, 254, 0.28);
 }
@@ -144,7 +144,7 @@ html.dark .contact-hero__badge {
 }
 
 html.dark .contact-hero__badge span {
-  color: #00f2fe;
+  color: var(--brand-cyan);
 }
 
 .contact-hero__badge strong {
@@ -192,13 +192,13 @@ html.dark .contact-office.is-active {
 .contact-office__phone {
   display: inline-block;
   margin-top: 0.45rem;
-  color: #0d5a8c;
+  color: var(--brand-blue);
   font-size: 0.875rem;
   font-weight: 600;
 }
 
 html.dark .contact-office__phone {
-  color: #00f2fe;
+  color: var(--brand-cyan);
 }
 
 .contact-map {
@@ -227,7 +227,7 @@ html.dark .contact-map {
 }
 
 html.dark .contact-map__kicker {
-  color: #00f2fe;
+  color: var(--brand-cyan);
 }
 
 .contact-map__city {
@@ -235,7 +235,7 @@ html.dark .contact-map__kicker {
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-size: 1.05rem;
   font-weight: 700;
-  color: #0d5a8c;
+  color: var(--brand-blue);
 }
 
 html.dark .contact-map__city {
@@ -246,13 +246,13 @@ html.dark .contact-map__city {
   flex-shrink: 0;
   font-size: 0.78rem;
   font-weight: 700;
-  color: #0d5a8c;
+  color: var(--brand-blue);
   text-decoration: underline;
   text-underline-offset: 0.18em;
 }
 
 html.dark .contact-map__link {
-  color: #00f2fe;
+  color: var(--brand-cyan);
 }
 
 .contact-map__frame {
@@ -260,11 +260,11 @@ html.dark .contact-map__link {
   width: 100%;
   height: clamp(16rem, 42vw, 22rem);
   border: 0;
-  background: #eef2f7;
+  background: var(--surface-light-muted);
 }
 
 html.dark .contact-map__frame {
-  background: #0f172a;
+  background: var(--surface-dark-elevated);
 }
 
 @media (max-width: 640px) {

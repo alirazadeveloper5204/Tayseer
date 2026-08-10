@@ -13,7 +13,7 @@
   min-width: 0;
   max-width: 14.25rem;
   padding: 0.65rem 0.8rem;
-  color: #0b1220;
+  color: var(--ink);
   pointer-events: auto;
   cursor: default;
 
@@ -28,7 +28,7 @@
 }
 
 :host-context(html.dark) .proof-card {
-  color: #e8eef5;
+  color: var(--ink-inverse);
   box-shadow: var(--elev-2);
 }
 
@@ -69,7 +69,7 @@
 .proof-card small {
   font-size: clamp(0.65rem, 0.6rem + 0.2vw, 0.75rem);
   font-weight: 500;
-  color: #475569;
+  color: var(--ink-soft);
 }
 
 :host-context(html.dark) .proof-card small {
@@ -89,7 +89,7 @@
 
 :host-context(html.dark) .proof-card__icon {
   background: rgba(98, 169, 69, 0.18);
-  color: #62a945;
+  color: var(--brand-green);
 }
 
 .proof-card__icon svg {
@@ -129,7 +129,7 @@
   border-radius: 999px;
   border: 1.5px solid rgba(13, 90, 140, 0.18);
   background: rgba(255, 255, 255, 0.9);
-  color: #0d5a8c;
+  color: var(--brand-blue);
   padding: 0.45rem 0.9rem;
   font-size: 0.8125rem;
   font-weight: 600;
@@ -138,7 +138,7 @@
 :host-context(html.dark) .proof-card__mobile li {
   border-color: rgba(255, 255, 255, 0.18);
   background: rgba(15, 23, 42, 0.72);
-  color: #e8eef5;
+  color: var(--ink-inverse);
 }
 
 @media (max-width: 1100px) {

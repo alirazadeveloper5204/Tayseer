@@ -13,7 +13,7 @@
 .admin-page__header h2 {
   margin: 0.2rem 0 0;
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-  color: #095a8d;
+  color: var(--brand-blue);
   font-size: 1.6rem;
 }
 
@@ -23,7 +23,7 @@
   font-size: 0.72rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #62a845;
+  color: var(--brand-green);
 }
 
 .admin-grid {
@@ -49,14 +49,14 @@
 }
 
 .admin-stat span {
-  color: #5b6478;
+  color: var(--ink-soft);
   font-size: 0.85rem;
 }
 
 .admin-stat strong {
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-size: 1.8rem;
-  color: #095a8d;
+  color: var(--brand-blue);
 }
 
 .admin-panel {
@@ -74,7 +74,7 @@
   border: 0;
   border-radius: 0.65rem;
   padding: 0.6rem 0.9rem;
-  background: #095a8d;
+  background: var(--brand-blue);
   color: #fff;
   font: inherit;
   font-weight: 650;
@@ -84,7 +84,7 @@
 
 .admin-btn--ghost {
   background: transparent;
-  color: #095a8d;
+  color: var(--brand-blue);
   border: 1px solid rgb(9 90 141 / 25%);
 }
 
@@ -111,7 +111,7 @@
 }
 
 .admin-table th {
-  color: #5b6478;
+  color: var(--ink-soft);
   font-weight: 650;
 }
 
@@ -172,7 +172,7 @@
   padding: 0.75rem;
   display: grid;
   gap: 0.65rem;
-  background: #f7f9fc;
+  background: var(--surface-light);
 }
 
 .admin-actions {
@@ -188,9 +188,9 @@
 }
 
 .admin-btn.is-selected {
-  background: #095a8d;
+  background: var(--brand-blue);
   color: #fff;
-  border-color: #095a8d;
+  border-color: var(--brand-blue);
 }
 
 .admin-chat__layout {
@@ -215,7 +215,7 @@
   text-align: start;
   border: 1px solid transparent;
   border-radius: 0.75rem;
-  background: #f7f9fc;
+  background: var(--surface-light);
   padding: 0.75rem;
   font: inherit;
   color: inherit;
@@ -238,7 +238,7 @@
 .admin-chat__item p,
 .admin-chat__item time {
   margin: 0;
-  color: #5b6478;
+  color: var(--ink-soft);
   font-size: 0.82rem;
 }
 
@@ -258,7 +258,7 @@
 }
 
 .admin-chat__status--closed {
-  color: #5b6478;
+  color: var(--ink-soft);
 }
 
 .admin-chat__thread {
@@ -280,13 +280,13 @@
 
 .admin-chat__thread-header h3 {
   margin: 0;
-  color: #095a8d;
+  color: var(--brand-blue);
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
 }
 
 .admin-chat__thread-header p {
   margin: 0.25rem 0 0;
-  color: #5b6478;
+  color: var(--ink-soft);
   font-size: 0.85rem;
 }
 
@@ -296,7 +296,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
-  background: #f7f9fc;
+  background: var(--surface-light);
 }
 
 .admin-chat__bubble {
@@ -315,7 +315,7 @@
 .admin-chat__bubble span {
   display: block;
   margin-top: 0.35rem;
-  color: #5b6478;
+  color: var(--ink-soft);
   font-size: 0.72rem;
 }
 
@@ -325,7 +325,7 @@
 
 .admin-chat__bubble--agent {
   align-self: flex-end;
-  background: #095a8d;
+  background: var(--brand-blue);
   color: #fff;
   border-color: transparent;
 }
@@ -338,7 +338,7 @@
   align-self: center;
   background: transparent;
   border-style: dashed;
-  color: #5b6478;
+  color: var(--ink-soft);
   font-size: 0.88rem;
 }
 
@@ -364,7 +364,7 @@
 .admin-chat__closed {
   margin: auto;
   padding: 1.5rem;
-  color: #5b6478;
+  color: var(--ink-soft);
   text-align: center;
 }
 
@@ -375,7 +375,7 @@
   margin-inline-start: 0.35rem;
   padding: 0 0.35rem;
   border-radius: 999px;
-  background: #62a845;
+  background: var(--brand-green);
   color: #fff;
   font-size: 0.72rem;
   font-weight: 700;
@@ -407,12 +407,12 @@
 
 .admin-shell__toast-item strong {
   display: block;
-  color: #095a8d;
+  color: var(--brand-blue);
   margin-bottom: 0.2rem;
 }
 
 .admin-shell__toast-item span {
-  color: #5b6478;
+  color: var(--ink-soft);
   font-size: 0.85rem;
 }
 

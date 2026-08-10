@@ -78,7 +78,7 @@ app-site-carousel {
 }
 
 .site-carousel__viewport:focus-visible {
-  box-shadow: 0 0 0 2px color-mix(in srgb, #62a945 70%, transparent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--brand-green) 70%, transparent);
   border-radius: 1rem;
 }
 
@@ -139,7 +139,7 @@ app-site-carousel {
   max-width: 12rem;
   margin-inline: auto;
   border-radius: 999px;
-  background: color-mix(in srgb, #0d5a8c 14%, transparent);
+  background: color-mix(in srgb, var(--brand-blue) 14%, transparent);
   overflow: hidden;
 }
 
@@ -152,7 +152,7 @@ html.dark .site-carousel__progress {
   height: 100%;
   width: 0%;
   border-radius: inherit;
-  background: #62a945;
+  background: var(--brand-green);
   transform-origin: left center;
 }
 
@@ -162,7 +162,7 @@ html.rtl .site-carousel__progress-bar {
 }
 
 html.dark .site-carousel__progress-bar {
-  background: #00f2fe;
+  background: var(--brand-cyan);
 }
 
 .site-carousel__progress-bar.is-running {
@@ -196,9 +196,9 @@ html.dark .site-carousel__progress-bar {
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 999px;
-  border: 1.5px solid color-mix(in srgb, #0d5a8c 22%, transparent);
+  border: 1.5px solid color-mix(in srgb, var(--brand-blue) 22%, transparent);
   background: #ffffff;
-  color: #0d5a8c;
+  color: var(--brand-blue);
   transition:
     background var(--site-slider-duration) var(--site-slider-ease-soft),
     border-color var(--site-slider-duration) var(--site-slider-ease-soft),
@@ -207,26 +207,26 @@ html.dark .site-carousel__progress-bar {
 }
 
 .site-carousel__nav:hover {
-  background: #0d5a8c;
-  border-color: #0d5a8c;
+  background: var(--brand-blue);
+  border-color: var(--brand-blue);
   color: #ffffff;
   transform: translateY(-1px);
 }
 
 .site-carousel__nav:focus-visible {
-  outline: 2px solid #62a945;
+  outline: 2px solid var(--brand-green);
   outline-offset: 2px;
 }
 
 html.dark .site-carousel__nav {
   border-color: rgba(255, 255, 255, 0.22);
   background: rgba(15, 23, 42, 0.72);
-  color: #e8eef5;
+  color: var(--ink-inverse);
 }
 
 html.dark .site-carousel__nav:hover {
   background: rgba(98, 169, 69, 0.22);
-  border-color: #62a945;
+  border-color: var(--brand-green);
   color: #ffffff;
 }
 
@@ -242,7 +242,7 @@ html.dark .site-carousel__nav:hover {
   padding: 0;
   border: 0;
   border-radius: 999px;
-  background: color-mix(in srgb, #0d5a8c 28%, transparent);
+  background: color-mix(in srgb, var(--brand-blue) 28%, transparent);
   transition:
     width var(--site-slider-duration) var(--site-slider-ease-soft),
     background var(--site-slider-duration) var(--site-slider-ease-soft);
@@ -250,7 +250,7 @@ html.dark .site-carousel__nav:hover {
 
 .site-carousel__dot.is-active {
   width: 1.55rem;
-  background: #0d5a8c;
+  background: var(--brand-blue);
 }
 
 html.dark .site-carousel__dot {
@@ -258,11 +258,11 @@ html.dark .site-carousel__dot {
 }
 
 html.dark .site-carousel__dot.is-active {
-  background: #62a945;
+  background: var(--brand-green);
 }
 
 .site-carousel__dot:focus-visible {
-  outline: 2px solid #62a945;
+  outline: 2px solid var(--brand-green);
   outline-offset: 2px;
 }
 
@@ -339,7 +339,7 @@ app-site-carousel.about-hero__slider .site-carousel__dot {
 }
 
 app-site-carousel.about-hero__slider .site-carousel__dot.is-active {
-  background: #62a945;
+  background: var(--brand-green);
 }
 
 @media (prefers-reduced-motion: reduce) {

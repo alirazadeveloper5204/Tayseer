@@ -38,7 +38,7 @@
 }
 
 .service-card__cta {
-  color: #62a945;
+  color: var(--brand-green);
   letter-spacing: 0.01em;
   transition:
     color 0.25s ease,
@@ -54,7 +54,7 @@
   width: 100%;
   height: 1.5px;
   border-radius: 999px;
-  background: linear-gradient(90deg, #0d5a8c 0%, #62a945 100%);
+  background: linear-gradient(90deg, var(--brand-blue) 0%, var(--brand-green) 100%);
   transform: scaleX(0);
   transform-origin: inline-start;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -62,7 +62,7 @@
 
 .service-card:hover .service-card__cta,
 .service-card:focus-visible .service-card__cta {
-  color: #0d5a8c;
+  color: var(--brand-blue);
   gap: 0.65rem;
 }
 
@@ -72,16 +72,16 @@
 }
 
 html.dark .service-card__cta {
-  color: #62a945;
+  color: var(--brand-green);
 }
 
 html.dark .service-card:hover .service-card__cta,
 html.dark .service-card:focus-visible .service-card__cta {
-  color: #00f2fe;
+  color: var(--brand-cyan);
 }
 
 html.dark .service-card__cta::after {
-  background: linear-gradient(90deg, #00f2fe 0%, #62a945 100%);
+  background: linear-gradient(90deg, var(--brand-cyan) 0%, var(--brand-green) 100%);
 }
 
 .service-card__cta-arrow {
@@ -99,16 +99,16 @@ html.dark .service-card__cta::after {
 }
 
 .service-card--grg {
-  border-color: color-mix(in srgb, #0d5a8c 28%, transparent);
+  border-color: color-mix(in srgb, var(--brand-blue) 28%, transparent);
   box-shadow:
-    inset 0 3px 0 0 #62a945,
+    inset 0 3px 0 0 var(--brand-green),
     0 1px 2px rgba(13, 90, 140, 0.06);
 }
 
 html.dark .service-card--grg {
-  border-color: color-mix(in srgb, #00f2fe 22%, transparent);
+  border-color: color-mix(in srgb, var(--brand-cyan) 22%, transparent);
   box-shadow:
-    inset 0 3px 0 0 #62a945,
+    inset 0 3px 0 0 var(--brand-green),
     0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
@@ -120,9 +120,9 @@ html.dark .service-card--grg {
   padding: 0.28rem 0.55rem;
   border-radius: 0.4rem;
   border: 1px solid rgba(255, 255, 255, 0.28);
-  background: color-mix(in srgb, #0d5a8c 78%, transparent);
+  background: color-mix(in srgb, var(--brand-blue) 78%, transparent);
   backdrop-filter: blur(6px);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
   font-size: 0.62rem;
   font-weight: 700;
   letter-spacing: 0.06em;

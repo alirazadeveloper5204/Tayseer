@@ -9,13 +9,13 @@
   display: grid;
   place-items: center;
   pointer-events: all;
-  background: #141b24;
+  background: var(--surface-dark-elevated);
   opacity: 0;
   transition: opacity 320ms cubic-bezier(0.33, 1, 0.68, 1);
 }
 
 .page-loader--light {
-  background: #f7f9fc;
+  background: var(--surface-light);
 }
 
 .page-loader--visible {
@@ -66,7 +66,7 @@
 
 .page-loader__ghost path {
   fill: none;
-  stroke: #095a8d;
+  stroke: var(--brand-blue);
   stroke-width: 6;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -75,12 +75,12 @@
 }
 
 .page-loader__ghost path:last-child {
-  stroke: #62a845;
+  stroke: var(--brand-green);
 }
 
 .page-loader__stroke {
   fill: none;
-  stroke: #0d5a8e;
+  stroke: var(--brand-blue);
   stroke-width: 5;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -91,7 +91,7 @@
 
 .page-loader__stroke--5a,
 .page-loader__stroke--5b {
-  stroke: #62a845;
+  stroke: var(--brand-green);
   animation-name: page-loader-pen-green;
 }
 

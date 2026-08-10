@@ -28,6 +28,24 @@
     --site-chrome-offset-collapsed: 4rem;
     --site-chrome-offset-expanded: 7.25rem;
 
+    /* Brand + surface tokens (keep in sync with tailwind.config.js) */
+    --brand-blue: var(--brand-blue);
+    --brand-blue-600: var(--brand-blue-600);
+    --brand-blue-700: var(--brand-blue-700);
+    --brand-blue-800: var(--brand-blue-800);
+    --brand-blue-900: var(--brand-blue-900);
+    --brand-blue-mid: var(--brand-blue-mid);
+    --brand-green: var(--brand-green);
+    --brand-cyan: var(--brand-cyan);
+    --surface-light: var(--surface-light);
+    --surface-light-muted: var(--surface-light-muted);
+    --surface-light-elevated: #ffffff;
+    --surface-dark: var(--surface-dark);
+    --surface-dark-elevated: var(--surface-dark-elevated);
+    --surface-dark-muted: var(--surface-dark-muted);
+    --ink: var(--ink);
+    --ink-soft: var(--ink-soft);
+    --ink-inverse: var(--ink-inverse);
 
     --motion-instant: 120ms;
     --motion-fast: 200ms;
@@ -60,7 +78,7 @@
 
   html.dark {
     color-scheme: dark;
-    background: #030712;
+    background: var(--surface-dark);
     --elev-1:
       0 1px 2px rgba(0, 0, 0, 0.35),
       0 6px 18px rgba(0, 0, 0, 0.28);
@@ -80,7 +98,7 @@
     overflow-x: clip;
     @apply antialiased;
     text-rendering: optimizeLegibility;
-    background: #f7f9fc;
+    background: var(--surface-light);
   }
 
   body {
@@ -110,14 +128,14 @@
     background:
       radial-gradient(ellipse 80% 55% at 12% 8%, rgba(13, 90, 140, 0.16), transparent 58%),
       radial-gradient(ellipse 70% 50% at 88% 12%, rgba(98, 169, 69, 0.12), transparent 52%),
-      linear-gradient(180deg, #eef4f8 0%, #f7f9fc 42%, #f3f6fa 100%);
+      linear-gradient(180deg, var(--surface-light-muted) 0%, var(--surface-light) 42%, #f3f6fa 100%);
   }
 
   html.dark body::before {
     background:
       radial-gradient(ellipse 80% 55% at 12% 8%, rgba(0, 242, 254, 0.1), transparent 58%),
       radial-gradient(ellipse 70% 50% at 88% 12%, rgba(98, 169, 69, 0.1), transparent 52%),
-      linear-gradient(180deg, #071018 0%, #030712 48%, #050b14 100%);
+      linear-gradient(180deg, #071018 0%, var(--surface-dark) 48%, #050b14 100%);
   }
 
   body::after {
@@ -157,7 +175,7 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: #030712;
+    background: var(--surface-dark);
   }
 
   ::-webkit-scrollbar-thumb {
@@ -166,11 +184,11 @@
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #00f2fe;
+    background: var(--brand-cyan);
   }
 
   html {
-    scrollbar-color: #1e293b #030712;
+    scrollbar-color: #1e293b var(--surface-dark);
   }
 
   h1,
@@ -344,14 +362,14 @@
   .site-band {
     position: relative;
     isolation: isolate;
-    background: #0b1220 !important;
+    background: var(--ink) !important;
     border-block: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   html:not(.dark) .services-bento,
   html:not(.dark) .clients-band,
   html:not(.dark) .site-band {
-    background: #f7f9fc !important;
+    background: var(--surface-light) !important;
     border-block-color: rgba(9, 90, 141, 0.12);
   }
 
@@ -359,22 +377,22 @@
   @media (min-width: 1024px) {
     html:not(.dark) .site-nav a:hover,
     html:not(.dark) .site-nav .nav-scroll-active {
-      color: #62a945 !important;
+      color: var(--brand-green) !important;
     }
 
     html.dark .site-nav a:hover,
     html.dark .site-nav .nav-scroll-active {
-      color: #00f2fe !important;
+      color: var(--brand-cyan) !important;
     }
   }
 
   .nav-scroll-active {
-    color: #62a945 !important;
+    color: var(--brand-green) !important;
     border-color: rgba(98, 169, 69, 0.45) !important;
   }
 
   html.dark .nav-scroll-active {
-    color: #00f2fe !important;
+    color: var(--brand-cyan) !important;
     border-color: rgba(0, 242, 254, 0.5) !important;
   }
 

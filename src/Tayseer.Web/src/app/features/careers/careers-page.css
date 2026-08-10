@@ -65,7 +65,7 @@ html[dir='rtl'] .careers-hero__title {
   border-radius: 999px;
   border: 1px solid rgba(13, 90, 140, 0.18);
   background: rgba(255, 255, 255, 0.88);
-  color: #0d5a8c;
+  color: var(--brand-blue);
   padding: 0.42rem 0.8rem;
   font-size: 0.78rem;
   font-weight: 700;
@@ -75,7 +75,7 @@ html[dir='rtl'] .careers-hero__title {
 :host-context(html.dark) .careers-hero__meta li {
   border-color: rgba(0, 242, 254, 0.22);
   background: rgba(15, 23, 42, 0.78);
-  color: #e8eef5;
+  color: var(--ink-inverse);
 }
 
 .careers-hero__media {
@@ -111,12 +111,12 @@ html[dir='rtl'] .careers-hero__title {
   bottom: var(--careers-hang);
   width: 46%;
   aspect-ratio: 5 / 4;
-  border: 3px solid #f7f9fc;
+  border: 3px solid var(--surface-light);
   transform: translateY(28%);
 }
 
 :host-context(html.dark) .careers-hero__shot--side {
-  border-color: #030712;
+  border-color: var(--surface-dark);
 }
 
 .careers-hero__badge {
@@ -126,14 +126,14 @@ html[dir='rtl'] .careers-hero__title {
   max-width: 14rem;
   border-radius: 0.95rem;
   padding: 0.75rem 0.9rem;
-  background: linear-gradient(135deg, #0d5a8c 0%, #1a7bb0 55%, #62a945 100%);
+  background: linear-gradient(135deg, var(--brand-blue) 0%, var(--brand-blue-mid) 55%, var(--brand-green) 100%);
   color: #ffffff;
   box-shadow: 0 14px 30px rgba(13, 90, 140, 0.22);
   transform: translateY(50%);
 }
 
 :host-context(html.dark) .careers-hero__badge {
-  background: linear-gradient(135deg, #0f172a 0%, #0d5a8c 62%, #0b4f7a 100%);
+  background: linear-gradient(135deg, var(--surface-dark-elevated) 0%, var(--brand-blue) 62%, var(--brand-blue-600) 100%);
   box-shadow: 0 14px 30px rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(0, 242, 254, 0.28);
 }
@@ -148,7 +148,7 @@ html[dir='rtl'] .careers-hero__title {
 }
 
 :host-context(html.dark) .careers-hero__badge span {
-  color: #00f2fe;
+  color: var(--brand-cyan);
 }
 
 .careers-hero__badge strong {
@@ -211,7 +211,7 @@ html[dir='rtl'] .careers-hero__title {
   height: 2.55rem;
   margin-bottom: 0.95rem;
   border-radius: 999px;
-  background: #0d5a8c;
+  background: var(--brand-blue);
   color: #ffffff;
   box-shadow: 0 8px 18px rgba(13, 90, 140, 0.22);
 }
@@ -223,7 +223,7 @@ html[dir='rtl'] .careers-hero__title {
 }
 
 :host-context(html.dark) .careers-value__icon {
-  background: #62a945;
+  background: var(--brand-green);
   color: #ffffff;
   box-shadow: 0 8px 18px rgba(98, 169, 69, 0.28);
 }
@@ -232,7 +232,7 @@ html[dir='rtl'] .careers-hero__title {
   margin: 0;
   font-size: 1.05rem;
   font-weight: 700;
-  color: #0b1220;
+  color: var(--ink);
 }
 
 :host-context(html.dark) .careers-value h3 {
@@ -241,7 +241,7 @@ html[dir='rtl'] .careers-hero__title {
 
 .careers-value p {
   margin: 0.55rem 0 0;
-  color: #475569;
+  color: var(--ink-soft);
   line-height: 1.65;
 }
 
@@ -262,7 +262,7 @@ html[dir='rtl'] .careers-hero__title {
   margin: 0;
   font-size: 1.15rem;
   font-weight: 700;
-  color: #0d5a8c;
+  color: var(--brand-blue);
 }
 
 :host-context(html.dark) .careers-empty h3 {
@@ -271,7 +271,7 @@ html[dir='rtl'] .careers-hero__title {
 
 .careers-empty p {
   margin: 0.55rem 0 0;
-  color: #475569;
+  color: var(--ink-soft);
   line-height: 1.65;
 }
 

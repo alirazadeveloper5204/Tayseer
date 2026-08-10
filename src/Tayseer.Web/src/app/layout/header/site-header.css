@@ -42,7 +42,7 @@
   list-style: none;
   font-size: clamp(0.7rem, 0.62rem + 0.45vw, 0.9375rem);
   font-weight: 600;
-  color: #0d5a8c;
+  color: var(--brand-blue);
 }
 
 :host-context(html.dark) .site-nav__list {
@@ -60,13 +60,13 @@
 .site-nav__link:hover,
 .site-nav__link.router-link-active,
 .site-nav__link.nav-scroll-active {
-  color: #62a945;
+  color: var(--brand-green);
 }
 
 :host-context(html.dark) .site-nav__link:hover,
 :host-context(html.dark) .site-nav__link.router-link-active,
 :host-context(html.dark) .site-nav__link.nav-scroll-active {
-  color: #00f2fe;
+  color: var(--brand-cyan);
 }
 
 .nav-dd {
@@ -139,7 +139,7 @@
 
 :host-context(html.dark) .site-nav__submenu-panel {
   border-color: rgba(255, 255, 255, 0.12);
-  background: #0f172a;
+  background: var(--surface-dark-elevated);
 }
 
 .site-nav__submenu-link.dropdown-item {
@@ -164,7 +164,7 @@
 
 .site-nav__submenu-link.dropdown-item:hover,
 .site-nav__submenu-link.dropdown-item:focus {
-  background: #0d5a8c;
+  background: var(--brand-blue);
   color: #ffffff;
   padding-inline-start: 1.1rem;
   outline: none;
@@ -173,7 +173,7 @@
 :host-context(html.dark) .site-nav__submenu-link.dropdown-item:hover,
 :host-context(html.dark) .site-nav__submenu-link.dropdown-item:focus {
   background: rgba(0, 242, 254, 0.18);
-  color: #00f2fe;
+  color: var(--brand-cyan);
 }
 
 .site-header__actions {
@@ -202,7 +202,7 @@
   border-radius: 999px;
   border: 1.5px solid rgba(13, 90, 140, 0.28);
   background: #ffffff;
-  color: #0d5a8c;
+  color: var(--brand-blue);
   transition:
     background 0.2s ease,
     border-color 0.2s ease,
@@ -211,24 +211,24 @@
 }
 
 .site-chrome-btn:hover {
-  border-color: #0d5a8c;
+  border-color: var(--brand-blue);
   background: rgba(13, 90, 140, 0.08);
 }
 
 .site-chrome-btn:focus-visible {
-  outline: 2px solid #62a945;
+  outline: 2px solid var(--brand-green);
   outline-offset: 2px;
 }
 
 :host-context(html.dark) .site-chrome-btn {
   border-color: rgba(255, 255, 255, 0.28);
   background: rgba(15, 23, 42, 0.78);
-  color: #e8eef5;
+  color: var(--ink-inverse);
 }
 
 :host-context(html.dark) .site-chrome-btn:hover {
-  border-color: #00f2fe;
-  color: #00f2fe;
+  border-color: var(--brand-cyan);
+  color: var(--brand-cyan);
   background: rgba(0, 242, 254, 0.1);
 }
 
@@ -275,7 +275,7 @@
   border-radius: 999px;
   border: 1.5px solid rgba(13, 90, 140, 0.28);
   background: #ffffff;
-  color: #0d5a8c;
+  color: var(--brand-blue);
   cursor: pointer;
 }
 
@@ -285,14 +285,14 @@
 }
 
 .site-header__menu-btn:focus-visible {
-  outline: 2px solid #62a945;
+  outline: 2px solid var(--brand-green);
   outline-offset: 2px;
 }
 
 :host-context(html.dark) .site-header__menu-btn {
   border-color: rgba(255, 255, 255, 0.28);
   background: rgba(15, 23, 42, 0.78);
-  color: #e8eef5;
+  color: var(--ink-inverse);
 }
 
 .site-header__backdrop {
@@ -335,7 +335,7 @@
 
   :host-context(html.dark) .site-nav {
     border-bottom-color: rgba(255, 255, 255, 0.12);
-    background: #030712;
+    background: var(--surface-dark);
     box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
   }
 
