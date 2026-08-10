@@ -380,7 +380,7 @@ export class ChatWidget implements OnDestroy {
           this.persistSession({ conversationId: res.conversationId, visitorKey: res.visitorKey });
           this.messages.set(res.messages.map((m) => this.toUiMessage(m)));
           this.busy.set(false);
-          await this.bindAgentRealtime(res.conversationId);
+          await this.bindAgentRealtime(res.conversationId, res.visitorKey);
           this.focusComposer();
         },
         error: (err: unknown) => {
@@ -457,15 +457,15 @@ export class ChatWidget implements OnDestroy {
         this.agentConversationId.set(detail.id);
         this.agentStatus.set(detail.status);
         this.messages.set(detail.messages.map((m) => this.toUiMessage(m)));
-        await this.bindAgentRealtime(detail.id);
+        await this.bindAgentRealtime(detail.id, session.visitorKey);
       },
       error: () => this.clearSession(),
     });
   }
 
-  private async bindAgentRealtime(conversationId: string): Promise<void> {
+  private async bindAgentRealtime(conversationId: string, visitorKey: string): Promise<void> {
     this.hubSub?.unsubscribe();
-    await this.hub.joinConversation(conversationId);
+    await this.hub.joinConversation(conversationId, visitorKey);
     this.joinedConversationId = conversationId;
     this.hubSub = this.hub.messageCreated$.subscribe((payload) => {
       if ('conversationId' in payload) {

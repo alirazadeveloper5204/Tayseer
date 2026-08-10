@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
+using Tayseer.Api.Data;
 
 namespace Tayseer.Api.Hubs;
 
@@ -10,7 +12,7 @@ public interface IAgentChatClient
     Task AgentNotification(object payload);
 }
 
-public sealed class AgentChatHub : Hub<IAgentChatClient>
+public sealed class AgentChatHub(AppDbContext db) : Hub<IAgentChatClient>
 {
     public const string AdminsGroup = "admins";
 
@@ -26,15 +28,38 @@ public sealed class AgentChatHub : Hub<IAgentChatClient>
         await base.OnConnectedAsync();
     }
 
-
-    public Task JoinConversation(string conversationId)
+    /// <summary>
+    /// Visitors must prove ownership with <paramref name="visitorKey"/>.
+    /// Authenticated admins may join any conversation group without a key.
+    /// </summary>
+    public async Task JoinConversation(string conversationId, string? visitorKey = null)
     {
         if (!Guid.TryParse(conversationId, out var id))
         {
             throw new HubException("Invalid conversation id.");
         }
 
-        return Groups.AddToGroupAsync(Context.ConnectionId, ConversationGroup(id));
+        var isAdmin = Context.User?.Identity?.IsAuthenticated == true
+            && Context.User.IsInRole("Admin");
+
+        if (!isAdmin)
+        {
+            if (string.IsNullOrWhiteSpace(visitorKey))
+            {
+                throw new HubException("visitorKey is required.");
+            }
+
+            var allowed = await db.AgentConversations
+                .AsNoTracking()
+                .AnyAsync(c => c.Id == id && c.VisitorKey == visitorKey);
+
+            if (!allowed)
+            {
+                throw new HubException("Conversation not found.");
+            }
+        }
+
+        await Groups.AddToGroupAsync(Context.ConnectionId, ConversationGroup(id));
     }
 
     public Task LeaveConversation(string conversationId)

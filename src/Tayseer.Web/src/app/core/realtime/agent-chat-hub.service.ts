@@ -58,10 +58,10 @@ export class AgentChatHubService {
     await this.ensureConnected('visitor');
   }
 
-  async joinConversation(conversationId: string): Promise<void> {
+  async joinConversation(conversationId: string, visitorKey: string): Promise<void> {
     await this.connectAsVisitor();
     if (this.connection?.state === HubConnectionState.Connected) {
-      await this.connection.invoke('JoinConversation', conversationId);
+      await this.connection.invoke('JoinConversation', conversationId, visitorKey);
     }
   }
 

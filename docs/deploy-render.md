@@ -254,6 +254,21 @@ If the API fails to connect, keep the Sprint 3 defaults (`Require` + trust certi
 3. Update `ConnectionStrings__DefaultConnection` to use `tayseer_app` + its password.
 4. Redeploy and confirm `/health/ready` is healthy.
 
+### SignalR conversation join
+
+`JoinConversation` requires a valid `visitorKey` matching the conversation (admins authenticated with role `Admin` may join without a key). Random GUIDs can no longer subscribe to another visitor’s live messages.
+
+### Dependency audit (monthly)
+
+From `src/Tayseer.Web`:
+
+```bash
+npm run audit:deps        # production deps only
+npm run audit:deps:all    # including devDependencies
+```
+
+Triage high/critical findings; prefer `npm audit fix` when safe. Don’t blind `npm audit fix --force` across Angular majors.
+
 ## Third-party / CDN
 
 - **Fonts** are self-hosted via `@fontsource/*` (bundled with the web app). There is no Google Fonts CDN link in `index.html`.
