@@ -56,7 +56,7 @@ html.dark .page-hero__glow {
 html:not(.dark) .page-hero__panel {
   background: rgba(255, 255, 255, 0.96);
   border-color: rgba(13, 90, 140, 0.16);
-  box-shadow: 0 24px 48px rgba(13, 90, 140, 0.1);
+  box-shadow: var(--elev-3);
 }
 
 .page-module {
@@ -92,20 +92,20 @@ html:not(.dark) .page-module {
 
 html:not(.dark) .fintech-card {
   background: #ffffff;
-  border-color: rgba(13, 90, 140, 0.14);
+  border-color: rgba(13, 90, 140, 0.12);
   color: #0b1220;
-  box-shadow: 0 8px 24px rgba(13, 90, 140, 0.06);
+  box-shadow: var(--elev-2);
 }
 
 .fintech-card:hover {
   transform: translateY(-6px) scale(1.015);
   border-color: rgba(98, 169, 69, 0.45);
-  box-shadow: 0 20px 40px -15px rgba(13, 90, 140, 0.18);
+  box-shadow: var(--elev-3);
 }
 
 html.dark .fintech-card:hover {
   border-color: rgba(0, 242, 254, 0.4);
-  box-shadow: 0 20px 40px -15px rgba(0, 242, 254, 0.15);
+  box-shadow: var(--elev-3);
 }
 
 
@@ -542,15 +542,11 @@ html.dark .spotlight-hero__meta li {
   display: block;
   object-fit: cover;
   border-radius: 1.2rem;
-  box-shadow:
-    0 22px 48px rgba(13, 90, 140, 0.16),
-    0 0 0 1px rgba(13, 90, 140, 0.12);
+  box-shadow: var(--elev-3);
 }
 
 html.dark .spotlight-hero__shot {
-  box-shadow:
-    0 22px 48px rgba(0, 0, 0, 0.45),
-    0 0 0 1px rgba(255, 255, 255, 0.08);
+  box-shadow: var(--elev-3);
 }
 
 .spotlight-hero__shot--main {
@@ -789,16 +785,12 @@ html.dark .zigzag__media {
 .zigzag__media:not(.zigzag__media--collage) {
   overflow: hidden;
   background: rgba(13, 90, 140, 0.06);
-  box-shadow:
-    0 18px 40px rgba(13, 90, 140, 0.12),
-    0 2px 8px rgba(13, 90, 140, 0.06);
+  box-shadow: var(--elev-2);
 }
 
 html.dark .zigzag__media:not(.zigzag__media--collage) {
   background: rgba(255, 255, 255, 0.04);
-  box-shadow:
-    0 22px 48px rgba(0, 0, 0, 0.35),
-    0 0 0 1px rgba(255, 255, 255, 0.06);
+  box-shadow: var(--elev-2);
 }
 
 .zigzag__media:not(.zigzag__media--collage) img {

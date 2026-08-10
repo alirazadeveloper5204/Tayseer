@@ -138,7 +138,7 @@ html.dark .home-hero__segments {
   height: clamp(16rem, 38vw, 26rem);
   width: 100%;
   padding: 0;
-  box-shadow: 0 8px 24px rgba(13, 90, 140, 0.06);
+  box-shadow: var(--elev-2);
 }
 
 html.dark .home-hero__stage {
@@ -150,7 +150,7 @@ html.dark .home-hero__stage {
   transform: none !important;
   will-change: auto;
   border-color: rgba(13, 90, 140, 0.14);
-  box-shadow: 0 8px 24px rgba(13, 90, 140, 0.06);
+  box-shadow: var(--elev-2);
 }
 
 html.dark .home-hero__stage.fintech-card,

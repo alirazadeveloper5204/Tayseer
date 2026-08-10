@@ -82,9 +82,10 @@
 .services-bento .service-card {
   height: 100%;
   border-color: rgba(13, 90, 140, 0.14);
-  background: rgba(255, 255, 255, 0.78);
+  background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  box-shadow: var(--elev-2);
   transition:
     transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
     box-shadow 0.35s ease,
@@ -135,16 +136,17 @@
   background: rgba(15, 23, 42, 0.72);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  box-shadow: var(--elev-2);
 }
 
 .services-bento .service-card:hover {
   transform: translateY(-4px);
   border-color: rgba(13, 90, 140, 0.35);
-  box-shadow: 0 20px 40px -15px rgba(13, 90, 140, 0.18);
+  box-shadow: var(--elev-3);
 }
 
 :host-context(html.dark) .services-bento .service-card:hover {
-  box-shadow: 0 20px 40px -15px rgba(0, 242, 254, 0.15);
+  box-shadow: var(--elev-3);
 }
 
 @media (prefers-reduced-motion: reduce) {

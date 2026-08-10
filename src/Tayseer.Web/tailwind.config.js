@@ -84,12 +84,14 @@ module.exports = {
         'fluid-2xl': 'clamp(2.5rem, 1.6rem + 3vw, 5rem)',
         'fluid-3xl': 'clamp(3rem, 2rem + 4vw, 6.5rem)',
       },
-      maxWidth: {
-        content: '72rem' /* ~1152px — constrained reading/content column */,
-      },
       boxShadow: {
-        glass: '0 8px 32px rgba(13, 90, 140, 0.12)',
-        'glass-dark': '0 8px 32px rgba(0, 0, 0, 0.45)',
+        glass:
+          '0 2px 4px rgba(13, 90, 140, 0.05), 0 10px 28px rgba(13, 90, 140, 0.1), 0 24px 48px -22px rgba(13, 90, 140, 0.16)',
+        'glass-dark':
+          '0 8px 32px rgba(0, 0, 0, 0.42), 0 0 0 1px rgba(255, 255, 255, 0.05)',
+      },
+      maxWidth: {
+        content: '90rem',
       },
       backgroundImage: {
         'brand-gradient':
