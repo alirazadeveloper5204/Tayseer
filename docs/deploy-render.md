@@ -37,8 +37,16 @@ The Angular production build **bakes** API URLs into the client/SSR bundles. On 
 
 | Env var | Required | Used for |
 |---------|----------|----------|
-| `API_BASE_URL` | Yes | Browser → public API (`https://tayseer-api.onrender.com`) |
+| `API_BASE_URL` | Yes | Browser → public API (your real hostname, e.g. `https://tayseer-api-mp4f.onrender.com`) |
 | `SSR_API_BASE_URL` | No | Node SSR → API. Prefer private network when both services are in the same region |
+
+Render public hostnames can include a **random suffix** (e.g. `tayseer-api-mp4f`). Always copy the URL from the Render dashboard — `https://tayseer-api.onrender.com` may 404 even if the service is healthy under the suffixed name.
+
+Private network SSR still uses the **service name**, not the public host:
+
+```text
+SSR_API_BASE_URL=http://tayseer-api:10000
+```
 
 **How Render builds the image**
 
@@ -84,7 +92,7 @@ Render deploys from a Git remote. Commit and push these deploy files first.
    - `SSR_API_BASE_URL` — optional; leave blank on first deploy, or set private URL once API is up.
 4. Create the blueprint (`tayseer-api`, `tayseer-web`, `tayseer-db`).
 
-`render.yaml` already sets `API_BASE_URL=https://tayseer-api.onrender.com`. Change it in the Blueprint or Dashboard if your API hostname differs.
+`render.yaml` sets `API_BASE_URL=https://tayseer-api-mp4f.onrender.com`. If Render assigned a different public hostname, update this env var (and redeploy **web**) to match the API service URL from the dashboard.
 
 ## 3. Wire CORS + API URL after first deploy
 
@@ -93,7 +101,7 @@ After both services have public URLs:
 1. **API → Environment**
    - `Cors__AngularOrigins__0` = `https://<your-web-service>.onrender.com`
 2. **Web → Environment**
-   - `API_BASE_URL` = `https://<your-api-service>.onrender.com`
+   - `API_BASE_URL` = `https://<your-api-service>.onrender.com` (exact dashboard URL; may include a suffix like `-mp4f`)
    - Optional: `SSR_API_BASE_URL` = `http://tayseer-api:10000` (same-region private network)
 3. **Manual Deploy** both services after env changes (web must rebuild so the Angular bundle picks up the new API URL).
 
@@ -136,6 +144,7 @@ ConnectionStrings__DefaultConnection=<neon connection string>
 
 ```text
 ASPNETCORE_ENVIRONMENT=Production
+DOTNET_HOSTBUILDER__RELOADCONFIGONCHANGE=false
 Database__Provider=Npgsql
 ConnectionStrings__DefaultConnection=<Internal Database URL from Render Postgres>
 Cors__AngularOrigins__0=https://<web>.onrender.com
@@ -145,7 +154,7 @@ AdminSeed__Password=<strong password>
 Ollama__RagEnabled=false
 ```
 
-7. Deploy, note the public URL (e.g. `https://tayseer-api.onrender.com`).
+7. Deploy, note the public URL from the dashboard (e.g. `https://tayseer-api-mp4f.onrender.com`).
 
 ### Web
 
@@ -184,6 +193,24 @@ docker build -f src/Tayseer.Web/Dockerfile \
   -t tayseer-web .
 docker run --rm -p 4000:4000 tayseer-web
 ```
+
+## Troubleshooting
+
+### Browser CORS error + API `404` / `x-render-routing: no-server`
+
+The API process is **not running**. CORS is a side effect — Render’s “Not Found” response has no `Access-Control-Allow-Origin` header.
+
+Common cause on free tier: ASP.NET file watchers exceed the **inotify** limit:
+
+```text
+System.IO.IOException: The configured user limit (128) on the number of inotify instances has been reached
+```
+
+Fix (already in this repo): set `DOTNET_HOSTBUILDER__RELOADCONFIGONCHANGE=false` and redeploy the API. Confirm `/health` returns JSON before testing the site.
+
+### CORS only (API `/health` works)
+
+Set `Cors__AngularOrigins__0` exactly to the web origin (no trailing slash), e.g. `https://tayseer-web.onrender.com`, then redeploy the API.
 
 ## Security checklist before sharing the URL
 

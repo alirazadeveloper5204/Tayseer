@@ -12,7 +12,7 @@
 FROM node:22-bookworm AS build
 WORKDIR /app
 
-ARG API_BASE_URL=https://tayseer-api.onrender.com
+ARG API_BASE_URL=https://tayseer-api-mp4f.onrender.com
 ARG SSR_API_BASE_URL=
 
 COPY src/Tayseer.Web/package.json src/Tayseer.Web/package-lock.json ./

@@ -13,6 +13,9 @@ using Tayseer.Api.Options;
 using Tayseer.Api.Services;
 using Tayseer.Api.Services.Rag;
 
+// Render free tier hits inotify limits if ASP.NET watches appsettings for reload.
+Environment.SetEnvironmentVariable("DOTNET_HOSTBUILDER__RELOADCONFIGONCHANGE", "false");
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
@@ -98,8 +101,18 @@ builder.Services.AddSingleton<InMemoryKnowledgeIndex>();
 builder.Services.AddScoped<CmsKnowledgeBuilder>();
 builder.Services.AddScoped<KnowledgeIndexService>();
 
-var corsOrigins = builder.Configuration.GetSection("Cors:AngularOrigins").Get<string[]>()
-    ?? ["http://localhost:4200", "https://localhost:4200", "http://127.0.0.1:4200"];
+var corsOrigins = (builder.Configuration.GetSection("Cors:AngularOrigins").Get<string[]>()
+    ?? ["http://localhost:4200", "https://localhost:4200", "http://127.0.0.1:4200"])
+    .Where(static o => !string.IsNullOrWhiteSpace(o))
+    .Select(static o => o.Trim().TrimEnd('/'))
+    .Distinct(StringComparer.OrdinalIgnoreCase)
+    .ToArray();
+
+if (corsOrigins.Length == 0)
+{
+    throw new InvalidOperationException(
+        "Configure Cors:AngularOrigins (e.g. Cors__AngularOrigins__0=https://tayseer-web.onrender.com).");
+}
 
 builder.Services.AddCors(options =>
 {
@@ -126,7 +139,14 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AngularApp");
 
-if (!app.Environment.IsDevelopment())
+// Render terminates TLS at the proxy; the container receives HTTP.
+// Skip HTTPS redirection so health/API calls aren't redirected oddly behind the load balancer.
+if (!app.Environment.IsDevelopment()
+    && !string.Equals(
+        Environment.GetEnvironmentVariable("DISABLE_HTTPS_REDIRECTION"),
+        "true",
+        StringComparison.OrdinalIgnoreCase)
+    && string.IsNullOrEmpty(Environment.GetEnvironmentVariable("RENDER")))
 {
     app.UseHttpsRedirection();
 }

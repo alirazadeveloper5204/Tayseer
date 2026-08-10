@@ -19,6 +19,8 @@ services:
     envVars:
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
+      - key: DOTNET_HOSTBUILDER__RELOADCONFIGONCHANGE
+        value: "false"
       - key: Database__Provider
         value: Npgsql
       - key: ConnectionStrings__DefaultConnection
@@ -53,8 +55,9 @@ services:
         value: production
       # Public API URL baked into the Angular browser bundle at image build time.
       # Render forwards this env var to Docker as ARG API_BASE_URL.
+      # Use the exact public hostname from the API service (may include a random suffix).
       - key: API_BASE_URL
-        value: https://tayseer-api.onrender.com
+        value: https://tayseer-api-mp4f.onrender.com
       # Optional: private-network URL for SSR server-side fetches (same region).
       # Leave unset to reuse API_BASE_URL. Example: http://tayseer-api:10000
       - key: SSR_API_BASE_URL
