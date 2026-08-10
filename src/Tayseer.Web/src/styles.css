@@ -28,24 +28,24 @@
     --site-chrome-offset-collapsed: 4rem;
     --site-chrome-offset-expanded: 7.25rem;
 
-    /* Brand + surface tokens (keep in sync with tailwind.config.js) */
-    --brand-blue: var(--brand-blue);
-    --brand-blue-600: var(--brand-blue-600);
-    --brand-blue-700: var(--brand-blue-700);
-    --brand-blue-800: var(--brand-blue-800);
-    --brand-blue-900: var(--brand-blue-900);
-    --brand-blue-mid: var(--brand-blue-mid);
-    --brand-green: var(--brand-green);
-    --brand-cyan: var(--brand-cyan);
-    --surface-light: var(--surface-light);
-    --surface-light-muted: var(--surface-light-muted);
+    /* Brand + surface tokens (keep in sync with tailwind.config.js). Values must be hex, not var() self-refs. */
+    --brand-blue: #0d5a8c;
+    --brand-blue-600: #0b4f7a;
+    --brand-blue-700: #094266;
+    --brand-blue-800: #06324d;
+    --brand-blue-900: #042233;
+    --brand-blue-mid: #1a7bb0;
+    --brand-green: #62a945;
+    --brand-cyan: #00f2fe;
+    --surface-light: #f7f9fc;
+    --surface-light-muted: #eef2f7;
     --surface-light-elevated: #ffffff;
-    --surface-dark: var(--surface-dark);
-    --surface-dark-elevated: var(--surface-dark-elevated);
-    --surface-dark-muted: var(--surface-dark-muted);
-    --ink: var(--ink);
-    --ink-soft: var(--ink-soft);
-    --ink-inverse: var(--ink-inverse);
+    --surface-dark: #030712;
+    --surface-dark-elevated: #0f172a;
+    --surface-dark-muted: #111827;
+    --ink: #0b1220;
+    --ink-soft: #475569;
+    --ink-inverse: #e5e7eb;
 
     --motion-instant: 120ms;
     --motion-fast: 200ms;
