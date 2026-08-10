@@ -55,17 +55,16 @@ After both services have public URLs:
 
 1. **API → Environment**
    - `Cors__AngularOrigins__0` = `https://<your-web-service>.onrender.com`
-2. **Web → Build**
-   - Confirm build arg `API_BASE_URL` = `https://<your-api-service>.onrender.com`
-   - Or edit `render.yaml` `dockerBuildArgs.API_BASE_URL` and redeploy the blueprint / web service.
-3. Manual Dashboard clear: **Manual Deploy** on each service after env changes.
+2. **Web → Environment**
+   - Confirm `API_BASE_URL` = `https://<your-api-service>.onrender.com`
+   - (Render passes service env vars into Docker as build args automatically.)
+3. **Manual Deploy** on each service after env changes.
 
-Optional SSR speed-up (same Render region): set build arg
+Optional SSR speed-up (same Render region): set env var
 
 ```text
 SSR_API_BASE_URL=http://tayseer-api:10000
 ```
-
 Browsers still use the public `API_BASE_URL`.
 
 ## 4. Verify
@@ -121,7 +120,7 @@ Ollama__RagEnabled=false
 - Dockerfile path: `src/Tayseer.Web/Dockerfile`
 - Docker build context: repo root `.`
 - Instance: **Free**
-- Docker build args: `API_BASE_URL=https://<api>.onrender.com`
+- Environment: `API_BASE_URL=https://<api>.onrender.com` (passed into the Docker build as an ARG)
 
 ## Local Docker smoke test
 

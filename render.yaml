@@ -49,11 +49,12 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-    dockerBuildArgs:
-      # Set this to your API public URL after the first API deploy (or use the default name).
-      API_BASE_URL: https://tayseer-api.onrender.com
-      # Optional: private network URL for SSR fetches (same region).
-      # SSR_API_BASE_URL: http://tayseer-api:10000
+      # Also available as a Docker build ARG (Render maps env vars → build args).
+      - key: API_BASE_URL
+        value: https://tayseer-api.onrender.com
+      # Optional SSR private URL after deploy (same region): http://tayseer-api:10000
+      # - key: SSR_API_BASE_URL
+      #   value: http://tayseer-api:10000
 
 databases:
   - name: tayseer-db
