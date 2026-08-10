@@ -222,10 +222,33 @@ static bool LooksLikePostgres(string connectionString) =>
 
 static string NormalizePostgresConnectionString(string connectionString)
 {
-    // Render / Neon URI form works with Npgsql once the scheme is postgresql://
-    if (connectionString.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase))
+    if (string.IsNullOrWhiteSpace(connectionString))
     {
-        return "postgresql://" + connectionString["postgres://".Length..];
+        throw new InvalidOperationException(
+            "Postgres connection string is missing. Set ConnectionStrings__DefaultConnection " +
+            "(Render: Internal Database URL from the Postgres service).");
+    }
+
+    // Npgsql's ConnectionStringBuilder rejects URI form (postgres:// / postgresql://).
+    // Convert Render/Neon URLs to keyword format and require SSL.
+    if (connectionString.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase)
+        || connectionString.StartsWith("postgresql://", StringComparison.OrdinalIgnoreCase))
+    {
+        var uri = new Uri(connectionString);
+        var userInfo = uri.UserInfo.Split(':', 2);
+        var username = Uri.UnescapeDataString(userInfo[0]);
+        var password = userInfo.Length > 1 ? Uri.UnescapeDataString(userInfo[1]) : string.Empty;
+        var database = Uri.UnescapeDataString(uri.AbsolutePath.TrimStart('/'));
+        var port = uri.IsDefaultPort ? 5432 : uri.Port;
+
+        return string.Join(';',
+            $"Host={uri.Host}",
+            $"Port={port}",
+            $"Database={database}",
+            $"Username={username}",
+            $"Password={password}",
+            "SSL Mode=Require",
+            "Trust Server Certificate=true");
     }
 
     return connectionString;

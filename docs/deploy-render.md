@@ -29,6 +29,8 @@ Local development stays on **SQL Server LocalDB**. Production uses **PostgreSQL*
 
 Optional: `Database__Provider=Npgsql` (already set in Production + `render.yaml`).
 
+Render’s Internal/External Database URL looks like `postgresql://user:pass@host/db`. The API converts that URI to Npgsql keyword form (`Host=...;SSL Mode=Require;...`) at startup — do not paste a SQL Server-style string.
+
 ## Web service env vars (API URL)
 
 The Angular production build **bakes** API URLs into the client/SSR bundles. On Render, configure them as **service environment variables** — not Blueprint `dockerBuildArgs` (that field is invalid and will fail validation).
