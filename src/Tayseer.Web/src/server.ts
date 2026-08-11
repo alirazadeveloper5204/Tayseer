@@ -28,7 +28,13 @@ app.use((req, res, next) => {
   next();
 });
 
-/** Upstream API for same-origin browser requests (/api, /hubs, /health). */
+/**
+ * Public API hostname — required to wake Render free dynos.
+ * Free web services only wake on public inbound traffic (private network does not wake them).
+ */
+const publicApiUpstream = (process.env['API_BASE_URL'] || '').replace(/\/$/, '');
+
+/** Upstream for /api proxy (may be private on paid plans; prefer public on free). */
 const apiUpstream = (
   process.env['API_PROXY_TARGET'] ||
   process.env['SSR_API_BASE_URL'] ||
@@ -36,15 +42,53 @@ const apiUpstream = (
   ''
 ).replace(/\/$/, '');
 
+const wakeTarget = publicApiUpstream || apiUpstream;
+
 const apiProxy = apiUpstream
   ? createProxyMiddleware({
       target: apiUpstream,
       changeOrigin: true,
       ws: true,
       xfwd: true,
+      // Cold starts often exceed the default proxy timeout.
+      proxyTimeout: 120_000,
+      timeout: 120_000,
       pathFilter: ['/api', '/hubs', '/health'],
     })
   : null;
+
+/**
+ * Long-held server-side wake. Browser polls this so Node (not the short-lived proxy hop)
+ * waits on Render's public spin-up page.
+ */
+app.get('/__wake-api', async (_req, res) => {
+  if (!wakeTarget) {
+    res.status(503).json({ ok: false, ready: false, reason: 'no_upstream' });
+    return;
+  }
+
+  try {
+    const health = await fetch(`${wakeTarget}/health`, {
+      signal: AbortSignal.timeout(90_000),
+      headers: { Accept: 'application/json, text/plain, */*' },
+    });
+    let ready = false;
+    if (health.ok) {
+      try {
+        const readyRes = await fetch(`${wakeTarget}/health/ready`, {
+          signal: AbortSignal.timeout(20_000),
+          headers: { Accept: 'application/json, text/plain, */*' },
+        });
+        ready = readyRes.ok;
+      } catch {
+        ready = false;
+      }
+    }
+    res.status(health.ok ? 200 : 502).json({ ok: health.ok, ready });
+  } catch {
+    res.status(503).json({ ok: false, ready: false });
+  }
+});
 
 if (apiProxy) {
   app.use(apiProxy);
@@ -54,20 +98,18 @@ if (apiProxy) {
   );
 }
 
-/** When the web dyno boots (Render cold start), nudge the API awake ASAP. */
+/** When the web dyno boots, nudge the public API awake ASAP. */
 function wakeUpstreamApi(): void {
-  if (!apiUpstream) {
+  if (!wakeTarget) {
     return;
   }
-  const controllers = ['/health', '/health/ready'];
-  for (const path of controllers) {
-    void fetch(`${apiUpstream}${path}`).catch(() => {
-      /* cold API may take 30–60s — browser wake poll continues */
+  for (const path of ['/health', '/health/ready']) {
+    void fetch(`${wakeTarget}${path}`).catch(() => {
+      /* cold API may take 30–90s — browser /__wake-api poll continues */
     });
   }
 }
 wakeUpstreamApi();
-
 
 app.use(
   express.static(browserDistFolder, {
@@ -96,6 +138,9 @@ if (isMainModule(import.meta.url) || process.env['pm_id']) {
     console.log(`Node Express server listening on http://localhost:${port}`);
     if (apiUpstream) {
       console.log(`[ssr] Proxying /api /hubs /health → ${apiUpstream}`);
+    }
+    if (wakeTarget) {
+      console.log(`[ssr] Wake target → ${wakeTarget}`);
     }
   });
 

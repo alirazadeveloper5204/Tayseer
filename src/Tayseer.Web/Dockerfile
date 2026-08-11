@@ -34,6 +34,7 @@ const content = `export const environment = {
   production: true,
   apiBaseUrl: '',
   ssrApiBaseUrl: '${ssr}',
+  apiPublicWakeUrl: '${api}',
   useStaticContent: false,
   siteUrl: '${site}',
   defaultOgImage: '/brand/logo-light.svg',

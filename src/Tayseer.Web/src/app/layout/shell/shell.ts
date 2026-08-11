@@ -1,14 +1,12 @@
 import {
   Component,
   inject,
-  OnInit,
   signal,
   afterNextRender,
   DestroyRef,
-  PLATFORM_ID,
   computed,
 } from '@angular/core';
-import { isPlatformBrowser, DOCUMENT } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { TopBar } from '../top-bar/top-bar';
 import { SiteHeader } from '../header/site-header';
@@ -26,9 +24,8 @@ import { ApiWakeService } from '../../core/api/api-wake.service';
   templateUrl: './shell.html',
   styleUrl: './shell.css',
 })
-export class Shell implements OnInit {
+export class Shell {
   private readonly document = inject(DOCUMENT);
-  private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
   private readonly locale = inject(LocaleService);
   private readonly apiWake = inject(ApiWakeService);
@@ -45,10 +42,10 @@ export class Shell implements OnInit {
   private lockUntil = 0;
 
   constructor() {
+    // SSR: ngOnInit already ran on the server and will NOT re-run after hydration.
+    // Wake + boot finish must happen here so the browser actually pings the API.
     afterNextRender(() => {
-      if (!isPlatformBrowser(this.platformId)) {
-        return;
-      }
+      void this.finishBootWhenApiReady();
 
       const win = this.document.defaultView;
       if (!win) {
@@ -73,14 +70,8 @@ export class Shell implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    void this.finishBootWhenApiReady();
-  }
-
   private async finishBootWhenApiReady(): Promise<void> {
-    if (isPlatformBrowser(this.platformId)) {
-      await this.apiWake.ensureAwake();
-    }
+    await this.apiWake.ensureAwake();
     this.navigationLoader.markAppReady();
   }
 

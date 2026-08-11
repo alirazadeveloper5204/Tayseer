@@ -47,7 +47,8 @@ Render public hostnames can include a **random suffix** (e.g. `tayseer-api-mp4f`
 Private network (same region) example:
 
 ```text
-SSR_API_BASE_URL=http://tayseer-api:10000
+# Leave unset on free tier (private network cannot wake / reach free web services)
+# SSR_API_BASE_URL=http://tayseer-api:10000
 ```
 
 - Host = service name (`tayseer-api`)
@@ -71,7 +72,8 @@ Do **not** put secrets in these URL vars.
 When `tayseer-web` and `tayseer-api` are in the same Render region:
 
 ```text
-SSR_API_BASE_URL=http://tayseer-api:10000
+# Leave unset on free tier (private network cannot wake / reach free web services)
+# SSR_API_BASE_URL=http://tayseer-api:10000
 ```
 
 Rebuild the web image after setting it.
@@ -172,7 +174,8 @@ Ollama__RagEnabled=false
 ```text
 NODE_ENV=production
 API_BASE_URL=https://<api>.onrender.com
-SSR_API_BASE_URL=http://tayseer-api:10000
+# Leave unset on free tier (private network cannot wake / reach free web services)
+# SSR_API_BASE_URL=http://tayseer-api:10000
 ```
 
 Omit `SSR_API_BASE_URL` if you are unsure of the private port; SSR will use the public `API_BASE_URL` instead.
@@ -271,13 +274,18 @@ Triage high/critical findings; prefer `npm audit fix` when safe. Don’t blind `
 
 ## Cold starts (Render free)
 
-Free web/API/DB sleep after ~15 minutes idle. Visiting the site:
+Free web/API spin down after ~15 minutes idle. **Only a public `*.onrender.com` request wakes a free web service** — private-network hostnames (`http://tayseer-api:10000`) do **not** wake free dynos (and free services cannot receive private inbound traffic).
 
-1. The **web** dyno boots and immediately pings the API `/health` + `/health/ready` (see `server.ts`).
-2. The **browser** keeps the page loader up and polls the same endpoints via same-origin `/health` until the API (and Postgres) answer.
-3. When the API process starts it runs existing **startup seeders** (`EnsureSeedAsync`) — filling missing seed data only, not wiping the DB.
+Leave `SSR_API_BASE_URL` **unset** on free tier so the proxy uses public `API_BASE_URL`.
 
-First load after idle can take **30–90 seconds**. This is normal on free tier.
+Visiting the site:
+
+1. Browser runs wake after hydration (`afterNextRender` — not SSR `ngOnInit`).
+2. Client hits same-origin `/__wake-api`; Node holds a long fetch to the **public** API `/health` (up to ~90s) so Render’s spin-up page is not aborted early.
+3. Browser also `no-cors` nudges `apiPublicWakeUrl` directly.
+4. When the API process starts it runs **startup seeders** (`EnsureSeedAsync`) — filling missing seed data only, not wiping the DB.
+
+First load after idle can take **30–90 seconds**. In DevTools you should see `/__wake-api` pending, then 200.
 
 ## Third-party / CDN
 

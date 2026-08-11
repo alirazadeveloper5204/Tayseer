@@ -61,11 +61,13 @@ services:
       # Canonical site origin for SEO (sitemap, Open Graph, JSON-LD).
       - key: SITE_URL
         value: https://tayseer-web.onrender.com
-      # Optional: private-network URL for SSR fetches + proxy target (same region).
-      # Leave unset to reuse API_BASE_URL. Example: http://tayseer-api:10000
+      # Optional: private-network URL for paid plans only.
+      # Leave UNSET on free tier — free services cannot receive private traffic and it will not wake sleepers.
+      # Example (paid): http://tayseer-api:10000
       - key: SSR_API_BASE_URL
         sync: false
       # Optional override for the Node proxy only (defaults to SSR_API_BASE_URL || API_BASE_URL).
+      # Prefer leaving unset so wake + proxy use public API_BASE_URL on free tier.
       - key: API_PROXY_TARGET
         sync: false
 

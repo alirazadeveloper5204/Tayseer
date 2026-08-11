@@ -92,6 +92,10 @@ export class NavigationLoaderService {
 
         this.navigationDepth = Math.max(0, this.navigationDepth - 1);
         if (this.navigationDepth === 0) {
+          // Keep the boot loader up until Shell finishes API wake (markAppReady).
+          if (!this.booted) {
+            return;
+          }
           if (this.loaderSession || this.active()) {
             this.scheduleHide();
           }
