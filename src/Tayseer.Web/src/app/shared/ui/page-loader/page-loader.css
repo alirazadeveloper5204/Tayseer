@@ -133,6 +133,21 @@
   display: block;
 }
 
+.page-loader__status {
+  margin: 1rem auto 0;
+  max-width: 18rem;
+  text-align: center;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.45;
+  color: rgba(229, 231, 235, 0.72);
+}
+
+.page-loader--light .page-loader__status {
+  color: rgba(11, 18, 32, 0.62);
+}
+
 .page-loader__logo {
   width: clamp(10rem, 36vw, 14rem);
   height: auto;

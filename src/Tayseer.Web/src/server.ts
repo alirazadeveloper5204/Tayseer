@@ -54,6 +54,21 @@ if (apiProxy) {
   );
 }
 
+/** When the web dyno boots (Render cold start), nudge the API awake ASAP. */
+function wakeUpstreamApi(): void {
+  if (!apiUpstream) {
+    return;
+  }
+  const controllers = ['/health', '/health/ready'];
+  for (const path of controllers) {
+    void fetch(`${apiUpstream}${path}`).catch(() => {
+      /* cold API may take 30–60s — browser wake poll continues */
+    });
+  }
+}
+wakeUpstreamApi();
+
+
 app.use(
   express.static(browserDistFolder, {
     maxAge: '1y',

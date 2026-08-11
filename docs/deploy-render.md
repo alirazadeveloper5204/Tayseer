@@ -269,6 +269,16 @@ npm run audit:deps:all    # including devDependencies
 
 Triage high/critical findings; prefer `npm audit fix` when safe. Don’t blind `npm audit fix --force` across Angular majors.
 
+## Cold starts (Render free)
+
+Free web/API/DB sleep after ~15 minutes idle. Visiting the site:
+
+1. The **web** dyno boots and immediately pings the API `/health` + `/health/ready` (see `server.ts`).
+2. The **browser** keeps the page loader up and polls the same endpoints via same-origin `/health` until the API (and Postgres) answer.
+3. When the API process starts it runs existing **startup seeders** (`EnsureSeedAsync`) — filling missing seed data only, not wiping the DB.
+
+First load after idle can take **30–90 seconds**. This is normal on free tier.
+
 ## Third-party / CDN
 
 - **Fonts** are self-hosted via `@fontsource/*` (bundled with the web app). There is no Google Fonts CDN link in `index.html`.

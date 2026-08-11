@@ -4,6 +4,9 @@ export interface UiCopy {
   common: {
     loading: string;
     servicesUnavailable: string;
+    wakeConnecting: string;
+    wakeDatabase: string;
+    wakeTimeout: string;
     readMore: string;
     requestDemo: string;
     talkToUs: string;
@@ -134,6 +137,9 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
     common: {
       loading: 'Loading',
       servicesUnavailable: 'Services are temporarily unavailable. Please try again shortly.',
+      wakeConnecting: 'Waking services… first visit after idle can take up to a minute.',
+      wakeDatabase: 'Connecting to the database…',
+      wakeTimeout: 'Services are slow to respond. Loading the site anyway…',
       readMore: 'Read More',
       requestDemo: 'Request Demo',
       talkToUs: 'Talk To Us',
@@ -272,6 +278,9 @@ export const UI_COPY: Record<AppLocale, UiCopy> = {
     common: {
       loading: 'جاري التحميل',
       servicesUnavailable: 'الخدمات غير متاحة مؤقتاً. يرجى المحاولة مرة أخرى قريباً.',
+      wakeConnecting: 'جاري إيقاظ الخدمات… أول زيارة بعد الخمول قد تستغرق حتى دقيقة.',
+      wakeDatabase: 'جاري الاتصال بقاعدة البيانات…',
+      wakeTimeout: 'الاستجابة بطيئة. نعرض الموقع على أي حال…',
       readMore: 'اقرأ المزيد',
       requestDemo: 'اطلب عرضاً توضيحياً',
       talkToUs: 'تحدث معنا',

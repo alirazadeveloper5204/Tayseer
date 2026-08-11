@@ -1,8 +1,9 @@
-import { Component, DestroyRef, ElementRef, effect, inject, viewChild } from '@angular/core';
+import { Component, DestroyRef, ElementRef, computed, effect, inject, viewChild } from '@angular/core';
 import gsap from 'gsap';
 import { NavigationLoaderService } from '../../../core/navigation/navigation-loader.service';
 import { GsapService } from '../../../core/motion/gsap.service';
 import { UiCopyService } from '../../../core/i18n/ui-copy.service';
+import { ApiWakeService } from '../../../core/api/api-wake.service';
 
 @Component({
   selector: 'app-page-loader',
@@ -12,6 +13,7 @@ import { UiCopyService } from '../../../core/i18n/ui-copy.service';
 export class PageLoader {
   readonly loader = inject(NavigationLoaderService);
   readonly copy = inject(UiCopyService).copy;
+  private readonly apiWake = inject(ApiWakeService);
   private readonly motion = inject(GsapService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly panel = viewChild<ElementRef<HTMLElement>>('loaderPanel');
@@ -19,6 +21,20 @@ export class PageLoader {
   private readonly logo = viewChild<ElementRef<HTMLElement>>('loaderLogo');
   private intro: gsap.core.Timeline | null = null;
   private loop: gsap.core.Timeline | null = null;
+
+  readonly statusText = computed(() => {
+    const c = this.copy().common;
+    switch (this.apiWake.phase()) {
+      case 'database':
+        return c.wakeDatabase;
+      case 'timeout':
+        return c.wakeTimeout;
+      case 'ready':
+        return c.loading;
+      default:
+        return this.apiWake.status() === 'waking' ? c.wakeConnecting : c.loading;
+    }
+  });
 
   constructor() {
     this.destroyRef.onDestroy(() => this.killMotion());

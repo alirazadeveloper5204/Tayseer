@@ -7,7 +7,7 @@
     role="status"
     aria-live="polite"
     [attr.aria-busy]="!loader.leaving()"
-    [attr.aria-label]="copy().a11y.loading"
+    [attr.aria-label]="statusText()"
   >
     @for (gen of [loader.generation()]; track gen) {
       <div #loaderPanel class="page-loader__panel">
@@ -62,6 +62,7 @@
           />
           <span class="page-loader__logo-shine" aria-hidden="true"></span>
         </div>
+        <p class="page-loader__status">{{ statusText() }}</p>
       </div>
     }
   </div>

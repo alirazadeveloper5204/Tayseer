@@ -18,6 +18,7 @@ import { NavigationLoaderService } from '../../core/navigation/navigation-loader
 import { ChromeScrollService } from '../../core/navigation/chrome-scroll.service';
 import { LocaleService } from '../../core/i18n/locale.service';
 import { UiCopyService } from '../../core/i18n/ui-copy.service';
+import { ApiWakeService } from '../../core/api/api-wake.service';
 
 @Component({
   selector: 'app-shell',
@@ -30,6 +31,7 @@ export class Shell implements OnInit {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
   private readonly locale = inject(LocaleService);
+  private readonly apiWake = inject(ApiWakeService);
   readonly navigationLoader = inject(NavigationLoaderService);
   readonly chromeScroll = inject(ChromeScrollService);
   readonly copy = inject(UiCopyService).copy;
@@ -72,6 +74,13 @@ export class Shell implements OnInit {
   }
 
   ngOnInit(): void {
+    void this.finishBootWhenApiReady();
+  }
+
+  private async finishBootWhenApiReady(): Promise<void> {
+    if (isPlatformBrowser(this.platformId)) {
+      await this.apiWake.ensureAwake();
+    }
     this.navigationLoader.markAppReady();
   }
 
