@@ -83,6 +83,17 @@ builder.Services
                 // Optional Authorization: Bearer for non-browser clients / tooling.
                 return Task.CompletedTask;
             },
+            OnChallenge = context =>
+            {
+                // Avoid browser basic-auth prompts on API 401 responses.
+                context.HandleResponse();
+                if (!context.Response.HasStarted)
+                {
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                }
+
+                return Task.CompletedTask;
+            },
         };
     });
 

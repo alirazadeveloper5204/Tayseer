@@ -1,7 +1,8 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, afterNextRender, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/auth/auth.service';
+import { NavigationLoaderService } from '../../../core/navigation/navigation-loader.service';
 
 @Component({
   selector: 'app-admin-login',
@@ -12,11 +13,17 @@ import { AuthService } from '../../../core/auth/auth.service';
 export class AdminLogin {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly navigationLoader = inject(NavigationLoaderService);
 
   readonly email = signal('admin@tayseer.me');
   readonly password = signal('');
   readonly busy = signal(false);
   readonly error = signal<string | null>(null);
+
+  constructor() {
+    // Admin routes bypass Shell, which is what normally dismisses the boot loader.
+    afterNextRender(() => this.navigationLoader.markAppReady());
+  }
 
   submit(): void {
     if (this.busy()) {

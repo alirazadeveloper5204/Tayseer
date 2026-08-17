@@ -6,8 +6,10 @@ public static class AuthCookie
 
     public static CookieOptions CreateOptions(HttpContext http, DateTimeOffset? expires = null)
     {
+        // Honor TLS at the edge (Render/proxy sets X-Forwarded-Proto).
+        var forwardedProto = http.Request.Headers["X-Forwarded-Proto"].FirstOrDefault();
         var secure = http.Request.IsHttps
-            || !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("RENDER"));
+            || string.Equals(forwardedProto, "https", StringComparison.OrdinalIgnoreCase);
 
         var options = new CookieOptions
         {

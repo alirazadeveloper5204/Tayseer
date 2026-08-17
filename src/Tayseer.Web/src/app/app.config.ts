@@ -35,6 +35,9 @@ export const appConfig: ApplicationConfig = {
       withEventReplay(),
       withHttpTransferCacheOptions({
         includeRequestsWithAuthHeaders: false,
+        // Never cache admin session probes or credentialed API reads during SSR.
+        filter: (req) =>
+          !req.url.includes('/api/v1/auth/') && !req.url.includes('/api/v1/admin/'),
       }),
     ),
     provideAppInitializer(() => {

@@ -1,6 +1,7 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, afterNextRender, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../../core/auth/auth.service';
+import { NavigationLoaderService } from '../../../core/navigation/navigation-loader.service';
 import { AdminNotificationsService } from '../../../core/realtime/admin-notifications.service';
 
 @Component({
@@ -13,6 +14,12 @@ export class AdminShell implements OnInit {
   readonly auth = inject(AuthService);
   readonly notifications = inject(AdminNotificationsService);
   private readonly router = inject(Router);
+  private readonly navigationLoader = inject(NavigationLoaderService);
+
+  constructor() {
+    // Admin routes bypass Shell, which is what normally dismisses the boot loader.
+    afterNextRender(() => this.navigationLoader.markAppReady());
+  }
 
   ngOnInit(): void {
     void this.notifications.start();
