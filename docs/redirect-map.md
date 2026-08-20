@@ -10,12 +10,12 @@ Old [tayseer.me](https://tayseer.me/) URLs to apply at cutover (Azure Front Door
 | `/core-banking/` | `/en/solutions/core-banking` |
 | `/fahim-ai/` | `/en/solutions/fahim-ai` |
 | `/mbuke/` | `/en/solutions/mbuke` |
-| `/managed-services/` | `/en/solutions/managed-services` |
-| `/software-management-systems/` | `/en/solutions/software-management-systems` |
+| `/managed-services/` | `/en/managed-services` |
+| `/software-management-systems/` | `/en/software-development` |
 | `/banking-systems/` | `/en/solutions/banking-systems` |
-| `/connect/` | `/en/connect` |
+| `/connect/` | `/en/contact` |
 | `/careers/` | `/en/careers` |
-| `/blogs-and-resources/` | `/en/blog` |
+| `/blogs-and-resources/` | `/en/faqs` |
 | `/privacy-policy/` | `/en/legal/privacy` |
 | `/privacy-policy-2/` | `/en/legal/privacy` |
 | `/terms-conditions/` | `/en/legal/terms` |
@@ -29,14 +29,18 @@ Old [tayseer.me](https://tayseer.me/) URLs to apply at cutover (Azure Front Door
 | `/core-banking.html` | `/en/solutions/core-banking` |
 | `/fahim-ai.html` | `/en/solutions/fahim-ai` |
 | `/mbuke.html` | `/en/solutions/mbuke` |
-| `/managed-services.html` | `/en/solutions/managed-services` |
-| `/software-management-systems.html` | `/en/solutions/software-management-systems` |
+| `/managed-services.html` | `/en/managed-services` |
+| `/software-management-systems.html` | `/en/software-development` |
 | `/banking-systems.html` | `/en/solutions/banking-systems` |
-| `/connect.html` | `/en/connect` |
+| `/connect.html` | `/en/contact` |
 | `/careers.html` | `/en/careers` |
-| `/blogs-and-resources.html` | `/en/blog` |
+| `/blogs-and-resources.html` | `/en/faqs` |
 | `/privacy-policy.html` | `/en/legal/privacy` |
 | `/terms-conditions.html` | `/en/legal/terms` |
+
+These 301s are also applied by the Node SSR server (`src/Tayseer.Web/src/seo/legacy-redirects.ts`) so they work without Front Door on Render/Azure.
+
+In-app aliases: `/en/connect` and `/ar/connect` → `/contact`; `/en/blog` and `/ar/blog` → `/faqs`.
 
 ## Arabic
 Mirror with `/ar/...` when `Accept-Language` or user preference is Arabic (optional geo rule later).

@@ -18,7 +18,7 @@ export class NavigationLoaderService {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly appRef = inject(ApplicationRef);
 
-  readonly active = signal(true);
+  readonly active = signal(false);
   readonly visible = signal(false);
   readonly leaving = signal(false);
 
@@ -129,7 +129,7 @@ export class NavigationLoaderService {
     this.removeBootSplash();
     if (!this.booted) {
       this.booted = true;
-      if (this.navigationDepth === 0) {
+      if (this.active() && this.navigationDepth === 0) {
         this.scheduleHide(true);
       }
     }

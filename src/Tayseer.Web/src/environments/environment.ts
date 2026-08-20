@@ -6,5 +6,5 @@ export const environment = {
   apiPublicWakeUrl: 'http://localhost:5095',
   useStaticContent: true,
   siteUrl: 'http://localhost:4200',
-  defaultOgImage: '/brand/logo-light.svg',
+  defaultOgImage: '/images/solutions-banner.jpg',
 };

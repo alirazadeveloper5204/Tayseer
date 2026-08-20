@@ -4,8 +4,9 @@ import { Meta, Title } from '@angular/platform-browser';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { FAQ_PAGE, t, type PageLocale } from '../content/page-content';
 import { LocaleService } from '../i18n/locale.service';
-import { resolvePageSeo } from './seo-pages';
+import { resolvePageSeo, seoKeyFromUrl } from './seo-pages';
 import type { SeoApplyOptions, SeoLocale } from './seo.model';
 
 const JSON_LD_ID = 'tayseer-json-ld';
@@ -49,7 +50,7 @@ export class SeoService {
     const lang = (this.locale.lang() === 'ar' ? 'ar' : 'en') as SeoLocale;
     const page = resolvePageSeo(url, lang);
     if (!page) {
-      // Detail pages set their own meta after data loads.
+      // Detail pages and 404 set their own meta after data loads.
       this.setHtmlLang(lang);
       return;
     }
@@ -58,6 +59,7 @@ export class SeoService {
       ...page,
       lang,
       urlPath: url.split('?')[0],
+      jsonLd: seoKeyFromUrl(url) === 'faqs' ? this.faqPageSchema(lang) : undefined,
     });
   }
 
@@ -84,6 +86,11 @@ export class SeoService {
     this.upsertMeta('property', 'og:url', canonical);
     this.upsertMeta('property', 'og:image', image);
     this.upsertMeta('property', 'og:locale', options.lang === 'ar' ? 'ar_SA' : 'en_US');
+    this.upsertMeta(
+      'property',
+      'og:locale:alternate',
+      options.lang === 'ar' ? 'en_US' : 'ar_SA',
+    );
 
     this.upsertMeta('name', 'twitter:card', 'summary_large_image');
     this.upsertMeta('name', 'twitter:title', title);
@@ -172,7 +179,7 @@ export class SeoService {
       url: siteUrl,
       logo: absoluteUrl(siteUrl, '/brand/logo-light.svg'),
       email: 'info@tayseer.me',
-      sameAs: [],
+      sameAs: ['https://www.linkedin.com/company/tayseer-innovations/'],
       address: [
         {
           '@type': 'PostalAddress',
@@ -228,6 +235,39 @@ export class SeoService {
       isPartOf: { '@id': `${environment.siteUrl.replace(/\/$/, '')}/#website` },
     };
   }
+
+  private faqPageSchema(lang: SeoLocale): Record<string, unknown> {
+    const locale = lang as PageLocale;
+    return {
+      '@type': 'FAQPage',
+      mainEntity: FAQ_PAGE.categories.flatMap((category) =>
+        category.items.map((item) => ({
+          '@type': 'Question',
+          name: t(item.q, locale),
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: t(item.a, locale),
+          },
+        })),
+      ),
+    };
+  }
+}
+
+export function breadcrumbList(
+  siteUrl: string,
+  crumbs: readonly { name: string; path: string }[],
+): Record<string, unknown> {
+  const site = siteUrl.replace(/\/$/, '');
+  return {
+    '@type': 'BreadcrumbList',
+    itemListElement: crumbs.map((crumb, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: crumb.name,
+      item: `${site}${crumb.path.startsWith('/') ? crumb.path : `/${crumb.path}`}`,
+    })),
+  };
 }
 
 function absoluteUrl(siteUrl: string, path: string): string {

@@ -145,21 +145,25 @@ export const SEO_PAGES: Record<string, LocalizedMeta> = {
   'legal/privacy': {
     en: {
       title: `Privacy Policy | ${brandEn}`,
-      description: 'Privacy policy for the Tayseer Innovations corporate website and related digital services.',
+      description:
+        'How Tayseer Innovations collects, uses, and protects contact, usage, and chat data on the corporate website and related digital services in Saudi Arabia and the UAE.',
     },
     ar: {
       title: `سياسة الخصوصية | ${brandAr}`,
-      description: 'سياسة الخصوصية لموقع تيسير للابتكارات والخدمات الرقمية ذات الصلة.',
+      description:
+        'كيف تجمع تيسير للابتكارات بيانات التواصل والاستخدام والمحادثة على الموقع والخدمات الرقمية ذات الصلة في المملكة العربية السعودية والإمارات، وكيف تستخدمها وتحميها.',
     },
   },
   'legal/terms': {
     en: {
       title: `Terms of Use | ${brandEn}`,
-      description: 'Terms of use for the Tayseer Innovations corporate website.',
+      description:
+        'Terms of use for the Tayseer Innovations website covering information accuracy, acceptable use, and how to contact the Riyadh and Dubai teams about these terms.',
     },
     ar: {
       title: `شروط الاستخدام | ${brandAr}`,
-      description: 'شروط استخدام موقع تيسير للابتكارات.',
+      description:
+        'شروط استخدام موقع تيسير للابتكارات بما يشمل دقة المعلومات والاستخدام المقبول وكيفية التواصل مع فريقي الرياض ودبي بشأن هذه الشروط.',
     },
   },
 };
@@ -170,11 +174,13 @@ export function seoKeyFromUrl(url: string): string {
   if (parts.length === 0) {
     return '';
   }
-  // /en or /ar
+  const lang = parts[0];
+  if (lang !== 'en' && lang !== 'ar') {
+    return parts.join('/');
+  }
   if (parts.length === 1) {
     return '';
   }
-  // drop lang
   return parts.slice(1).join('/');
 }
 
@@ -184,5 +190,5 @@ export function resolvePageSeo(url: string, lang: SeoLocale): SeoPageMeta | null
   if (key.startsWith('solutions/') || key.startsWith('case-studies/')) {
     return null;
   }
-  return SEO_PAGES[key]?.[lang] ?? SEO_PAGES[''][lang];
+  return SEO_PAGES[key]?.[lang] ?? null;
 }

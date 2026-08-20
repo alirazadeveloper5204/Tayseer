@@ -100,6 +100,10 @@ module.exports = {
           'linear-gradient(107deg, #0D5A8C 25%, #1A7BB0 55%, #62A945 100%)',
         'geometric-corner':
           "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120' fill='none'%3E%3Cpath d='M100 100V20H20' stroke='%230D5A8C' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M88 100V32H20' stroke='%230D5A8C' stroke-width='6' stroke-linecap='round' stroke-linejoin='round' opacity='0.75'/%3E%3Cpath d='M76 100V44H20' stroke='%230D5A8C' stroke-width='6' stroke-linecap='round' stroke-linejoin='round' opacity='0.55'/%3E%3Cpath d='M64 100V56H20' stroke='%230D5A8C' stroke-width='6' stroke-linecap='round' stroke-linejoin='round' opacity='0.4'/%3E%3Cpath d='M52 100V68H20' stroke='%2362A945' stroke-width='6' stroke-linecap='round' stroke-linejoin='round' opacity='0.55'/%3E%3C/svg%3E\")",
+        grid:
+          'linear-gradient(to right, rgba(13, 90, 140, 0.09) 1px, transparent 1px), linear-gradient(to bottom, rgba(13, 90, 140, 0.09) 1px, transparent 1px)',
+        'grid-dark':
+          'linear-gradient(to right, rgba(0, 242, 254, 0.07) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 242, 254, 0.07) 1px, transparent 1px)',
       },
       animation: {
         'geometric-pulse': 'geometric-pulse 1.6s ease-in-out infinite',

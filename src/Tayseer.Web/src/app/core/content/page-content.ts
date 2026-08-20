@@ -30,6 +30,12 @@ export const PAGE_COMMON = {
   },
   backToList: { en: 'Back to case studies', ar: 'العودة إلى دراسات الحالة' },
   backHome: { en: 'Back to home', ar: 'العودة للرئيسية' },
+  viewSolutions: { en: 'Browse solutions', ar: 'تصفّح الحلول' },
+  pageNotFoundTitle: { en: 'Page not found', ar: 'الصفحة غير موجودة' },
+  pageNotFoundLead: {
+    en: 'This URL is not a page on Tayseer Innovations. Check the address or continue from home or our solutions suite.',
+    ar: 'هذا الرابط ليس صفحة على موقع تيسير للابتكارات. تحقق من العنوان أو تابع من الرئيسية أو مجموعة الحلول.',
+  },
   submitAnother: { en: 'Submit another inquiry', ar: 'إرسال استفسار آخر' },
   servicesUnavailable: {
     en: 'Services are temporarily unavailable. Please try again shortly.',
@@ -41,6 +47,16 @@ export const PAGE_COMMON = {
   problem: { en: 'Problem', ar: 'التحدي' },
   solution: { en: 'Solution Architecture', ar: 'بنية الحل' },
   metrics: { en: 'Key Performance Metrics', ar: 'مؤشرات الأداء الرئيسية' },
+} as const;
+
+export const NOT_FOUND_PAGE = {
+  title: { en: 'Page Not Found', ar: 'الصفحة غير موجودة' },
+  lead: {
+    en: 'This address is not a live Tayseer page. Return home to continue.',
+    ar: 'هذا العنوان ليس صفحة قائمة على موقع تيسير. عد للرئيسية للمتابعة.',
+  },
+  cta: { en: 'Return to Home', ar: 'العودة للرئيسية' },
+  status: '[ 404 ] // HTTP_NOT_FOUND',
 } as const;
 
 export const SERVICES_PAGE = {

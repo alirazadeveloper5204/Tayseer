@@ -8,5 +8,5 @@ export const environment = {
   apiPublicWakeUrl: 'https://tayseer-api-mp4f.onrender.com',
   useStaticContent: false,
   siteUrl: 'https://tayseer-web.onrender.com',
-  defaultOgImage: '/brand/logo-light.svg',
+  defaultOgImage: '/images/solutions-banner.jpg',
 };

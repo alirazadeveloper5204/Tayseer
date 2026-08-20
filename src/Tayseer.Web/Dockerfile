@@ -37,7 +37,7 @@ const content = `export const environment = {
   apiPublicWakeUrl: '${api}',
   useStaticContent: false,
   siteUrl: '${site}',
-  defaultOgImage: '/brand/logo-light.svg',
+  defaultOgImage: '/images/solutions-banner.jpg',
 };
 `;
 fs.writeFileSync('src/environments/environment.production.ts', content);
@@ -57,6 +57,13 @@ if (fs.existsSync(sitemapPath)) {
   const xml = fs.readFileSync(sitemapPath, 'utf8')
     .replaceAll('https://tayseer-web.onrender.com', site);
   fs.writeFileSync(sitemapPath, xml);
+}
+const indexPath = 'src/index.html';
+if (fs.existsSync(indexPath)) {
+  fs.writeFileSync(
+    indexPath,
+    fs.readFileSync(indexPath, 'utf8').replaceAll('https://tayseer-web.onrender.com', site),
+  );
 }
 EOF
 

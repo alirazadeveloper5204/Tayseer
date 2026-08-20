@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { localeGuard } from './core/i18n/locale.guard';
+import { localeMatcher } from './core/i18n/locale.matcher';
 import { pageTransitionGuard } from './core/navigation/page-transition.guard';
 import { authGuard, guestGuard } from './core/auth/auth.guard';
 import { Shell } from './layout/shell/shell';
@@ -56,7 +57,7 @@ export const routes: Routes = [
     ],
   },
   {
-    path: ':lang',
+    matcher: localeMatcher,
     canActivate: [localeGuard],
     canActivateChild: [pageTransitionGuard],
     component: Shell,
@@ -118,11 +119,7 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/contact/contact-page').then((m) => m.ContactPage),
       },
-      {
-        path: 'connect',
-        loadComponent: () =>
-          import('./features/contact/contact-page').then((m) => m.ContactPage),
-      },
+      { path: 'connect', redirectTo: 'contact', pathMatch: 'full' },
       {
         path: 'faqs',
         loadComponent: () => import('./features/faqs/faqs-page').then((m) => m.FaqsPage),
@@ -145,7 +142,16 @@ export const routes: Routes = [
           import('./features/legal/legal-page').then((m) => m.LegalPage),
         data: { doc: 'terms' },
       },
+      {
+        path: '**',
+        loadComponent: () =>
+          import('./features/not-found/not-found-page').then((m) => m.NotFoundPage),
+      },
     ],
   },
-  { path: '**', redirectTo: 'en' },
+  {
+    path: '**',
+    loadComponent: () =>
+      import('./features/not-found/not-found-page').then((m) => m.NotFoundPage),
+  },
 ];

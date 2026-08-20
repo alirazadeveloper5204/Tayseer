@@ -1,11 +1,13 @@
 import { Component, computed, effect, inject } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { catchError, combineLatest, map, of, startWith, switchMap } from 'rxjs';
 import { ContentApiService } from '../../core/api/content-api.service';
 import { LocaleService } from '../../core/i18n/locale.service';
 import { UiCopyService } from '../../core/i18n/ui-copy.service';
-import { SeoService } from '../../core/seo/seo.service';
+import { SeoService, breadcrumbList } from '../../core/seo/seo.service';
+import { injectSsrResponseInit, setSsrStatus } from '../../core/seo/ssr-status';
 import { SOLUTIONS_PAGE, PAGE_COMMON, t, type PageLocale } from '../../core/content/page-content';
 import { serviceImage, serviceHeroCollage } from '../../core/media/site-images';
 import { ServiceDto } from '../../models/service.model';
@@ -21,6 +23,7 @@ export class ServiceDetailPage {
   private readonly api = inject(ContentApiService);
   private readonly locale = inject(LocaleService);
   private readonly seo = inject(SeoService);
+  private readonly ssrResponse = injectSsrResponseInit();
   readonly copy = inject(UiCopyService).copy;
   readonly c = SOLUTIONS_PAGE;
   readonly common = PAGE_COMMON;
@@ -30,9 +33,25 @@ export class ServiceDetailPage {
 
   constructor() {
     effect(() => {
+      const status = this.load().status;
       const s = this.service();
       const lang = this.lang();
-      if (!s) {
+      if (status === 'loading') {
+        return;
+      }
+      if (status === 'error') {
+        setSsrStatus(this.ssrResponse, 503);
+        return;
+      }
+      if (status === 'notfound' || !s) {
+        setSsrStatus(this.ssrResponse, 404);
+        this.seo.apply({
+          lang,
+          urlPath: `/${lang}/solutions/${this.route.snapshot.paramMap.get('slug') ?? ''}`,
+          title: t(this.common.solutionNotFound, lang),
+          description: t(this.common.pageNotFoundLead, lang),
+          noIndex: true,
+        });
         return;
       }
       const siteUrl = environment.siteUrl.replace(/\/$/, '');
@@ -51,15 +70,21 @@ export class ServiceDetailPage {
         title,
         description,
         imagePath: serviceImage(s.slug) ?? environment.defaultOgImage,
-        keywords: `${s.title}, Tayseer, FinTech, banking, ${s.slug}`,
-        jsonLd: {
-          '@type': 'Service',
-          name: s.title,
-          description,
-          url: `${siteUrl}/${lang}/solutions/${s.slug}`,
-          provider: { '@id': `${siteUrl}/#organization` },
-          areaServed: ['SA', 'AE'],
-        },
+        jsonLd: [
+          {
+            '@type': 'Service',
+            name: s.title,
+            description,
+            url: `${siteUrl}/${lang}/solutions/${s.slug}`,
+            provider: { '@id': `${siteUrl}/#organization` },
+            areaServed: ['SA', 'AE'],
+          },
+          breadcrumbList(siteUrl, [
+            { name: this.copy().nav.home, path: `/${lang}` },
+            { name: this.copy().nav.solutions, path: `/${lang}/solutions` },
+            { name: s.title, path: `/${lang}/solutions/${s.slug}` },
+          ]),
+        ],
       });
     });
   }
@@ -80,7 +105,13 @@ export class ServiceDetailPage {
         return this.api.getService(slug).pipe(
           map((service) => ({ status: 'ok' as const, service })),
           startWith({ status: 'loading' as const, service: null as ServiceDto | null }),
-          catchError(() => of({ status: 'error' as const, service: null as ServiceDto | null })),
+          catchError((err: unknown) => {
+            const httpStatus = err instanceof HttpErrorResponse ? err.status : 404;
+            if (httpStatus === 404) {
+              return of({ status: 'notfound' as const, service: null as ServiceDto | null });
+            }
+            return of({ status: 'error' as const, service: null as ServiceDto | null });
+          }),
         );
       }),
     ),

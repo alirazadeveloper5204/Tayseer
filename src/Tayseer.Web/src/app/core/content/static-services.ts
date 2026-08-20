@@ -200,14 +200,22 @@ const STATIC_SERVICES: readonly StaticService[] = [
   },
 ];
 
-export function solutionPath(lang: string, slug: string): string {
+export function solutionPublicPath(slug: string): string {
   if (slug === 'software-management-systems') {
-    return `/${lang}/software-development`;
+    return '/software-development';
   }
   if (slug === 'managed-services') {
-    return `/${lang}/managed-services`;
+    return '/managed-services';
   }
-  return `/${lang}/solutions/${slug}`;
+  return `/solutions/${slug}`;
+}
+
+export function solutionPath(lang: string, slug: string): string {
+  return `/${lang}${solutionPublicPath(slug)}`;
+}
+
+export function staticServiceSlugs(): string[] {
+  return STATIC_SERVICES.map((item) => item.slug);
 }
 
 

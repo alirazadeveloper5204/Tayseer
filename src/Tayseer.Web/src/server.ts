@@ -7,6 +7,9 @@ import {
 import express from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { join } from 'node:path';
+import { CANONICAL_REDIRECTS, LEGACY_REDIRECTS } from './seo/legacy-redirects';
+import { buildSitemapXml } from './seo/build-sitemap';
+import { solutionPublicPath } from './app/core/content/static-services';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
@@ -110,6 +113,52 @@ function wakeUpstreamApi(): void {
   }
 }
 wakeUpstreamApi();
+
+function siteOrigin(): string {
+  return (process.env['SITE_URL'] || 'https://tayseer-web.onrender.com').replace(/\/$/, '');
+}
+
+app.use((req, res, next) => {
+  const dest = CANONICAL_REDIRECTS[req.path] ?? LEGACY_REDIRECTS[req.path];
+  if (dest) {
+    res.redirect(301, dest);
+    return;
+  }
+  next();
+});
+
+app.get('/robots.txt', (_req, res) => {
+  const site = siteOrigin();
+  res
+    .type('text/plain')
+    .send(
+      `User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /admin/\n\nSitemap: ${site}/sitemap.xml\n`,
+    );
+});
+
+app.get('/sitemap.xml', async (_req, res) => {
+  const extra: string[] = [];
+  if (apiUpstream) {
+    try {
+      const response = await fetch(`${apiUpstream}/api/v1/services?lang=en`, {
+        signal: AbortSignal.timeout(8_000),
+        headers: { Accept: 'application/json' },
+      });
+      if (response.ok) {
+        const items = (await response.json()) as { slug?: string }[];
+        for (const item of items) {
+          if (item.slug) {
+            extra.push(solutionPublicPath(item.slug));
+          }
+        }
+      }
+    } catch {
+      /* fall back to seeded service slugs in buildSitemapXml */
+    }
+  }
+
+  res.type('application/xml').send(buildSitemapXml(siteOrigin(), extra));
+});
 
 app.use(
   express.static(browserDistFolder, {

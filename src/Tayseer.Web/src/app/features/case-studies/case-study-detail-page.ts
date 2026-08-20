@@ -3,7 +3,8 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
 import { LocaleService } from '../../core/i18n/locale.service';
-import { SeoService } from '../../core/seo/seo.service';
+import { SeoService, breadcrumbList } from '../../core/seo/seo.service';
+import { injectSsrResponseInit, setSsrStatus } from '../../core/seo/ssr-status';
 import {
   CASE_STUDIES_PAGE,
   PAGE_COMMON,
@@ -21,6 +22,7 @@ export class CaseStudyDetailPage {
   private readonly locale = inject(LocaleService);
   private readonly route = inject(ActivatedRoute);
   private readonly seo = inject(SeoService);
+  private readonly ssrResponse = injectSsrResponseInit();
   readonly lang = computed(() => this.locale.lang() as PageLocale);
   readonly common = PAGE_COMMON;
   readonly filters = CASE_STUDIES_PAGE.filters;
@@ -35,7 +37,19 @@ export class CaseStudyDetailPage {
     effect(() => {
       const item = this.item();
       const lang = this.lang();
+      const slug = this.slug();
+      if (!slug) {
+        return;
+      }
       if (!item) {
+        setSsrStatus(this.ssrResponse, 404);
+        this.seo.apply({
+          lang,
+          urlPath: `/${lang}/case-studies/${slug}`,
+          title: t(this.common.notFound, lang),
+          description: t(this.common.pageNotFoundLead, lang),
+          noIndex: true,
+        });
         return;
       }
       const titleText = t(item.title, lang);
@@ -51,14 +65,21 @@ export class CaseStudyDetailPage {
         description: summary,
         ogType: 'article',
         imagePath: this.sideImage(),
-        jsonLd: {
-          '@type': 'Article',
-          headline: titleText,
-          description: summary,
-          url: `${siteUrl}/${lang}/case-studies/${item.slug}`,
-          author: { '@id': `${siteUrl}/#organization` },
-          publisher: { '@id': `${siteUrl}/#organization` },
-        },
+        jsonLd: [
+          {
+            '@type': 'Article',
+            headline: titleText,
+            description: summary,
+            url: `${siteUrl}/${lang}/case-studies/${item.slug}`,
+            author: { '@id': `${siteUrl}/#organization` },
+            publisher: { '@id': `${siteUrl}/#organization` },
+          },
+          breadcrumbList(siteUrl, [
+            { name: lang === 'ar' ? 'الرئيسية' : 'Home', path: `/${lang}` },
+            { name: t(CASE_STUDIES_PAGE.title, lang), path: `/${lang}/case-studies` },
+            { name: titleText, path: `/${lang}/case-studies/${item.slug}` },
+          ]),
+        ],
       });
     });
   }
