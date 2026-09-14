@@ -23,10 +23,11 @@ services:
         value: "false"
       - key: Database__Provider
         value: Npgsql
+      # Paste the Internal Database URL from the existing Render Postgres `tayseer-db`
+      # (Dashboard → tayseer-db → Connections). Free tier allows only one Postgres;
+      # that DB was already provisioned, so this Blueprint does not create another.
       - key: ConnectionStrings__DefaultConnection
-        fromDatabase:
-          name: tayseer-db
-          property: connectionString
+        sync: false
       - key: Cors__AngularOrigins__0
         sync: false
       - key: Jwt__SigningKey
@@ -55,24 +56,15 @@ services:
         value: production
       # Upstream API for the SSR reverse proxy (/api, /hubs, /health) and baked SSR fetches.
       # Browser calls same-origin /api — the API hostname is not in client JS.
-      # Use the exact public hostname from the API service (may include a random suffix).
+      # After first deploy, if Render assigned a random suffix, update these to the
+      # exact dashboard URLs and Manual Deploy (clear build cache) the web service.
       - key: API_BASE_URL
-        value: https://tayseer-api-mp4f.onrender.com
-      # Canonical site origin for SEO (sitemap, Open Graph, JSON-LD).
+        value: https://tayseer-api.onrender.com
       - key: SITE_URL
         value: https://tayseer-web.onrender.com
-      # Optional: private-network URL for paid plans only.
-      # Leave UNSET on free tier — free services cannot receive private traffic and it will not wake sleepers.
-      # Example (paid): http://tayseer-api:10000
+      # Leave blank on free tier (private network cannot reach free web services).
       - key: SSR_API_BASE_URL
         sync: false
-      # Optional override for the Node proxy only (defaults to SSR_API_BASE_URL || API_BASE_URL).
-      # Prefer leaving unset so wake + proxy use public API_BASE_URL on free tier.
+      # Leave blank unless you need a proxy override.
       - key: API_PROXY_TARGET
         sync: false
-
-databases:
-  - name: tayseer-db
-    plan: free
-    databaseName: tayseer
-    user: tayseer
