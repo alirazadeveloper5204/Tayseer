@@ -28,8 +28,9 @@ services:
       # that DB was already provisioned, so this Blueprint does not create another.
       - key: ConnectionStrings__DefaultConnection
         sync: false
+      # Exact public URL of tayseer-web (Render appended a random suffix).
       - key: Cors__AngularOrigins__0
-        sync: false
+        value: https://tayseer-web-0sf6.onrender.com
       - key: Jwt__SigningKey
         generateValue: true
       - key: Jwt__Issuer
@@ -56,12 +57,12 @@ services:
         value: production
       # Upstream API for the SSR reverse proxy (/api, /hubs, /health) and baked SSR fetches.
       # Browser calls same-origin /api — the API hostname is not in client JS.
-      # After first deploy, if Render assigned a random suffix, update these to the
-      # exact dashboard URLs and Manual Deploy (clear build cache) the web service.
+      # Exact public URLs assigned by Render (random suffixes). Changing these
+      # triggers a Blueprint sync + web rebuild.
       - key: API_BASE_URL
-        value: https://tayseer-api.onrender.com
+        value: https://tayseer-api-rbyy.onrender.com
       - key: SITE_URL
-        value: https://tayseer-web.onrender.com
+        value: https://tayseer-web-0sf6.onrender.com
       # Leave blank on free tier (private network cannot reach free web services).
       - key: SSR_API_BASE_URL
         sync: false

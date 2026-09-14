@@ -341,6 +341,17 @@ static string NormalizePostgresConnectionString(string connectionString, IConfig
         "false",
         StringComparison.OrdinalIgnoreCase);
 
+    // Tolerate copy/paste noise from dashboards: surrounding whitespace/quotes.
+    connectionString = connectionString.Trim().Trim('"', '\'', '`').Trim();
+
+    // Render's "PSQL Command" (PGPASSWORD=... psql -h host -U user db) is a common
+    // mis-paste. Convert it to a URI so the normal path below handles it.
+    if (connectionString.Contains("psql", StringComparison.OrdinalIgnoreCase)
+        && connectionString.Contains("-h", StringComparison.Ordinal))
+    {
+        connectionString = PsqlCommandToUri(connectionString);
+    }
+
     // Npgsql's ConnectionStringBuilder rejects URI form (postgres:// / postgresql://).
     // Convert Render/Neon URLs to keyword format and require SSL.
     if (connectionString.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase)
@@ -364,7 +375,20 @@ static string NormalizePostgresConnectionString(string connectionString, IConfig
     }
 
     // Keyword form: only add SSL defaults when not already specified.
-    var builder = new Npgsql.NpgsqlConnectionStringBuilder(connectionString);
+    Npgsql.NpgsqlConnectionStringBuilder builder;
+    try
+    {
+        builder = new Npgsql.NpgsqlConnectionStringBuilder(connectionString);
+    }
+    catch (ArgumentException ex)
+    {
+        // Never echo the value: it contains the DB password.
+        throw new InvalidOperationException(
+            "ConnectionStrings__DefaultConnection is not a valid Postgres connection string " +
+            $"(length {connectionString.Length}). Paste the Render 'Internal Database URL' " +
+            "(postgresql://user:pass@host/db), not the PSQL command or a quoted value.", ex);
+    }
+
     if (builder.SslMode is Npgsql.SslMode.Disable or Npgsql.SslMode.Prefer)
     {
         if (Enum.TryParse<Npgsql.SslMode>(sslMode.Replace(" ", ""), ignoreCase: true, out var parsed))
@@ -385,4 +409,42 @@ static string NormalizePostgresConnectionString(string connectionString, IConfig
     }
 
     return normalized;
+}
+
+// Parses Render's "PSQL Command" form:
+//   PGPASSWORD=secret psql -h host -U user db
+// into postgresql://user:secret@host:5432/db
+static string PsqlCommandToUri(string command)
+{
+    var tokens = command.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+    string? password = null, host = null, user = null, database = null;
+    var port = 5432;
+
+    for (var i = 0; i < tokens.Length; i++)
+    {
+        var token = tokens[i];
+        if (token.StartsWith("PGPASSWORD=", StringComparison.OrdinalIgnoreCase))
+        {
+            password = token["PGPASSWORD=".Length..].Trim('"', '\'');
+            continue;
+        }
+
+        if (token is "-h" or "--host" && i + 1 < tokens.Length) { host = tokens[++i]; continue; }
+        if (token is "-U" or "--username" && i + 1 < tokens.Length) { user = tokens[++i]; continue; }
+        if (token is "-d" or "--dbname" && i + 1 < tokens.Length) { database = tokens[++i]; continue; }
+        if (token is "-p" or "--port" && i + 1 < tokens.Length && int.TryParse(tokens[++i], out var p)) { port = p; continue; }
+        if (token.Equals("psql", StringComparison.OrdinalIgnoreCase) || token.StartsWith('-')) continue;
+
+        // Bare trailing positional argument = database name.
+        if (database is null && host is not null) database = token;
+    }
+
+    if (host is null || user is null || database is null)
+    {
+        throw new InvalidOperationException(
+            "ConnectionStrings__DefaultConnection looks like a psql command but is missing -h/-U/database. " +
+            "Paste the Render 'Internal Database URL' instead.");
+    }
+
+    return $"postgresql://{Uri.EscapeDataString(user)}:{Uri.EscapeDataString(password ?? string.Empty)}@{host}:{port}/{Uri.EscapeDataString(database)}";
 }
